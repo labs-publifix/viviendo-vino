@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" role="img" aria-labelledby="t">
+  <title id="t">Viviendo Vino</title>
+  <g fill="none" stroke="#C9A96E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- copa -->
+    <path d="M144 18h32c0 22-6 38-16 42-10-4-16-20-16-42z"/>
+    <path d="M160 60v26M146 88h28"/>
+    <path d="M147 34c8 3 18 3 26 0" stroke-width="1.5"/>
+  </g>
+  <path d="M146.5 36c7 2.6 19 2.6 27 0-1 12-6 20-13.5 22-7.5-2-12.5-10-13.5-22z" fill="#7A1F33"/>
+  <text x="160" y="140" text-anchor="middle" font-family="'Cormorant Garamond', 'Cormorant', Georgia, serif" font-size="44" font-weight="500" letter-spacing="1" fill="#F3EBDD">Viviendo Vino</text>
+  <line x1="96" y1="160" x2="136" y2="160" stroke="#C9A96E" stroke-width="1"/>
+  <line x1="184" y1="160" x2="224" y2="160" stroke="#C9A96E" stroke-width="1"/>
+  <circle cx="160" cy="160" r="2.5" fill="#C9A96E"/>
+</svg>
