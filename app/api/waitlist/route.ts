@@ -1,7 +1,6 @@
 import { Resend } from "resend";
 import { renderConfirmationEmail } from "@/lib/email/confirmation";
 import { isRateLimited } from "@/lib/rate-limit";
-import { SITE_URL } from "@/lib/site";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { unsubscribeToken } from "@/lib/tokens";
 import { EMAIL_ERROR } from "@/lib/messages";
@@ -56,17 +55,18 @@ export async function POST(request: Request) {
     return fail(500, "Algo salió mal de nuestro lado. Intenta de nuevo en un momento.");
   }
 
-  await sendConfirmation(inserted.data.id as string, email, wineTypes);
+  // La baja apunta al mismo despliegue donde se registró (preview o producción).
+  await sendConfirmation(inserted.data.id as string, email, wineTypes, new URL(request.url).origin);
   return ok();
 }
 
-async function sendConfirmation(id: string, email: string, wineTypes: WineType[]) {
+async function sendConfirmation(id: string, email: string, wineTypes: WineType[], origin: string) {
   try {
     const apiKey = process.env.RESEND_API_KEY;
     const from = process.env.EMAIL_FROM;
     if (!apiKey || !from) throw new Error("Faltan RESEND_API_KEY o EMAIL_FROM");
 
-    const unsubscribeUrl = `${SITE_URL}/api/waitlist/unsubscribe?token=${encodeURIComponent(unsubscribeToken(id))}`;
+    const unsubscribeUrl = `${origin}/api/waitlist/unsubscribe?token=${encodeURIComponent(unsubscribeToken(id))}`;
     const { subject, html, text } = renderConfirmationEmail({ wineTypes, unsubscribeUrl });
     const { error } = await new Resend(apiKey).emails.send({
       from,
