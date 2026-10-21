@@ -1,0 +1,78 @@
+/* Tokens del Manual de identidad 2026 (apartado 12). */
+:root {
+  --vv-negro: #0a0206;
+  --vv-hueso: #f3ece4;
+  --vv-vino: #9a2030;
+  --vv-carmin: #cf2c4b;
+  --vv-ciruela: #641f53;
+  --vv-radius-pill: 999px;
+  --vv-dur: 240ms;
+
+  --font-display: var(--font-inter), "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-label: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+
+  /* Sitio claro: sobre hueso. */
+  --bg: var(--vv-hueso);
+  --fg: var(--vv-negro);
+  --muted: #5c5454;
+  --line: rgb(10 2 6 / 0.14);
+  --accent: var(--vv-vino);
+  --btn-bg: var(--vv-vino);
+  --btn-fg: var(--vv-hueso);
+  --field-bg: rgb(255 255 255 / 0.55);
+  --danger: #c33a2c;
+  --focus: 2px solid var(--vv-carmin);
+  --atmosphere: none;
+  color-scheme: light;
+}
+
+/* Oscuro: negro tinto con resplandor vino y eco ciruela (nunca negro plano). */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: var(--vv-negro);
+    --fg: var(--vv-hueso);
+    --muted: #a19a96;
+    --line: rgb(243 236 228 / 0.16);
+    --accent: var(--vv-carmin);
+    --btn-bg: var(--vv-carmin);
+    --btn-fg: #ffffff;
+    --field-bg: rgb(243 236 228 / 0.04);
+    --danger: #ff8a7a;
+    --atmosphere:
+      radial-gradient(60rem 40rem at 100% 0%, rgb(154 32 48 / 0.14), transparent 70%),
+      radial-gradient(50rem 36rem at 0% 100%, rgb(100 31 83 / 0.1), transparent 70%);
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { min-height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Atmósfera fija detrás del contenido (Safari en iOS ignora background-attachment: fixed). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--atmosphere);
+  pointer-events: none;
+}
+
+:focus-visible { outline: var(--focus); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
