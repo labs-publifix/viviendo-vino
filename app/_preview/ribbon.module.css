@@ -1,0 +1,20 @@
+.ribbon {
+  position: fixed;
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 100;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: var(--vv-radius-pill);
+  background: var(--vv-negro);
+  color: var(--vv-hueso);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgb(10 2 6 / 0.18);
+}

@@ -26,9 +26,10 @@
   color-scheme: light;
 }
 
-/* Oscuro: negro tinto con resplandor vino y eco ciruela (nunca negro plano). */
+/* Oscuro (solo la lista de espera, que marca su contenedor con .vv-theme-auto): negro tinto con
+   resplandor vino y eco ciruela (nunca negro plano). La tienda es siempre clara (Manual · 12). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:has(.vv-theme-auto) {
     --bg: var(--vv-negro);
     --fg: var(--vv-hueso);
     --muted: #a19a96;

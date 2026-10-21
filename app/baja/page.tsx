@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function BajaPage() {
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} vv-theme-auto`}>
       <main className={styles.main}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className={`${styles.logo} ${styles.logoLight}`} src="/brand/logo-color.svg" alt="Viviendo Vino" width={786} height={250} />

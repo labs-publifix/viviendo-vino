@@ -5,7 +5,7 @@ import styles from "@/app/_waitlist/waitlist.module.css";
 // Home temporal: lista de espera con cuenta regresiva hasta la apertura de la tienda.
 export default function Home() {
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} vv-theme-auto`}>
       <main className={styles.main}>
         {/* eslint-disable-next-line @next/next/no-img-element -- SVG maestro del logotipo, sin optimizar */}
         <img className={`${styles.logo} ${styles.logoLight}`} src="/brand/logo-color.svg" alt="Viviendo Vino" width={786} height={250} />
