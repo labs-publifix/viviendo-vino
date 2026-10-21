@@ -37,19 +37,22 @@ const WAITLIST_EXACT = new Set([
   "/correos",
   "/robots.txt",
   "/sitemap.xml",
-  "/icon.png",
-  "/apple-icon.png",
   "/opengraph-image.png",
   "/twitter-image.png",
-  "/favicon.ico",
 ]);
 const WAITLIST_PREFIXES = ["/api/waitlist", "/api/cron/email-sequence", "/_next/", "/brand/", "/email/"];
 
+// Favicons, webclips y manifest del kit de marca, en la raíz pública.
+const BRAND_KIT_FILE =
+  /^\/(favicon(-\d+x\d+\.png|\.svg|\.ico)|apple-touch-icon\.png|safari-pinned-tab\.svg|site\.webmanifest|browserconfig\.xml|(android-chrome|maskable-icon|mstile|icon)-\d+x\d+\.png)$/;
+
 // Lo que la pantalla de acceso del preview necesita sin contraseña.
-const LOGIN_PREFIXES = ["/_next/", "/brand/", "/icon.png", "/apple-icon.png", "/robots.txt"];
+const LOGIN_PREFIXES = ["/_next/", "/brand/", "/robots.txt"];
 
 export function isWaitlistPath(pathname: string): boolean {
-  return WAITLIST_EXACT.has(pathname) || WAITLIST_PREFIXES.some((p) => pathname.startsWith(p));
+  return (
+    WAITLIST_EXACT.has(pathname) || BRAND_KIT_FILE.test(pathname) || WAITLIST_PREFIXES.some((p) => pathname.startsWith(p))
+  );
 }
 
 export function isPreviewHost(host: string): boolean {
@@ -65,7 +68,7 @@ export function decide({ pathname, host, env, hasPreviewAccess }: GateInput): Ga
   if (env.preview || previewHost) {
     if (pathname === LOGIN_PATH || pathname === LOGIN_API) return { action: "next" };
     if (!hasPreviewAccess) {
-      if (LOGIN_PREFIXES.some((p) => pathname.startsWith(p))) return { action: "next" };
+      if (BRAND_KIT_FILE.test(pathname) || LOGIN_PREFIXES.some((p) => pathname.startsWith(p))) return { action: "next" };
       return { action: "login" };
     }
   } else if (pathname === LOGIN_PATH || pathname === LOGIN_API) {

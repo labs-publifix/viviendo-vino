@@ -17,7 +17,9 @@ const STORE_ROUTES = [
 ];
 const WAITLIST_ROUTES = [
   "/", "/baja", "/correos", "/api/waitlist", "/api/waitlist/unsubscribe", "/api/cron/email-sequence",
-  "/robots.txt", "/sitemap.xml", "/brand/logo-color.svg", "/email/logo-viviendo-vino.png", "/icon.png",
+  "/robots.txt", "/sitemap.xml", "/brand/logo-color.svg", "/email/logo-viviendo-vino.png",
+  "/favicon.ico", "/favicon.svg", "/favicon-32x32.png", "/apple-touch-icon.png", "/safari-pinned-tab.svg",
+  "/site.webmanifest", "/browserconfig.xml", "/android-chrome-512x512.png", "/maskable-icon-192x192.png", "/mstile-150x150.png",
 ];
 
 test("producción cerrada: ninguna ruta de la tienda pasa", () => {
@@ -55,6 +57,9 @@ test("preview sin contraseña: todo pide acceso, nada de la tienda se muestra", 
   }
   assert.deepEqual(decide({ pathname: "/acceso", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
   assert.deepEqual(decide({ pathname: "/brand/logo-color.svg", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
+  assert.deepEqual(decide({ pathname: "/favicon.svg", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
+  // Un archivo con nombre parecido no se cuela.
+  assert.deepEqual(decide({ pathname: "/favicon-catalogo.json", host: WWW, env: PROD_CLOSED, hasPreviewAccess: false }), { action: "not-found" });
 });
 
 test("preview en *.vercel.app también pide contraseña", () => {

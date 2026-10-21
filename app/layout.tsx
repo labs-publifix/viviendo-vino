@@ -34,15 +34,28 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: { card: "summary_large_image", title, description },
+  // Favicons y webclips del kit de marca (public/, sin modificar; ver docs/favicons-head-snippet.html).
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-96x96.png", type: "image/png", sizes: "96x96" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    other: [{ rel: "mask-icon", url: "/safari-pinned-tab.svg", color: "#9A2031" }],
+  },
+  manifest: "/site.webmanifest",
+  appleWebApp: { title: "Viviendo Vino" },
+  other: { "msapplication-TileColor": "#9A2031", "msapplication-config": "/browserconfig.xml" },
   // El preview privado nunca se indexa (además de X-Robots-Tag y robots.txt).
   ...(IS_PREVIEW ? { robots: { index: false, follow: false } } : {}),
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f3ece4" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0206" },
-  ],
+  // theme-color del kit de marca.
+  themeColor: "#9A2031",
   viewportFit: "cover",
 };
 
