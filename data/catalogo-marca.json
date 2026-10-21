@@ -1,0 +1,124 @@
+{
+  "nota": "Textos en voz de marca y datos por vino. Los precios NO viven aquí: salen solo de catalogo-inicial.json. Los campos de 'inferido' se dedujeron del nombre y deben confirmarse con el aliado (PENDIENTES.md).",
+  "aliado": {
+    "slug": "aliado-cordoba",
+    "nombre": "Aliado de Córdoba",
+    "ciudad": "Córdoba",
+    "estado": "Veracruz",
+    "comision_bps": 1000
+  },
+  "grupos": [
+    { "codigo": "azul", "nombre": "Grupo azul", "orden": 1, "solo_caja_completa": false,
+      "descripcion": "Blancos, rosado y cuatro tintos. Se mezclan todos entre sí." },
+    { "codigo": "rojo", "nombre": "Grupo rojo", "orden": 2, "solo_caja_completa": false,
+      "descripcion": "Tintos de más cuerpo: Don Carlo, Primitivo di Manduria, Ripasso y Amarone. Elige hasta 4 etiquetas." },
+    { "codigo": "verde", "nombre": "Grupo verde", "orden": 3, "solo_caja_completa": false,
+      "descripcion": "Los dos tintos de Bodega Rocca, con medalla Double Gold. Combínalos como quieras." },
+    { "codigo": "amarillo", "nombre": "Grupo amarillo", "orden": 4, "solo_caja_completa": true,
+      "descripcion": "Prosecco y Rosé Extra Dry. Va como caja completa de 6." }
+  ],
+  "categorias": [
+    { "slug": "blancos-rosado", "nombre": "Blancos y rosado", "orden": 1,
+      "intro": "Blancos frescos, con fruta, cítricos y flores, y un rosado ligero. Todos son del grupo azul: se mezclan entre sí y con cuatro tintos." },
+    { "slug": "tintos", "nombre": "Tintos", "orden": 2,
+      "intro": "Tintos de Véneto, Abruzzo, Piamonte y Puglia. Del grupo azul, los de todos los días; del rojo, los de más cuerpo; del verde, los dos de Bodega Rocca." },
+    { "slug": "espumosos", "nombre": "Espumosos", "orden": 3,
+      "intro": "Un Prosecco brut y un rosé extra dry. Burbuja fina, fruta y flores. Van juntos en una caja de 6." }
+  ],
+  "intro_general": "Los antiguos griegos llamaron al sur de Italia Enotria Tellus: la tierra del vino. De ahí vienen muchas de las uvas que hoy caben en tu kit.",
+  "vinos": {
+    "Chardonnay Vento IGT 2024": {
+      "tipo": "blanco", "uva": "Chardonnay", "region": "Véneto", "denominacion": "IGT", "anada": 2024,
+      "descripcion": "Chardonnay del Véneto, de cuerpo medio. Pera madura, manzana y un toque cítrico; acidez equilibrada y un final ligeramente mineral."
+    },
+    "Sauvignon Blanc Trevenezie IGT 2024": {
+      "tipo": "blanco", "uva": "Sauvignon Blanc", "region": "Tre Venezie", "denominacion": "IGT", "anada": 2024,
+      "descripcion": "Fresco y vibrante. Manzana verde, ralladura de cítricos y una nota herbal sutil. La acidez manda."
+    },
+    "Pinot Grigio delle Venezie DOC 2024": {
+      "tipo": "blanco", "uva": "Pinot Grigio", "region": "Delle Venezie", "denominacion": "DOC", "anada": 2024,
+      "descripcion": "Delicado y fresco. Manzana verde, pera y durazno blanco, con flores de acacia y jazmín y un toque de limón y lima."
+    },
+    "Traminer Aromático Trevenezie IGT 2025": {
+      "tipo": "blanco", "uva": "Traminer Aromático", "region": "Tre Venezie", "denominacion": "IGT", "anada": 2025,
+      "descripcion": "Huélelo primero: lichi y agua de rosas. Luego, fruta de hueso madura, durazno y chabacano. Rico y aromático."
+    },
+    "Falanghina Puglia IGT": {
+      "tipo": "blanco", "uva": "Falanghina", "region": "Puglia", "denominacion": "IGT", "anada": null,
+      "descripcion": "Falanghina, blanca del sur de Italia. Cuerpo ligero a medio, cítricos vivos, manzana verde crujiente y un toque de pera."
+    },
+    "Soave DOC 2024": {
+      "tipo": "blanco", "uva": null, "region": "Véneto", "denominacion": "DOC", "anada": 2024,
+      "descripcion": "Soave, del Véneto. Ligero y refrescante: limón, manzana verde y durazno blanco, con acidez viva."
+    },
+    "Pinot Grigio delle Venezie DOC Blush (rosado) 2025": {
+      "tipo": "rosado", "uva": "Pinot Grigio", "region": "Delle Venezie", "denominacion": "DOC", "anada": 2025,
+      "descripcion": "Rosado de Pinot Grigio. Frutos rojos frescos, cítricos y un toque de durazno blanco. Ligero, con acidez que refresca."
+    },
+    "Cabernet Sauvignon Veneto IGT 2024": {
+      "tipo": "tinto", "uva": "Cabernet Sauvignon", "region": "Véneto", "denominacion": "IGT", "anada": 2024,
+      "descripcion": "Cassis, zarzamora y especias. Tanino firme, con chocolate y hierbas al final."
+    },
+    "Merlot Veneto IGT 2024": {
+      "tipo": "tinto", "uva": "Merlot", "region": "Véneto", "denominacion": "IGT", "anada": 2024,
+      "descripcion": "Suave, de cuerpo medio. Frutos rojos maduros, sobre todo bayas, con pimienta y vainilla."
+    },
+    "Montepulciano d'Abruzzo DOC 2024": {
+      "tipo": "tinto", "uva": "Montepulciano", "region": "Abruzzo", "denominacion": "DOC", "anada": 2024,
+      "descripcion": "Montepulciano de Abruzzo: cuerpo pleno y buena estructura. Cereza y zarzamora, regaliz y especias."
+    },
+    "Langhe Nebbiolo": {
+      "tipo": "tinto", "uva": "Nebbiolo", "region": "Piamonte", "denominacion": "DOC", "anada": null,
+      "descripcion": "Nebbiolo de Langhe, en el Piamonte, de la bodega Fiorella Bertino. Pronto agregamos su nota de cata."
+    },
+    "Don Carlo Rosso Veneto IGT 2018": {
+      "tipo": "tinto", "uva": null, "region": "Véneto", "denominacion": "IGT", "anada": 2018,
+      "descripcion": "Tinto del Véneto, cosecha 2018. Cuerpo medio y armonioso: frutos rojos y negros maduros, especias sutiles y un toque terroso."
+    },
+    "Primitivo di Manduria DOC 2023": {
+      "tipo": "tinto", "uva": "Primitivo", "region": "Puglia", "denominacion": "DOC", "anada": 2023,
+      "descripcion": "Primitivo de Manduria, en Puglia. Frutos negros maduros, mermelada de ciruela, pimienta negra y cuero. Rico, suave y bien estructurado."
+    },
+    "Valpolicella Ripasso Classico Superiore DOC 2020": {
+      "tipo": "tinto", "uva": null, "region": "Véneto", "denominacion": "DOC", "anada": 2020,
+      "descripcion": "Ripasso: el vino vuelve a pasar sobre los orujos del Amarone. Por eso es intenso, de cuerpo completo, con pimienta negra, pasas y cereza dulce."
+    },
+    "Amarone della Valpolicella Classico DOCG 2017": {
+      "tipo": "tinto", "uva": null, "region": "Véneto", "denominacion": "DOCG", "anada": 2017,
+      "descripcion": "Amarone: se hace con uvas secadas antes de fermentar. Complejo e intenso, con miel de acacia, zarzamora, cereza, especias oscuras y café."
+    },
+    "Sangiovese Puglia IGT 2024 (Double Gold)": {
+      "tipo": "tinto", "uva": "Sangiovese", "region": "Puglia", "denominacion": "IGT", "anada": 2024, "premio": "Double Gold",
+      "descripcion": "Sangiovese de Puglia. Rojo intenso, violeta y frutos rojos maduros. Redondo y fino, con acidez equilibrada y buena estructura."
+    },
+    "Primitivo 2025 (Double Gold)": {
+      "tipo": "tinto", "uva": "Primitivo", "region": "Puglia", "denominacion": null, "anada": 2025, "premio": "Double Gold",
+      "descripcion": "Primitivo de Bodega Rocca. Rojo rubí, ciruela madura, confitura de cereza y cacao."
+    },
+    "Prosecco DOC Spumante Brut Imperial": {
+      "tipo": "espumoso", "uva": "Glera", "region": null, "denominacion": "DOC", "anada": null,
+      "descripcion": "Prosecco brut. Burbuja fina y persistente; flores blancas, pera, manzana y un toque cítrico. Vibrante, pero suave en boca."
+    },
+    "Rosé Extra Dry 921": {
+      "tipo": "espumoso", "uva": null, "region": null, "denominacion": null, "anada": null,
+      "descripcion": "Espumoso rosado extra dry, de baja graduación. Rosa y frutos rojos en nariz; suave, fácil de beber y con final limpio."
+    }
+  },
+  "inferido": [
+    "uva de Soave, Don Carlo, Ripasso, Amarone y Rosé 921: se dejó vacía (mezclas o sin dato)",
+    "uva Glera del Prosecco (por denominación)",
+    "regiones deducidas del nombre",
+    "nombre del aliado: provisional ('Aliado de Córdoba') hasta tener su razón social"
+  ],
+  "kits_prearmados": [
+    { "slug": "blancos-frescos", "nombre": "Blancos frescos", "orden": 1,
+      "descripcion": "Cuatro blancos del Véneto y Puglia, de la acidez viva a la fruta madura.",
+      "items": [["Sauvignon Blanc Trevenezie IGT 2024", 2], ["Pinot Grigio delle Venezie DOC 2024", 2], ["Falanghina Puglia IGT", 1], ["Soave DOC 2024", 1]] },
+    { "slug": "tintos-de-diario", "nombre": "Tintos de diario", "orden": 2,
+      "descripcion": "Merlot, Cabernet y Montepulciano: tres tintos del grupo azul para abrir cualquier día.",
+      "items": [["Merlot Veneto IGT 2024", 2], ["Cabernet Sauvignon Veneto IGT 2024", 2], ["Montepulciano d'Abruzzo DOC 2024", 2]] },
+    { "slug": "burbujas", "nombre": "Burbujas", "orden": 3,
+      "descripcion": "La caja de 6 del grupo amarillo: tres Prosecco y tres Rosé Extra Dry.",
+      "items": [["Prosecco DOC Spumante Brut Imperial", 3], ["Rosé Extra Dry 921", 3]] }
+  ]
+}
