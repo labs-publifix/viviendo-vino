@@ -29,6 +29,14 @@ Las claves secretas (`RESEND_API_KEY`, `SUPABASE_SECRET_KEY`, `WAITLIST_TOKEN_SE
 | `WAITLIST_SEQUENCE_ENABLED` | `true` para enviar la secuencia de verdad. Cualquier otro valor: solo simula. |
 | `WAITLIST_NOTIFY_TO` | Quién recibe el aviso de cada registro nuevo (correos separados por coma). Si está vacía, no se avisa. |
 
+## Ramas y entornos
+
+| Rama | Se publica en | Qué muestra |
+|---|---|---|
+| `main` | www.viviendovino.com (Production) | Lista de espera; la tienda sigue cerrada hasta que `STORE_OPEN=true` (ver [LAUNCH.md](LAUNCH.md)). |
+| `develop` | dev.viviendovino.com (Preview) | Tienda completa, con contraseña (`PREVIEW_PASSWORD`), cinta de vista previa y noindex. |
+| `feature/*` | Liga de preview de Vercel | Trabajo en curso; se fusiona a `develop`. También pide contraseña. |
+
 ## Estructura
 
 Next.js (App Router) + TypeScript.
