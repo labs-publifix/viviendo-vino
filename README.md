@@ -25,6 +25,7 @@ Las claves secretas (`RESEND_API_KEY`, `SUPABASE_SECRET_KEY`, `WAITLIST_TOKEN_SE
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY` | Supabase. |
 | `RESEND_API_KEY`, `EMAIL_FROM` | Resend. |
 | `WAITLIST_TOKEN_SECRET` | Firma de los enlaces de baja (≥ 32 caracteres aleatorios). |
+| `WAITLIST_NOTIFY_TO` | Quién recibe el aviso de cada registro nuevo (correos separados por coma). Si está vacía, no se avisa. |
 
 ## Estructura
 

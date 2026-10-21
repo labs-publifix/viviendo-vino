@@ -1,5 +1,7 @@
+import { after } from "next/server";
 import { Resend } from "resend";
 import { renderConfirmationEmail } from "@/lib/email/confirmation";
+import { notifyRecipients, renderSignupNotification } from "@/lib/email/signup-notification";
 import { isRateLimited } from "@/lib/rate-limit";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { unsubscribeToken } from "@/lib/tokens";
@@ -57,7 +59,26 @@ export async function POST(request: Request) {
 
   // La baja apunta al mismo despliegue donde se registró (preview o producción).
   await sendConfirmation(inserted.data.id as string, email, wineTypes, new URL(request.url).origin);
+  // El aviso al equipo no retrasa la respuesta ni afecta al registro si falla.
+  after(() => notifyTeam(inserted.data.id as string, email, wineTypes, source ?? null));
   return ok();
+}
+
+async function notifyTeam(id: string, email: string, wineTypes: WineType[], source: string | null) {
+  try {
+    const to = notifyRecipients();
+    const apiKey = process.env.RESEND_API_KEY;
+    const from = process.env.EMAIL_FROM;
+    if (to.length === 0) return;
+    if (!apiKey || !from) throw new Error("Faltan RESEND_API_KEY o EMAIL_FROM");
+
+    const { count } = await supabaseAdmin().from(TABLE).select("id", { count: "exact", head: true });
+    const { subject, html, text } = renderSignupNotification({ email, wineTypes, source, total: count ?? null, at: new Date() });
+    const { error } = await new Resend(apiKey).emails.send({ from, to, subject, html, text });
+    if (error) throw new Error(`${error.name}: ${error.message}`);
+  } catch (err) {
+    console.error("waitlist: falló el aviso al equipo", id, err instanceof Error ? err.message : err);
+  }
 }
 
 async function sendConfirmation(id: string, email: string, wineTypes: WineType[], origin: string) {
