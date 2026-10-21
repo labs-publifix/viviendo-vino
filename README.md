@@ -25,6 +25,8 @@ Las claves secretas (`RESEND_API_KEY`, `SUPABASE_SECRET_KEY`, `WAITLIST_TOKEN_SE
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY` | Supabase. |
 | `RESEND_API_KEY`, `EMAIL_FROM` | Resend. |
 | `WAITLIST_TOKEN_SECRET` | Firma de los enlaces de baja (≥ 32 caracteres aleatorios). |
+| `CRON_SECRET` | Autoriza al workflow de GitHub a disparar la secuencia. Mismo valor en Vercel y en GitHub → Secrets → Actions. |
+| `WAITLIST_SEQUENCE_ENABLED` | `true` para enviar la secuencia de verdad. Cualquier otro valor: solo simula. |
 | `WAITLIST_NOTIFY_TO` | Quién recibe el aviso de cada registro nuevo (correos separados por coma). Si está vacía, no se avisa. |
 
 ## Estructura
@@ -54,6 +56,14 @@ where unsubscribed_at is null
 order by created_at;
 ```
 y descarga el resultado como CSV.
+
+### Secuencia de correos (2 a 6)
+- Textos y horarios: `lib/email/sequence.ts` (las horas se derivan de `NEXT_PUBLIC_LAUNCH_AT`).
+- Vista previa para el equipo: `/correos`.
+- Envío: `.github/workflows/email-sequence.yml` llama cada hora (minuto 7) a `/api/cron/email-sequence`. Cada correo sale en la primera ejecución después de su hora, con un margen de 6 h; después se omite.
+- A quién: personas activas (sin baja) registradas antes de la hora de envío. Los correos 5 y 6 excluyen a quien tenga `purchased_at` (lo llenará la tienda al cobrar un pedido con ese correo).
+- Cada envío queda en `waitlist_email_sends` (único por persona y correo): no hay duplicados aunque el cron corra dos veces.
+- Simular otra fecha (solo cuando la secuencia está apagada): `GET /api/cron/email-sequence?now=2026-11-19T09:10:00-06:00` con `Authorization: Bearer <CRON_SECRET>`.
 
 ### Anti-spam
 - Campo trampa oculto y tiempo mínimo de llenado (2.5 s): si se activan, se responde éxito sin guardar.
