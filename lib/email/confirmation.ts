@@ -1,11 +1,11 @@
 import "server-only";
-import { capitalize, giftEnd, launch } from "@/lib/launch";
+import { giftEnd, launch } from "@/lib/launch";
 import { SITE_URL } from "@/lib/site";
 import { wineTypesNote, type WineType } from "@/lib/wine-types";
 
 // Correo 1: confirmación de registro en la lista de espera.
-// Plantilla de marca (tablas + estilos en línea) ajustada al Manual de identidad:
-// hueso, negro tinto y vino; titulares en Arial/Helvetica Bold; botón píldora.
+// Formato de carta firmada por Rafael (tablas + estilos en línea): se lee como un correo personal,
+// con el logotipo pequeño dentro de la firma, para que Gmail lo trate menos como promoción.
 
 export const CONFIRMATION_SUBJECT = "Ya estás en la lista de Viviendo Vino";
 
@@ -22,89 +22,55 @@ const HTML = `<!doctype html>
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
 <title>Ya estás en la lista de Viviendo Vino</title>
-<!--[if mso]><style>td,p,h1,a{font-family:Arial,Helvetica,sans-serif!important}</style><![endif]-->
+<!--[if mso]><style>td,p,a{font-family:Arial,Helvetica,sans-serif!important}</style><![endif]-->
 <style>
   body { margin: 0; padding: 0; }
-  img { border: 0; outline: none; text-decoration: none; display: block; }
+  img { border: 0; outline: none; text-decoration: none; }
   a { color: #9a2030; }
   @media (max-width: 620px) {
-    .container { width: 100% !important; }
-    .px { padding-left: 24px !important; padding-right: 24px !important; }
-    .h1 { font-size: 28px !important; line-height: 34px !important; }
-    .date { font-size: 20px !important; }
+    .px { padding-left: 20px !important; padding-right: 20px !important; }
   }
 </style>
 </head>
-<body style="margin:0;padding:0;background-color:#e5ded7;">
+<body style="margin:0;padding:0;background-color:#ffffff;">
 
 <!-- Preheader: texto de vista previa en la bandeja de entrada -->
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#e5ded7;font-size:1px;line-height:1px;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#ffffff;font-size:1px;line-height:1px;">
   Abrimos el {{LAUNCH_DATE}}. Compra en las primeras 48 horas y recibe un regalo sorpresa.
   &#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;
 </div>
 
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#e5ded7;">
+<!-- Correo con formato de carta: texto, firma de Rafael y el logotipo pequeño dentro de la firma. -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
   <tr>
-    <td align="center" style="padding:32px 12px;">
-
-      <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background-color:#f3ece4;border:1px solid #d7d0c9;border-top:4px solid #9a2030;">
-
-        <!-- Logo -->
-        <tr>
-          <td align="center" class="px" style="padding:44px 40px 0 40px;">
-            <img src="{{LOGO_URL}}" width="240" alt="Viviendo Vino" style="width:240px;height:auto;margin:0 auto;">
-          </td>
-        </tr>
-
-        <!-- Línea de acento -->
-        <tr>
-          <td align="center" style="padding:40px 0 28px 0;">
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-              <tr><td width="32" height="1" style="width:32px;height:1px;line-height:1px;font-size:1px;background-color:#9a2030;">&nbsp;</td></tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- Eyebrow + titular -->
-        <tr>
-          <td align="center" class="px" style="padding:0 40px;">
-            <p style="margin:0 0 14px 0;font-family:${FONT};font-size:12px;line-height:18px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#0a0206;">Ya estás en la lista</p>
-            <h1 class="h1" style="margin:0;font-family:${FONT};font-size:34px;line-height:40px;font-weight:700;letter-spacing:-0.5px;color:#0a0206;">Ya estás dentro.</h1>
-          </td>
-        </tr>
-
-        <!-- Apertura -->
-        <tr>
-          <td class="px" style="padding:32px 40px 0 40px;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #d7d0c9;border-bottom:1px solid #d7d0c9;">
-              <tr>
-                <td align="center" style="padding:24px 12px;">
-                  <p style="margin:0 0 8px 0;font-family:${FONT};font-size:11px;line-height:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#5c5454;">Abrimos</p>
-                  <p class="date" style="margin:0;font-family:${FONT};font-size:24px;line-height:30px;font-weight:700;letter-spacing:-0.3px;color:#9a2030;">{{LAUNCH_DATE_LONG}}</p>
-                  <p style="margin:6px 0 0 0;font-family:${FONT};font-size:14px;line-height:20px;font-weight:400;color:#5c5454;">{{LAUNCH_TIME}} · hora centro de México</p>
-                  <p style="margin:16px 0 0 0;font-family:${FONT};font-size:14px;line-height:21px;font-weight:700;color:#0a0206;">Regalo sorpresa para compras hasta el {{GIFT_END_LONG}}, {{GIFT_END_TIME}}</p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+    <td align="left" class="px" style="padding:32px 24px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;">
 
         <!-- Cuerpo -->
         <tr>
-          <td class="px" style="padding:32px 40px 0 40px;font-family:${FONT};font-size:16px;line-height:26px;font-weight:400;color:#0a0206;">
-            <p style="margin:0 0 18px 0;">Compra tu primer kit de 6 botellas en las primeras 48 horas y te enviamos un regalo sorpresa con tu pedido. Para que lo reconozcamos, compra con este mismo correo.</p>
-            <p style="margin:0;">Mientras tanto, ve pensando tu primer kit: son 6 botellas y tú las armas.</p>
+          <td style="font-family:${FONT};font-size:16px;line-height:26px;color:#0a0206;">
+            <p style="margin:0 0 18px 0;">Hola:</p>
+            <p style="margin:0 0 18px 0;">Gracias por apuntarte a la lista de espera de Viviendo Vino. Ya estás dentro.</p>
+            <p style="margin:0 0 18px 0;">Abrimos el <strong>{{LAUNCH_DATE_LONG}} a las {{LAUNCH_TIME}}</strong> (hora centro de México). Compra tu primer kit de 6 botellas en las primeras 48 horas, hasta el <strong>{{GIFT_END_LONG}}, {{GIFT_END_TIME}}</strong>, y te enviamos un regalo sorpresa con tu pedido. Para que lo reconozcamos, compra con este mismo correo.</p>
+            <p style="margin:0 0 18px 0;">Mientras tanto, ve pensando tu primer kit: son 6 botellas y tú las armas.</p>
             {{WINE_TYPES_BLOCK}}
+            <p style="margin:0 0 28px 0;">La cuenta regresiva está en <a href="{{SITE_URL}}" style="color:#9a2030;text-decoration:underline;">viviendovino.com</a>.</p>
+            <p style="margin:0 0 20px 0;">Salud,</p>
           </td>
         </tr>
 
-        <!-- Botón -->
+        <!-- Firma -->
         <tr>
-          <td align="center" class="px" style="padding:36px 40px 0 40px;">
+          <td>
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
               <tr>
-                <td align="center" bgcolor="#9a2030" style="background-color:#9a2030;border-radius:999px;">
-                  <a href="{{SITE_URL}}" style="display:inline-block;padding:14px 30px;font-family:${FONT};font-size:15px;line-height:20px;font-weight:700;color:#f3ece4;text-decoration:none;border-radius:999px;">Ver la cuenta regresiva</a>
+                <td valign="top" style="padding:0 14px 0 0;">
+                  <img src="{{PHOTO_URL}}" width="64" height="64" alt="Rafael Aguirre" style="display:block;width:64px;height:64px;border-radius:50%;">
+                </td>
+                <td valign="top" style="font-family:${FONT};font-size:15px;line-height:21px;color:#0a0206;">
+                  <p style="margin:2px 0 2px 0;font-weight:700;">Rafael Aguirre</p>
+                  <p style="margin:0 0 10px 0;color:#5c5454;">Viviendo Vino</p>
+                  <a href="{{SITE_URL}}" style="text-decoration:none;"><img src="{{LOGO_URL}}" width="104" alt="Viviendo Vino" style="display:block;width:104px;height:auto;"></a>
                 </td>
               </tr>
             </table>
@@ -113,13 +79,12 @@ const HTML = `<!doctype html>
 
         <!-- Pie -->
         <tr>
-          <td align="center" class="px" style="padding:44px 40px 36px 40px;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #d7d0c9;">
+          <td style="padding-top:36px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #e5ded7;">
               <tr>
-                <td align="center" style="padding-top:24px;font-family:${FONT};font-size:12px;line-height:19px;font-weight:400;color:#5c5454;">
-                  <p style="margin:0 0 6px 0;">Viviendo Vino · Consumo exclusivo para mayores de edad.</p>
-                  <p style="margin:0;">Recibes este correo porque te registraste en la lista de espera en viviendovino.com.<br>
-                  <a href="{{UNSUBSCRIBE_URL}}" style="color:#5c5454;text-decoration:underline;">Darme de baja</a></p>
+                <td style="padding-top:16px;font-family:${FONT};font-size:12px;line-height:18px;color:#5c5454;">
+                  <p style="margin:0 0 4px 0;">Viviendo Vino · Consumo exclusivo para mayores de edad.</p>
+                  <p style="margin:0;">Recibes este correo porque te registraste en la lista de espera en viviendovino.com. <a href="{{UNSUBSCRIBE_URL}}" style="color:#5c5454;text-decoration:underline;">Darme de baja</a></p>
                 </td>
               </tr>
             </table>
@@ -127,7 +92,6 @@ const HTML = `<!doctype html>
         </tr>
 
       </table>
-
     </td>
   </tr>
 </table>
@@ -135,16 +99,20 @@ const HTML = `<!doctype html>
 </html>
 `;
 
-const TEXT = `YA ESTÁS DENTRO.
+const TEXT = `Hola:
 
-Abrimos el {{LAUNCH_DATE_LONG}} a las {{LAUNCH_TIME}} (hora centro de México).
-Regalo sorpresa para compras hasta el {{GIFT_END_LONG}}, {{GIFT_END_TIME}}.
+Gracias por apuntarte a la lista de espera de Viviendo Vino. Ya estás dentro.
 
-Compra tu primer kit de 6 botellas en las primeras 48 horas y te enviamos un regalo sorpresa con tu pedido. Para que lo reconozcamos, compra con este mismo correo.
+Abrimos el {{LAUNCH_DATE_LONG}} a las {{LAUNCH_TIME}} (hora centro de México). Compra tu primer kit de 6 botellas en las primeras 48 horas, hasta el {{GIFT_END_LONG}}, {{GIFT_END_TIME}}, y te enviamos un regalo sorpresa con tu pedido. Para que lo reconozcamos, compra con este mismo correo.
 
 Mientras tanto, ve pensando tu primer kit: son 6 botellas y tú las armas.
 {{WINE_TYPES_TEXT}}
-Ver la cuenta regresiva: {{SITE_URL}}
+La cuenta regresiva está en {{SITE_URL}}
+
+Salud,
+
+Rafael Aguirre
+Viviendo Vino
 
 --
 Viviendo Vino · Consumo exclusivo para mayores de edad.
@@ -165,7 +133,7 @@ function escapeHtml(text: string): string {
 
 export function wineTypesSentence(types: readonly WineType[]): string | null {
   const note = wineTypesNote(types);
-  return note ? `${note} Lo tendremos presente para el primer kit.` : null;
+  return note ? `${note} Lo tendremos presente para tu primer kit.` : null;
 }
 
 export function renderConfirmationEmail(input: { wineTypes: readonly WineType[]; unsubscribeUrl: string }) {
@@ -174,7 +142,8 @@ export function renderConfirmationEmail(input: { wineTypes: readonly WineType[];
     LOGO_URL: `${SITE_URL}/email/logo-viviendo-vino.png`,
     SITE_URL,
     LAUNCH_DATE: launch.shortDay,
-    LAUNCH_DATE_LONG: capitalize(launch.day),
+    PHOTO_URL: `${SITE_URL}/email/rafael-aguirre.jpg`,
+    LAUNCH_DATE_LONG: launch.day,
     LAUNCH_TIME: launch.time,
     GIFT_END_LONG: giftEnd.day,
     GIFT_END_TIME: giftEnd.time,
@@ -182,13 +151,8 @@ export function renderConfirmationEmail(input: { wineTypes: readonly WineType[];
   };
   const html = fill(HTML, {
     ...vars,
-    WINE_TYPES_BLOCK: sentence ? `<p style="margin:18px 0 0 0;">${escapeHtml(sentence)}</p>` : "",
+    WINE_TYPES_BLOCK: sentence ? `<p style="margin:0 0 18px 0;">${escapeHtml(sentence)}</p>` : "",
   });
-  // En texto plano la fecha va a media frase ("Abrimos el jueves 19 de noviembre"): sin mayúscula.
-  const text = fill(TEXT, {
-    ...vars,
-    LAUNCH_DATE_LONG: launch.day,
-    WINE_TYPES_TEXT: sentence ? `\n${sentence}\n` : "",
-  });
+  const text = fill(TEXT, { ...vars, WINE_TYPES_TEXT: sentence ? `\n${sentence}\n` : "" });
   return { subject: CONFIRMATION_SUBJECT, html, text };
 }
