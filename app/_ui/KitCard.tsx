@@ -1,5 +1,5 @@
 import { GROUP_LABELS, type BottleGroup } from "@/lib/catalog/types";
-import { Button } from "./Button";
+import { Button, ButtonLink } from "./Button";
 import { Icon } from "./Icon";
 import { Price } from "./Price";
 import { MonoTag } from "./Typography";
@@ -15,6 +15,7 @@ export function KitCard({
   lines,
   totalCents,
   variant = "preset",
+  href,
   onPrimary,
   onRemove,
 }: {
@@ -23,6 +24,8 @@ export function KitCard({
   lines: KitLine[];
   totalCents: number;
   variant?: "preset" | "cart";
+  /** Kit prearmado fuera del armador: "Usar este kit" lleva al armador con el kit cargado. */
+  href?: string;
   onPrimary?: () => void;
   onRemove?: () => void;
 }) {
@@ -55,9 +58,13 @@ export function KitCard({
               Quitar
             </Button>
           )}
-          <Button variant={variant === "cart" ? "secondary" : "primary"} onClick={onPrimary}>
-            {variant === "cart" ? "Editar" : "Usar este kit"}
-          </Button>
+          {href ? (
+            <ButtonLink href={href}>Usar este kit</ButtonLink>
+          ) : (
+            <Button variant={variant === "cart" ? "secondary" : "primary"} onClick={onPrimary}>
+              {variant === "cart" ? "Editar" : "Usar este kit"}
+            </Button>
+          )}
         </div>
       </footer>
     </article>

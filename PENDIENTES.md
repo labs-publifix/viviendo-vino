@@ -12,11 +12,15 @@ Lo que falta confirmar o conseguir para la tienda. Se actualiza en cada ronda.
 - [ ] Grado alcohólico y volumen de cada etiqueta.
 - [ ] Fotografías de producto (hoy se usan placeholders).
 
+## Tienda en el preview
+- [ ] Los botones "Agregar" y "Usar este kit" llevan a `/arma-tu-kit`, que se construye en el paso 5 (armador y carrito). Hasta entonces responde 404.
+
 ## Marca
-- [ ] Archivos de favicon y webclip del kit de marca (el manual los marca "LISTO"; no están en el repo). Hoy los íconos son recortes del logo.
-- [ ] Confirmar JetBrains Mono como tipografía de etiquetas (el manual la marca "por confirmar"; alterna: Space Mono).
+- [x] Archivos de favicon y webclip del kit de marca (en `public/`).
+- [x] JetBrains Mono confirmada para etiquetas y numeración.
 - [ ] Leyenda legal definitiva de mayoría de edad y consumo responsable (pendiente del equipo legal).
 
 ## Infraestructura
-- [ ] Proyecto de Supabase de staging y sus variables en Preview.
+- [x] Proyecto de Supabase de staging, variables en Preview y catálogo cargado.
+- [ ] Producción: correr `supabase/seed/catalogo-completo.sql` en el proyecto de producción antes de abrir (las páginas de la tienda no consultan la base mientras `STORE_OPEN` no sea `true`).
 - [ ] Credenciales de prueba de Mercado Pago (fase de pagos).

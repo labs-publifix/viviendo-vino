@@ -1,0 +1,104 @@
+/* Portada de la tienda. Bloques oscuros solo arriba y al cierre (DESIGN.md §1). */
+.hero { display: flex; flex-direction: column; gap: var(--s-5); align-items: flex-start; padding: var(--s-6) 0; }
+.heroTitle {
+  margin: 0;
+  font-size: var(--t-hero);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+.heroTitle em,
+.closingTitle em { font-style: normal; color: var(--vv-carmin); }
+.heroLede { margin: 0; max-width: 32rem; font-size: var(--t-body-lg); color: rgb(243 236 228 / 0.8); }
+.heroActions { display: flex; flex-wrap: wrap; gap: var(--s-3); padding-top: var(--s-2); }
+
+.section {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--s-9) var(--gutter) 0;
+}
+.lastSection { padding-bottom: var(--s-9); }
+.sectionHead { display: flex; flex-direction: column; gap: var(--s-3); max-width: 44rem; margin-bottom: var(--s-7); }
+.lede { margin: 0; font-size: var(--t-body-lg); color: var(--muted); }
+
+/* Pasos */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--s-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.step { display: flex; flex-direction: column; gap: var(--s-2); padding-top: var(--s-4); border-top: 2px solid var(--vv-vino); }
+.step h3 { margin: 0; font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+.step p { margin: 0; color: var(--muted); }
+.stepNum { font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; color: var(--vv-vino); }
+
+/* Grupos */
+.groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--s-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.groupHead { display: flex; flex-direction: column; gap: var(--s-1); }
+.groupHead h3 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+.groupDesc { margin: 0; color: var(--muted); font-size: var(--t-small); }
+.groupFoot { display: flex; flex-direction: column; gap: var(--s-4); margin-top: auto; padding-top: var(--s-3); border-top: 1px solid var(--line); }
+.range { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.35em; margin: var(--s-1) 0 0; }
+.rangeSep { color: var(--muted); }
+.groupLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  color: var(--vv-vino);
+  font-weight: 600;
+  text-decoration: none;
+}
+.groupLink:hover { text-decoration: underline; }
+
+/* Categorías: lista editorial, no tarjetas */
+.categories { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.categories li { border-bottom: 1px solid var(--line); }
+.category {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--s-1) var(--s-4);
+  padding: var(--s-5) 0;
+  color: inherit;
+  text-decoration: none;
+}
+.categoryName { font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; }
+.categoryMeta { grid-column: 1; grid-row: 2; }
+.category svg { grid-column: 2; grid-row: 1 / span 2; color: var(--vv-vino); transition: transform var(--vv-dur) var(--vv-ease); }
+.category:hover .categoryName { text-decoration: underline; text-decoration-thickness: 2px; }
+.category:hover svg { transform: translateX(4px); }
+
+.kits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: var(--s-4);
+  align-items: start;
+}
+
+.closing { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-5); }
+.closingTitle { margin: 0; font-size: var(--t-section); font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; }
+
+@media (min-width: 900px) {
+  .hero { padding: var(--s-8) 0; }
+  .closing { flex-direction: row; align-items: center; justify-content: space-between; }
+}

@@ -85,3 +85,13 @@
   .bar { animation: pulse 1.4s ease-in-out infinite; }
 }
 @keyframes pulse { 50% { opacity: 0.5; } }
+
+/* Tarjeta angosta (dos columnas en móvil): precio arriba y botón a todo el ancho. */
+.card { container-type: inline-size; }
+@container (max-width: 240px) {
+  .body { padding: var(--s-3); }
+  .foot { flex-direction: column; align-items: stretch; gap: var(--s-2); }
+  .foot > a,
+  .foot > button { width: 100%; }
+  .note { text-align: left; }
+}

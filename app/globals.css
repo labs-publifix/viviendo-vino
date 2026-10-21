@@ -116,3 +116,17 @@ a { text-underline-offset: 0.18em; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Enlace para saltar al contenido: visible solo con teclado. */
+.vv-skip {
+  position: absolute;
+  top: var(--s-2);
+  left: var(--s-2);
+  z-index: 100;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--vv-radius-pill);
+  background: var(--vv-negro);
+  color: var(--vv-hueso);
+  transform: translateY(-200%);
+}
+.vv-skip:focus-visible { transform: none; }

@@ -1,0 +1,50 @@
+.page { max-width: var(--container); margin: 0 auto; padding: var(--s-8) var(--gutter) var(--s-9); }
+.intro { display: flex; flex-direction: column; gap: var(--s-3); max-width: 44rem; padding-bottom: var(--s-6); }
+.lede { margin: 0; font-size: var(--t-body-lg); color: var(--muted); }
+
+.jump ul { display: flex; flex-wrap: wrap; gap: var(--s-2); margin: var(--s-3) 0 0; padding: 0; list-style: none; }
+.jump a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  padding: 0 var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--vv-radius-pill);
+  color: inherit;
+  font-size: var(--t-small);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color var(--vv-dur) var(--vv-ease);
+}
+.jump a:hover { border-color: var(--vv-negro); }
+.jump span { font-family: var(--font-label); font-size: 11px; font-weight: 500; color: var(--muted); }
+
+.category { padding-top: var(--s-7); scroll-margin-top: var(--s-4); }
+.categoryHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  max-width: 44rem;
+  padding-top: var(--s-5);
+  margin-bottom: var(--s-5);
+  border-top: 1px solid var(--line);
+}
+.categoryTitle { margin: 0; font-size: clamp(30px, 4vw, 44px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+.categoryIntro { margin: 0; color: var(--muted); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: var(--s-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.grid li { display: flex; }
+.grid li > * { flex: 1; }
+
+/* En móvil, dos columnas compactas para ver más vinos con el pulgar. */
+@media (max-width: 559px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
+}

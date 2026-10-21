@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { GROUP_LABELS, type Wine } from "@/lib/catalog/types";
 import { BottlePlaceholder } from "./BottlePlaceholder";
-import { Button } from "./Button";
+import { Button, ButtonLink } from "./Button";
 import { Icon } from "./Icon";
 import { Price } from "./Price";
 import { QuantityStepper } from "./QuantityStepper";
@@ -18,6 +18,7 @@ export function WineCard({
   quantity = 0,
   canAdd = true,
   href,
+  addHref,
   onAdd,
   onIncrement,
   onDecrement,
@@ -27,6 +28,8 @@ export function WineCard({
   quantity?: number;
   canAdd?: boolean;
   href?: string;
+  /** Sin armador en la página (catálogo, ficha): "Agregar" lleva al armador con el vino elegido. */
+  addHref?: string;
   onAdd?: () => void;
   onIncrement?: () => void;
   onDecrement?: () => void;
@@ -77,6 +80,10 @@ export function WineCard({
               onIncrement={onIncrement}
               onDecrement={onDecrement}
             />
+          ) : addHref ? (
+            <ButtonLink variant="secondary" href={addHref} aria-label={`Agregar ${wine.name} a mi kit`}>
+              Agregar
+            </ButtonLink>
           ) : (
             <Button variant="secondary" onClick={onAdd} disabled={!canAdd} aria-label={`Agregar ${wine.name} a mi kit`}>
               Agregar

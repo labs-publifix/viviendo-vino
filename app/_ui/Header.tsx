@@ -10,7 +10,7 @@ import styles from "./Header.module.css";
 
 const NAV = [
   { href: "/vinos", label: "Vinos" },
-  { href: "/como-funciona", label: "Cómo funciona" },
+  { href: "/#como-funciona", label: "Cómo funciona" },
   { href: "/envios", label: "Envíos" },
 ];
 

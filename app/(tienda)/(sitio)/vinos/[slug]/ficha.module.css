@@ -1,0 +1,80 @@
+.page { max-width: var(--container); margin: 0 auto; padding: var(--s-5) var(--gutter) var(--s-9); }
+
+.crumbs ol { display: flex; flex-wrap: wrap; gap: var(--s-2); margin: 0 0 var(--s-5); padding: 0; list-style: none; font-size: var(--t-small); color: var(--muted); }
+.crumbs li:not(:last-child)::after { content: "/"; margin-left: var(--s-2); color: var(--line); }
+.crumbs a { color: inherit; }
+.crumbs a:hover { color: var(--fg); }
+.crumbs [aria-current] { color: var(--fg); }
+
+.main { display: grid; gap: var(--s-6); grid-template-columns: minmax(0, 1fr); }
+.media { border: 1px solid var(--line); border-radius: var(--r-card); overflow: hidden; background: var(--surface); align-self: start; }
+.photo { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+
+.info { display: flex; flex-direction: column; gap: var(--s-4); min-width: 0; }
+.title { margin: 0; font-size: clamp(32px, 4.4vw, 52px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.02; text-wrap: balance; }
+.award {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 12px;
+  border: 1px solid var(--vv-vino);
+  border-radius: var(--vv-radius-pill);
+  color: var(--vv-vino);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.desc { margin: 0; max-width: 36rem; font-size: var(--t-body-lg); line-height: 1.55; }
+
+.buy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.priceRow { display: flex; align-items: baseline; gap: var(--s-2); flex-wrap: wrap; }
+.per { color: var(--muted); font-size: var(--t-small); }
+.compat { margin: 0; }
+.soldOut { margin: 0; color: var(--muted); }
+.perks { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); margin: 0; padding: 0; list-style: none; font-size: var(--t-small); color: var(--muted); }
+.perks li { display: inline-flex; align-items: center; gap: var(--s-2); }
+.perks svg { color: var(--vv-vino); }
+
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--s-5); margin: 0; }
+.facts div { padding: var(--s-3) 0; border-top: 1px solid var(--line); }
+.facts dt { font-family: var(--font-label); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 2px 0 0; font-weight: 600; }
+
+.related { display: flex; flex-direction: column; gap: var(--s-3); padding-top: var(--s-9); }
+.relatedTitle { margin: 0 0 var(--s-3); font-size: clamp(28px, 3.6vw, 40px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: var(--s-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.grid li { display: flex; }
+.grid li > * { flex: 1; }
+.kits { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: var(--s-4); align-items: start; }
+
+@media (max-width: 559px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
+}
+@media (min-width: 900px) {
+  .main { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--s-8); align-items: start; }
+  .media { position: sticky; top: calc(72px + var(--s-5)); }
+}
+/* En móvil la botella no empuja el precio fuera de la primera pantalla. */
+@media (max-width: 899px) {
+  .media > div,
+  .media > img { aspect-ratio: 5 / 4; }
+}
