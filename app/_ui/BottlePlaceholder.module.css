@@ -1,0 +1,18 @@
+.frame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  background:
+    radial-gradient(70% 60% at 50% 65%, rgb(154 32 48 / 0.05), transparent 70%),
+    var(--surface);
+}
+.bottle { width: 34%; height: auto; overflow: visible; }
+.bottle path {
+  fill: none;
+  stroke: rgb(10 2 6 / 0.35);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.bottle .label { stroke: rgb(154 32 48 / 0.45); }

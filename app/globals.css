@@ -5,8 +5,43 @@
   --vv-vino: #9a2030;
   --vv-carmin: #cf2c4b;
   --vv-ciruela: #641f53;
+  --vv-orquidea: #d2a5c8;
+  --vv-ambar: #d98a4b; /* manual: "por medir" */
   --vv-radius-pill: 999px;
   --vv-dur: 240ms;
+  --vv-ease: cubic-bezier(0.16, 1, 0.3, 1); /* fundido con desplazamiento corto, sin rebote */
+
+  /* Estados (Manual · 6 funcionales): solo punto o texto pequeño, nunca fondo. */
+  --ok: #2b7a50;
+  --error: #c33a2c;
+  --aviso: #b97a12;
+
+  /* Espaciado (DESIGN.md §4). */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+  --container: 1200px;
+  --gutter: clamp(16px, 4vw, 32px);
+  --r-card: 16px;
+  --shadow-float: 0 8px 24px rgb(10 2 6 / 0.14);
+
+  /* Escala tipográfica (Manual · 5). */
+  --t-hero: clamp(48px, 9vw, 120px);
+  --t-section: clamp(36px, 5vw, 56px);
+  --t-subtitle: clamp(22px, 2.4vw, 28px);
+  --t-body: 16px;
+  --t-body-lg: 18px;
+  --t-label: 12px;
+  --t-small: 14px;
+  --line-dark: rgb(243 236 228 / 0.16);
+  --surface: #faf6f1;
 
   --font-display: var(--font-inter), "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-label: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
@@ -73,6 +108,10 @@ body::before {
 }
 
 :focus-visible { outline: var(--focus); outline-offset: 2px; }
+
+::selection { background: var(--vv-vino); color: var(--vv-hueso); }
+input, textarea { caret-color: var(--vv-carmin); }
+a { text-underline-offset: 0.18em; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }

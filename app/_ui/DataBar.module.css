@@ -1,0 +1,16 @@
+.row { display: grid; grid-template-columns: 7rem 1fr 3rem; align-items: center; gap: var(--s-3); }
+.label,
+.value {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.value { text-align: right; font-variant-numeric: tabular-nums; }
+.track { height: 4px; border-radius: 2px; background: rgb(10 2 6 / 0.1); overflow: hidden; }
+.fill { display: block; height: 100%; background: var(--vv-ciruela); }
+@media (prefers-reduced-motion: no-preference) {
+  .fill { animation: grow 600ms var(--vv-ease) both; transform-origin: left; }
+}
+@keyframes grow { from { transform: scaleX(0); } }

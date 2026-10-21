@@ -1,0 +1,70 @@
+.btn {
+  --b-bg: var(--vv-vino);
+  --b-fg: var(--vv-hueso);
+  --b-line: var(--vv-vino);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  padding: 10px 22px;
+  border: 1px solid var(--b-line);
+  border-radius: var(--vv-radius-pill);
+  background: var(--b-bg);
+  color: var(--b-fg);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--vv-dur) var(--vv-ease), color var(--vv-dur) var(--vv-ease),
+    border-color var(--vv-dur) var(--vv-ease), transform 120ms var(--vv-ease);
+}
+.btn:active:not(:disabled) { transform: translateY(1px); }
+/* Deshabilitado: neutro, sin acento (el vino solo marca lo que se puede hacer). */
+.btn:disabled { cursor: not-allowed; }
+.primary:disabled,
+.secondary:disabled { --b-bg: rgb(10 2 6 / 0.08); --b-line: transparent; --b-fg: #6e6566; }
+.dark:disabled { --b-bg: rgb(243 236 228 / 0.1); --b-line: transparent; --b-fg: rgb(243 236 228 / 0.55); }
+.link:disabled { --b-fg: #6e6566; }
+.loading:disabled { cursor: progress; --b-bg: var(--vv-vino); --b-line: var(--vv-vino); --b-fg: var(--vv-hueso); opacity: 0.85; }
+
+.lg { min-height: 52px; padding: 14px 30px; font-size: 16px; }
+.block { display: flex; width: 100%; }
+
+/* Relleno */
+.primary.light:hover:not(:disabled) { --b-bg: #7f1a28; --b-line: #7f1a28; }
+.primary.dark { --b-bg: var(--vv-carmin); --b-line: var(--vv-carmin); --b-fg: #fff; }
+.primary.dark:hover:not(:disabled) { --b-bg: #b8223f; --b-line: #b8223f; }
+
+/* Contorno */
+.secondary { --b-bg: transparent; --b-fg: var(--vv-negro); --b-line: rgb(10 2 6 / 0.35); }
+.secondary.light:hover:not(:disabled) { --b-line: var(--vv-negro); --b-bg: rgb(10 2 6 / 0.04); }
+.secondary.dark { --b-fg: var(--vv-hueso); --b-line: rgb(243 236 228 / 0.4); }
+.secondary.dark:hover:not(:disabled) { --b-line: var(--vv-hueso); --b-bg: rgb(243 236 228 / 0.06); }
+
+/* Enlace */
+.link {
+  --b-bg: transparent;
+  --b-line: transparent;
+  --b-fg: var(--vv-negro);
+  min-height: 44px;
+  padding-inline: 0;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+.link.dark { --b-fg: var(--vv-hueso); }
+.link:hover:not(:disabled) { --b-fg: var(--vv-vino); }
+.link.dark:hover:not(:disabled) { --b-fg: var(--vv-orquidea); }
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

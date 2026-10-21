@@ -1,0 +1,17 @@
+.notice {
+  --dot: var(--vv-negro);
+  display: flex;
+  gap: var(--s-3);
+  align-items: flex-start;
+  padding: var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.ok { --dot: var(--ok); }
+.aviso { --dot: var(--aviso); }
+.error { --dot: var(--error); }
+.dot { flex: none; width: 8px; height: 8px; margin-top: 7px; border-radius: 50%; background: var(--dot); }
+.title { margin: 0 0 2px; font-weight: 700; }
+.body { font-size: var(--t-small); line-height: 1.5; color: var(--muted); }
+.body p { margin: 0; }

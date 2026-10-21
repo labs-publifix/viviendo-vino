@@ -1,0 +1,184 @@
+{
+  "fuente_precios": "Excel final del aliado (1039e6c2-catalogo_final.xlsx); precios con envío incluido",
+  "fuente_textos": "Catalogo_con_Precios.pdf del aliado (precios del PDF NO se usan)",
+  "nota": "Las descripciones son texto fuente: reescribir en voz de marca. Grupo color define compatibilidad en la caja de 6.",
+  "introducciones_categoria": {
+    "general": "Enotria Tellus ('la tierra del vino') es el nombre que los antiguos griegos dieron al sur de Italia (Calabria, Campania y Sicilia) en el siglo VII a.C.; los colonos helenos introdujeron y perfeccionaron el cultivo y la vinificación, y de ahí vienen muchas uvas italianas actuales.",
+    "blancos-rosado": "Vino blanco fresco y elegante, con aromas frutales y final suave y armonioso; aromas frescos, notas cítricas y matices florales. Rosado: fresco y sofisticado, notas frutales y florales, equilibrio entre frescura y suavidad.",
+    "tintos": "Selección de tintos elegidos por su carácter, sofisticación y tradición; cada etiqueta refleja la esencia de las mejores regiones vinícolas, con aromas intensos, notas afrutadas y una experiencia refinada.",
+    "espumosos": "Espumoso de gran frescura y sofisticación, finas burbujas y delicadas notas frutales y florales; ligero y elegante, para celebrar momentos especiales."
+  },
+  "vinos": [
+    {
+      "categoria": "blancos-rosado",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Chardonnay Vento IGT 2024",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Chardonnay Levorato Veneto",
+      "precio_mxn": 300,
+      "descripcion_aliado_texto_fuente": "Cuerpo medio y suave; pera madura, manzana y toque cítrico; acidez equilibrada y ligero matiz mineral."
+    },
+    {
+      "categoria": "blancos-rosado",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Sauvignon Blanc Trevenezie IGT 2024",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Sauvignon Blanc Levorato",
+      "precio_mxn": 310,
+      "descripcion_aliado_texto_fuente": "Fresco y vibrante; manzana verde, ralladura de cítricos y sutil toque herbal; acidez refrescante."
+    },
+    {
+      "categoria": "blancos-rosado",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Pinot Grigio delle Venezie DOC 2024",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Pinot Grigio delle Venezie DOC",
+      "precio_mxn": 315,
+      "descripcion_aliado_texto_fuente": "Fresco y delicado; manzana verde, pera y melocotón blanco; notas florales de acacia y jazmín y toque cítrico de limón y lima."
+    },
+    {
+      "categoria": "blancos-rosado",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Traminer Aromático Trevenezie IGT 2025",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Traminer Aromático Levorato",
+      "precio_mxn": 300,
+      "descripcion_aliado_texto_fuente": "Rico y aromático; lichi, agua de rosas y frutas de hueso maduras como melocotón y albaricoque."
+    },
+    {
+      "categoria": "blancos-rosado",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Falanghina Puglia IGT",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Falanghina Levorato",
+      "precio_mxn": 320,
+      "descripcion_aliado_texto_fuente": "Cuerpo ligero a medio; cítricos vibrantes, manzana verde crujiente y toque de pera."
+    },
+    {
+      "categoria": "blancos-rosado",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Soave DOC 2024",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Soave Levorato DOC",
+      "precio_mxn": 300,
+      "descripcion_aliado_texto_fuente": "Ligero y refrescante; limón, manzana verde y melocotón blanco; acidez viva y equilibrada."
+    },
+    {
+      "categoria": "blancos-rosado",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Pinot Grigio delle Venezie DOC Blush (rosado) 2025",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Pinot grigio blush delle Venezie DOC",
+      "precio_mxn": 310,
+      "descripcion_aliado_texto_fuente": "Fresco y ligero; frutos rojos frescos, cítricos y delicado toque de melocotón blanco; acidez refrescante."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Cabernet Sauvignon Veneto IGT 2024",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Cabernet Souvignon Levorato",
+      "precio_mxn": 310,
+      "descripcion_aliado_texto_fuente": "Aromas intensos de cassis, mora y especias; paladar estructurado con taninos firmes y notas de chocolate y hierbas."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Merlot Veneto IGT 2024",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Merlot Levorato",
+      "precio_mxn": 300,
+      "descripcion_aliado_texto_fuente": "Suave, de cuerpo medio; frutos rojos maduros, especialmente bayas, con pimienta y vainilla."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Montepulciano d'Abruzzo DOC 2024",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Montepulciano d'Abruzzo DOC Levorato",
+      "precio_mxn": 300,
+      "descripcion_aliado_texto_fuente": "Cuerpo pleno y bien estructurado; cereza y mora, regaliz y especias."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "azul",
+      "nombre_oficial_excel": "Langhe Nebbiolo",
+      "productor": "Fiorella Bertino",
+      "nombre_comercial_pdf": "Nebbiolo Langhe DOC Fiorella Bertino",
+      "precio_mxn": 405,
+      "descripcion_aliado_texto_fuente": "SIN NOTA DE CATA en el PDF (solo filosofía de Cantina Bertino); pedir ficha al aliado."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "rojo",
+      "nombre_oficial_excel": "Don Carlo Rosso Veneto IGT 2018",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Levorato Don Carlo Veneto",
+      "precio_mxn": 545,
+      "descripcion_aliado_texto_fuente": "Cuerpo medio y armonioso; frutos rojos y negros maduros, especias sutiles y toque terroso."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "rojo",
+      "nombre_oficial_excel": "Primitivo di Manduria DOC 2023",
+      "productor": "Villa Fulvia (Levorato)",
+      "nombre_comercial_pdf": "Primitivo Manduria DOC Villa Fulvia",
+      "precio_mxn": 600,
+      "descripcion_aliado_texto_fuente": "Rico, suave y bien estructurado; frutos negros maduros, mermelada y ciruela, pimienta negra y cuero."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "rojo",
+      "nombre_oficial_excel": "Valpolicella Ripasso Classico Superiore DOC 2020",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Valpolicella ripasso superiore Doc Levorato",
+      "precio_mxn": 670,
+      "descripcion_aliado_texto_fuente": "Perfumes picantes y pimienta negra con toque de pasas; equilibrado, de cuerpo completo, muy intenso y picante, con cereza dulce."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "rojo",
+      "nombre_oficial_excel": "Amarone della Valpolicella Classico DOCG 2017",
+      "productor": "Levorato",
+      "nombre_comercial_pdf": "Amarone della Valpolicella Doc Levorato",
+      "precio_mxn": 1435,
+      "descripcion_aliado_texto_fuente": "Complejo e intenso; miel de acacia, mora y cereza Vignola, con especias oscuras, pimienta negra y café."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "verde",
+      "nombre_oficial_excel": "Sangiovese Puglia IGT 2024 (Double Gold)",
+      "productor": "Bodega Rocca",
+      "nombre_comercial_pdf": "Sangiovese Primitivo Puglia (asignación inferida)",
+      "precio_mxn": 350,
+      "descripcion_aliado_texto_fuente": "Color rojo intenso; aroma complejo de violeta y frutos rojos maduros; redondo, fino y armonioso, con acidez equilibrada y buena estructura."
+    },
+    {
+      "categoria": "tintos",
+      "grupo_color": "verde",
+      "nombre_oficial_excel": "Primitivo 2025 (Double Gold)",
+      "productor": "Rocca",
+      "nombre_comercial_pdf": "Primitivo Salento (asignación inferida)",
+      "precio_mxn": 352,
+      "descripcion_aliado_texto_fuente": "Rojo rubí muy elegante; aromas intensos de ciruelas maduras, confituras de cereza y cacao."
+    },
+    {
+      "categoria": "espumosos",
+      "grupo_color": "amarillo",
+      "nombre_oficial_excel": "Prosecco DOC Spumante Brut Imperial",
+      "productor": "Carlov / Carlos V",
+      "nombre_comercial_pdf": "Prosecco Imperial Carlos V DOC",
+      "precio_mxn": 495,
+      "descripcion_aliado_texto_fuente": "Color pajizo pálido con burbujas suaves y persistentes; flores blancas, pera, manzana y toque cítrico; vibrante pero suave en boca."
+    },
+    {
+      "categoria": "espumosos",
+      "grupo_color": "amarillo",
+      "nombre_oficial_excel": "Rosé Extra Dry 921",
+      "productor": "Collevento",
+      "nombre_comercial_pdf": "921 Rose Collevento",
+      "precio_mxn": 465,
+      "descripcion_aliado_texto_fuente": "Nariz inmediata y fresca de rosa y frutos rojos; suave e inmediato en boca, baja graduación alcohólica y gran bebibilidad; final neto que deja la boca limpia."
+    }
+  ]
+}

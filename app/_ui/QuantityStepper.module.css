@@ -1,0 +1,22 @@
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--vv-negro);
+  border-radius: var(--vv-radius-pill);
+  background: var(--surface);
+}
+.btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--vv-radius-pill);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+  transition: background-color var(--vv-dur) var(--vv-ease);
+}
+.btn:hover:not(:disabled) { background: rgb(10 2 6 / 0.06); }
+.btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.value { min-width: 2ch; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }

@@ -1,0 +1,29 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s-4); }
+.head > div { display: flex; flex-direction: column; gap: var(--s-2); }
+.head span:first-child { display: inline-flex; align-items: center; gap: 6px; }
+.title { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+
+.lines { margin: 0; padding: var(--s-3) 0 0; list-style: none; border-top: 1px solid var(--line); display: grid; gap: 6px; }
+.lines li { display: flex; gap: var(--s-2); font-size: var(--t-small); }
+.qty { flex: none; min-width: 2.2ch; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--vv-vino); }
+.name { min-width: 0; }
+
+.foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); flex-wrap: wrap; }
+.shipping {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.actions { display: flex; align-items: center; gap: var(--s-3); }

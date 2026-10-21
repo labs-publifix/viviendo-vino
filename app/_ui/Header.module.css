@@ -1,0 +1,85 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgb(243 236 228 / 0.92);
+  backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--s-3) var(--gutter);
+  min-height: 64px;
+}
+.logo { flex: none; display: block; line-height: 0; }
+.logo img { width: 132px; height: auto; } /* manual: horizontal ≥ 120 px */
+
+.nav ul { display: flex; gap: var(--s-5); margin: 0; padding: 0; list-style: none; }
+.navLink {
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  padding: 12px 0;
+  display: inline-block;
+}
+.navLink:hover { color: var(--vv-vino); }
+
+.actions { display: flex; align-items: center; gap: var(--s-2); margin-left: auto; }
+.cart,
+.menuBtn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--vv-radius-pill);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+.cart:hover,
+.menuBtn:hover { background: rgb(10 2 6 / 0.06); }
+.count {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--vv-vino);
+  color: var(--vv-hueso);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.menuBtn { display: none; }
+
+@media (max-width: 760px) {
+  .menuBtn { display: grid; }
+  .cta { display: none; }
+  .nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: var(--s-2) var(--gutter) var(--s-5);
+  }
+  .nav.open { display: block; }
+  .nav ul { flex-direction: column; gap: 0; }
+  .navLink { display: block; padding: 14px 0; font-size: 13px; border-bottom: 1px solid var(--line); }
+}

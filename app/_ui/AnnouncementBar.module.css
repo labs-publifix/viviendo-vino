@@ -1,0 +1,37 @@
+.bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 6px 52px;
+  background: var(--vv-negro);
+  color: var(--vv-hueso);
+  text-align: center;
+}
+.bar p {
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.bar a { display: inline-flex; align-items: center; gap: 4px; color: var(--vv-hueso); text-decoration: underline; }
+.bar a:hover { color: var(--vv-orquidea); }
+.close {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--vv-radius-pill);
+  background: transparent;
+  color: var(--vv-hueso);
+  cursor: pointer;
+}
+.close:hover { background: rgb(243 236 228 / 0.1); }

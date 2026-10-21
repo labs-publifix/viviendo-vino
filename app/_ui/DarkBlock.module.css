@@ -1,0 +1,9 @@
+.block {
+  background:
+    radial-gradient(60rem 36rem at 100% 0%, rgb(154 32 48 / 0.14), transparent 70%),
+    radial-gradient(48rem 32rem at 0% 100%, rgb(100 31 83 / 0.1), transparent 70%),
+    var(--vv-negro);
+  color: var(--vv-hueso);
+}
+.inner { max-width: var(--container); margin: 0 auto; padding: var(--s-9) var(--gutter); }
+.block ::selection { background: var(--vv-carmin); color: #fff; }

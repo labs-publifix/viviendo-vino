@@ -1,0 +1,37 @@
+.footer { border-top: 1px solid var(--line); margin-top: var(--s-9); }
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-6);
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--s-7) var(--gutter) var(--s-6);
+}
+.brand { display: flex; flex-direction: column; gap: var(--s-3); max-width: 22rem; }
+.brand img { width: 140px; height: auto; }
+.brand p { margin: 0; color: var(--muted); font-size: var(--t-small); }
+.links { display: grid; gap: var(--s-1); margin: 0; padding: 0; list-style: none; }
+.links a { display: inline-block; padding: 10px 0; color: var(--fg); text-decoration: none; font-size: var(--t-small); }
+.links a:hover { color: var(--vv-vino); text-decoration: underline; }
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-5);
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--s-4) var(--gutter) var(--s-8);
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+}
+.legal p { margin: 0; }
+.age {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+}

@@ -8,7 +8,7 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "800"],
+  weight: ["300", "400", "500", "600", "800", "900"],
 });
 
 const mono = JetBrains_Mono({
