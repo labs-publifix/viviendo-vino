@@ -48,7 +48,7 @@ export function Countdown() {
   return (
     <>
       <p className={styles.lede}>
-        Kits de 6 botellas de vino, armados por ti. <span>{copy.lede}</span>
+        Tienda en línea de kits de 6 botellas de vino, armados por ti. <span>{copy.lede}</span>
       </p>
 
       <div className={styles.count} role="timer" aria-label={copy.label} aria-live="off">

@@ -17,7 +17,7 @@ const mono = JetBrains_Mono({
 });
 
 const title = "Viviendo Vino · Lista de espera";
-const description = `Kits de 6 botellas de vino, armados por ti. Abrimos el ${launch.day}. Apúntate y recibe un regalo sorpresa con tu primer kit.`;
+const description = `Tienda en línea de kits de 6 botellas de vino, armados por ti. Abrimos el ${launch.day}. Apúntate y recibe un regalo sorpresa con tu primer kit.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
