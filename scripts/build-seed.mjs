@@ -109,4 +109,11 @@ lines.push("", "commit;", "");
 const out = join(root, "supabase/seed/catalogo.sql");
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, lines.join("\n"));
+
+// Un solo archivo con tablas + catálogo, para pegar de una vez en el SQL Editor de Supabase.
+const migration = readFileSync(join(root, "supabase/migrations/20261023000000_catalogo.sql"), "utf8");
+writeFileSync(
+  join(root, "supabase/seed/catalogo-completo.sql"),
+  `-- Tablas del catálogo + carga de las 19 etiquetas. Generado por scripts/build-seed.mjs.\n\n${migration}\n${lines.join("\n")}`,
+);
 console.log(`OK: ${fuente.vinos.length} vinos, ${marca.kits_prearmados.length} kits → supabase/seed/catalogo.sql`);
