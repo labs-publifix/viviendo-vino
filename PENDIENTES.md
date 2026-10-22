@@ -14,7 +14,19 @@ Lo que falta confirmar o conseguir para la tienda. Se actualiza en cada ronda.
 
 ## Tienda en el preview
 - [x] Armador (`/arma-tu-kit`) y carrito (`/carrito`), con validación en el servidor.
-- [ ] "Continuar" del carrito lleva a `/checkout`, que se construye en el paso 6. Hasta entonces responde 404.
+- [x] Checkout sin pago (`/checkout`): datos de contacto, entrega, mayoría de edad, factura y aceptaciones; el servidor revisa todo y no guarda nada. Botón de pago desactivado: "Pagos disponibles pronto".
+- [ ] Checkout, fase de pagos: validar cobertura por código postal (K-07), opción "Es un regalo" con mensaje (P1), guardar fecha, hora y versión de las aceptaciones.
+
+## Textos legales e informativos (borradores)
+Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` llevan el aviso "Borrador pendiente de revisión legal" y marcan en amarillo cada dato faltante:
+- [ ] Razón social y domicilio de Viviendo Vino y del aliado.
+- [ ] Zonas y códigos postales con cobertura; plazos de preparación y entrega.
+- [ ] Requisitos al recibir (identificación) y qué pasa si nadie recibe.
+- [ ] Cancelaciones, devoluciones, reposición por daño y reembolsos (incluye quién absorbe la comisión de Mercado Pago).
+- [ ] Impuestos incluidos en el precio.
+- [ ] Aviso de privacidad: responsable, transferencias, ubicación de servidores, procedimiento y plazo ARCO.
+- [ ] Legislación aplicable y tribunales.
+- [ ] Número de WhatsApp de atención.
 - [ ] Al conectar pagos: el pedido debe leer precios sin caché (hoy la validación usa el catálogo cacheado ~1 minuto).
 
 ## Marca

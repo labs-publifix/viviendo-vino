@@ -1,0 +1,61 @@
+.page { max-width: var(--container); margin: 0 auto; padding: var(--s-7) var(--gutter) var(--s-9); }
+.head { display: flex; flex-direction: column; gap: var(--s-3); max-width: 44rem; padding-bottom: var(--s-6); }
+.lede { margin: 0; font-size: var(--t-body-lg); color: var(--muted); }
+.draft {
+  margin: var(--s-2) 0 0;
+  padding: var(--s-3) var(--s-4);
+  border-left: 3px solid var(--aviso);
+  background: var(--surface);
+  font-size: var(--t-small);
+}
+.updated { margin: 0; font-family: var(--font-label); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+.body { max-width: 44rem; }
+.body p,
+.body li { line-height: 1.6; }
+.body a { color: var(--vv-vino); font-weight: 600; }
+.body ul { padding-left: 1.2em; }
+
+.section { padding: var(--s-5) 0; border-top: 1px solid var(--line); }
+.section h2 {
+  display: flex;
+  gap: var(--s-3);
+  align-items: baseline;
+  margin: 0 0 var(--s-3);
+  font-size: var(--t-subtitle);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.section > p { margin: 0 0 var(--s-3); }
+.num { font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; color: var(--vv-vino); }
+
+.pending {
+  padding: 0 4px;
+  border-radius: 4px;
+  background: rgb(185 122 18 / 0.16);
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* Preguntas frecuentes: details/summary nativos, accesibles con teclado. */
+.faq { border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 56px;
+  padding: var(--s-3) 0;
+  font-size: var(--t-body-lg);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; flex: none; font-size: 24px; font-weight: 400; color: var(--vv-vino); }
+.faq details[open] summary::after { content: "−"; }
+.faq details > div { padding: 0 0 var(--s-4); }
+.faq details > div p { margin: 0 0 var(--s-2); }
+.faqGroup { margin: var(--s-6) 0 var(--s-2); font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--vv-vino); }

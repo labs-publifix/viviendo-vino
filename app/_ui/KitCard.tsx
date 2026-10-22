@@ -18,6 +18,7 @@ export function KitCard({
   href,
   onPrimary,
   onRemove,
+  onDuplicate,
 }: {
   name: string;
   group: BottleGroup | null;
@@ -29,6 +30,7 @@ export function KitCard({
   href?: string;
   onPrimary?: () => void;
   onRemove?: () => void;
+  onDuplicate?: () => void;
 }) {
   return (
     <article className={styles.card}>
@@ -57,6 +59,11 @@ export function KitCard({
           {variant === "cart" && (
             <Button variant="link" onClick={onRemove}>
               Quitar
+            </Button>
+          )}
+          {variant === "cart" && onDuplicate && (
+            <Button variant="link" onClick={onDuplicate}>
+              Duplicar
             </Button>
           )}
           {href ? (

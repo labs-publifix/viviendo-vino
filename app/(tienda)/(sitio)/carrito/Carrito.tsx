@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useHydrated } from "@/lib/use-hydrated";
 import Link from "next/link";
 import { Button, ButtonLink } from "@/app/_ui/Button";
 import { Icon } from "@/app/_ui/Icon";
@@ -11,24 +12,20 @@ import { Price } from "@/app/_ui/Price";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { cart, useCart, type CartKit } from "@/lib/cart/store";
 import type { BottleGroup } from "@/lib/catalog/types";
-import { KIT_SIZE, type KitValidation } from "@/lib/kit/rules";
+import { KIT_SIZE, MAX_KITS } from "@/lib/kit/rules";
+import { useCartValidation } from "@/lib/cart/useCartValidation";
 import styles from "./carrito.module.css";
 
 // Carrito: los kits viven en el navegador; nombres, precios y totales los calcula el servidor con la base
 // (/api/carrito/validar) cada vez que el carrito cambia.
 
 type WineRef = { slug: string; name: string; group: BottleGroup };
-type Result = { id?: string; groupName?: string } & KitValidation;
-type Validation = { status: "idle" | "loading" | "done" | "error"; kits: Result[]; totalCents: number; error?: string };
 
-const noop = () => () => {};
-const useHydrated = () => useSyncExternalStore(noop, () => true, () => false);
 
 export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug: string; name: string }[] }) {
   const router = useRouter();
   const hydrated = useHydrated();
   const { kits } = useCart();
-  const [validation, setValidation] = useState<Validation>({ status: "idle", kits: [], totalCents: 0 });
   const [added, setAdded] = useState(false);
   const bySlug = useMemo(() => new Map(wines.map((w) => [w.slug, w])), [wines]);
 
@@ -41,30 +38,7 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
     setAdded(true);
   }, []);
 
-  const key = JSON.stringify(kits.map((k) => [k.id, k.items]));
-  useEffect(() => {
-    if (!hydrated || kits.length === 0) return;
-    const controller = new AbortController();
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- refleja la petición al servidor en curso
-    setValidation((v) => ({ ...v, status: "loading" }));
-    fetch("/api/carrito/validar", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ kits: kits.map((k) => ({ id: k.id, items: k.items })) }),
-      signal: controller.signal,
-    })
-      .then(async (res) => {
-        const data = await res.json().catch(() => null);
-        if (!res.ok || !Array.isArray(data?.kits)) throw new Error(data?.error ?? "No pudimos revisar tu carrito.");
-        setValidation({ status: "done", kits: data.kits, totalCents: data.totalCents });
-      })
-      .catch((e: unknown) => {
-        if (controller.signal.aborted) return;
-        setValidation({ status: "error", kits: [], totalCents: 0, error: e instanceof Error ? e.message : "No pudimos revisar tu carrito." });
-      });
-    return () => controller.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- `key` resume el contenido del carrito
-  }, [hydrated, key]);
+  const validation = useCartValidation(kits, hydrated);
 
   if (!hydrated) {
     return (
@@ -133,6 +107,7 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
                   variant="cart"
                   onPrimary={() => edit(k.id)}
                   onRemove={() => cart.removeKit(k.id)}
+                  onDuplicate={kits.length < MAX_KITS ? () => cart.duplicateKit(k.id) : undefined}
                 />
                 {r && !r.ok && (
                   <Notice kind="error" title="Este kit necesita un cambio.">
