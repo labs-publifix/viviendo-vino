@@ -18,6 +18,8 @@
 .logo { flex: none; display: block; line-height: 0; }
 .logo img { width: 132px; height: auto; } /* manual: horizontal ≥ 120 px */
 
+/* Manual · slide 10: logo a la izquierda; navegación, "Arma tu kit" y carrito juntos a la derecha. */
+.nav { margin-left: auto; }
 .nav ul { display: flex; gap: var(--s-5); margin: 0; padding: 0; list-style: none; }
 .navLink {
   font-family: var(--font-label);
@@ -32,7 +34,7 @@
 }
 .navLink:hover { color: var(--vv-vino); }
 
-.actions { display: flex; align-items: center; gap: var(--s-2); margin-left: auto; }
+.actions { display: flex; align-items: center; gap: var(--s-2); }
 .cart,
 .menuBtn {
   position: relative;
@@ -68,6 +70,7 @@
 
 @media (max-width: 760px) {
   .menuBtn { display: grid; }
+  .actions { margin-left: auto; }
   .cta { display: none; }
   .nav {
     position: absolute;
