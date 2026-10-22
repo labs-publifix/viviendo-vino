@@ -99,7 +99,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
         return setMessage({ kind: "ok", text: `Agregamos ${wine.name} a tu kit.` });
       }
       if (check.reason === "other-group") {
-        return setError(`${wine.name} es del ${groupName(wine.group)} y tu kit es del ${groupName(kitGroup(current.items, bySlug))}. Vacía el kit para empezar con otro grupo.`);
+        return setError(`${wine.name} es de ${groupName(wine.group)} y tu kit es de ${groupName(kitGroup(current.items, bySlug))}. Vacía el kit para empezar con otro grupo.`);
       }
       if (check.reason === "full") return setMessage({ kind: "aviso", text: "Tu kit ya tiene 6 botellas. Quita una para agregar otra." });
       if (check.reason === "sold-out") return setMessage({ kind: "aviso", text: `${wine.name} está agotado por ahora.` });
@@ -136,7 +136,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
   }
 
   function groupName(code: string | null) {
-    return (groups.find((g) => g.code === code)?.name ?? "otro grupo").toLowerCase();
+    return groups.find((g) => g.code === code)?.name ?? "otro grupo";
   }
 
   function update(next: KitItem[], preset?: string) {
@@ -263,7 +263,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
                     Kit de {formatMXN(g.kitMinCents)}
                     {g.kitMaxCents !== g.kitMinCents && ` a ${formatMXN(g.kitMaxCents)}`}
                   </MonoTag>
-                  <p>{otherGroup ? `No cabe en tu kit del ${groupName(group)}. Vacía el kit para cambiar de grupo.` : g.description}</p>
+                  <p>{otherGroup ? `No cabe en tu kit de ${groupName(group)}. Vacía el kit para cambiar de grupo.` : g.description}</p>
                 </div>
 
                 {g.fullCaseOnly && (
@@ -335,7 +335,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
   );
 }
 
-/** Grupo de caja completa (amarillo): combinaciones listas de 6. */
+/** Grupo de caja completa (Bollicine): combinaciones listas de 6. */
 function FullCase({
   group,
   wines,
@@ -359,7 +359,7 @@ function FullCase({
   return (
     <div className={styles.fullCase}>
       <p className={styles.fullCaseTitle}>Caja completa de {KIT_SIZE}</p>
-      <div className={styles.fullCaseOptions} role="group" aria-label={`Cajas completas del ${group.name.toLowerCase()}`}>
+      <div className={styles.fullCaseOptions} role="group" aria-label={`Cajas completas de ${group.name}`}>
         {options.map((opt) => {
           const label = opt.map((i) => `${i.quantity} ${shortName(i.slug)}`).join(" + ");
           return (

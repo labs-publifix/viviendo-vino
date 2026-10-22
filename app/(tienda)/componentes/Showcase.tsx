@@ -186,7 +186,7 @@ export function Showcase() {
               count={3}
               totalCents={92500}
               group="azul"
-              error="El Amarone es del grupo rojo y no cabe en este kit. Vacía el kit para cambiar de grupo."
+              error="El Amarone es de I Grandi Rossi y no cabe en este kit. Vacía el kit para cambiar de grupo."
             />
             <KitProgress count={6} totalCents={BLANCOS.totalCents} group="azul" />
           </div>
@@ -216,7 +216,7 @@ export function Showcase() {
         <Section n={10} label="Avisos" title="Un punto de color y una frase.">
           <div className={styles.notices}>
             <Notice title="Pagos disponibles pronto">Puedes revisar tu pedido; el cobro se activa el día de la apertura.</Notice>
-            <Notice kind="ok" title="Kit agregado al carrito">6 botellas del grupo azul. Envío incluido.</Notice>
+            <Notice kind="ok" title="Kit agregado al carrito">6 botellas de La Selezione. Envío incluido.</Notice>
             <Notice kind="aviso" title="Cambió un precio">El Merlot ahora cuesta $310. Tu total se actualizó.</Notice>
             <Notice kind="error" title="No pudimos validar tu kit">Revisa que tenga 6 botellas del mismo grupo.</Notice>
           </div>

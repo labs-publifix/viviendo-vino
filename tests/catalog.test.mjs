@@ -54,3 +54,10 @@ test("kits prearmados: 6 botellas del mismo grupo", () => {
     assert.equal(new Set(k.items.map(([n]) => grupo[n])).size, 1, k.slug);
   }
 });
+
+test("nombres editoriales de los grupos: el código y la base dicen lo mismo, sin colores", async () => {
+  const { GROUP_LABELS } = await import("../lib/catalog/types.ts");
+  for (const g of marca.grupos) assert.equal(GROUP_LABELS[g.codigo], g.nombre, g.codigo);
+  const textos = JSON.stringify([marca.grupos, marca.categorias, marca.kits_prearmados]);
+  assert.doesNotMatch(textos, /grupo (azul|rojo|verde|amarillo)/i);
+});

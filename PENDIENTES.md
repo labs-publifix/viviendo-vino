@@ -31,6 +31,9 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [ ] Refresco inmediato del catálogo: hoy un cambio hecho por SQL (precio, foto, stock) tarda en verse y la primera visita a cada página puede mostrar la versión anterior (al navegar del catálogo a una ficha se ve la ficha vieja hasta recargar). Es el caché de la tienda (`cacheLife("minutes")`), no un error de datos. Solución: el panel de administración invalida el caché al guardar (`revalidateTag("catalogo", { expire: 0 })`); antes, opcional, un webhook de Supabase que haga lo mismo.
 - [ ] Al conectar pagos: el pedido debe leer precios sin caché (hoy la validación usa el catálogo cacheado ~1 minuto).
 
+## Grupos
+- [ ] Correr `supabase/seed/grupos-editoriales.sql` en **producción** antes de abrir (en staging ya se corre en esta ronda). Si se corre `catalogo-completo.sql` completo, ya incluye los nombres nuevos.
+
 ## Portada
 - [ ] Textos de la marquesina de anuncios: hoy son de muestra (`app/(tienda)/(sitio)/layout.tsx`).
 - [ ] Foto del hero en mayor resolución (ideal 2880 × 960 o más): la actual mide 1440 × 480 y en pantallas grandes se ve algo suave.

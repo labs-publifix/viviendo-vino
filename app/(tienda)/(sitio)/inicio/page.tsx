@@ -121,7 +121,7 @@ export default async function TiendaInicio() {
                   </p>
                 </div>
                 <Link href={`/arma-tu-kit?grupo=${g.code}`} className={styles.groupLink}>
-                  Armar con el {g.name.toLowerCase()} <Icon name="arrow" size={16} />
+                  Armar con {g.name} <Icon name="arrow" size={16} />
                 </Link>
               </div>
             </li>

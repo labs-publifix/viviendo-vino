@@ -8,22 +8,22 @@
     "comision_bps": 1000
   },
   "grupos": [
-    { "codigo": "azul", "nombre": "Grupo azul", "orden": 1, "solo_caja_completa": false,
-      "descripcion": "Blancos, rosado y cuatro tintos. Se mezclan todos entre sí." },
-    { "codigo": "rojo", "nombre": "Grupo rojo", "orden": 2, "solo_caja_completa": false,
-      "descripcion": "Tintos de más cuerpo: Don Carlo, Primitivo di Manduria, Ripasso y Amarone. Elige hasta 4 etiquetas." },
-    { "codigo": "verde", "nombre": "Grupo verde", "orden": 3, "solo_caja_completa": false,
-      "descripcion": "Los dos tintos de Bodega Rocca, con medalla Double Gold. Combínalos como quieras." },
-    { "codigo": "amarillo", "nombre": "Grupo amarillo", "orden": 4, "solo_caja_completa": true,
-      "descripcion": "Prosecco y Rosé Extra Dry. Va como caja completa de 6." }
+    { "codigo": "azul", "nombre": "La Selezione", "orden": 1, "solo_caja_completa": false,
+      "descripcion": "Una selección versátil de 11 etiquetas italianas que reúne vinos blancos, rosados y tintos. Combina y descubre diferentes estilos para encontrar tus favoritos." },
+    { "codigo": "rojo", "nombre": "I Grandi Rossi", "orden": 2, "solo_caja_completa": false,
+      "descripcion": "Cuatro grandes tintos italianos de mayor cuerpo y carácter: Don Carlo, Primitivo di Manduria, Ripasso y Amarone. Elige hasta cuatro etiquetas para crear tu propia colección." },
+    { "codigo": "verde", "nombre": "Selezione d’Oro", "orden": 3, "solo_caja_completa": false,
+      "descripcion": "Dos tintos de Bodega Rocca, distinguidos con medalla Double Gold. Una selección especial para quienes buscan vinos con reconocimiento y carácter. Combina ambas etiquetas como prefieras." },
+    { "codigo": "amarillo", "nombre": "Bollicine", "orden": 4, "solo_caja_completa": true,
+      "descripcion": "Una caja completa de seis botellas que combina Prosecco y Rosé Extra Dry. Una selección de vinos espumosos italianos ideal para celebrar, compartir y brindar." }
   ],
   "categorias": [
     { "slug": "blancos-rosado", "nombre": "Blancos y rosado", "orden": 1,
-      "intro": "Blancos frescos, con fruta, cítricos y flores, y un rosado ligero. Todos son del grupo azul: se mezclan entre sí y con cuatro tintos." },
+      "intro": "Blancos frescos, con fruta, cítricos y flores, y un rosado ligero. Todos son de La Selezione: se mezclan entre sí y con cuatro tintos." },
     { "slug": "tintos", "nombre": "Tintos", "orden": 2,
-      "intro": "Tintos de Véneto, Abruzzo, Piamonte y Puglia. Del grupo azul, los de todos los días; del rojo, los de más cuerpo; del verde, los dos de Bodega Rocca." },
+      "intro": "Tintos de Véneto, Abruzzo, Piamonte y Puglia. En La Selezione, los de todos los días; en I Grandi Rossi, los de más cuerpo; en Selezione d’Oro, los dos de Bodega Rocca." },
     { "slug": "espumosos", "nombre": "Espumosos", "orden": 3,
-      "intro": "Un Prosecco brut y un rosé extra dry. Burbuja fina, fruta y flores. Van juntos en una caja de 6." }
+      "intro": "Un Prosecco brut y un rosé extra dry. Burbuja fina, fruta y flores. Van juntos en la caja de 6 de Bollicine." }
   ],
   "intro_general": "Los antiguos griegos llamaron al sur de Italia Enotria Tellus: la tierra del vino. De ahí vienen muchas de las uvas que hoy caben en tu kit.",
   "vinos": {
@@ -115,10 +115,10 @@
       "descripcion": "Cuatro blancos del Véneto y Puglia, de la acidez viva a la fruta madura.",
       "items": [["Sauvignon Blanc Trevenezie IGT 2024", 2], ["Pinot Grigio delle Venezie DOC 2024", 2], ["Falanghina Puglia IGT", 1], ["Soave DOC 2024", 1]] },
     { "slug": "tintos-de-diario", "nombre": "Tintos de diario", "orden": 2,
-      "descripcion": "Merlot, Cabernet y Montepulciano: tres tintos del grupo azul para abrir cualquier día.",
+      "descripcion": "Merlot, Cabernet y Montepulciano: tres tintos de La Selezione para abrir cualquier día.",
       "items": [["Merlot Veneto IGT 2024", 2], ["Cabernet Sauvignon Veneto IGT 2024", 2], ["Montepulciano d'Abruzzo DOC 2024", 2]] },
     { "slug": "burbujas", "nombre": "Burbujas", "orden": 3,
-      "descripcion": "La caja de 6 del grupo amarillo: tres Prosecco y tres Rosé Extra Dry.",
+      "descripcion": "La caja de 6 de Bollicine: tres Prosecco y tres Rosé Extra Dry.",
       "items": [["Prosecco DOC Spumante Brut Imperial", 3], ["Rosé Extra Dry 921", 3]] }
   ]
 }

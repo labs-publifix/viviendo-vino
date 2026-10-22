@@ -30,11 +30,13 @@ export type Wine = {
   available: boolean;
 };
 
+// Nombres editoriales de los grupos (22 oct 2026). Los códigos (azul, rojo…) son internos y no se muestran.
+// Deben coincidir con grupos_botella.nombre (data/catalogo-marca.json).
 export const GROUP_LABELS: Record<BottleGroup, string> = {
-  azul: "Grupo azul",
-  rojo: "Grupo rojo",
-  verde: "Grupo verde",
-  amarillo: "Grupo amarillo",
+  azul: "La Selezione",
+  rojo: "I Grandi Rossi",
+  verde: "Selezione d’Oro",
+  amarillo: "Bollicine",
 };
 
 export const CATEGORY_LABELS: Record<Category, string> = {

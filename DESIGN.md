@@ -113,4 +113,4 @@ Tuteo, frases cortas y dato antes que adjetivo. Los botones dicen su acción: "A
 | Inter como display | La pide (§5) | impeccable la lista como default de IA | **Gana el manual** |
 | Botón principal y etiquetas en carmín | Carmín | Contraste AA (manual §12 y skills) | **[A]** vino sobre claro, carmín sobre oscuro |
 | Muro de edad al entrar | Lo propone (§10.05) | Tu prompt original: "sin muros" | **[D]** (22 oct, cambió) aviso de edad al entrar a la tienda, recordado 30 días; la verificación con fecha de nacimiento sigue en el checkout |
-| Colores de grupos | Propuesta sin cerrar (§6) | — | **[D]** solo nombre |
+| Colores de grupos | Propuesta sin cerrar (§6) | — | **[D]** solo nombre, sin color. Desde el 22 oct, nombres editoriales: La Selezione (azul), I Grandi Rossi (rojo), Selezione d’Oro (verde) y Bollicine (amarillo); los colores quedan solo como códigos internos |

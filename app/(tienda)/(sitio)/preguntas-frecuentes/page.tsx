@@ -23,7 +23,7 @@ const GROUPS: { title: string; items: { q: string; a: ReactNode }[] }[] = [
         q: "¿Qué es un grupo de botella?",
         a: (
           <p>
-            Cada vino pertenece a un grupo: azul, rojo, verde o amarillo. Un kit lleva vinos de un solo grupo. La primera
+            Cada vino pertenece a uno de cuatro grupos: La Selezione, I Grandi Rossi, Selezione d’Oro o Bollicine. Un kit lleva vinos de un solo grupo. La primera
             botella que eliges define el grupo y el armador te muestra qué más cabe.
           </p>
         ),

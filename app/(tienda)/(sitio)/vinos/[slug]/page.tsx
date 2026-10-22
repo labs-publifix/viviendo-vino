@@ -10,13 +10,13 @@ import { MonoTag, NumberedLabel } from "@/app/_ui/Typography";
 import { WineCard } from "@/app/_ui/WineCard";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { getCatalog, getWine } from "@/lib/catalog/repo";
-import { CATEGORY_LABELS, TYPE_LABELS } from "@/lib/catalog/types";
+import { CATEGORY_LABELS, GROUP_LABELS, TYPE_LABELS } from "@/lib/catalog/types";
 import { KIT_IMAGES } from "@/lib/catalog/media";
 import { formatMXN } from "@/lib/money";
 import { SITE_URL } from "@/lib/site";
 import styles from "./ficha.module.css";
 
-// Ficha de vino (Fundamentos §3, 03): dato, opinión y compatibilidad "Va con los vinos del grupo X".
+// Ficha de vino (Fundamentos §3, 03): dato, opinión y compatibilidad "Va con los vinos de La Selezione".
 
 const CLOSED = "__tienda-cerrada__";
 
@@ -127,7 +127,7 @@ export default async function FichaVino({ params }: { params: Promise<{ slug: st
               <span className={styles.per}>por botella</span>
             </div>
             <p className={styles.compat}>
-              Va con los vinos del <strong>{group?.name.toLowerCase() ?? `grupo ${wine.group}`}</strong>.{" "}
+              Va con los vinos de <strong>{group?.name ?? GROUP_LABELS[wine.group]}</strong>.{" "}
               {group?.fullCaseOnly
                 ? `Se vende en caja de ${catalog.kitSize}: ${formatMXN(kitPrice)} con envío incluido.`
                 : `Seis de este vino: ${formatMXN(kitPrice)}, o mézclalo con ${sameGroup.length} ${sameGroup.length === 1 ? "etiqueta más" : "etiquetas más"} de su grupo.`}
@@ -162,7 +162,7 @@ export default async function FichaVino({ params }: { params: Promise<{ slug: st
 
       {sameGroup.length > 0 && (
         <section className={styles.related} aria-labelledby="mismo-grupo">
-          <NumberedLabel>{group?.name ?? "Mismo grupo"}</NumberedLabel>
+          <NumberedLabel>{group?.name ?? GROUP_LABELS[wine.group]}</NumberedLabel>
           <h2 id="mismo-grupo" className={styles.relatedTitle}>
             Caben en el mismo kit.
           </h2>
