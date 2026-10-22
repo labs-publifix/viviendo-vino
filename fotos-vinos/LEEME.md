@@ -5,7 +5,7 @@ Sube aquí una foto por vino (JPG, PNG o WebP). Claude las recorta, optimiza y c
 - **Nombre del archivo:** el de la columna "Archivo" (la extensión puede ser .jpg, .png o .webp). Si no puedes renombrarlas, súbelas como estén y avisa: se identifican por la etiqueta.
 - **Formato ideal:** botella completa y vertical, centrada, de al menos 1200 px de alto, con el mismo fondo y la misma luz en todas.
 - **Tamaño:** máximo 25 MB por archivo (límite de GitHub en la web).
-- Esta carpeta no se publica en el sitio: las versiones optimizadas van a `public/vinos/`.
+- Esta carpeta no se publica en el sitio. `npm run photos:build` genera las versiones optimizadas en `public/img/vinos/` (el mapa archivo → vino está en `scripts/build-photos.mjs`) y `npm run seed:build` genera `supabase/seed/fotos.sql` para apuntar cada vino a su foto.
 
 | Vino | Categoría | Archivo |
 |---|---|---|

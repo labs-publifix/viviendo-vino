@@ -14,7 +14,7 @@
 .inKit:hover { border-color: var(--vv-vino); }
 
 .media { position: relative; background: var(--surface); border-bottom: 1px solid var(--line); }
-.photo { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.photo { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
 
 .badge {
   position: absolute;

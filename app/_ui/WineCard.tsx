@@ -47,8 +47,8 @@ export function WineCard({
     <article className={`${styles.card} ${dimmed ? styles.dimmed : ""} ${state === "in-kit" ? styles.inKit : ""}`}>
       <div className={styles.media}>
         {wine.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element -- se cambia a next/image al tener fotos
-          <img src={wine.imageUrl} alt={wine.name} className={styles.photo} />
+          // eslint-disable-next-line @next/next/no-img-element -- fotos ya optimizadas (scripts/build-photos.mjs)
+          <img src={wine.imageUrl} alt={wine.name} width={880} height={1184} loading="lazy" decoding="async" className={styles.photo} />
         ) : (
           <BottlePlaceholder kind={wine.category === "espumosos" ? "sparkling" : "still"} label={wine.name} />
         )}

@@ -67,7 +67,7 @@ export default async function FichaVino({ params }: { params: Promise<{ slug: st
     description: wine.description,
     category: CATEGORY_LABELS[wine.category],
     brand: { "@type": "Brand", name: wine.producer },
-    ...(wine.imageUrl ? { image: wine.imageUrl } : {}),
+    ...(wine.imageUrl ? { image: `${SITE_URL}${wine.imageUrl}` } : {}),
     offers: {
       "@type": "Offer",
       url: `${SITE_URL}/vinos/${wine.slug}`,
@@ -101,8 +101,8 @@ export default async function FichaVino({ params }: { params: Promise<{ slug: st
       <article className={styles.main}>
         <div className={styles.media}>
           {wine.imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element -- se cambia a next/image al tener fotos
-            <img src={wine.imageUrl} alt={wine.name} className={styles.photo} />
+            // eslint-disable-next-line @next/next/no-img-element -- fotos ya optimizadas (scripts/build-photos.mjs)
+            <img src={wine.imageUrl} alt={wine.name} width={880} height={1184} fetchPriority="high" className={styles.photo} />
           ) : (
             <BottlePlaceholder kind={wine.category === "espumosos" ? "sparkling" : "still"} label={wine.name} />
           )}

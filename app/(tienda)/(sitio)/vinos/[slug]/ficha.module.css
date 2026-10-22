@@ -8,7 +8,7 @@
 
 .main { display: grid; gap: var(--s-6); grid-template-columns: minmax(0, 1fr); }
 .media { border: 1px solid var(--line); border-radius: var(--r-card); overflow: hidden; background: var(--surface); align-self: start; }
-.photo { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.photo { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
 
 .info { display: flex; flex-direction: column; gap: var(--s-4); min-width: 0; }
 .title { margin: 0; font-size: clamp(32px, 4.4vw, 52px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.02; text-wrap: balance; }
@@ -75,6 +75,6 @@
 }
 /* En móvil la botella no empuja el precio fuera de la primera pantalla. */
 @media (max-width: 899px) {
-  .media > div,
-  .media > img { aspect-ratio: 5 / 4; }
+  .media > div { aspect-ratio: 5 / 4; }
+  .media > img { aspect-ratio: 4 / 5; } /* la foto conserva la botella completa */
 }

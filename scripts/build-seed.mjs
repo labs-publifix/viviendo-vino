@@ -2,7 +2,7 @@
 // aliado) y data/catalogo-marca.json (textos en voz de marca y datos por vino).
 // Uso: npm run seed:build. El SQL es idempotente: se puede correr varias veces.
 
-import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -79,6 +79,8 @@ fuente.vinos.forEach((v, i) => {
     premio: q(m.premio ?? null),
     descripcion: q(m.descripcion),
     descripcion_aliado: q(v.descripcion_aliado_texto_fuente),
+    // Foto optimizada por scripts/build-photos.mjs; sin archivo, la tienda muestra el placeholder.
+    imagen_url: existsSync(join(root, `public/img/vinos/${slug}.webp`)) ? q(`/img/vinos/${slug}.webp`) : "null",
     modo_venta: q("kit"),
     orden: String(i + 1),
   };
@@ -106,9 +108,20 @@ for (const k of marca.kits_prearmados) {
 }
 lines.push("", "commit;", "");
 
+// Solo las fotos, para aplicarlas sin volver a correr todo el catálogo.
+const fotos = [...slugs.values()].map((slug) => {
+  const url = existsSync(join(root, `public/img/vinos/${slug}.webp`)) ? q(`/img/vinos/${slug}.webp`) : "null";
+  return `update public.productos set imagen_url = ${url} where slug = ${q(slug)};`;
+});
+
 const out = join(root, "supabase/seed/catalogo.sql");
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, lines.join("\n"));
+
+writeFileSync(
+  join(root, "supabase/seed/fotos.sql"),
+  `-- Fotos de producto (rutas a public/img/vinos/). Generado por scripts/build-seed.mjs.\n${fotos.join("\n")}\n`,
+);
 
 // Un solo archivo con tablas + catálogo, para pegar de una vez en el SQL Editor de Supabase.
 const migration = readFileSync(join(root, "supabase/migrations/20261023000000_catalogo.sql"), "utf8");

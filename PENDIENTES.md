@@ -10,7 +10,9 @@ Lo que falta confirmar o conseguir para la tienda. Se actualiza en cada ronda.
 - [ ] Nombre y razón social del aliado (hoy "Aliado de Córdoba", provisional).
 - [ ] Revisar las 19 descripciones reescritas en voz de marca (`data/catalogo-marca.json`) y los 3 kits prearmados propuestos (Blancos frescos, Tintos de diario, Burbujas).
 - [ ] Grado alcohólico y volumen de cada etiqueta.
-- [ ] Fotografías de producto (hoy se usan placeholders).
+- [x] Fotografías de producto: 18 de 19 en `public/img/vinos/` (originales en `fotos-vinos/`).
+- [ ] Foto del **Pinot Grigio delle Venezie DOC Blush (rosado) 2025**: subirla a `fotos-vinos/` como `levorato-pinot-grigio-blush.png`, luego `npm run photos:build` y `npm run seed:build`, y correr `supabase/seed/fotos.sql`.
+- [ ] Al tener panel de administración: mover las fotos al almacenamiento de Supabase.
 
 ## Tienda en el preview
 - [x] Armador (`/arma-tu-kit`) y carrito (`/carrito`), con validación en el servidor.
