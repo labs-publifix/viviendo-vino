@@ -35,6 +35,8 @@ Las claves secretas (`RESEND_API_KEY`, `SUPABASE_SECRET_KEY`, `WAITLIST_TOKEN_SE
 |---|---|---|
 | `main` | www.viviendovino.com (Production) | Lista de espera; la tienda sigue cerrada hasta que `STORE_OPEN=true` (ver [LAUNCH.md](LAUNCH.md)). |
 | `develop` | dev.viviendovino.com (Preview) | Tienda completa, con contraseña (`PREVIEW_PASSWORD`) y noindex. |
+
+> dev.viviendovino.com muestra el despliegue **más reciente** de `develop`, aunque sea de un commit anterior. Si en Vercel se hace *Redeploy* de un despliegue viejo, dev vuelve a esa versión: para regresar a la última, redesplegar el commit más nuevo de `develop`.
 | `feature/*` | Liga de preview de Vercel | Trabajo en curso; se fusiona a `develop`. También pide contraseña. |
 
 ## Estructura
