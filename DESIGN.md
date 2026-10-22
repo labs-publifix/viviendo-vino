@@ -94,7 +94,6 @@ Todos en `app/_ui/` y todos con estados de foco visible, hover y `disabled`.
 | **Tarjeta de kit** | §12 | kit prearmado, renglón del carrito | normal, hover, editar o quitar |
 | **Barra de dato** | §7.05 | perfil (cuerpo, acidez…) | — (sin datos del aliado por ahora) |
 | **Encabezado** | §10.01 | logo + navegación + "Arma tu kit" + carrito | menú móvil abierto y cerrado; contador del carrito |
-| **Barra de anuncios** | §10.04 | texto + enlace | visible, cerrada |
 | **Pie** | §10.11 | enlaces, +18, consumo responsable | — |
 | **Avisos** | §12 "Mensajes del sitio" | info, éxito, aviso, error (punto de color + texto) | — |
 | **Barra de anuncios** | §10.04 | marquesina en bucle con punto carmín entre mensajes | se pausa al pasar el cursor, al enfocarla o con su botón; fija con movimiento reducido; se puede cerrar |
