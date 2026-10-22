@@ -75,6 +75,14 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
       if (!preset) return setMessage({ kind: "aviso", text: "Ese kit ya no está disponible. Arma el tuyo." });
       const available = preset.items.every((i) => bySlug.get(i.slug)?.available);
       if (!available) return setMessage({ kind: "aviso", text: `Una botella de “${preset.name}” está agotada. Arma el tuyo con su grupo.` });
+      const items = preset.items.map((i) => ({ slug: i.slug, quantity: i.quantity }));
+      if (params.get("agregar") === "1") {
+        // "Agregar este kit": va directo al carrito después de que el servidor lo revise.
+        setFilter(preset.group);
+        setMessage({ kind: "info", text: `Agregando “${preset.name}” a tu carrito…` });
+        void addPresetToCart(preset.name, preset.slug, items);
+        return;
+      }
       const editingNow = cart.getState().draft.editing;
       cart.setDraft({ items: preset.items.map((i) => ({ slug: i.slug, quantity: i.quantity })), preset: preset.slug, ...(editingNow ? { editing: editingNow } : {}) });
       setFilter(preset.group);
@@ -101,6 +109,31 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
     // eslint-disable-next-line react-hooks/exhaustive-deps -- solo al llegar a la página
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
+
+  async function addPresetToCart(name: string, slug: string, presetItems: KitItem[]) {
+    try {
+      const res = await fetch("/api/carrito/validar", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ kits: [{ items: presetItems }] }),
+      });
+      const data = await res.json().catch(() => null);
+      const kit = data?.kits?.[0];
+      if (!res.ok || !kit) throw new Error(data?.error ?? "No pudimos agregar el kit. Intenta de nuevo.");
+      if (!kit.ok) {
+        setMessage({ kind: "aviso", text: `${kit.message} Arma el tuyo con su grupo.` });
+        return;
+      }
+      const saved = cart.addKit(presetItems, slug);
+      if (!saved.ok) {
+        setMessage({ kind: "aviso", text: "Tu carrito ya tiene 10 kits, el máximo por pedido." });
+        return;
+      }
+      router.replace("/carrito?agregado=1");
+    } catch (e) {
+      setMessage({ kind: "error", text: e instanceof Error ? e.message : `No pudimos agregar “${name}”. Intenta de nuevo.` });
+    }
+  }
 
   function groupName(code: string | null) {
     return (groups.find((g) => g.code === code)?.name ?? "otro grupo").toLowerCase();

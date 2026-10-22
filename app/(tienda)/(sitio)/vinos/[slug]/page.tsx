@@ -11,6 +11,7 @@ import { WineCard } from "@/app/_ui/WineCard";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { getCatalog, getWine } from "@/lib/catalog/repo";
 import { CATEGORY_LABELS, TYPE_LABELS } from "@/lib/catalog/types";
+import { KIT_IMAGES } from "@/lib/catalog/media";
 import { formatMXN } from "@/lib/money";
 import { SITE_URL } from "@/lib/site";
 import styles from "./ficha.module.css";
@@ -194,7 +195,9 @@ export default async function FichaVino({ params }: { params: Promise<{ slug: st
                 group={k.group}
                 lines={k.items}
                 totalCents={k.totalCents}
-                href={`/arma-tu-kit?kit=${k.slug}`}
+                imageUrl={KIT_IMAGES[k.slug]}
+                href={`/arma-tu-kit?kit=${k.slug}&agregar=1`}
+                customizeHref={`/arma-tu-kit?kit=${k.slug}`}
               />
             ))}
           </div>

@@ -15,7 +15,9 @@ export function KitCard({
   lines,
   totalCents,
   variant = "preset",
+  imageUrl,
   href,
+  customizeHref,
   onPrimary,
   onRemove,
   onDuplicate,
@@ -26,14 +28,22 @@ export function KitCard({
   /** null mientras el servidor calcula el precio. */
   totalCents: number | null;
   variant?: "preset" | "cart";
-  /** Kit prearmado fuera del armador: "Usar este kit" lleva al armador con el kit cargado. */
+  /** Foto del kit (solo prearmados). */
+  imageUrl?: string;
+  /** Kit prearmado fuera del armador: "Agregar este kit" lo pone en el carrito. */
   href?: string;
+  /** Abre el kit en el armador para cambiar botellas. */
+  customizeHref?: string;
   onPrimary?: () => void;
   onRemove?: () => void;
   onDuplicate?: () => void;
 }) {
   return (
-    <article className={styles.card}>
+    <article className={`${styles.card} ${imageUrl ? styles.withImage : ""}`}>
+      {imageUrl && (
+        // eslint-disable-next-line @next/next/no-img-element -- fotos ya optimizadas (scripts/build-home-images.mjs)
+        <img src={imageUrl} alt={`Kit ${name}: ${lines.map((l) => `${l.quantity} ${l.name}`).join(", ")}`} width={880} height={660} loading="lazy" decoding="async" className={styles.photo} />
+      )}
       <header className={styles.head}>
         <div>
           <MonoTag>
@@ -66,11 +76,16 @@ export function KitCard({
               Duplicar
             </Button>
           )}
+          {customizeHref && (
+            <ButtonLink href={customizeHref} variant="link">
+              Personalizar
+            </ButtonLink>
+          )}
           {href ? (
-            <ButtonLink href={href}>Usar este kit</ButtonLink>
+            <ButtonLink href={href}>Agregar este kit</ButtonLink>
           ) : (
             <Button variant={variant === "cart" ? "secondary" : "primary"} onClick={onPrimary}>
-              {variant === "cart" ? "Editar" : "Usar este kit"}
+              {variant === "cart" ? "Editar" : "Agregar este kit"}
             </Button>
           )}
         </div>

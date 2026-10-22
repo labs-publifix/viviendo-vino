@@ -127,6 +127,13 @@ export const cart = {
     save({ kits, draft: { items: [] } });
     return { ok: true };
   },
+  /** Agrega un kit directo al carrito (kit prearmado) sin tocar el kit que se esté armando. */
+  addKit(items: KitItem[], preset?: string): { ok: true } | { ok: false; reason: "max-kits" } {
+    const s = getSnapshot();
+    if (s.kits.length >= MAX_KITS) return { ok: false, reason: "max-kits" };
+    save({ ...s, kits: [...s.kits, { id: newId(), items, ...(preset ? { preset } : {}) }] });
+    return { ok: true };
+  },
   removeKit(id: string) {
     const s = getSnapshot();
     save({ ...s, kits: s.kits.filter((k) => k.id !== id) });

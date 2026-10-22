@@ -64,7 +64,7 @@
 }
 .grid li { display: flex; }
 .grid li > * { flex: 1; }
-.kits { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: var(--s-4); align-items: start; }
+.kits { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: var(--s-4); }
 
 @media (max-width: 559px) {
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }

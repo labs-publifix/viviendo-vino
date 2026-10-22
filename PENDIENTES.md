@@ -11,7 +11,7 @@ Lo que falta confirmar o conseguir para la tienda. Se actualiza en cada ronda.
 - [ ] Revisar las 19 descripciones reescritas en voz de marca (`data/catalogo-marca.json`) y los 3 kits prearmados propuestos (Blancos frescos, Tintos de diario, Burbujas).
 - [ ] Grado alcohólico y volumen de cada etiqueta.
 - [x] Fotografías de producto: las 19 en `public/img/vinos/` (originales en `fotos-vinos/`).
-- [ ] Al tener panel de administración: mover las fotos al almacenamiento de Supabase.
+- [ ] Al tener panel de administración: mover las fotos al almacenamiento de Supabase. Las imágenes de grupos y kits prearmados (`lib/catalog/media.ts`, generadas con `npm run home-images:build`) pasan a columnas de la base; un kit prearmado nuevo hoy sale sin foto.
 
 ## Tienda en el preview
 - [x] Armador (`/arma-tu-kit`) y carrito (`/carrito`), con validación en el servidor.

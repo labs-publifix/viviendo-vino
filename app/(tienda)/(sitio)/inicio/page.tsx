@@ -10,6 +10,7 @@ import { Price } from "@/app/_ui/Price";
 import { Heading, MonoTag, NumberedLabel } from "@/app/_ui/Typography";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { getCatalog } from "@/lib/catalog/repo";
+import { GROUP_IMAGES, KIT_IMAGES } from "@/lib/catalog/media";
 import { formatMXN } from "@/lib/money";
 import styles from "./inicio.module.css";
 
@@ -88,6 +89,16 @@ export default async function TiendaInicio() {
         <ul className={styles.groups}>
           {groups.map((g) => (
             <li key={g.code} className={styles.group}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- fotos ya optimizadas (scripts/build-home-images.mjs) */}
+              <img
+                src={GROUP_IMAGES[g.code].src}
+                alt={GROUP_IMAGES[g.code].alt}
+                width={1000}
+                height={625}
+                loading="lazy"
+                decoding="async"
+                className={styles.groupPhoto}
+              />
               <div className={styles.groupHead}>
                 <h3>{g.name}</h3>
                 <MonoTag>
@@ -146,7 +157,7 @@ export default async function TiendaInicio() {
           <div className={styles.sectionHead}>
             <NumberedLabel n={4}>Kits prearmados</NumberedLabel>
             <Heading id="kits-title">¿Sin tiempo? Empieza con uno de estos.</Heading>
-            <p className={styles.lede}>Ábrelo en el armador y cambia las botellas que quieras.</p>
+            <p className={styles.lede}>Agrégalo tal cual a tu carrito o personalízalo en el armador.</p>
           </div>
           <div className={styles.kits}>
             {kits.map((k) => (
@@ -156,7 +167,9 @@ export default async function TiendaInicio() {
                 group={k.group}
                 lines={k.items}
                 totalCents={k.totalCents}
-                href={`/arma-tu-kit?kit=${k.slug}`}
+                imageUrl={KIT_IMAGES[k.slug]}
+                href={`/arma-tu-kit?kit=${k.slug}&agregar=1`}
+                customizeHref={`/arma-tu-kit?kit=${k.slug}`}
               />
             ))}
           </div>

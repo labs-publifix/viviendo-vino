@@ -10,7 +10,8 @@
     "test": "node --test tests/*.test.mjs",
     "test:gate": "node scripts/check-gate.mjs",
     "seed:build": "node scripts/build-seed.mjs",
-    "photos:build": "node scripts/build-photos.mjs"
+    "photos:build": "node scripts/build-photos.mjs",
+    "home-images:build": "node scripts/build-home-images.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
