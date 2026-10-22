@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useCart } from "@/lib/cart/store";
 import { ButtonLink } from "./Button";
 import { Icon } from "./Icon";
 import styles from "./Header.module.css";
@@ -14,8 +15,11 @@ const NAV = [
   { href: "/envios", label: "Envíos" },
 ];
 
-export function Header({ cartCount = 0 }: { cartCount?: number }) {
+/** `cartCount` solo para la página de componentes; en la tienda se lee del carrito guardado. */
+export function Header({ cartCount: forcedCount }: { cartCount?: number }) {
   const [open, setOpen] = useState(false);
+  const { kits } = useCart();
+  const cartCount = forcedCount ?? kits.length;
 
   useEffect(() => {
     if (!open) return;

@@ -71,3 +71,16 @@
 .bar .status { display: none; }
 .bar .total { order: 1; }
 .bar .actions { order: 2; }
+
+.headEnd { display: inline-flex; align-items: center; gap: var(--s-3); }
+.clearSmall {
+  min-height: 32px;
+  padding: 0 var(--s-1);
+  border: 0;
+  background: none;
+  color: var(--fg);
+  font: inherit;
+  font-size: var(--t-small);
+  text-decoration: underline;
+  cursor: pointer;
+}

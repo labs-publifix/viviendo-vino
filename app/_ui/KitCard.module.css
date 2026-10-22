@@ -27,3 +27,4 @@
   color: var(--muted);
 }
 .actions { display: flex; align-items: center; gap: var(--s-3); }
+.pending { font-size: 22px; font-weight: 800; color: var(--muted); }

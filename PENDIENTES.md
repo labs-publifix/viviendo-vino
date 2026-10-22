@@ -13,7 +13,9 @@ Lo que falta confirmar o conseguir para la tienda. Se actualiza en cada ronda.
 - [ ] Fotografías de producto (hoy se usan placeholders).
 
 ## Tienda en el preview
-- [ ] Los botones "Agregar" y "Usar este kit" llevan a `/arma-tu-kit`, que se construye en el paso 5 (armador y carrito). Hasta entonces responde 404.
+- [x] Armador (`/arma-tu-kit`) y carrito (`/carrito`), con validación en el servidor.
+- [ ] "Continuar" del carrito lleva a `/checkout`, que se construye en el paso 6. Hasta entonces responde 404.
+- [ ] Al conectar pagos: el pedido debe leer precios sin caché (hoy la validación usa el catálogo cacheado ~1 minuto).
 
 ## Marca
 - [x] Archivos de favicon y webclip del kit de marca (en `public/`).

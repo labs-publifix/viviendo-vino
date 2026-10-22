@@ -16,6 +16,7 @@ export function KitProgress({
   error,
   loading,
   variant = "panel",
+  completeLabel = "Agregar kit al carrito",
   onAddToCart,
   onClear,
 }: {
@@ -25,6 +26,7 @@ export function KitProgress({
   error?: string | null;
   loading?: boolean;
   variant?: "panel" | "bar";
+  completeLabel?: string;
   onAddToCart?: () => void;
   onClear?: () => void;
 }) {
@@ -38,7 +40,14 @@ export function KitProgress({
         <p className={styles.counter}>
           <span className={styles.big}>{count}</span> de {KIT_SIZE}
         </p>
-        {group && <span className={styles.group}>{GROUP_LABELS[group]}</span>}
+        <span className={styles.headEnd}>
+          {group && <span className={styles.group}>{GROUP_LABELS[group]}</span>}
+          {count > 0 && variant === "bar" && onClear && (
+            <button type="button" className={styles.clearSmall} onClick={onClear}>
+              Vaciar
+            </button>
+          )}
+        </span>
       </div>
 
       <ol className={styles.segments} aria-hidden="true">
@@ -65,7 +74,7 @@ export function KitProgress({
 
       <div className={styles.actions}>
         <Button block size="lg" disabled={!complete} loading={loading} onClick={onAddToCart}>
-          {complete ? "Agregar kit al carrito" : count === 0 ? "Elige 6 botellas" : `Te ${missing === 1 ? "falta" : "faltan"} ${missing}`}
+          {complete ? completeLabel : count === 0 ? "Elige 6 botellas" : `Te ${missing === 1 ? "falta" : "faltan"} ${missing}`}
         </Button>
         {count > 0 && variant === "panel" && (
           <Button variant="link" onClick={onClear}>

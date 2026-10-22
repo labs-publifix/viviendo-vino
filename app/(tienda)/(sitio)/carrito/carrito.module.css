@@ -1,0 +1,44 @@
+.page { max-width: var(--container); margin: 0 auto; padding: var(--s-7) var(--gutter) var(--s-9); }
+.intro { display: flex; flex-direction: column; gap: var(--s-3); padding-bottom: var(--s-5); }
+.loading { color: var(--muted); }
+.notice { margin-bottom: var(--s-5); max-width: 44rem; }
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-3);
+  max-width: 32rem;
+  padding: var(--s-6) 0;
+  color: var(--vv-vino);
+}
+.emptyTitle { margin: 0; font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; color: var(--fg); }
+.emptyText { margin: 0 0 var(--s-3); color: var(--muted); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); align-items: start; }
+.kits { display: flex; flex-direction: column; gap: var(--s-4); margin: 0; padding: 0; list-style: none; }
+.kitItem { display: flex; flex-direction: column; gap: var(--s-3); }
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.summaryTitle { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+.rows { display: flex; flex-direction: column; gap: var(--s-2); margin: 0; }
+.rows div { display: flex; justify-content: space-between; gap: var(--s-3); font-size: var(--t-small); }
+.rows dt { color: var(--muted); }
+.rows dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.included { color: var(--ok); }
+.total { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); padding-top: var(--s-3); border-top: 1px solid var(--line); font-weight: 700; }
+.calculating { color: var(--muted); font-weight: 500; }
+.fine { margin: 0; font-size: var(--t-small); color: var(--muted); text-align: center; }
+
+@media (min-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr) 360px; gap: var(--s-7); }
+  .summary { position: sticky; top: calc(72px + var(--s-5)); }
+}

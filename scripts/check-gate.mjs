@@ -9,7 +9,7 @@ const HOST = process.env.HOST;
 const PASSWORD = process.env.PASSWORD ?? "";
 
 const STORE = ["/inicio", "/vinos", "/vinos/chardonnay-vento-igt-2024", "/arma-tu-kit", "/carrito", "/checkout", "/envios",
-  "/preguntas-frecuentes", "/terminos", "/privacidad", "/componentes", "/api/tienda/estado", "/acceso", "/api/acceso"];
+  "/preguntas-frecuentes", "/terminos", "/privacidad", "/componentes", "/api/tienda/estado", "/api/carrito/validar", "/acceso", "/api/acceso"];
 
 let failed = 0;
 const check = (ok, label) => {

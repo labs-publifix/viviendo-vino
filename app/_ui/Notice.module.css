@@ -15,3 +15,4 @@
 .title { margin: 0 0 2px; font-weight: 700; }
 .body { font-size: var(--t-small); line-height: 1.5; color: var(--muted); }
 .body p { margin: 0; }
+.body a { color: var(--vv-vino); font-weight: 600; }

@@ -20,9 +20,10 @@ export function KitCard({
   onRemove,
 }: {
   name: string;
-  group: BottleGroup;
+  group: BottleGroup | null;
   lines: KitLine[];
-  totalCents: number;
+  /** null mientras el servidor calcula el precio. */
+  totalCents: number | null;
   variant?: "preset" | "cart";
   /** Kit prearmado fuera del armador: "Usar este kit" lleva al armador con el kit cargado. */
   href?: string;
@@ -34,16 +35,16 @@ export function KitCard({
       <header className={styles.head}>
         <div>
           <MonoTag>
-            <Icon name="box" size={14} /> Kit de 6 · {GROUP_LABELS[group]}
+            <Icon name="box" size={14} /> Kit de 6{group ? ` · ${GROUP_LABELS[group]}` : ""}
           </MonoTag>
           <h3 className={styles.title}>{name}</h3>
         </div>
-        <Price cents={totalCents} size="md" />
+        {totalCents === null ? <span className={styles.pending}>—</span> : <Price cents={totalCents} size="md" />}
       </header>
 
       <ul className={styles.lines}>
         {lines.map((l) => (
-          <li key={l.name}>
+          <li key={`${l.name}-${l.quantity}`}>
             <span className={styles.qty}>{l.quantity}×</span>
             <span className={styles.name}>{l.name}</span>
           </li>
