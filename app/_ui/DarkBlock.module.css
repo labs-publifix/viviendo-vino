@@ -1,7 +1,12 @@
+/* Atmósfera calibrada contra el slide 06 del manual: el resplandor vino nace en la esquina superior
+   derecha y el eco ciruela en la inferior izquierda; ambos se desvanecen antes del centro, que queda
+   en negro tinto. Las elipses se miden contra el bloque para que la proporción sea la misma en móvil. */
 .block {
   background:
-    radial-gradient(60rem 36rem at 100% 0%, rgb(154 32 48 / 0.14), transparent 70%),
-    radial-gradient(48rem 32rem at 0% 100%, rgb(100 31 83 / 0.1), transparent 70%),
+    radial-gradient(ellipse 55% 75% at 100% 0%,
+      rgb(154 32 48 / 0.48), rgb(154 32 48 / 0.3) 20%, rgb(154 32 48 / 0.14) 45%, rgb(154 32 48 / 0.05) 70%, transparent),
+    radial-gradient(ellipse 30% 45% at 0% 100%,
+      rgb(100 31 83 / 0.38), rgb(100 31 83 / 0.25) 25%, rgb(100 31 83 / 0.12) 50%, transparent),
     var(--vv-negro);
   color: var(--vv-hueso);
 }

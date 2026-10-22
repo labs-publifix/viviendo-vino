@@ -97,7 +97,7 @@ Todos en `app/_ui/` y todos con estados de foco visible, hover y `disabled`.
 | **Barra de anuncios** | §10.04 | texto + enlace | visible, cerrada |
 | **Pie** | §10.11 | enlaces, +18, consumo responsable | — |
 | **Avisos** | §12 "Mensajes del sitio" | info, éxito, aviso, error (punto de color + texto) | — |
-| **Bloque oscuro** | §6 Atmósfera | negro tinto con resplandor vino y eco ciruela | — |
+| **Bloque oscuro** | §6 Atmósfera | negro tinto `#0A0206` con resplandor vino (esquina superior derecha) y eco ciruela (inferior izquierda), calibrados contra el slide 06 "Nunca negro plano"; el centro queda en negro tinto | — |
 | **Cinta del preview** | — | fija abajo | solo en el preview |
 
 ## 7. Voz en pantalla
