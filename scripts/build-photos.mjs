@@ -18,7 +18,7 @@ const MAP = {
   "levorato-traminer-aromatico": "traminer-aromatico-trevenezie-igt-2025",
   "levorato-falanghina-puglia": "falanghina-puglia-igt",
   "levorato-soave": "soave-doc-2024",
-  "levorato-pinot-grigio-blush": "pinot-grigio-delle-venezie-doc-blush-rosado-2025",
+  "levorato-pinot-grigio-rose": "pinot-grigio-delle-venezie-doc-blush-rosado-2025",
   "levorato-cabernet-sauvignon": "cabernet-sauvignon-veneto-igt-2024",
   "levorato-merlot": "merlot-veneto-igt-2024",
   "levorato-montepulciano-d-abruzzo": "montepulciano-d-abruzzo-doc-2024",
