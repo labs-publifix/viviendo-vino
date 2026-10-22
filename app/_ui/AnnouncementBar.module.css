@@ -2,28 +2,51 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
   min-height: 40px;
-  padding: 6px 52px;
   background: var(--vv-negro);
   color: var(--vv-hueso);
-  text-align: center;
+  overflow: hidden;
 }
-.bar p {
-  margin: 0;
+
+/* Marquesina */
+.viewport {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  /* Desvanece los extremos para que el texto entre y salga suave. */
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+.bar:hover .track,
+.bar:focus-within .track,
+.paused .track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+.group { display: flex; flex: none; margin: 0; padding: 0; list-style: none; }
+.group li {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
   font-family: var(--font-label);
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-.bar a { display: inline-flex; align-items: center; gap: 4px; color: var(--vv-hueso); text-decoration: underline; }
-.bar a:hover { color: var(--vv-orquidea); }
-.close {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
+/* Separador: punto carmín entre mensajes. */
+.group li::after {
+  content: "";
+  width: 4px;
+  height: 4px;
+  margin: 0 var(--s-6);
+  border-radius: 50%;
+  background: var(--vv-carmin);
+}
+.group a { display: inline-flex; align-items: center; gap: 4px; color: var(--vv-hueso); text-decoration: underline; }
+.group a:hover { color: var(--vv-orquidea); }
+
+.controls { flex: none; display: flex; align-items: center; padding: 0 var(--s-1); background: var(--vv-negro); }
+.btn {
   display: grid;
   place-items: center;
   width: 40px;
@@ -34,4 +57,13 @@
   color: var(--vv-hueso);
   cursor: pointer;
 }
-.close:hover { background: rgb(243 236 228 / 0.1); }
+.btn:hover { background: rgb(243 236 228 / 0.1); }
+
+/* Sin movimiento: mensajes fijos, centrados, solo la primera copia; sin botón de pausa. */
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; width: auto; justify-content: center; flex-wrap: wrap; }
+  .track > .group + .group { display: none; }
+  .viewport { mask-image: none; padding: 6px var(--s-3); }
+  .group { flex-wrap: wrap; justify-content: center; row-gap: 2px; }
+  .pauseBtn { display: none; }
+}

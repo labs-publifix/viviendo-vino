@@ -1,6 +1,7 @@
 // Imágenes de la portada a partir de las fotos de fotos-vinos/ (mismo fondo y luz en todas):
 // - Kits prearmados: recorte 4:3 de las fotos de kit → public/img/kits/<slug>.webp
 // - Grupos de botella: composición 16:10 con botellas reales del grupo → public/img/grupos/<codigo>.webp
+// - Hero de la portada: fotos-vinos/hero-viviendo-vino.png → public/img/hero.webp
 // Uso: npm run home-images:build
 
 import { mkdirSync } from "node:fs";
@@ -112,3 +113,6 @@ for (const [slug, name] of Object.entries(KITS)) {
   console.log(`kit ${slug} → public/img/kits/${slug}.webp`);
 }
 for (const [code, files] of Object.entries(GROUPS)) await groupImage(code, files);
+
+await sharp(join(root, "fotos-vinos/hero-viviendo-vino.png")).webp({ quality: 78 }).toFile(join(out(""), "hero.webp"));
+console.log("hero → public/img/hero.webp");

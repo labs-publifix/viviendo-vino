@@ -12,3 +12,40 @@
 }
 .inner { max-width: var(--container); margin: 0 auto; padding: var(--s-9) var(--gutter); }
 .block ::selection { background: var(--vv-carmin); color: #fff; }
+
+/* Con foto de fondo: foto → velo negro tinto (más denso donde va el texto) → atmósfera de marca → texto. */
+.withImage { position: relative; isolation: isolate; overflow: hidden; background: var(--vv-negro); }
+.photo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -2;
+  width: 72%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 100% 50%; /* la caja abierta con las 6 botellas */
+  opacity: 0.7;
+  /* Entra desde la izquierda: el titular queda sobre negro tinto liso. */
+  mask-image: linear-gradient(90deg, transparent 0%, #000 45%);
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 55% 75% at 100% 0%,
+      rgb(154 32 48 / 0.48), rgb(154 32 48 / 0.3) 20%, rgb(154 32 48 / 0.14) 45%, rgb(154 32 48 / 0.05) 70%, transparent),
+    radial-gradient(ellipse 30% 45% at 0% 100%,
+      rgb(100 31 83 / 0.38), rgb(100 31 83 / 0.25) 25%, rgb(100 31 83 / 0.12) 50%, transparent),
+    linear-gradient(90deg, rgb(10 2 6 / 0.7) 0%, rgb(10 2 6 / 0.45) 50%, rgb(10 2 6 / 0.2) 100%);
+}
+/* En móvil el texto ocupa todo el ancho: velo parejo y la foto más tenue. */
+@media (max-width: 759px) {
+  .photo { width: 100%; opacity: 0.5; object-position: 78% 50%; mask-image: none; }
+  .scrim {
+    background:
+      radial-gradient(ellipse 70% 60% at 100% 0%, rgb(154 32 48 / 0.45), rgb(154 32 48 / 0.15) 50%, transparent),
+      radial-gradient(ellipse 50% 40% at 0% 100%, rgb(100 31 83 / 0.35), transparent),
+      linear-gradient(180deg, rgb(10 2 6 / 0.55) 0%, rgb(10 2 6 / 0.78) 45%, rgb(10 2 6 / 0.88) 100%);
+  }
+}

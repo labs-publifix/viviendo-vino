@@ -34,7 +34,7 @@ Las claves secretas (`RESEND_API_KEY`, `SUPABASE_SECRET_KEY`, `WAITLIST_TOKEN_SE
 | Rama | Se publica en | Qué muestra |
 |---|---|---|
 | `main` | www.viviendovino.com (Production) | Lista de espera; la tienda sigue cerrada hasta que `STORE_OPEN=true` (ver [LAUNCH.md](LAUNCH.md)). |
-| `develop` | dev.viviendovino.com (Preview) | Tienda completa, con contraseña (`PREVIEW_PASSWORD`), cinta de vista previa y noindex. |
+| `develop` | dev.viviendovino.com (Preview) | Tienda completa, con contraseña (`PREVIEW_PASSWORD`) y noindex. |
 | `feature/*` | Liga de preview de Vercel | Trabajo en curso; se fusiona a `develop`. También pide contraseña. |
 
 ## Estructura

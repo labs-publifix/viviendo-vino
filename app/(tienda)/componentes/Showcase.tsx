@@ -71,7 +71,7 @@ export function Showcase() {
 
   return (
     <>
-      <AnnouncementBar text="Envío incluido en todos los kits" href="/arma-tu-kit" linkLabel="Arma el tuyo" />
+      <AnnouncementBar items={["Envío incluido en todos los kits", "Arma tu kit desde $1,800"]} href="/arma-tu-kit" linkLabel="Arma el tuyo" />
       <Header cartCount={2} />
 
       <main className={styles.main}>

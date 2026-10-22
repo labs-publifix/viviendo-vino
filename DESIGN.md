@@ -68,7 +68,7 @@ Botones deshabilitados en gris neutro, sin vino: el color de marca queda para lo
   - Tarjetas y paneles: **[A] 16 px**.
   - Imagen de botella: sin radio. **[A]**
 - **Líneas de 1 px a baja opacidad: el único adorno.** **[M §7]**
-- **Sombras:** **[A]** sin sombras en tarjetas; solo una sombra suave en lo que flota (barra fija del kit en móvil, avisos y cinta del preview).
+- **Sombras:** **[A]** sin sombras en tarjetas; solo una sombra suave en lo que flota (barra fija del kit en móvil y avisos).
 - **Movimiento:** fundido con desplazamiento corto, 200–400 ms (`--vv-dur` 240 ms), sin rebotes. Barras que se llenan y números que cuentan. Todo se desactiva con `prefers-reduced-motion`. **[M §7, §12]**
 - **Foco:** 2 px sólido en carmín, separado 2 px. **[M §12]**
 
@@ -97,8 +97,9 @@ Todos en `app/_ui/` y todos con estados de foco visible, hover y `disabled`.
 | **Barra de anuncios** | §10.04 | texto + enlace | visible, cerrada |
 | **Pie** | §10.11 | enlaces, +18, consumo responsable | — |
 | **Avisos** | §12 "Mensajes del sitio" | info, éxito, aviso, error (punto de color + texto) | — |
-| **Bloque oscuro** | §6 Atmósfera | negro tinto `#0A0206` con resplandor vino (esquina superior derecha) y eco ciruela (inferior izquierda), calibrados contra el slide 06 "Nunca negro plano"; el centro queda en negro tinto | — |
-| **Cinta del preview** | — | fija abajo | solo en el preview |
+| **Barra de anuncios** | §10.04 | marquesina en bucle con punto carmín entre mensajes | se pausa al pasar el cursor, al enfocarla o con su botón; fija con movimiento reducido; se puede cerrar |
+| **Aviso de edad** | §10.05 | pantalla completa en negro tinto con atmósfera, logo para fondo oscuro, "¿Tienes 18 años o más?" | sí (se recuerda 30 días), no ("Vuelve cuando cumplas 18"), foco atrapado en el aviso |
+| **Bloque oscuro** | §6 Atmósfera | opcional: foto de fondo tenue que entra desde la derecha (hero de la portada); negro tinto `#0A0206` con resplandor vino (esquina superior derecha) y eco ciruela (inferior izquierda), calibrados contra el slide 06 "Nunca negro plano"; el centro queda en negro tinto | — |
 
 ## 7. Voz en pantalla
 
@@ -112,5 +113,5 @@ Tuteo, frases cortas y dato antes que adjetivo. Los botones dicen su acción: "A
 | Paleta y tipografías | Negro tinto, hueso, vino; Inter + JetBrains Mono | ui-ux-pro-max propone verde/naranja y Rubik + Nunito Sans | **Gana el manual** |
 | Inter como display | La pide (§5) | impeccable la lista como default de IA | **Gana el manual** |
 | Botón principal y etiquetas en carmín | Carmín | Contraste AA (manual §12 y skills) | **[A]** vino sobre claro, carmín sobre oscuro |
-| Muro de edad al entrar | Lo propone (§10.05) | Tu prompt: "sin muros" | **[D]** sin muro; verificación en el checkout |
+| Muro de edad al entrar | Lo propone (§10.05) | Tu prompt original: "sin muros" | **[D]** (22 oct, cambió) aviso de edad al entrar a la tienda, recordado 30 días; la verificación con fecha de nacimiento sigue en el checkout |
 | Colores de grupos | Propuesta sin cerrar (§6) | — | **[D]** solo nombre |

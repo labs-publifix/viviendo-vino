@@ -42,7 +42,7 @@ export default async function TiendaInicio() {
 
   return (
     <>
-      <DarkBlock aria-labelledby="hero-title">
+      <DarkBlock aria-labelledby="hero-title" image={{ src: "/img/hero.webp", width: 1440, height: 480 }}>
         <div className={styles.hero}>
           <NumberedLabel tone="dark">Vino italiano · Tienda en línea</NumberedLabel>
           <h1 id="hero-title" className={styles.heroTitle}>

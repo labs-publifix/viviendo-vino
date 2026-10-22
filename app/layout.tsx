@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { launch } from "@/lib/launch";
-import { PreviewRibbon } from "@/app/_preview/PreviewRibbon";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -61,10 +60,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className={`${inter.variable} ${mono.variable}`}>
+    <html lang="es" className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
       <body>
         {children}
-        {IS_PREVIEW && <PreviewRibbon />}
       </body>
     </html>
   );

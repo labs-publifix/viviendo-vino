@@ -1,0 +1,56 @@
+/* Aviso de edad: pantalla completa en negro tinto con la atmósfera de marca (Manual · 6, 10.05). */
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: var(--s-5) var(--gutter);
+  overflow-y: auto;
+  background:
+    radial-gradient(ellipse 55% 75% at 100% 0%,
+      rgb(154 32 48 / 0.48), rgb(154 32 48 / 0.3) 20%, rgb(154 32 48 / 0.14) 45%, rgb(154 32 48 / 0.05) 70%, transparent),
+    radial-gradient(ellipse 40% 50% at 0% 100%,
+      rgb(100 31 83 / 0.38), rgb(100 31 83 / 0.25) 25%, rgb(100 31 83 / 0.12) 50%, transparent),
+    var(--vv-negro);
+  color: var(--vv-hueso);
+}
+/* Ya confirmó (script en el layout): no se muestra ni bloquea el scroll. */
+:global(html[data-edad="ok"]) .gate { display: none; }
+:global(html:not([data-edad="ok"]):has([data-age-gate])) { overflow: hidden; }
+
+.panel { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-4); width: 100%; max-width: 34rem; }
+.logo { width: 150px; height: auto; margin-bottom: var(--s-5); }
+.label {
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vv-carmin);
+}
+.title {
+  margin: 0;
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+.title em { font-style: normal; color: var(--vv-carmin); }
+.text { margin: 0; max-width: 28rem; font-size: var(--t-body-lg); color: rgb(243 236 228 / 0.8); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s-3); padding-top: var(--s-3); }
+.fine {
+  margin: var(--s-6) 0 0;
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(243 236 228 / 0.6);
+}
+.gate ::selection { background: var(--vv-carmin); color: #fff; }
+@media (prefers-reduced-motion: no-preference) {
+  .panel { animation: rise var(--vv-dur) var(--vv-ease) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+}

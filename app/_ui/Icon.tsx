@@ -16,6 +16,8 @@ const PATHS = {
   glass: "M7.5 3.5h9c0 5-1.8 8-4.5 8.5-2.7-.5-4.5-3.5-4.5-8.5zM12 12v8M8.5 20.5h7",
   chat: "M4.5 19.5l1.2-3.6A7.5 7.5 0 1 1 8.6 18.6z",
   info: "M12 11v5M12 7.5v.01M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z",
+  pause: "M9 6v12M15 6v12",
+  play: "M8 5.5v13l10.5-6.5z",
 } as const;
 
 export type IconName = keyof typeof PATHS;
