@@ -36,7 +36,8 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 
 ## Portada
 - [ ] Textos de la marquesina de anuncios: hoy son de muestra (`app/(tienda)/(sitio)/layout.tsx`).
-- [ ] Foto del hero en mayor resolución (ideal 2880 × 960 o más): la actual mide 1440 × 480 y en pantallas grandes se ve algo suave.
+- [ ] Ilustración del hero en mayor resolución (ideal 2560 × 1440): la actual mide 1280 × 720.
+- [ ] Etiqueta del hero "Vinos exclusivos de Viviendo Vino": la guía de voz (PRODUCT.md) pide evitar "exclusivo"; se usó por decisión del equipo (23 oct). Confirmar.
 - [ ] Texto del aviso de edad revisado por el equipo legal; decidir si también se muestra en la lista de espera de www (hoy solo en la tienda).
 
 ## Marca

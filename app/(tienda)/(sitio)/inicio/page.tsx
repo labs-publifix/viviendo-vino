@@ -42,9 +42,9 @@ export default async function TiendaInicio() {
 
   return (
     <>
-      <DarkBlock aria-labelledby="hero-title" image={{ src: "/img/hero.webp", width: 1440, height: 480 }}>
+      <DarkBlock aria-labelledby="hero-title" image={{ src: "/img/hero-rafa.webp", width: 1280, height: 720, clean: true }}>
         <div className={styles.hero}>
-          <NumberedLabel tone="dark">Vino italiano · Tienda en línea</NumberedLabel>
+          <NumberedLabel tone="dark">Vinos exclusivos de Viviendo Vino</NumberedLabel>
           <h1 id="hero-title" className={styles.heroTitle}>
             Arma tu <em>kit.</em>
           </h1>
