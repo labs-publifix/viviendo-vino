@@ -14,7 +14,7 @@ Los tokens viven en `app/globals.css` (`:root`) y los consumen los componentes d
 ## 1. Tema
 
 - **Sitio claro sobre hueso**: catálogo, armador, carrito y checkout. **[M §12]**
-- **Bloques oscuros puntuales** (negro tinto con atmósfera): la portada de la tienda (hero), la cabecera de categoría y el cierre de página. Nunca un formulario sobre oscuro. **[M §10.01, §6 Atmósfera]**
+- **Bloques oscuros puntuales** (negro tinto con atmósfera): la portada de la tienda (hero), la cabecera de categoría, el cierre de página y, desde el 24 oct, un bloque a mitad de las páginas largas para alternar claro y oscuro (06 Wine Scan en la portada; "Rafa Aguirre" en /nosotros). **[D]** Nunca un formulario sobre oscuro. **[M §10.01, §6 Atmósfera]**
 - El vino pleno como fondo, solo en un momento puntual (pop-up de promoción). **[M §6 Proporciones, §10.04]**
 - La tienda **no** cambia a modo oscuro con el sistema; la lista de espera sí lo conserva. **[D]**
 - Proporción por pantalla: neutros (negro tinto y hueso) 75–85%, vino + carmín 10–15%, secundarios ≤5%. **[M §6]**

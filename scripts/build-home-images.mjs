@@ -117,3 +117,7 @@ for (const [code, files] of Object.entries(GROUPS)) await groupImage(code, files
 // Hero ilustrado: versión limpia en vertical (3:4), sin degradado. Se usa en todos los tamaños.
 await sharp(join(root, "fotos-vinos/hero-rafa-movil.jpg")).resize(1086, 1448).webp({ quality: 82 }).toFile(join(out(""), "hero-rafa.webp"));
 console.log("hero ilustrado → public/img/hero-rafa.webp");
+
+// Foto de Rafa (Nosotros): cuadrada; cada lugar la encuadra con object-fit.
+await sharp(join(root, "fotos-vinos/rafa-nosotros.png")).webp({ quality: 82 }).toFile(join(out(""), "rafa.webp"));
+console.log("Rafa → public/img/rafa.webp");

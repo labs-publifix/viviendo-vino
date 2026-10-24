@@ -38,7 +38,7 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [x] `/nosotros` construida (con placeholders de contenido de Rafa).
 - [ ] Páginas `/quiz`, `/wine-scan` y `/blog` son provisionales (título, una línea y regreso al inicio); se reemplazan al construir cada función.
 - [ ] Contenido de Rafa (portada y `/nosotros`), todo en `lib/about.ts`. Mientras falte, dev muestra un placeholder y producción no muestra esa pieza:
-  - `RAFA_PHOTO`: foto de Rafa Aguirre (ideal 4:5).
+  - [x] `RAFA_PHOTO`: foto de Rafa (`public/img/rafa.webp`).
   - `RAFA_STORY`: su historia con el vino, con sus palabras.
   - `RAFA_QUOTE`: una frase suya.
   - `RAFA_CRITERIA`: 3 o 4 criterios reales con los que elige cada vino (título y una línea).

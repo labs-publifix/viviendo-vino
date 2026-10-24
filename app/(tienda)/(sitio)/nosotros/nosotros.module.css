@@ -12,9 +12,16 @@
 
 /* 1. Portada: texto y foto lado a lado en escritorio. */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); align-items: center; padding-top: var(--s-7); }
-.photo { width: 100%; max-width: 480px; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r-card); }
+.photo { width: 100%; max-width: 480px; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 15%; border-radius: var(--r-card); }
 
-/* 2. Quién es Rafa */
+/* 2. Quién es Rafa (en bloque oscuro) */
+.beforeDark { padding-bottom: var(--s-9); }
+.onDark .subtitle { color: var(--vv-carmin); }
+.onDark .story { color: var(--vv-hueso); }
+.onDark .quote { border-top-color: var(--line-dark); }
+.onDark .quote p::before,
+.onDark .quote p::after { color: var(--vv-carmin); }
+.onDark .quote footer { color: rgb(243 236 228 / 0.7); }
 .bio { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
 .bioHead { display: flex; flex-direction: column; gap: var(--s-2); }
 .subtitle {

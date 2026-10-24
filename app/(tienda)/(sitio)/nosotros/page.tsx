@@ -28,7 +28,7 @@ export default function Nosotros() {
   return (
     <>
       {/* 1. Portada */}
-      <section className={`${styles.section} ${styles.hero}`} aria-labelledby="nosotros-title">
+      <section className={`${styles.section} ${styles.hero} ${styles.beforeDark}`} aria-labelledby="nosotros-title">
         <div className={styles.copy}>
           <NumberedLabel>Nosotros</NumberedLabel>
           <Heading level={1} size="section" id="nosotros-title">
@@ -52,31 +52,34 @@ export default function Nosotros() {
       </section>
 
       {/* 2. Quién es Rafa */}
-      <section className={`${styles.section} ${styles.bio}`} aria-labelledby="rafa-title">
-        <header className={styles.bioHead}>
-          <Heading id="rafa-title">Rafa Aguirre</Heading>
-          <p className={styles.subtitle}>Fundador de Viviendo Vino</p>
-        </header>
-        <div className={styles.bioBody}>
-          {RAFA_STORY ? (
-            RAFA_STORY.map((p) => (
-              <p key={p} className={styles.story}>
-                {p}
-              </p>
-            ))
-          ) : (
-            <Pending label="Historia de Rafa con el vino, escrita con sus palabras" lines={6} />
-          )}
-          {RAFA_QUOTE ? (
-            <blockquote className={styles.quote}>
-              <p>{RAFA_QUOTE}</p>
-              <footer>Rafa Aguirre</footer>
-            </blockquote>
-          ) : (
-            <Pending variant="quote" label="Una frase de Rafa" />
-          )}
+      {/* En bloque oscuro: alterna con la portada clara (Manual §6, bloques puntuales). */}
+      <DarkBlock aria-labelledby="rafa-title">
+        <div className={`${styles.bio} ${styles.onDark}`}>
+          <header className={styles.bioHead}>
+            <Heading id="rafa-title">Rafa Aguirre</Heading>
+            <p className={styles.subtitle}>Fundador de Viviendo Vino</p>
+          </header>
+          <div className={styles.bioBody}>
+            {RAFA_STORY ? (
+              RAFA_STORY.map((p) => (
+                <p key={p} className={styles.story}>
+                  {p}
+                </p>
+              ))
+            ) : (
+              <Pending label="Historia de Rafa con el vino, escrita con sus palabras" lines={6} />
+            )}
+            {RAFA_QUOTE ? (
+              <blockquote className={styles.quote}>
+                <p>{RAFA_QUOTE}</p>
+                <footer>Rafa Aguirre</footer>
+              </blockquote>
+            ) : (
+              <Pending variant="quote" label="Una frase de Rafa" />
+            )}
+          </div>
         </div>
-      </section>
+      </DarkBlock>
 
       {/* 3. Cómo elegimos cada vino */}
       <section className={styles.section} aria-labelledby="criterios-title">

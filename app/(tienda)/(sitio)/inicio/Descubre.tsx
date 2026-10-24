@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ButtonLink } from "@/app/_ui/Button";
+import { DarkBlock } from "@/app/_ui/DarkBlock";
 import { Icon } from "@/app/_ui/Icon";
 import { Heading, MonoTag, NumberedLabel } from "@/app/_ui/Typography";
 import { IS_PREVIEW, RAFA_PHOTO } from "@/lib/about";
@@ -24,7 +25,7 @@ const QUIZ_BOTTLES = [
 export function Descubre() {
   return (
     <>
-      <section className={`${styles.section} ${styles.teaser}`} aria-labelledby="quiz-title">
+      <section className={`${styles.section} ${styles.teaser} ${styles.beforeDark}`} aria-labelledby="quiz-title">
         <div className={styles.copy}>
           <NumberedLabel n={5}>Quiz IA</NumberedLabel>
           <Heading id="quiz-title">¿No sabes cuál elegir? Te ayudamos.</Heading>
@@ -62,29 +63,36 @@ export function Descubre() {
         </div>
       </section>
 
-      <section className={`${styles.section} ${styles.teaser} ${styles.reverse}`} aria-labelledby="scan-title">
-        <div className={styles.copy}>
-          <NumberedLabel n={6}>Wine Scan</NumberedLabel>
-          <Heading id="scan-title">Fotografía la etiqueta. Entérate de todo.</Heading>
-          <p className={styles.lede}>Escanea cualquier botella y descubre cómo sabe, cómo servirla y qué comer con ella.</p>
-          <p className={styles.detail}>
-            <Icon name="camera" size={16} /> Desde tu celular.
-          </p>
-          <div className={styles.actions}>
-            <ButtonLink href="/wine-scan">Escanear una etiqueta</ButtonLink>
+      {/* 06 en bloque oscuro: alterna claro y oscuro a mitad de la portada (Manual §6, bloques puntuales). */}
+      <DarkBlock aria-labelledby="scan-title">
+        <div className={`${styles.teaser} ${styles.reverse} ${styles.onDark}`}>
+          <div className={styles.copy}>
+            <NumberedLabel n={6} tone="dark">
+              Wine Scan
+            </NumberedLabel>
+            <Heading id="scan-title">Fotografía la etiqueta. Entérate de todo.</Heading>
+            <p className={styles.lede}>Escanea cualquier botella y descubre cómo sabe, cómo servirla y qué comer con ella.</p>
+            <p className={styles.detail}>
+              <Icon name="camera" size={16} /> Desde tu celular.
+            </p>
+            <div className={styles.actions}>
+              <ButtonLink href="/wine-scan" tone="dark">
+                Escanear una etiqueta
+              </ButtonLink>
+            </div>
           </div>
-        </div>
 
-        {/* Ilustración del escáner: una botella real dentro del visor de la cámara. Decorativa. */}
-        <div className={styles.visual} aria-hidden="true">
-          <div className={styles.scanFrame}>
-            {/* eslint-disable-next-line @next/next/no-img-element -- foto ya optimizada */}
-            <img src="/img/vinos/valpolicella-ripasso-classico-superiore-doc-2020.webp" alt="" width={880} height={1184} loading="lazy" decoding="async" />
-            <span className={styles.scanCorners} />
-            <span className={styles.scanLine} />
+          {/* Ilustración del escáner: una botella real dentro del visor de la cámara. Decorativa. */}
+          <div className={styles.visual} aria-hidden="true">
+            <div className={styles.scanFrame}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- foto ya optimizada */}
+              <img src="/img/vinos/valpolicella-ripasso-classico-superiore-doc-2020.webp" alt="" width={880} height={1184} loading="lazy" decoding="async" />
+              <span className={styles.scanCorners} />
+              <span className={styles.scanLine} />
+            </div>
           </div>
         </div>
-      </section>
+      </DarkBlock>
 
       <section className={`${styles.section} ${styles.about}`} aria-labelledby="nosotros-title">
         {RAFA_PHOTO ? (

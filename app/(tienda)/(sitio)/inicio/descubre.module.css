@@ -23,6 +23,15 @@
 .teaser { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); align-items: center; }
 .visual { min-width: 0; }
 
+/* La sección antes de un bloque oscuro cierra con el mismo aire que abre. */
+.beforeDark { padding-bottom: var(--s-9); }
+
+/* 06 sobre el bloque oscuro: texto hueso, secundarios en hueso atenuado, detalles en carmín. */
+.onDark .lede { color: rgb(243 236 228 / 0.8); }
+.onDark .detail { color: rgb(243 236 228 / 0.75); }
+.onDark .detail svg { color: var(--vv-carmin); }
+.onDark .scanFrame { border-color: var(--line-dark); }
+
 /* Ilustración del quiz */
 .quizCard {
   display: flex;
@@ -89,7 +98,7 @@
 
 /* Nosotros: foto y texto. Sin foto (producción), solo texto. */
 .about { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); align-items: center; }
-.aboutPhoto { display: block; width: 100%; max-width: 420px; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r-card); }
+.aboutPhoto { display: block; width: 100%; max-width: 420px; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 15%; border-radius: var(--r-card); }
 .aboutPlaceholder {
   display: grid;
   place-content: center;
