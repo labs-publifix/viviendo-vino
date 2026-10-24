@@ -14,9 +14,9 @@ export const metadata: Metadata = {
   description: "Artículos y guías de maridaje escritos por Rafa Aguirre, en palabras sencillas. Las guías también las puedes descargar en PDF.",
 };
 
-export default function Blog() {
+export default async function Blog() {
   if (!storeEnabled()) notFound();
-  const articles = getArticles().map(toSummary);
+  const articles = (await getArticles()).map(toSummary);
   const [featured] = articles;
   const guides = articles.filter((a) => a.tipo === "guia");
 
@@ -38,7 +38,7 @@ export default function Blog() {
             <ArticleCard article={featured} size="large" headingLevel={2} />
           </section>
           <section className={styles.section} aria-label="Todos los artículos">
-            <BlogGrid articles={articles} categories={getCategories()} featuredSlug={featured.slug} />
+            <BlogGrid articles={articles} categories={getCategories(articles)} featuredSlug={featured.slug} />
           </section>
         </>
       ) : (

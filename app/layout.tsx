@@ -60,7 +60,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="es-MX" className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
       <body>
         {children}
       </body>

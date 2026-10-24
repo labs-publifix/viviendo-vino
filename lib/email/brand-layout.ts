@@ -1,7 +1,7 @@
 import "server-only";
 import { SITE_URL } from "@/lib/site";
 
-// Plantilla de marca para todos los correos de la lista de espera (tablas + estilos en línea,
+// Plantilla de marca para todos los correos (lista de espera y guías del blog) (tablas + estilos en línea,
 // compatible con Gmail, Outlook y Apple Mail). Ajustada al Manual de identidad:
 // hueso, negro tinto y vino; titulares en Arial/Helvetica Bold; botón píldora.
 
@@ -20,8 +20,13 @@ export type BrandEmail = {
   /** Párrafos del cuerpo, en texto plano (se escapan). */
   paragraphs: string[];
   cta: { label: string; url: string };
-  unsubscribeUrl: string;
+  /** Enlace de baja; los correos que no son de la lista (p. ej. una guía pedida) no lo llevan. */
+  unsubscribeUrl?: string;
+  /** Por qué recibe el correo. Por omisión, el texto de la lista de espera. */
+  reason?: string;
 };
+
+const WAITLIST_REASON = "Recibes este correo porque te registraste en la lista de espera en viviendovino.com.";
 
 export function escapeHtml(text: string): string {
   return text.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -147,8 +152,12 @@ ${email.highlight ? highlightHtml(email.highlight) : ""}
               <tr>
                 <td align="center" style="padding-top:24px;font-family:${FONT};font-size:12px;line-height:19px;font-weight:400;color:#5c5454;">
                   <p style="margin:0 0 6px 0;">Viviendo Vino · Tienda en línea · Consumo exclusivo para mayores de edad.</p>
-                  <p style="margin:0;">Recibes este correo porque te registraste en la lista de espera en viviendovino.com.<br>
-                  <a href="${email.unsubscribeUrl}" style="color:#5c5454;text-decoration:underline;">Darme de baja</a></p>
+                  <p style="margin:0;">${escapeHtml(email.reason ?? WAITLIST_REASON)}${
+                    email.unsubscribeUrl
+                      ? `<br>
+                  <a href="${email.unsubscribeUrl}" style="color:#5c5454;text-decoration:underline;">Darme de baja</a>`
+                      : ""
+                  }</p>
                 </td>
               </tr>
             </table>
@@ -174,8 +183,8 @@ ${email.highlight ? highlightHtml(email.highlight) : ""}
     "",
     "--",
     "Viviendo Vino · Tienda en línea · Consumo exclusivo para mayores de edad.",
-    "Recibes este correo porque te registraste en la lista de espera en viviendovino.com.",
-    `Darme de baja: ${email.unsubscribeUrl}`,
+    email.reason ?? WAITLIST_REASON,
+    ...(email.unsubscribeUrl ? [`Darme de baja: ${email.unsubscribeUrl}`] : []),
     "",
   ].join("\n");
 

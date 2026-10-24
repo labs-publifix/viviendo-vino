@@ -3,12 +3,12 @@ titulo: "A qué temperatura servir cada vino"
 numero: "02"
 categoria: "Guías de maridaje"
 entradilla: "La misma botella sabe distinta fría o tibia. Usa esta tabla como punto de partida: un par de grados arriba o abajo está bien."
-fecha: "2026-10-15"
+fecha: "2026-10-24"
 resumen:
   - "**Frío**, el vino se siente más fresco; **tibio**, más alcohólico."
   - "Espumosos, blancos y rosados van **fríos**; los tintos, **frescos**, no a temperatura ambiente."
   - "Sírvelo un poco frío de más: en la copa se calienta rápido."
-ejemplo: true
+ejemplo: false
 ---
 
 ## La tabla
@@ -18,7 +18,7 @@ ejemplo: true
 | Espumosos (Prosecco, rosé espumoso) | 6 a 8 °C | Directo del refrigerador, varias horas antes |
 | Blancos y rosados ligeros | 8 a 10 °C | Del refrigerador; sácalo 5 minutos antes |
 | Blancos con más cuerpo | 10 a 13 °C | Del refrigerador; sácalo 15 minutos antes |
-| Tintos ligeros | 12 a 14 °C | 30 minutos en el refrigerador |
+| Tintos ligeros | 13 a 15 °C | 20 a 30 minutos en el refrigerador |
 | Tintos con más cuerpo | 16 a 18 °C | 15 a 20 minutos en el refrigerador |
 
 ## Cómo enfriar sin complicarte

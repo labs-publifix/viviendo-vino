@@ -1,11 +1,17 @@
 ---
 titulo: "Cómo leer la etiqueta de un vino sin perderte en el intento"
+titulo_seo: "Cómo leer la etiqueta de un vino | Viviendo Vino"
 slug: "como-leer-la-etiqueta-de-un-vino"
-extracto: "Productor, uva, lugar, año y unas siglas que asustan. Te explicamos qué dice cada parte de la etiqueta y qué puedes ignorar."
+extracto: "Aprende a leer la etiqueta de un vino: uva, añada, región y qué significan DOC, IGT y DOCG. Con ejemplos de etiquetas reales."
 tipo: "articulo"
 categoria: "Aprende"
 color: "oscuro"
-fecha: "2026-10-22"
+cifra: "01"
+fecha: "2026-10-24"
+relacionados:
+  - "a-que-temperatura-servir-cada-vino"
+  - "como-saber-que-tipo-de-vino-te-gusta"
+  - "guia-de-vinos-italianos-viviendo-vino"
 resumen:
   - "La etiqueta te dice **quién hizo el vino, con qué uva o de qué lugar viene y de qué año es**."
   - "En Italia muchas veces el nombre del vino es el **lugar**, no la uva."
@@ -13,71 +19,86 @@ resumen:
   - "El año y el porcentaje de alcohol te dan pistas rápidas sobre cómo puede ser el vino."
 vinos:
   - "chardonnay-vento-igt-2024"
+  - "pinot-grigio-delle-venezie-doc-2024"
   - "soave-doc-2024"
   - "amarone-della-valpolicella-classico-docg-2017"
 preguntas:
-  - pregunta: "¿Un vino DOCG siempre es mejor que uno IGT?"
-    respuesta: "No necesariamente. DOCG significa que la zona tiene reglas más estrictas, pero hay vinos IGT muy buenos que simplemente no siguen esas reglas. Lo que te gusta a ti cuenta más que la sigla."
-  - pregunta: "¿Qué significa que un vino no tenga año en la etiqueta?"
-    respuesta: "Que mezcla vino de varias cosechas. Es común en algunos espumosos: el productor busca que el vino sepa igual cada año."
-  - pregunta: "¿El porcentaje de alcohol dice algo del sabor?"
-    respuesta: "Da una pista. Con más alcohol el vino suele sentirse más cálido y con más cuerpo; con menos, más ligero y fresco. No es una regla, pero ayuda."
+  - pregunta: "¿Qué significan DOC, IGT y DOCG en una etiqueta?"
+    respuesta: "Son niveles de reglas de origen en Italia. IGT es el más amplio y flexible; DOC marca una zona más pequeña con reglas más precisas, y DOCG es el nivel más estricto, con controles adicionales. Hablan del origen y de las reglas, no de si el vino te va a gustar."
+  - pregunta: "¿Qué es la añada y qué tanto importa?"
+    respuesta: "La añada es el año de la cosecha: cuándo se cortaron las uvas. Para empezar te basta con saber si el vino es joven o tiene ya unos años. Muchos blancos y rosados se disfrutan jóvenes; algunos tintos están hechos para esperar."
+  - pregunta: "¿La uva que aparece en la etiqueta dice cómo va a saber el vino?"
+    respuesta: "Da una buena pista, porque cada uva tiene un estilo reconocible. Pero el lugar, el año y la forma de hacerlo también cuentan: dos vinos de la misma uva pueden ser bastante distintos."
 publicado: true
-ejemplo: true
+ejemplo: false
 ---
 
 Te paras frente a una botella, ves un nombre en italiano, unas siglas, un año y un número con porcentaje. Si no sabes qué buscar, todo parece igual de importante. No lo es. Una etiqueta tiene pocas piezas y, una vez que las ubicas, puedes leer casi cualquier botella en unos segundos.
 
-Aquí te explicamos qué significa cada parte, qué te ayuda a elegir y qué puedes dejar pasar sin culpa.
+Aquí te explicamos qué significa cada parte, con etiquetas reales de nuestro [catálogo](/vinos), qué te ayuda a elegir y qué puedes dejar pasar sin culpa.
 
-## Quién lo hace
+## ¿Qué dice la etiqueta de un vino?
+
+La etiqueta responde cinco preguntas: quién hizo el vino, con qué uva o de qué lugar viene, qué reglas de origen sigue, de qué año es la cosecha y cuánto alcohol tiene. Con esos cinco datos ya puedes imaginar cómo será el vino antes de abrirlo. Lo demás, como dibujos o frases, es casi siempre decoración.
+
+En las siguientes secciones vamos pieza por pieza.
+
+## ¿Quién hizo el vino?
 
 Casi siempre, el nombre más grande o más visible es el del **productor**: la bodega o la familia que hizo el vino. A veces aparece arriba, a veces abajo, a veces solo en la etiqueta de atrás.
 
-¿Por qué importa? Porque el productor es tu mejor referencia para la próxima vez. Si un vino te gustó, es muy probable que otros vinos del mismo productor también te gusten, aunque sean de otra uva. Con el tiempo vas a reconocer nombres como reconoces marcas de café o de cerveza.
+¿Por qué importa? Porque el productor es tu mejor referencia para la próxima vez. Si un vino te gustó, es muy probable que otros vinos del mismo productor también te gusten, aunque sean de otra uva. Con el tiempo vas a reconocer nombres como reconoces marcas de café.
 
-## La uva o el lugar
+En nuestro catálogo, por ejemplo, varias etiquetas son de Levorato, una bodega del Véneto. Si un blanco de Levorato te gustó, tienes un buen punto de partida para probar otro de la misma casa.
 
-Aquí está la diferencia más grande entre países. En muchos vinos de América, el nombre principal es la **uva**: Malbec, Cabernet Sauvignon, Chardonnay. Lo lees y sabes qué hay dentro.
+## ¿El nombre del vino es la uva o el lugar?
 
-En Italia es común lo contrario: el nombre del vino es el **lugar** de donde viene. Un Chianti, un Soave o un Amarone no son uvas, son zonas o estilos con reglas propias sobre qué uvas usar y cómo hacer el vino. Por eso a veces la etiqueta no menciona la uva por ningún lado.
+Depende del país, y esta es la diferencia más grande que vas a encontrar. En muchos vinos de América el nombre principal es la **uva**: Malbec, Cabernet Sauvignon, Chardonnay. Lo lees y sabes qué hay dentro.
 
-Si ves un nombre que no reconoces, pregúntate primero si es un lugar. Muchas veces la uva está en letras más pequeñas, en la etiqueta de atrás o simplemente se da por hecho.
+En Italia hay de las dos formas. Un **Chardonnay Vento IGT 2024** te dice la uva de entrada. Un **Pinot Grigio delle Venezie DOC 2024** te dice la uva (Pinot Grigio) y la zona (delle Venezie). En cambio, un **Soave DOC 2024** o un **Amarone della Valpolicella Classico DOCG 2017** llevan el nombre de un lugar o de un estilo con reglas propias sobre qué uvas usar y cómo hacer el vino. Por eso a veces la etiqueta no menciona la uva por ningún lado.
 
-> Un truco: si el nombre termina en una zona geográfica que puedes buscar en un mapa, casi seguro es un vino nombrado por su origen.
+> Un truco: si el nombre es una zona que puedes encontrar en un mapa, casi seguro es un vino nombrado por su origen.
 
-## Las siglas: IGT, DOC y DOCG
+## ¿Qué significan DOC, IGT y DOCG?
 
-Estas tres siglas son las que más asustan y las más fáciles de entender. Son niveles de reglas que pone Italia para proteger el nombre de cada zona:
+Son tres niveles de reglas que Italia usa para proteger el nombre de cada zona. Ninguno es una calificación: indican de dónde viene el vino y qué tan estrictas son las reglas que siguió el productor. Van de la más flexible a la más estricta:
 
-- **IGT**: el vino viene de una región amplia y el productor tiene bastante libertad para elegir uvas y forma de hacerlo.
-- **DOC**: la zona es más pequeña y hay reglas más precisas sobre uvas, rendimientos y método.
-- **DOCG**: el nivel con las reglas más estrictas, con controles adicionales.
+- **IGT**: el vino viene de una región amplia y el productor tiene bastante libertad para elegir uvas y forma de hacerlo. Ejemplo: Chardonnay Vento IGT 2024.
+- **DOC**: la zona es más pequeña y hay reglas más precisas sobre uvas, rendimientos y método. Ejemplos: Soave DOC 2024 y Pinot Grigio delle Venezie DOC 2024.
+- **DOCG**: el nivel con las reglas más estrictas, con controles y catas oficiales adicionales. Ejemplo: Amarone della Valpolicella Classico DOCG 2017.
 
-Lo importante: estas siglas hablan de **reglas y origen**, no de qué tan bueno es el vino para ti. Hay IGT que muchos prefieren a ciertos DOCG, justo porque el productor pudo hacer las cosas a su manera. Úsalas como un dato más, no como una calificación.
+Lo importante: estas siglas hablan de **reglas y origen**, no de qué tan bueno es el vino para ti. Hay vinos IGT que mucha gente prefiere a ciertos DOCG, justo porque el productor pudo hacer las cosas a su manera. Úsalas como un dato más.
 
-## El año
+## ¿Qué es la añada y qué tanto importa?
 
-El año que ves en la etiqueta es el de la **cosecha**: cuándo se cortaron las uvas, no cuándo se embotelló el vino.
+La añada es el año que ves en la etiqueta: el de la **cosecha**, cuándo se cortaron las uvas, no cuándo se embotelló el vino. Para empezar, te basta con saber si el vino es joven o si ya tiene unos años; no necesitas memorizar qué años fueron buenos en cada región.
 
 En la práctica te sirve así:
 
 1. Muchos blancos, rosados y espumosos se disfrutan jóvenes, en sus primeros años, cuando están más frescos.
-2. Algunos tintos están pensados para guardarse y cambian con el tiempo; una cosecha de hace varios años puede ser justo lo que buscaba el productor.
+2. Algunos tintos están pensados para guardarse y cambian con el tiempo. Una cosecha de hace varios años, como la 2017 de nuestro Amarone, puede ser justo lo que buscaba el productor.
 3. Si no hay año, el vino mezcla varias cosechas. Es normal en algunos espumosos.
 
-No necesitas saber qué años fueron buenos en cada región. Para empezar, basta con saber si el vino es joven o tiene ya un tiempo en la botella.
+## ¿Qué te dice el porcentaje de alcohol?
 
-## El alcohol y lo demás
+Es una pista rápida sobre el cuerpo del vino. Con más alcohol, el vino suele sentirse más cálido y con más cuerpo; con menos, más ligero y fresco. Un blanco con 11 o 12 % probablemente será más fresco que un tinto con 14 o 15 %. No es una regla exacta, pero ayuda a decidir.
 
-El porcentaje de alcohol suele estar en una esquina de la etiqueta. Es una pista rápida: con más alcohol el vino suele sentirse más cálido y con más cuerpo; con menos, más ligero. Un blanco con 11 o 12 % probablemente será más fresco que un tinto con 14 o 15 %.
-
-En la etiqueta de atrás encontrarás el volumen, quién lo importa, a veces una descripción del productor y avisos legales. La descripción del productor ayuda, pero tómala como su opinión.
+En la etiqueta de atrás encontrarás el volumen, quién lo importa, a veces una descripción del productor y avisos legales. La descripción ayuda, pero tómala como la opinión de quien lo hizo.
 
 Lo que puedes ignorar al principio: medallas sin año ni concurso, frases como "reserva especial" sin más contexto y dibujos que no dicen nada del vino. No tienen nada de malo, pero no te ayudan a decidir.
 
-## Cómo usar todo esto la próxima vez
+## Cómo leer una etiqueta en cinco pasos
 
-Cuando tomes una botella, haz este recorrido en orden: productor, uva o lugar, sigla, año y alcohol. Cinco datos, unos segundos. Con eso ya sabes mucho más que antes de voltearla.
+Cuando tomes una botella, haz este recorrido en orden:
 
-Y si un vino te gusta, toma una foto de la etiqueta. Es la forma más sencilla de construir tu propia lista y de ir descubriendo qué te gusta de verdad.
+1. **Productor**: ¿quién lo hizo?
+2. **Uva o lugar**: ¿qué hay dentro o de dónde viene?
+3. **Sigla**: IGT, DOC o DOCG.
+4. **Año**: ¿es joven o ya tiene unos años?
+5. **Alcohol**: ¿será ligero o con más cuerpo?
+
+Cinco datos, unos segundos. Con eso ya sabes mucho más que antes de voltear la botella.
+
+Y si un vino te gusta, tómale una foto a la etiqueta. Es la forma más sencilla de armar tu propia lista. Muy pronto podrás hacerlo con nuestro [Wine Scan](/wine-scan): le tomas una foto a la etiqueta y te ayuda a entender qué estás tomando.
+
+Si quieres seguir aprendiendo, lee [a qué temperatura servir cada vino](/blog/a-que-temperatura-servir-cada-vino) o descubre [qué tipo de vino te gusta](/blog/como-saber-que-tipo-de-vino-te-gusta).

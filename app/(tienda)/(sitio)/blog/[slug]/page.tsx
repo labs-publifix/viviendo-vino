@@ -11,6 +11,7 @@ import { IS_PREVIEW } from "@/lib/about";
 import { getArticle, getArticles, getRelated } from "@/lib/blog/content";
 import { AUTHOR, formatDate, typeLabel } from "@/lib/blog/meta";
 import { storeEnabled } from "@/lib/catalog/enabled";
+import { SITE_URL } from "@/lib/site";
 import { getCatalog } from "@/lib/catalog/repo";
 import { GuideDownload } from "./GuideDownload";
 import { Toc } from "./Toc";
@@ -21,15 +22,17 @@ import styles from "./article.module.css";
 
 const CLOSED = "__tienda-cerrada__";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   if (!storeEnabled()) return [{ slug: CLOSED }];
-  return getArticles().map((a) => ({ slug: a.slug }));
+  const slugs = (await getArticles()).map((a) => ({ slug: a.slug }));
+  // Al menos un parámetro (Cache Components); los artículos que se publiquen después se generan al pedirlos.
+  return slugs.length > 0 ? slugs : [{ slug: CLOSED }];
 }
 
 async function load(params: Promise<{ slug: string }>) {
   const { slug } = await params;
   if (!storeEnabled() || slug === CLOSED) notFound();
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
   if (!article) notFound();
   return article;
 }
@@ -37,12 +40,15 @@ async function load(params: Promise<{ slug: string }>) {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const a = await load(params);
   return {
-    title: `${a.titulo} · Viviendo Vino`,
+    title: { absolute: a.tituloSeo },
     description: a.extracto,
-    alternates: { canonical: `/blog/${a.slug}` },
+    alternates: { canonical: `${SITE_URL}/blog/${a.slug}` },
     authors: [{ name: AUTHOR.name }],
     openGraph: {
       type: "article",
+      locale: "es_MX",
+      siteName: "Viviendo Vino",
+      url: `${SITE_URL}/blog/${a.slug}`,
       title: a.titulo,
       description: a.extracto,
       publishedTime: a.fecha,
@@ -53,15 +59,52 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+// Datos estructurados: artículo, ruta de navegación y preguntas frecuentes (backlog §4).
+function structuredData(a: Awaited<ReturnType<typeof load>>) {
+  const url = `${SITE_URL}/blog/${a.slug}`;
+  const strip = (html: string) => html.replace(/<[^>]+>/g, "").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&");
+  const graph: object[] = [
+    {
+      "@type": "Article",
+      headline: a.titulo,
+      description: a.extracto,
+      image: `${url}/opengraph-image`,
+      datePublished: `${a.fecha}T09:00:00-06:00`,
+      dateModified: `${a.actualizado ?? a.fecha}T09:00:00-06:00`,
+      inLanguage: "es-MX",
+      author: { "@type": "Person", name: AUTHOR.name, jobTitle: AUTHOR.role, url: `${SITE_URL}/nosotros` },
+      publisher: { "@type": "Organization", name: "Viviendo Vino", url: SITE_URL, logo: { "@type": "ImageObject", url: `${SITE_URL}/email/logo-viviendo-vino.png` } },
+      mainEntityOfPage: url,
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+        { "@type": "ListItem", position: 3, name: a.titulo, item: url },
+      ],
+    },
+  ];
+  if (a.preguntas.length > 0) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: a.preguntas.map((p) => ({ "@type": "Question", name: p.pregunta, acceptedAnswer: { "@type": "Answer", text: strip(p.respuesta) } })),
+    });
+  }
+  // "<" escapado para que el texto nunca cierre la etiqueta <script>.
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
+}
+
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const a = await load(params);
   const { wines } = await getCatalog();
   const featuredWines = a.vinos.map((slug) => wines.find((w) => w.slug === slug)).filter((w) => w !== undefined);
-  const related = getRelated(a.slug);
+  const related = await getRelated(a.slug);
   const isGuide = a.tipo === "guia" && Boolean(a.pdf);
 
   return (
     <article className={styles.article}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData(a) }} />
       {/* 1. Encabezado con el color del artículo */}
       <header className={`${styles.header} ${colors[a.color]}`}>
         <div className={styles.headerInner}>
@@ -74,6 +117,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </ol>
           </nav>
           {a.ejemplo && IS_PREVIEW && <p className={styles.sample}>Ejemplo · solo se ve en dev</p>}
+          {a.programado && (
+            <p className={styles.sample}>Programado · se publica el {formatDate(a.fecha)}, 9:00 am · por ahora solo se ve en dev</p>
+          )}
           <h1 className={styles.title}>{a.titulo}</h1>
           <p className={styles.excerpt}>{a.extracto}</p>
 
@@ -100,7 +146,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </p>
           {isGuide && (
             <div className={styles.headerAction}>
-              <GuideDownload guide={a.titulo} label="Descargar guía en PDF" tone={a.color === "claro" ? "light" : "dark"} />
+              <GuideDownload slug={a.slug} guide={a.titulo} label="Descargar guía en PDF" tone={a.color === "claro" ? "light" : "dark"} />
             </div>
           )}
         </div>
@@ -157,7 +203,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <div className={styles.downloadBody}>
                 <h2 id="descarga-title">{a.titulo}</h2>
                 <p>{a.extracto}</p>
-                <GuideDownload guide={a.titulo} label="Descargar guía" />
+                <GuideDownload slug={a.slug} guide={a.titulo} label="Descargar guía" />
               </div>
             </section>
           )}

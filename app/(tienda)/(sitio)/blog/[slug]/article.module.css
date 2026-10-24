@@ -182,7 +182,8 @@
 .dialogLabel { color: var(--vv-vino); }
 .dialogTitle { margin: 0 0 var(--s-2); padding-right: var(--s-6); font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
 .dialogText { margin: 0 0 var(--s-5); color: var(--muted); }
-.dialogForm { display: flex; flex-direction: column; gap: var(--s-4); }
+.dialogForm { position: relative; display: flex; flex-direction: column; gap: var(--s-4); }
+.trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 @media (prefers-reduced-motion: no-preference) {
   .dialog[open] { animation: rise var(--vv-dur) var(--vv-ease); }
   @keyframes rise { from { opacity: 0; transform: translateY(8px); } }

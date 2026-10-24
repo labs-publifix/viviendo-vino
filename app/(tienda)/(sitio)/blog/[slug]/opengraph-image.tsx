@@ -26,14 +26,16 @@ const PALETTE: Record<BlogColor, { bg: string; fg: string; muted: string; cifra:
   acento: { bg: "#641F53", fg: "#F3ECE4", muted: "rgba(243,236,228,0.82)", cifra: "#D2A5C8" },
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   if (!storeEnabled()) return [{ slug: "__tienda-cerrada__" }];
-  return getArticles().map((a) => ({ slug: a.slug }));
+  const slugs = (await getArticles()).map((a) => ({ slug: a.slug }));
+  // Al menos un parámetro (Cache Components); los artículos que se publiquen después se generan al pedirlos.
+  return slugs.length > 0 ? slugs : [{ slug: "__tienda-cerrada__" }];
 }
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const a = storeEnabled() ? getArticle(slug) : null;
+  const a = storeEnabled() ? await getArticle(slug) : null;
   const c = PALETTE[a?.color ?? "oscuro"];
   const background =
     a?.color === "oscuro" || !a

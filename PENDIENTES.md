@@ -46,7 +46,13 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [x] Blog construido: `/blog`, `/blog/[slug]` y el teaser de la portada leen `content/blog/*.md` (guía en `content/blog/README.md`, backlog en `content/blog/BACKLOG.md`).
 - [ ] Los 3 artículos actuales son de **ejemplo** (`ejemplo: true`, etiqueta visible solo en dev). Reemplazarlos o quitarles la marca al revisarlos.
 - [x] Plantilla de marca para las guías en PDF (`npm run guides:build`, guía en `content/blog/README.md`). Muestra: `public/guias/temperatura-de-servicio.pdf`; falta tu visto bueno.
-- [ ] Descarga de guías por correo: hoy la ventana solo valida y muestra "Función pendiente de conectar" (no envía ni guarda nada).
+- [x] Descarga de guías por correo: `/api/guias` valida en servidor, guarda en `guide_requests` y envía el PDF con Resend (plantilla de marca; vista previa en `/correos?correo=guia`). Quien marca "novedades" entra a `waitlist_signups` con source `guia:<slug>`.
+- [ ] **Correr en Supabase** `supabase/migrations/20261024000000_guide_requests.sql`: primero staging, luego producción. Sin esa tabla el formulario de la guía responde con error.
+- [x] Blog real: backlog en `content/blog/BACKLOG.md` (Excel en `docs/`), publicación programada los jueves 9:00 am CDMX sin cron, title tag, canonical, JSON-LD (Article, BreadcrumbList, FAQPage), sitemap con artículos visibles. Piezas 01 a 06 en revisión en dev.
+- [ ] 19 nov: dar de alta Search Console, enviar el sitemap y pedir indexación de 01 a 07 (backlog §4).
+- [ ] GA4 y sus eventos (descarga de guía, clic al armador, quiz y Wine Scan): pendiente, no hay GA4 instalado.
+- [ ] Índice del blog paginado y RSS: no hacen falta con menos de 30 artículos; se agregan cuando crezca.
+- [ ] Confirmar con quien corresponda la leyenda de consumo responsable (hoy "Evita el exceso · Venta solo a mayores de 18 años").
 
 ## Portada
 - [ ] Textos de la marquesina de anuncios: hoy son de muestra (`app/(tienda)/(sitio)/layout.tsx`).

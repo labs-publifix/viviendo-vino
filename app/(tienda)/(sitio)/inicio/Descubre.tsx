@@ -22,8 +22,8 @@ const QUIZ_BOTTLES = [
   "/img/vinos/falanghina-puglia-igt.webp",
 ];
 
-export function Descubre() {
-  const recientes = getArticles().slice(0, 3).map(toSummary);
+export async function Descubre() {
+  const recientes = (await getArticles()).slice(0, 3).map(toSummary);
   return (
     <>
       <section className={`${styles.section} ${styles.teaser} ${styles.beforeDark}`} aria-labelledby="quiz-title">

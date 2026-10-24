@@ -32,6 +32,7 @@ export function ArticleCard({
             </li>
           )}
           {a.ejemplo && IS_PREVIEW && <li className={styles.sample}>Ejemplo</li>}
+          {a.programado && <li className={styles.sample}>Programado</li>}
         </ul>
         <p className={styles.category}>{a.categoria}</p>
         <span className={styles.cifra} aria-hidden="true">

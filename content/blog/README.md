@@ -2,14 +2,23 @@
 
 Esta guía es para las sesiones de Claude Code que escriben el blog. Cada artículo es un archivo Markdown en esta carpeta (`content/blog/<slug>.md`). No hay base de datos: publicar es crear o editar un archivo y hacer commit.
 
-## Cómo crear un artículo nuevo
+## El flujo: "¿qué artículo sigue?"
 
-1. **Toma el siguiente tema** de `BACKLOG.md` (el de número más bajo con estado `idea` o `listo`). Cámbialo a `redactando`.
-2. **Crea el archivo** `content/blog/<slug>.md`. El slug va en minúsculas, sin acentos, con guiones: `como-servir-un-espumoso`.
-3. **Llena los datos del inicio** (todos los campos, ver la tabla de abajo). Copia la estructura de un artículo existente.
-4. **Escribe el texto** con la estructura recomendada y la voz de marca.
-5. **Revisa** con la lista de abajo.
-6. **Publica**: pon `publicado: true`, cambia el estado en el backlog a `publicado`, haz commit y push a `develop`. Revisa el artículo en dev.viviendovino.com.
+Cuando el equipo pregunte qué artículo sigue:
+
+1. **Lee `BACKLOG.md` completo** (es la fuente de verdad de temas, fechas, SEO y reglas) y toma la ficha con estado `Idea aprobada` y la fecha más próxima. Cámbiala a `Redactando`.
+2. **Consulta** el manual de marca y las skills `impeccable` y `ui-ux-pro-max`; respeta la voz de abajo.
+3. **Redacta** `content/blog/<slug>.md` con los campos de la ficha (tabla de abajo). La `fecha` es el jueves de la ficha: el artículo se publica solo ese día a las **9:00 am CDMX**.
+4. Si es **guía**, crea también su PDF (ver "Guías en PDF").
+5. **Control de calidad** (obligatorio, lo haces tú): la lista del backlog §1 y la de abajo. Verifica los datos generales de vino contra una fuente confiable y anótala en la ficha. Corre `npm run lint`, `npm test` y `npm run build`.
+6. **Sube a dev**: commit en `feature/store`, avanza `develop` y haz push. En dev los artículos con fecha futura se ven con la etiqueta "Programado". Cambia el estado a `En revisión (dev)` y muéstrale al equipo el enlace del preview y, si es guía, el PDF.
+7. **Cuando el equipo diga "llévalo a main"**: fusiona a `main` (solo con esa aprobación expresa). Cambia el estado a `Programado`. El día y la hora de su `fecha` aparece solo en producción, sin desplegar nada más; ese día cambia el estado a `Publicado` y agrega los enlaces recíprocos desde 2 artículos anteriores (columna Relacionados).
+
+Notas:
+
+- Mientras la tienda esté cerrada (`STORE_OPEN` distinto de `true`), el blog no se ve en producción aunque esté en `main`; aparece completo el día que abre la tienda.
+- Los artículos con `ejemplo: true` nunca se muestran en producción.
+- `publicado: false` es un borrador: no se ve en ningún lado.
 
 Si es una **guía**: además del artículo, crea su PDF con la plantilla de marca (ver "Guías en PDF" abajo) y pon la ruta en el campo `pdf`. Las guías usan siempre `color: "acento"`.
 
@@ -29,31 +38,34 @@ Para revisar la imagen de la página sin abrir el PDF: `GUIDE_PREVIEW=<carpeta> 
 
 ```yaml
 ---
-titulo: "Título del artículo"
-slug: "titulo-del-articulo"            # igual al nombre del archivo
-extracto: "Una o dos frases para tarjetas, buscadores y redes."
+titulo: "Título del artículo"           # el H1 de la ficha
+titulo_seo: "Título corto | Viviendo Vino"  # title tag de la ficha, máximo 60 caracteres
+slug: "titulo-del-articulo"            # igual al nombre del archivo; nunca cambia una vez publicado
+extracto: "La meta descripción de la ficha (110 a 155 caracteres)."
 tipo: "articulo"                       # articulo | guia
 categoria: "Aprende"                   # Aprende | Guías de maridaje | Del catálogo | otra nueva
 color: "oscuro"                        # oscuro | claro | vino | acento (acento solo para guías)
-cifra: "07"                            # opcional; si falta, se usa el número consecutivo por fecha
-fecha: "2026-11-05"                    # AAAA-MM-DD
+cifra: "07"                            # el número de la fila del backlog, con dos dígitos
+fecha: "2026-11-05"                    # AAAA-MM-DD; se publica ese día a las 9:00 am CDMX
 actualizado: "2026-11-12"              # opcional; solo se muestra si es distinta a la fecha
 pdf: "/guias/mi-guia.pdf"              # solo en guías
+relacionados:                          # slugs de la columna Relacionados de la ficha
+  - "como-leer-la-etiqueta-de-un-vino"
 resumen:                               # 3 o 4 frases para "En pocas palabras"; permite **negritas**
   - "Primera idea clave."
   - "Segunda idea clave."
   - "Tercera idea clave."
 vinos:                                 # slugs reales del catálogo (data/catalogo-inicial.json)
   - "merlot-veneto-igt-2024"
-preguntas:                             # opcional
+preguntas:                             # las 3 preguntas de la ficha
   - pregunta: "¿Pregunta?"
     respuesta: "Respuesta corta."
-publicado: false                       # true para mostrarlo
+publicado: true                        # false = borrador, no se ve en ningún lado
 ejemplo: false                         # true solo en contenido de muestra
 ---
 ```
 
-Lo que se calcula solo: el **tiempo de lectura** (200 palabras por minuto), el **índice lateral** (sale de los títulos `##`) y la **cifra** si no la pones. Solo aparecen los artículos con `publicado: true`, del más reciente al más antiguo.
+Lo que se calcula solo: el **tiempo de lectura** (200 palabras por minuto), el **índice lateral** (sale de los títulos `##`), los **datos estructurados** (artículo, ruta y preguntas frecuentes), la **imagen para compartir** y el **sitemap**. El orden es del más reciente al más antiguo; en la misma fecha, la cifra más alta va primero.
 
 Los colores alternan: no repitas el mismo color en dos artículos seguidos. `vino` se usa poco (es el acento de la marca).
 
@@ -70,18 +82,22 @@ Los colores alternan: no repitas el mismo color en dos artículos seguidos. `vin
 
 1. **Introducción corta** (1 o 2 párrafos, antes del primer `##`): de qué va y por qué te sirve.
 2. **"En pocas palabras"**: sale sola del campo `resumen`, justo después de la introducción.
-3. **Secciones** con títulos `##` claros (4 o 5). Usa listas, tablas sencillas y alguna frase destacada con `>`.
-4. **Preguntas frecuentes** (opcional) en el campo `preguntas`.
-5. **Cierre**: la página ya termina con el botón "Armar mi kit". En el texto puedes enlazar al [armador](/arma-tu-kit) o al [quiz](/quiz).
+3. **Secciones** con títulos `##`. Cuando sea natural, escribe el título como la pregunta que la gente busca y responde justo debajo en 40 a 60 palabras. Usa listas, tablas sencillas y alguna frase destacada con `>`.
+4. **Preguntas frecuentes**: las 3 de la ficha, en el campo `preguntas`.
+5. **Enlaces internos**: mínimo 1 a una categoría o vino del catálogo, 2 a otros artículos ya publicados y 1 CTA (kit, quiz o Wine Scan), con texto descriptivo (nunca "haz clic aquí").
+6. **Cierre**: la página ya termina con el botón "Armar mi kit". En el texto puedes enlazar al [armador](/arma-tu-kit) o al [quiz](/quiz).
 
-Extensión: de 600 a 900 palabras.
+Extensión: la de la ficha (columna "Longitud objetivo").
 
 ## Revisión antes de publicar
 
 - [ ] Ortografía y acentos (incluidos los títulos y el resumen).
 - [ ] Todos los enlaces funcionan (`/arma-tu-kit`, `/quiz`, `/vinos/...`).
 - [ ] Cada slug de `vinos` existe en el catálogo y está disponible.
-- [ ] **Nada inventado sobre los vinos del catálogo**: no atribuyas notas de cata, premios ni datos que no estén en la ficha. El texto habla de vino en general; los vinos aparecen solo en el bloque "Vinos de este artículo".
-- [ ] No hay datos de Rafa que no estén confirmados.
+- [ ] **Nada inventado sobre los vinos del catálogo**: solo nombres del catálogo y datos que estén en su ficha o etiqueta (`supabase/seed/catalogo.sql`, campo `descripcion`). Si falta un dato, se omite.
+- [ ] Cero precios escritos a mano; cero promesas de envío, factura o devolución que no estén en `/envios`, `/terminos` o `/preguntas-frecuentes`; cero fechas de entrega.
+- [ ] Ningún kit mezcla grupos: en La Selezione se combinan blancos, rosado y tintos; Bollicine es una caja completa de espumosos.
+- [ ] No hay anécdotas, viajes ni opiniones atribuidas a Rafa.
+- [ ] `npm test` revisa solo el largo del title tag y la meta, la cifra, los enlaces a otros artículos y las preguntas.
 - [ ] El color no repite el del artículo anterior; las guías usan `acento`.
 - [ ] Se ve bien en dev.viviendovino.com en celular y escritorio.

@@ -2,15 +2,26 @@ import "server-only";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
+import { cacheLife, cacheTag } from "next/cache";
 import { Marked } from "marked";
 import { z } from "zod";
 import { BLOG_COLORS, CATEGORY_ORDER, type BlogColor } from "./meta";
 
 // Blog en archivos: un .md por artículo en content/blog/ (datos al inicio + texto en Markdown).
 // Sin base de datos: se escribe desde Claude Code siguiendo content/blog/README.md.
+//
+// Publicación programada: cada artículo sale el día de su `fecha` a las 9:00 am CDMX (15:00 UTC; México ya
+// no cambia de horario). La lista se calcula dentro de una caché de minutos, así que el artículo aparece
+// solo, sin desplegar, a más tardar un par de minutos después de su hora. En dev (preview) se ven también
+// los programados, marcados como tales, para revisarlos antes; los de ejemplo nunca llegan a producción.
 
 const DIR = join(process.cwd(), "content/blog");
 const WORDS_PER_MINUTE = 200;
+const PUBLISH_TIME_UTC = "T15:00:00Z";
+const SHOW_SCHEDULED = process.env.NEXT_PUBLIC_PREVIEW === "true" || process.env.NODE_ENV === "development";
+
+/** Momento de publicación de un artículo: su fecha a las 9:00 am hora del centro de México. */
+export const publishAt = (fecha: string) => Date.parse(`${fecha}${PUBLISH_TIME_UTC}`);
 
 const fecha = z.union([z.string(), z.date()]).transform((v, ctx) => {
   const s = v instanceof Date ? v.toISOString().slice(0, 10) : v;
@@ -23,8 +34,12 @@ const fecha = z.union([z.string(), z.date()]).transform((v, ctx) => {
 
 const frontMatter = z.object({
   titulo: z.string().min(1),
+  /** Title tag para buscadores, con " | Viviendo Vino" (máximo 60 caracteres). */
+  titulo_seo: z.string().max(60, "el title tag lleva máximo 60 caracteres").optional(),
   slug: z.string().regex(/^[a-z0-9-]+$/, "solo minúsculas, números y guiones"),
   extracto: z.string().min(1),
+  /** Slugs de artículos relacionados (columna Relacionados del backlog), en orden de preferencia. */
+  relacionados: z.array(z.string()).default([]),
   tipo: z.enum(["articulo", "guia"]),
   categoria: z.string().min(1),
   color: z.enum(BLOG_COLORS),
@@ -44,6 +59,8 @@ export type TocItem = { id: string; text: string };
 export type Article = {
   slug: string;
   titulo: string;
+  tituloSeo: string;
+  relacionados: string[];
   extracto: string;
   tipo: "articulo" | "guia";
   categoria: string;
@@ -57,6 +74,8 @@ export type Article = {
   vinos: string[];
   preguntas: { pregunta: string; respuesta: string }[];
   ejemplo: boolean;
+  /** Solo en dev: todavía no llega su fecha de publicación. */
+  programado: boolean;
   minutos: number;
   toc: TocItem[];
   /** Texto antes del primer título de segundo nivel (la introducción). */
@@ -68,7 +87,7 @@ export type Article = {
 /** Lo que necesita una tarjeta (se puede pasar a componentes de cliente). */
 export type ArticleSummary = Pick<
   Article,
-  "slug" | "titulo" | "extracto" | "tipo" | "categoria" | "color" | "cifra" | "fecha" | "pdf" | "ejemplo" | "minutos"
+  "slug" | "titulo" | "extracto" | "tipo" | "categoria" | "color" | "cifra" | "fecha" | "pdf" | "ejemplo" | "programado" | "minutos"
 >;
 
 export function slugifyHeading(text: string): string {
@@ -155,6 +174,8 @@ function loadAll(): Article[] {
         article: {
           slug: fm.slug,
           titulo: fm.titulo,
+          tituloSeo: fm.titulo_seo ?? `${fm.titulo} | Viviendo Vino`,
+          relacionados: fm.relacionados,
           extracto: fm.extracto,
           tipo: fm.tipo,
           categoria: fm.categoria,
@@ -167,6 +188,7 @@ function loadAll(): Article[] {
           vinos: fm.vinos,
           preguntas: fm.preguntas.map((p) => ({ pregunta: p.pregunta, respuesta: r.inline(p.respuesta) })),
           ejemplo: fm.ejemplo,
+          programado: false,
           minutos: readingMinutes(content),
           toc: r.toc,
           introHtml: r.introHtml,
@@ -176,38 +198,50 @@ function loadAll(): Article[] {
     })
     .filter((a) => a.publicado)
     .map((a) => a.article)
-    .sort((a, b) => b.fecha.localeCompare(a.fecha));
+    // Del más reciente al más antiguo; en la misma fecha, la cifra más alta primero.
+    .sort((a, b) => b.fecha.localeCompare(a.fecha) || (Number(b.cifra) || 0) - (Number(a.cifra) || 0));
 }
 
 let cache: Article[] | null = null;
 
-/** Artículos publicados, del más reciente al más antiguo. */
-export function getArticles(): Article[] {
+function allArticles(): Article[] {
   if (!cache || process.env.NODE_ENV === "development") cache = loadAll();
   return cache;
 }
 
-export function getArticle(slug: string): Article | null {
-  return getArticles().find((a) => a.slug === slug) ?? null;
+/** Artículos visibles hoy, del más reciente al más antiguo. En dev incluye los programados. */
+export async function getArticles(): Promise<Article[]> {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("blog");
+  const now = Date.now();
+  return allArticles()
+    .map((a) => ({ ...a, programado: publishAt(a.fecha) > now }))
+    .filter((a) => SHOW_SCHEDULED || (!a.programado && !a.ejemplo));
+}
+
+export async function getArticle(slug: string): Promise<Article | null> {
+  return (await getArticles()).find((a) => a.slug === slug) ?? null;
 }
 
 export function toSummary(a: Article): ArticleSummary {
-  const { slug, titulo, extracto, tipo, categoria, color, cifra, fecha, pdf, ejemplo, minutos } = a;
-  return { slug, titulo, extracto, tipo, categoria, color, cifra, fecha, pdf, ejemplo, minutos };
+  const { slug, titulo, extracto, tipo, categoria, color, cifra, fecha, pdf, ejemplo, programado, minutos } = a;
+  return { slug, titulo, extracto, tipo, categoria, color, cifra, fecha, pdf, ejemplo, programado, minutos };
 }
 
-/** Categorías que existen en los artículos publicados, en el orden editorial. */
-export function getCategories(): string[] {
-  const present = [...new Set(getArticles().map((a) => a.categoria))];
+/** Categorías presentes en los artículos, en el orden editorial. */
+export function getCategories(articles: Pick<Article, "categoria">[]): string[] {
+  const present = [...new Set(articles.map((a) => a.categoria))];
   return [...CATEGORY_ORDER.filter((c) => present.includes(c)), ...present.filter((c) => !CATEGORY_ORDER.includes(c))];
 }
 
-/** Relacionados: primero de la misma categoría, luego los más recientes. */
-export function getRelated(slug: string, count = 3): ArticleSummary[] {
-  const all = getArticles();
+/** Relacionados: primero los de la ficha, luego los de la misma categoría y después los más recientes. */
+export async function getRelated(slug: string, count = 3): Promise<ArticleSummary[]> {
+  const all = await getArticles();
   const current = all.find((a) => a.slug === slug);
   const others = all.filter((a) => a.slug !== slug);
+  const picked = (current?.relacionados ?? []).map((s) => others.find((a) => a.slug === s)).filter((a) => a !== undefined);
   const same = others.filter((a) => a.categoria === current?.categoria);
-  const rest = others.filter((a) => a.categoria !== current?.categoria);
-  return [...same, ...rest].slice(0, count).map(toSummary);
+  const ordered = [...new Set([...picked, ...same, ...others])];
+  return ordered.slice(0, count).map(toSummary);
 }
