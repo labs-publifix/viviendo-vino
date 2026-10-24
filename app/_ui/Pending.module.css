@@ -1,0 +1,29 @@
+/* Solo en el preview: borde punteado en vino, superficie clara y la etiqueta en mono. */
+.pending {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-5);
+  border: 1px dashed rgb(154 32 48 / 0.5);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  color: var(--fg);
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vv-vino);
+}
+.label { font-size: var(--t-small); color: var(--muted); }
+.lines { display: flex; flex-direction: column; gap: 10px; padding-top: var(--s-2); }
+.lines span { display: block; height: 10px; border-radius: 5px; background: rgb(10 2 6 / 0.07); }
+
+.image { justify-content: center; align-items: center; text-align: center; aspect-ratio: 4 / 5; }
+.quote { padding: var(--s-6) var(--s-5); }
+.quote .label { font-size: var(--t-subtitle); font-weight: 500; letter-spacing: -0.01em; color: var(--muted); }

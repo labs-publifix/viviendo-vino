@@ -35,8 +35,14 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [ ] Correr `supabase/seed/grupos-editoriales.sql` en **producción** antes de abrir (en staging ya se corre en esta ronda). Si se corre `catalogo-completo.sql` completo, ya incluye los nombres nuevos.
 
 ## Descubrir (Quiz IA, Wine Scan, Nosotros, Blog)
-- [ ] Páginas `/quiz`, `/wine-scan`, `/nosotros` y `/blog` son provisionales (título, una línea y regreso al inicio); se reemplazan al construir cada función.
-- [ ] Foto de Rafa para la sección Nosotros: agregarla en `lib/about.ts` (`RAFA_PHOTO`). Mientras no exista, dev muestra un placeholder y producción muestra la sección sin foto.
+- [x] `/nosotros` construida (con placeholders de contenido de Rafa).
+- [ ] Páginas `/quiz`, `/wine-scan` y `/blog` son provisionales (título, una línea y regreso al inicio); se reemplazan al construir cada función.
+- [ ] Contenido de Rafa (portada y `/nosotros`), todo en `lib/about.ts`. Mientras falte, dev muestra un placeholder y producción no muestra esa pieza:
+  - `RAFA_PHOTO`: foto de Rafa Aguirre (ideal 4:5).
+  - `RAFA_STORY`: su historia con el vino, con sus palabras.
+  - `RAFA_QUOTE`: una frase suya.
+  - `RAFA_CRITERIA`: 3 o 4 criterios reales con los que elige cada vino (título y una línea).
+- [ ] Feed de Instagram en `/nosotros`: requiere conectar la API de Instagram (fase de funcionalidades). Hoy hay un espacio reservado solo en dev.
 - [ ] Artículos del blog en la portada: hoy son de **ejemplo** (`lib/blog/ejemplo.ts`, con la etiqueta "Ejemplo" visible solo en dev). Reemplazar por artículos reales.
 
 ## Portada

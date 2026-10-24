@@ -1,0 +1,99 @@
+/* /nosotros: mismo contenedor, ritmo y tokens que la portada. Sitio claro; el oscuro solo en el cierre. */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--s-9) var(--gutter) 0;
+}
+.copy { display: flex; flex-direction: column; gap: var(--s-3); max-width: 40rem; min-width: 0; }
+.lede { margin: 0; font-size: var(--t-body-lg); color: var(--muted); }
+
+/* 1. Portada: texto y foto lado a lado en escritorio. */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); align-items: center; padding-top: var(--s-7); }
+.photo { width: 100%; max-width: 480px; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r-card); }
+
+/* 2. Quién es Rafa */
+.bio { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
+.bioHead { display: flex; flex-direction: column; gap: var(--s-2); }
+.subtitle {
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vv-vino);
+}
+.bioBody { display: flex; flex-direction: column; gap: var(--s-5); max-width: 42rem; }
+.story { margin: 0; font-size: var(--t-body-lg); line-height: 1.6; }
+.quote { margin: 0; padding-top: var(--s-4); border-top: 1px solid var(--line); }
+.quote p { margin: 0; font-size: var(--t-subtitle); font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; text-wrap: balance; }
+.quote p::before { content: "“"; color: var(--vv-vino); }
+.quote p::after { content: "”"; color: var(--vv-vino); }
+.quote footer { margin-top: var(--s-3); font-family: var(--font-label); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+/* 3 y 4. Columnas cortas con número (mismo trazo que "Cómo funciona" de la portada). */
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--s-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.column { display: flex; flex-direction: column; gap: var(--s-2); padding-top: var(--s-4); border-top: 2px solid var(--vv-vino); }
+.column h3 { margin: 0; font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+.column p { margin: 0; color: var(--muted); }
+.column .step { font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; color: var(--fg); }
+.num { font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; color: var(--vv-vino); }
+
+.links { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-6); margin: 0; }
+.arrowLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  align-self: flex-start;
+  min-height: 44px;
+  color: var(--vv-vino);
+  font-weight: 600;
+  text-decoration: none;
+}
+.arrowLink:hover { text-decoration: underline; }
+.arrowLink svg { transition: transform var(--vv-dur) var(--vv-ease); }
+.arrowLink:hover svg { transform: translateX(3px); }
+
+/* 5. Comunidad */
+.community { padding-bottom: var(--s-9); }
+.communityHead { display: flex; flex-direction: column; gap: var(--s-4); align-items: flex-start; }
+.feed { display: flex; flex-direction: column; gap: var(--s-3); }
+.feedGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
+.feedGrid li {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 1px dashed rgb(154 32 48 / 0.35);
+  border-radius: 8px;
+  background: var(--surface);
+  color: rgb(154 32 48 / 0.5);
+}
+
+/* 6. Cierre (bloque oscuro, como el de la portada) */
+.closing { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-5); }
+.closingTitle { margin: 0; font-size: var(--t-section); font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; }
+.closingActions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-5); }
+.closingLink { display: inline-flex; align-items: center; gap: var(--s-2); min-height: 44px; color: var(--vv-hueso); font-weight: 600; text-decoration: underline; text-underline-offset: 0.2em; }
+.closingLink:hover { color: var(--vv-orquidea); }
+
+@media (min-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s-8); }
+  .hero .photo { justify-self: end; }
+  .bio { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s-8); align-items: start; }
+  .communityHead { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+  .feedGrid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .closing { flex-direction: row; align-items: center; justify-content: space-between; }
+}
+@media (max-width: 899px) {
+  .hero .photo { max-width: none; aspect-ratio: 3 / 2; } /* en móvil la foto no ocupa toda la pantalla */
+}
