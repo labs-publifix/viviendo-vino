@@ -1,7 +1,7 @@
 // Imágenes de la portada a partir de las fotos de fotos-vinos/ (mismo fondo y luz en todas):
 // - Kits prearmados: recorte 4:3 de las fotos de kit → public/img/kits/<slug>.webp
 // - Grupos de botella: composición 16:10 con botellas reales del grupo → public/img/grupos/<codigo>.webp
-// - Hero de la portada: fotos-vinos/hero-rafa-image.png → public/img/hero-rafa.webp
+// - Hero de la portada: fotos-vinos/hero-rafa-movil.jpg → public/img/hero-rafa.webp
 // Uso: npm run home-images:build
 
 import { mkdirSync } from "node:fs";
@@ -114,6 +114,6 @@ for (const [slug, name] of Object.entries(KITS)) {
 }
 for (const [code, files] of Object.entries(GROUPS)) await groupImage(code, files);
 
-// Hero ilustrado (oct 2026): la ilustración ya trae su degradado oscuro a la izquierda para el texto.
-await sharp(join(root, "fotos-vinos/hero-rafa-image.png")).webp({ quality: 82 }).toFile(join(out(""), "hero-rafa.webp"));
+// Hero ilustrado: versión limpia en vertical (3:4), sin degradado. Se usa en todos los tamaños.
+await sharp(join(root, "fotos-vinos/hero-rafa-movil.jpg")).resize(1086, 1448).webp({ quality: 82 }).toFile(join(out(""), "hero-rafa.webp"));
 console.log("hero ilustrado → public/img/hero-rafa.webp");

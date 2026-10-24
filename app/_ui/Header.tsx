@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useCart } from "@/lib/cart/store";
 import { ButtonLink } from "./Button";
+import { SocialLinks } from "./SocialLinks";
 import { Icon } from "./Icon";
 import styles from "./Header.module.css";
 
@@ -46,6 +47,10 @@ export function Header({ cartCount: forcedCount }: { cartCount?: number }) {
               </li>
             ))}
           </ul>
+          {/* Solo en el menú desplegable del móvil. */}
+          <div className={styles.navSocial}>
+            <SocialLinks label="Síguenos" />
+          </div>
         </nav>
 
         <div className={styles.actions}>

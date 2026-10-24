@@ -4,8 +4,8 @@ import styles from "./DarkBlock.module.css";
 // Bloque oscuro puntual con la atmósfera de la marca (Manual · 6): negro tinto, resplandor vino arriba
 // a la derecha y eco ciruela abajo a la izquierda. Nunca negro plano.
 // Con `image`, la foto va de fondo, tenue y velada del lado del texto; la atmósfera queda encima.
-// Con `image.clean`, la imagen (ilustración con su propio degradado oscuro a la izquierda) se ve limpia,
-// sin velo: el texto va sobre la parte oscura en escritorio y la imagen pasa abajo del texto en móvil.
+// Con `image.clean`, la imagen se ve limpia, sin velo, con corte recto: a la derecha en escritorio,
+// abajo del texto en tableta y móvil.
 export function DarkBlock({
   children,
   as: Tag = "section",

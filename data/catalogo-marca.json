@@ -25,7 +25,8 @@
     { "slug": "espumosos", "nombre": "Espumosos", "orden": 3,
       "intro": "Un Prosecco brut y un rosé extra dry. Burbuja fina, fruta y flores. Van juntos en la caja de 6 de Bollicine." }
   ],
-  "intro_general": "Los antiguos griegos llamaron al sur de Italia Enotria Tellus: la tierra del vino. De ahí vienen muchas de las uvas que hoy caben en tu kit.",
+  "intro_portada": "Italia es una potencia mundial del vino, reconocida por su tradición milenaria, la diversidad de sus regiones y sus extraordinarias uvas autóctonas. Cada botella es una expresión de su historia, su territorio y su pasión por la buena mesa.",
+  "intro_catalogo": "Descubre Italia a través de sus vinos y disfruta de una de las expresiones más fascinantes de la cultura vinícola mundial.",
   "vinos": {
     "Chardonnay Vento IGT 2024": {
       "tipo": "blanco", "uva": "Chardonnay", "region": "Véneto", "denominacion": "IGT", "anada": 2024,

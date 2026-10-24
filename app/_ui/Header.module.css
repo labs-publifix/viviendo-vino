@@ -33,6 +33,7 @@
   display: inline-block;
 }
 .navLink:hover { color: var(--vv-vino); }
+.navSocial { display: none; }
 
 .actions { display: flex; align-items: center; gap: var(--s-2); }
 .cart,
@@ -83,6 +84,8 @@
     padding: var(--s-2) var(--gutter) var(--s-5);
   }
   .nav.open { display: block; }
+  .navSocial { display: block; padding-top: var(--s-4); }
   .nav ul { flex-direction: column; gap: 0; }
+  .navSocial ul { flex-direction: row; gap: var(--s-2); } /* la lista del menú no aplica a los íconos */
   .navLink { display: block; padding: 14px 0; font-size: 13px; border-bottom: 1px solid var(--line); }
 }

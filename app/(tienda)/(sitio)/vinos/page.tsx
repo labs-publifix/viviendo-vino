@@ -24,7 +24,7 @@ export default async function Vinos() {
         <Heading level={1} size="section">
           Vinos.
         </Heading>
-        <p className={styles.lede}>{marca.intro_general}</p>
+        <p className={styles.lede}>{marca.intro_catalogo}</p>
         <nav aria-label="Categorías" className={styles.jump}>
           <ul>
             {categories.map((c) => (

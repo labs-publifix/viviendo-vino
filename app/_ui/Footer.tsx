@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SocialLinks } from "./SocialLinks";
 import styles from "./Footer.module.css";
 
 // Pie (Manual · 10.11): enlaces, aviso +18 y consumo responsable. Sin muros: el aviso solo informa.
@@ -10,6 +11,7 @@ export function Footer() {
           {/* eslint-disable-next-line @next/next/no-img-element -- SVG maestro del logotipo */}
           <img src="/brand/logo-color.svg" alt="Viviendo Vino" width={786} height={250} />
           <p>Kits de 6 botellas de vino italiano. Envío incluido.</p>
+          <SocialLinks />
         </div>
         <nav aria-label="Información">
           <ul className={styles.links}>

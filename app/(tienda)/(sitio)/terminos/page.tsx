@@ -28,7 +28,7 @@ export default function Terminos() {
       </Section>
       <Section n={3} title="Kits">
         <p>
-          Cada pedido se forma con kits de exactamente 6 botellas de vinos del mismo grupo de botella. Puedes repetir
+          Cada pedido se forma con kits de exactamente 6 botellas de vinos del mismo grupo de botellas. Puedes repetir
           etiquetas. Las imágenes de producto son ilustrativas.
         </p>
       </Section>

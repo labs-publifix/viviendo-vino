@@ -51,54 +51,49 @@
 }
 
 /* Imagen limpia (hero ilustrado) ------------------------------------------------------------------ */
-/* Escritorio: la ilustración a toda opacidad, anclada a la derecha y al alto del bloque. Solo se funde
-   su borde izquierdo con el negro tinto del bloque; el eco ciruela queda abajo a la izquierda, fuera
-   de la ilustración. */
+/* La ilustración se ve a toda opacidad, sin velos ni difuminados, con un corte recto contra el bloque
+   oscuro. El bloque del texto conserva la atmósfera del manual (§6): resplandor vino arriba a la
+   derecha de su propio espacio y eco ciruela abajo a la izquierda. */
+.clean { --panel: 42%; background: var(--vv-negro); }
 .clean .photo {
   left: auto;
   right: 0;
-  width: auto;
-  max-width: none;
+  width: var(--panel);
   height: 100%;
-  aspect-ratio: 16 / 9;
   object-fit: cover;
-  object-position: 50% 30%;
+  object-position: 50% 22%;
   opacity: 1;
   mask-image: none;
 }
 .clean .scrim {
+  right: var(--panel);
   background:
-    radial-gradient(ellipse 30% 45% at 0% 100%, rgb(100 31 83 / 0.38), rgb(100 31 83 / 0.12) 50%, transparent),
-    linear-gradient(90deg, var(--vv-negro) 0%, var(--vv-negro) 22%, rgb(10 2 6 / 0.85) 38%, rgb(10 2 6 / 0) 52%);
+    radial-gradient(ellipse 60% 75% at 100% 0%,
+      rgb(154 32 48 / 0.48), rgb(154 32 48 / 0.3) 20%, rgb(154 32 48 / 0.14) 45%, rgb(154 32 48 / 0.05) 70%, transparent),
+    radial-gradient(ellipse 45% 50% at 0% 100%,
+      rgb(100 31 83 / 0.38), rgb(100 31 83 / 0.25) 25%, rgb(100 31 83 / 0.12) 50%, transparent),
+    var(--vv-negro);
 }
-@media (min-width: 1400px) {
-  /* En pantallas muy anchas la imagen deja más negro a la izquierda: el fundido acompaña su borde. */
-  .clean .scrim {
-    background:
-      radial-gradient(ellipse 30% 45% at 0% 100%, rgb(100 31 83 / 0.38), rgb(100 31 83 / 0.12) 50%, transparent),
-      linear-gradient(90deg, var(--vv-negro) 0%, var(--vv-negro) 30%, rgb(10 2 6 / 0.85) 42%, rgb(10 2 6 / 0) 55%);
-  }
-}
+/* El texto no cruza el corte. */
+.clean .inner > * { max-width: calc(100% - var(--panel)); }
 
-/* Móvil y tableta: texto arriba e ilustración abajo, a todo el ancho, fundida hacia arriba con el negro.
-   En tableta se ve completa (16:9); en móvil se encuadra en la escena (1:1). */
-@media (max-width: 1199px) {
+/* Tableta y móvil: texto arriba sobre el bloque oscuro e ilustración abajo, a todo el ancho, con el
+   mismo corte recto. */
+@media (max-width: 1023px) {
   .clean { display: flex; flex-direction: column; }
-  .clean .inner { padding-bottom: var(--s-5); }
+  .clean .inner { padding-bottom: var(--s-7); }
+  .clean .inner > * { max-width: none; }
+  .clean .scrim { right: 0; bottom: auto; height: 100%; }
   .clean .photo {
     position: static;
     order: 2;
+    z-index: 0; /* como elemento flex respeta z-index: por encima del fondo del bloque */
     width: 100%;
     height: auto;
-    aspect-ratio: 16 / 9;
-    object-position: 50% 50%;
-    opacity: 1;
-    mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
-  }
-  .clean .scrim {
-    background: radial-gradient(ellipse 70% 40% at 0% 0%, rgb(100 31 83 / 0.3), transparent);
+    aspect-ratio: 4 / 3;
+    object-position: 50% 8%;
   }
 }
 @media (max-width: 759px) {
-  .clean .photo { aspect-ratio: 1 / 1; object-position: 88% 50%; }
+  .clean .photo { aspect-ratio: 3 / 4; object-position: 50% 0%; }
 }

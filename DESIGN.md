@@ -97,8 +97,9 @@ Todos en `app/_ui/` y todos con estados de foco visible, hover y `disabled`.
 | **Pie** | §10.11 | enlaces, +18, consumo responsable | — |
 | **Avisos** | §12 "Mensajes del sitio" | info, éxito, aviso, error (punto de color + texto) | — |
 | **Barra de anuncios** | §10.04 | marquesina en bucle con punto carmín entre mensajes | se pausa al pasar el cursor, al enfocarla o con su botón; fija con movimiento reducido; se puede cerrar |
+| **Redes (portada)** | — | filas editoriales en el bloque de cierre: número, ícono, nombre en Inter 900 mayúsculas, usuario y flecha carmín; Instagram primero | al pasar el cursor o enfocar: línea carmín a la izquierda y nombre en carmín; abren en otra pestaña |
 | **Aviso de edad** | §10.05 | pantalla completa en negro tinto con atmósfera, logo para fondo oscuro, "¿Tienes 18 años o más?" | sí (se recuerda 30 días), no ("Vuelve cuando cumplas 18"), foco atrapado en el aviso |
-| **Bloque oscuro** | §6 Atmósfera | opcional: foto de fondo tenue que entra desde la derecha (hero de la portada); negro tinto `#0A0206` con resplandor vino (esquina superior derecha) y eco ciruela (inferior izquierda), calibrados contra el slide 06 "Nunca negro plano"; el centro queda en negro tinto | — |
+| **Bloque oscuro** | §6 Atmósfera | opcional: imagen limpia con corte recto (hero de la portada: panel derecho en escritorio, debajo del texto en tableta y móvil) o foto de fondo tenue; negro tinto `#0A0206` con resplandor vino (esquina superior derecha) y eco ciruela (inferior izquierda), calibrados contra el slide 06 "Nunca negro plano"; el centro queda en negro tinto | — |
 
 ## 7. Voz en pantalla
 

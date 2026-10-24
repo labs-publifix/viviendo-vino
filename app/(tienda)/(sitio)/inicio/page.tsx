@@ -12,6 +12,7 @@ import { storeEnabled } from "@/lib/catalog/enabled";
 import { getCatalog } from "@/lib/catalog/repo";
 import { GROUP_IMAGES, KIT_IMAGES } from "@/lib/catalog/media";
 import { formatMXN } from "@/lib/money";
+import { SOCIAL } from "@/lib/social";
 import styles from "./inicio.module.css";
 
 // Portada de la tienda. Con STORE_OPEN=true, proxy.ts la muestra en "/".
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
 const STEPS = [
   {
     title: "Elige tus vinos",
-    text: "Cada vino tiene su grupo de botella. La primera que agregas define el grupo de tu kit.",
+    text: "Cada vino pertenece a un grupo de botellas. La primera que agregas define el grupo de tu kit.",
   },
   {
     title: "Llena tus 6 lugares",
@@ -42,7 +43,7 @@ export default async function TiendaInicio() {
 
   return (
     <>
-      <DarkBlock aria-labelledby="hero-title" image={{ src: "/img/hero-rafa.webp", width: 1280, height: 720, clean: true }}>
+      <DarkBlock aria-labelledby="hero-title" image={{ src: "/img/hero-rafa.webp", width: 1086, height: 1448, clean: true }}>
         <div className={styles.hero}>
           <NumberedLabel tone="dark">Vinos exclusivos de Viviendo Vino</NumberedLabel>
           <h1 id="hero-title" className={styles.heroTitle}>
@@ -66,7 +67,7 @@ export default async function TiendaInicio() {
         <div className={styles.sectionHead}>
           <NumberedLabel n={1}>Cómo funciona</NumberedLabel>
           <Heading id="como-title">Seis botellas, una regla.</Heading>
-          <p className={styles.lede}>Tu kit lleva vinos de un solo grupo de botella. Dentro del grupo, mezclas como quieras.</p>
+          <p className={styles.lede}>Tu kit lleva vinos de un solo grupo de botellas. Dentro del grupo, mezclas como quieras.</p>
         </div>
         <ol className={styles.steps}>
           {STEPS.map((s, i) => (
@@ -83,7 +84,7 @@ export default async function TiendaInicio() {
 
       <section className={styles.section} aria-labelledby="grupos-title">
         <div className={styles.sectionHead}>
-          <NumberedLabel n={2}>Grupos de botella</NumberedLabel>
+          <NumberedLabel n={2}>Grupos de botellas</NumberedLabel>
           <Heading id="grupos-title">Elige por dónde empezar.</Heading>
         </div>
         <ul className={styles.groups}>
@@ -133,7 +134,7 @@ export default async function TiendaInicio() {
         <div className={styles.sectionHead}>
           <NumberedLabel n={3}>El catálogo</NumberedLabel>
           <Heading id="cat-title">{categories.reduce((s, c) => s + c.wineCount, 0)} vinos italianos.</Heading>
-          <p className={styles.lede}>{marca.intro_general}</p>
+          <p className={styles.lede}>{marca.intro_portada}</p>
         </div>
         <ul className={styles.categories}>
           {categories.map((c) => (
@@ -156,8 +157,11 @@ export default async function TiendaInicio() {
         <section className={`${styles.section} ${styles.lastSection}`} aria-labelledby="kits-title">
           <div className={styles.sectionHead}>
             <NumberedLabel n={4}>Kits prearmados</NumberedLabel>
-            <Heading id="kits-title">¿Sin tiempo? Empieza con uno de estos.</Heading>
-            <p className={styles.lede}>Agrégalo tal cual a tu carrito o personalízalo en el armador.</p>
+            <Heading id="kits-title">¿Sin tiempo?</Heading>
+            <p className={styles.lede}>
+              Elige entre las selecciones recomendadas por Viviendo Vino. Agrégala tal cual a tu carrito o personalízala en el
+              armador.
+            </p>
           </div>
           <div className={styles.kits}>
             {kits.map((k) => (
@@ -185,6 +189,34 @@ export default async function TiendaInicio() {
             Empieza tu kit
           </ButtonLink>
         </div>
+
+        <section className={styles.social} aria-labelledby="redes-title">
+          <h2 id="redes-title" className={styles.socialLabel}>
+            Síguenos · la comunidad de Viviendo Vino
+          </h2>
+          <ul className={styles.socialList}>
+            {SOCIAL.map((s, i) => (
+              <li key={s.id}>
+                <a href={s.href} target="_blank" rel="noopener noreferrer" className={styles.socialRow}>
+                  <span className={styles.socialNum} aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className={styles.socialIcon} aria-hidden="true">
+                    <Icon name={s.id} size={28} />
+                  </span>
+                  <span className={styles.socialName}>{s.name}</span>
+                  <span className={styles.socialMeta}>
+                    {[s.handle, s.note].filter(Boolean).join(" · ") || "Síguenos"}
+                    <span className="vv-sr-only"> (se abre en otra pestaña)</span>
+                  </span>
+                  <span className={styles.socialArrow} aria-hidden="true">
+                    <Icon name="arrow" size={24} />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       </DarkBlock>
     </>
   );

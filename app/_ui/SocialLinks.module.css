@@ -1,0 +1,12 @@
+.list { display: flex; gap: var(--s-1); margin: 0; padding: 0; list-style: none; }
+.link {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--vv-radius-pill);
+  color: var(--fg);
+  transition: color var(--vv-dur) var(--vv-ease), border-color var(--vv-dur) var(--vv-ease);
+}
+.link:hover { color: var(--vv-vino); border-color: var(--vv-vino); }

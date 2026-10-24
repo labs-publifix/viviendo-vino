@@ -111,3 +111,78 @@
   .hero { padding: var(--s-8) 0; }
   .closing { flex-direction: row; align-items: center; justify-content: space-between; }
 }
+
+/* Redes: filas editoriales dentro del bloque de cierre (referencia del equipo). Instagram va primero:
+   es donde vive la comunidad. Al pasar el cursor, la fila marca una línea carmín y el nombre avanza. */
+.social { margin-top: var(--s-9); }
+.socialLabel {
+  margin: 0 0 var(--s-4);
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(243 236 228 / 0.75);
+}
+.socialList { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-dark); }
+.socialList li { border-bottom: 1px solid var(--line-dark); }
+.socialRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: var(--s-2) var(--s-5);
+  padding: var(--s-5) var(--s-3);
+  color: var(--vv-hueso);
+  text-decoration: none;
+}
+.socialRow::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--vv-carmin);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--vv-dur) var(--vv-ease);
+}
+.socialNum { font-family: var(--font-label); font-size: 11px; letter-spacing: 0.1em; color: rgb(243 236 228 / 0.6); }
+.socialIcon { display: grid; place-items: center; }
+.socialName {
+  font-size: clamp(40px, 7.5vw, 104px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  transition: color var(--vv-dur) var(--vv-ease), transform var(--vv-dur) var(--vv-ease);
+}
+.socialMeta {
+  grid-column: 3;
+  grid-row: 2;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(243 236 228 / 0.75);
+}
+.socialArrow { grid-column: 4; grid-row: 1 / span 2; color: var(--vv-carmin); transition: transform var(--vv-dur) var(--vv-ease); }
+.socialRow:hover .socialName,
+.socialRow:focus-visible .socialName { color: var(--vv-carmin); transform: translateX(var(--s-2)); }
+.socialRow:hover::before,
+.socialRow:focus-visible::before { transform: scaleY(1); }
+.socialRow:hover .socialArrow { transform: translateX(4px); }
+
+@media (min-width: 900px) {
+  .socialRow { grid-template-columns: 48px 40px 1fr auto 32px; padding: var(--s-6) var(--s-4); }
+  .socialMeta { grid-column: 4; grid-row: 1; text-align: right; }
+  .socialArrow { grid-column: 5; grid-row: 1; }
+}
+@media (max-width: 559px) {
+  .socialNum { display: none; }
+  .socialRow { grid-template-columns: auto 1fr auto; gap: var(--s-1) var(--s-3); padding: var(--s-4) var(--s-2); }
+  .socialMeta { grid-column: 2; }
+  .socialArrow { grid-column: 3; }
+}

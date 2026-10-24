@@ -20,7 +20,7 @@ const GROUPS: { title: string; items: { q: string; a: ReactNode }[] }[] = [
         a: <p>Cada pedido es una caja de 6. Así el envío va incluido en el precio desde el primer kit.</p>,
       },
       {
-        q: "¿Qué es un grupo de botella?",
+        q: "¿Qué es un grupo de botellas?",
         a: (
           <p>
             Cada vino pertenece a uno de cuatro grupos: La Selezione, I Grandi Rossi, Selezione d’Oro o Bollicine. Un kit lleva vinos de un solo grupo. La primera
@@ -47,6 +47,7 @@ const GROUPS: { title: string; items: { q: string; a: ReactNode }[] }[] = [
     items: [
       { q: "¿Cuánto cuesta el envío?", a: <p>Nada extra: va incluido en el precio de cada kit. <Link href="/envios">Más sobre envíos</Link>.</p> },
       { q: "¿A dónde envían?", a: <p><Pendiente>zonas de cobertura</Pendiente>.</p> },
+      { q: "¿Hacen envíos fuera de México?", a: <p>No. Solo hacemos entregas en la República Mexicana.</p> },
       { q: "¿Cuánto tarda?", a: <p><Pendiente>plazo de entrega</Pendiente>.</p> },
     ],
   },
