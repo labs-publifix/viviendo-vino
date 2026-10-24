@@ -17,7 +17,7 @@ Archivos que se cargan en el prompt del sistema del endpoint `/api/wine-scan` (c
 - `cuerpo`: 1 ligero · 3 medio · 5 pleno
 - `acidez`: 1 suave · 3 media · 5 muy fresca
 - `tanino`: 0 sin tanino (blancos, rosados, espumosos) · 1 muy suave · 5 muy marcado
-- `dulzor`: 0 seco · 1 seco con fruta madura · 2 semiseco · 3 semidulce · 4 dulce · 5 muy dulce
+- `dulzor` (desde la v0.2): 1 seco (menos de 4 g/L: el azúcar residual mínimo que queda en casi todo vino) · 2 seco con fruta madura (se percibe más dulce por la fruta o el alcohol) · 3 semiseco (4-12 g/L) · 4 semidulce (12-45 g/L) · 5 dulce (más de 45 g/L). Nunca 0: todo vino conserva algo de azúcar.
 - `intensidad`: intensidad aromática y de sabor, 1 discreta · 5 muy intensa
 
 ## Reglas de uso

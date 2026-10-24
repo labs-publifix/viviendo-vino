@@ -1,6 +1,6 @@
 {
  "version": "0.1",
- "nota": "Perfiles en escala 1-5 (dulzor 0-5). Los campos 'por_confirmar' deben revisarse con el aliado de Córdoba antes del lanzamiento.",
+ "nota": "Perfiles en escala 1-5 (dulzor 1-5 desde la v0.2). Los campos 'por_confirmar' deben revisarse con el aliado de Córdoba antes del lanzamiento.",
  "vinos": [
   {
    "slug": "chardonnay-vento-igt-2024",
@@ -20,7 +20,7 @@
     "cuerpo": 3,
     "acidez": 3,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "recomendar_cuando": "El vino escaneado es un blanco seco de cuerpo medio y acidez moderada, sobre todo Chardonnay joven o con poca barrica (por ejemplo Chablis, Mâcon, Chardonnay de Chile, Argentina o Italia), Pinot Bianco o Viognier ligero.",
@@ -54,7 +54,7 @@
     "cuerpo": 2,
     "acidez": 4,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 4
    },
    "recomendar_cuando": "El vino escaneado es un blanco seco, fresco y aromático: Sauvignon Blanc de cualquier origen (Sancerre, Marlborough, Chile), Verdejo, Grüner Veltliner o Albariño.",
@@ -86,7 +86,7 @@
     "cuerpo": 2,
     "acidez": 3,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 2
    },
    "recomendar_cuando": "El vino escaneado es un blanco seco, ligero y de sabor limpio: Pinot Grigio o Pinot Gris ligero, Soave, Vinho Verde, Gavi, Muscadet, Pinot Bianco o Trebbiano.",
@@ -116,14 +116,14 @@
     "cuerpo": 3,
     "acidez": 3,
     "tanino": 0,
-    "dulzor": 1,
+    "dulzor": 2,
     "intensidad": 5
    },
    "recomendar_cuando": "El vino escaneado es un blanco muy aromático: Gewürztraminer, Moscatel o Moscato seco, Torrontés, Viognier o Riesling aromático.",
    "no_recomendar_cuando": "El vino escaneado es un blanco neutro, de baja intensidad aromática o con barrica.",
    "argumento": "Es un Traminer Aromatico (la versión italiana del Gewürztraminer): huele a lichi y rosas, aunque es seco.",
    "por_confirmar": [
-    "Si es totalmente seco o con algo de azúcar residual (se asume dulzor 1)."
+    "Si es totalmente seco o con algo de azúcar residual (se asume dulzor 2: seco con fruta madura, escala v0.2)."
    ],
    "perfil_confianza": "alta",
    "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
@@ -148,7 +148,7 @@
     "cuerpo": 3,
     "acidez": 3,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "recomendar_cuando": "El vino escaneado es un blanco seco del sur de Italia o del Mediterráneo, de cuerpo medio: Falanghina, Fiano, Greco, Vermentino, Godello o Chenin Blanc seco.",
@@ -180,7 +180,7 @@
     "cuerpo": 2,
     "acidez": 3,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 2
    },
    "recomendar_cuando": "El vino escaneado es un Soave o un blanco italiano ligero y fresco: Pinot Bianco, Gavi, Orvieto, Trebbiano, Garganega, Vermentino ligero.",
@@ -212,7 +212,7 @@
     "cuerpo": 2,
     "acidez": 3,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 2
    },
    "recomendar_cuando": "El vino escaneado es un rosado seco, ligero y fresco: rosado de Provenza, rosado de Garnacha o Pinot Noir ligero, Pinot Grigio ramato.",
@@ -242,7 +242,7 @@
     "cuerpo": 4,
     "acidez": 3,
     "tanino": 4,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 4
    },
    "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio-alto y tanino marcado: Cabernet Sauvignon, mezclas de Burdeos, Petit Verdot, Merlot de cuerpo, Tempranillo con crianza.",
@@ -275,7 +275,7 @@
     "cuerpo": 3,
     "acidez": 3,
     "tanino": 3,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "recomendar_cuando": "El vino escaneado es un tinto suave y redondo, de cuerpo medio: Merlot, Carmenere, Garnacha, Côtes du Rhône, Tempranillo joven.",
@@ -307,7 +307,7 @@
     "cuerpo": 4,
     "acidez": 3,
     "tanino": 3,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio-alto y fruta oscura con tanino redondo: Montepulciano, Nero d'Avola, Negroamaro, Tempranillo con crianza, Sangiovese de cuerpo.",
@@ -337,7 +337,7 @@
     "cuerpo": 3,
     "acidez": 5,
     "tanino": 4,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 4
    },
    "recomendar_cuando": "El vino escaneado es Nebbiolo (Barolo, Barbaresco, Gattinara, Ghemme, Roero) o un tinto de acidez alta y tanino firme con color claro: Sangiovese de Chianti o Brunello, Aglianico, Nerello Mascalese, Pinot Noir de estructura.",
@@ -368,7 +368,7 @@
     "cuerpo": 3,
     "acidez": 3,
     "tanino": 3,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio, armonioso y con algo de añejamiento, de fruta roja y negra madura y especias suaves: Valpolicella Superiore, Ripasso ligero, Chianti Classico, Rioja Crianza, Montepulciano.",
@@ -404,7 +404,7 @@
     "cuerpo": 5,
     "acidez": 2,
     "tanino": 3,
-    "dulzor": 1,
+    "dulzor": 2,
     "intensidad": 5
    },
    "recomendar_cuando": "El vino escaneado es un tinto maduro, de cuerpo pleno, fruta dulce y poca acidez: Primitivo, Zinfandel de California, Negroamaro, Monastrell, Garnacha madura, Shiraz australiano.",
@@ -436,7 +436,7 @@
     "cuerpo": 4,
     "acidez": 4,
     "tanino": 3,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 4
    },
    "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio-alto con acidez viva: Valpolicella, Ripasso, Chianti Classico, Barbera, Rioja Crianza o Reserva, Sangiovese de estructura.",
@@ -468,7 +468,7 @@
     "cuerpo": 5,
     "acidez": 3,
     "tanino": 4,
-    "dulzor": 1,
+    "dulzor": 2,
     "intensidad": 5
    },
    "recomendar_cuando": "El vino escaneado es un tinto muy concentrado y de guarda, de cuerpo pleno y alcohol alto: Amarone, Valpolicella Ripasso Superiore, Priorat, Ribera del Duero Gran Reserva, Cabernet de gran cuerpo.",
@@ -500,7 +500,7 @@
     "cuerpo": 3,
     "acidez": 3,
     "tanino": 3,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio, frutal y fácil de tomar: Sangiovese, Chianti, Barbera, Montepulciano ligero, Tempranillo joven, Garnacha.",
@@ -533,7 +533,7 @@
     "cuerpo": 4,
     "acidez": 2,
     "tanino": 3,
-    "dulzor": 1,
+    "dulzor": 2,
     "intensidad": 4
    },
    "recomendar_cuando": "El vino escaneado es un tinto frutal, suave y de cuerpo medio-alto con poca acidez: Primitivo, Zinfandel, Garnacha, Malbec, Shiraz joven.",
@@ -566,7 +566,7 @@
     "cuerpo": 2,
     "acidez": 4,
     "tanino": 0,
-    "dulzor": 1,
+    "dulzor": 2,
     "intensidad": 2
    },
    "recomendar_cuando": "El vino escaneado es un espumoso seco, ligero y frutal: Prosecco, Cava, Crémant, Franciacorta joven, espumoso de método tanque.",
@@ -596,7 +596,7 @@
     "cuerpo": 2,
     "acidez": 3,
     "tanino": 0,
-    "dulzor": 2,
+    "dulzor": 3,
     "intensidad": 3
    },
    "recomendar_cuando": "El vino escaneado es un espumoso rosado o un espumoso suave y ligero, de baja graduación (Extra Dry, Dry, Demi-sec): Prosecco Rosé, Cava rosado, Moscato espumoso suave.",

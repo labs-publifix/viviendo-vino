@@ -30,7 +30,7 @@ export const GuideSchema = z.object({
     cuerpo: escala(1, 5),
     acidez: escala(1, 5),
     tanino: escala(0, 5),
-    dulzor: escala(0, 5),
+    dulzor: escala(1, 5),
     intensidad: escala(1, 5),
   }),
   resumen_perfil: texto,
@@ -51,23 +51,23 @@ export const GuideSchema = z.object({
 
 export type Guide = z.infer<typeof GuideSchema>;
 
-// Términos de etiqueta que fijan un dulzor mínimo (escala 0-5 de wine-scan/knowledge/README.md).
+// Términos de etiqueta que fijan un dulzor mínimo (escala 1-5 de wine-scan/knowledge/README.md).
 const DULZOR_MINIMO: [RegExp, number][] = [
-  [/\b(doux|dolce|beerenauslese|trockenbeerenauslese|eiswein|ice ?wine|sauternes|tokaji|aszu|pedro xim[eé]nez|vin ?santo|passito|recioto)\b/i, 4],
-  [/\b(demi[- ]?sec|semisecco|auslese|late harvest|vendimia tard[ií]a|vendange tardive|porto|oporto|port)\b/i, 3],
-  [/\b(amabile|abboccato|semi ?dulce|semidolce|medium sweet|moscato d'?asti|sp[aä]tlese)\b/i, 2],
-  [/\b(extra dry|kabinett|halbtrocken|off[- ]dry)\b/i, 1],
+  [/\b(doux|dolce|beerenauslese|trockenbeerenauslese|eiswein|ice ?wine|sauternes|tokaji|aszu|pedro xim[eé]nez|vin ?santo|passito|recioto)\b/i, 5],
+  [/\b(demi[- ]?sec|semisecco|auslese|late harvest|vendimia tard[ií]a|vendange tardive|porto|oporto|port)\b/i, 4],
+  [/\b(amabile|abboccato|semi ?dulce|semidolce|medium sweet|moscato d'?asti|sp[aä]tlese)\b/i, 3],
+  [/\b(extra dry|kabinett|halbtrocken|off[- ]dry)\b/i, 2],
 ];
 
 /** Dulzor mínimo creíble según el grupo y lo que se leyó en la etiqueta. */
 export function minSweetness(g: Pick<Guide, "identificacion">): number {
   const id = g.identificacion;
-  if (id.grupo === "dulce") return 4;
+  if (id.grupo === "dulce") return 5;
   const texto = [id.nombre_vino, id.denominacion].filter(Boolean).join(" ");
   for (const [re, min] of DULZOR_MINIMO) if (re.test(texto)) return min;
   // "Dry"/"Sec" a secas solo cuenta en espumosos (Extra Dry y Demi-Sec ya se revisaron arriba).
-  if (id.grupo === "espumoso" && /\b(dry|sec)\b/i.test(texto)) return 2;
-  return 0;
+  if (id.grupo === "espumoso" && /\b(dry|sec)\b/i.test(texto)) return 3;
+  return 1;
 }
 
 /**

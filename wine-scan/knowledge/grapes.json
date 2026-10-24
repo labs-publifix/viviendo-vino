@@ -1,6 +1,6 @@
 {
  "version": "0.1",
- "escala": "1-5 (tanino 0 en blancas). dulzor: 0 seco total, 1 seco con fruta madura, 2 semiseco, 3 semidulce, 4 dulce, 5 muy dulce. Perfiles TÍPICOS de la uva; el vino concreto puede variar.",
+ "escala": "1-5 (tanino 0 en blancas). dulzor (desde la v0.2, 26 oct 2026): 1 seco (menos de 4 g/L, el azúcar residual mínimo que queda en casi todo vino), 2 seco con fruta madura (igual de seco, pero se percibe más dulce por la fruta o el alcohol), 3 semiseco (4-12 g/L), 4 semidulce (12-45 g/L), 5 dulce (más de 45 g/L). Perfiles TÍPICOS de la uva; el vino concreto puede variar.",
  "uvas": [
   {
    "id": "cabernet-sauvignon",
@@ -14,7 +14,7 @@
    "acidez": 4,
    "tanino": 5,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "grosella negra",
     "cedro",
@@ -31,7 +31,7 @@
    "acidez": 3,
    "tanino": 3,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "ciruela",
     "cereza negra",
@@ -50,7 +50,7 @@
    "acidez": 4,
    "tanino": 3,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "frambuesa",
     "pimiento",
@@ -70,7 +70,7 @@
    "acidez": 3,
    "tanino": 4,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "ciruela",
     "mora",
@@ -89,7 +89,7 @@
    "acidez": 3,
    "tanino": 4,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "mora",
     "pimienta negra",
@@ -109,7 +109,7 @@
    "acidez": 2,
    "tanino": 2,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "fresa",
     "frambuesa",
@@ -131,7 +131,7 @@
    "acidez": 3,
    "tanino": 4,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cereza",
     "cuero",
@@ -153,7 +153,7 @@
    "acidez": 4,
    "tanino": 4,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cereza ácida",
     "ciruela roja",
@@ -174,7 +174,7 @@
    "acidez": 5,
    "tanino": 5,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "rosas",
     "cereza",
@@ -192,7 +192,7 @@
    "acidez": 5,
    "tanino": 2,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cereza",
     "ciruela",
@@ -209,7 +209,7 @@
    "acidez": 3,
    "tanino": 3,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "mora",
     "ciruela",
@@ -229,7 +229,7 @@
    "acidez": 2,
    "tanino": 3,
    "intensidad": 5,
-   "dulzor": 1,
+   "dulzor": 2,
    "aromas": [
     "mermelada de ciruela",
     "mora",
@@ -249,7 +249,7 @@
    "acidez": 3,
    "tanino": 3,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "ciruela",
     "cereza negra",
@@ -270,7 +270,7 @@
    "acidez": 4,
    "tanino": 2,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cereza ácida",
     "almendra amarga",
@@ -291,7 +291,7 @@
    "acidez": 4,
    "tanino": 2,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "fresa",
     "cereza",
@@ -309,7 +309,7 @@
    "acidez": 4,
    "tanino": 1,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "fresa",
     "frambuesa",
@@ -328,7 +328,7 @@
    "acidez": 3,
    "tanino": 3,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "frutos negros",
     "pimiento",
@@ -345,7 +345,7 @@
    "acidez": 4,
    "tanino": 5,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "mora",
     "ciruela",
@@ -362,7 +362,7 @@
    "acidez": 3,
    "tanino": 4,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "violeta",
     "mora",
@@ -379,7 +379,7 @@
    "acidez": 4,
    "tanino": 3,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "frutos rojos",
     "flores",
@@ -399,7 +399,7 @@
    "acidez": 3,
    "tanino": 4,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "mora",
     "hierbas mediterráneas",
@@ -420,7 +420,7 @@
    "acidez": 4,
    "tanino": 4,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "frutos negros",
     "hierbas",
@@ -437,7 +437,7 @@
    "acidez": 3,
    "tanino": 3,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "mora",
     "ciruela",
@@ -454,7 +454,7 @@
    "acidez": 5,
    "tanino": 5,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cereza negra",
     "ciruela",
@@ -472,7 +472,7 @@
    "acidez": 4,
    "tanino": 4,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cereza",
     "especias",
@@ -489,7 +489,7 @@
    "acidez": 2,
    "tanino": 3,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "ciruela",
     "almendra",
@@ -506,7 +506,7 @@
    "acidez": 3,
    "tanino": 3,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "ciruela",
     "frutos negros",
@@ -523,7 +523,7 @@
    "acidez": 4,
    "tanino": 5,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "violeta",
     "mora",
@@ -540,7 +540,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "manzana",
     "cítricos",
@@ -559,7 +559,7 @@
    "acidez": 5,
    "tanino": 0,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "pomelo",
     "hierba recién cortada",
@@ -580,7 +580,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 2,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "pera",
     "manzana verde",
@@ -597,7 +597,7 @@
    "acidez": 5,
    "tanino": 0,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "durazno",
     "limón",
@@ -617,7 +617,7 @@
    "acidez": 5,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "manzana",
     "membrillo",
@@ -634,7 +634,7 @@
    "acidez": 2,
    "tanino": 0,
    "intensidad": 5,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "durazno",
     "damasco",
@@ -653,7 +653,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "durazno",
     "cítricos",
@@ -670,7 +670,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 4,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "hierba",
     "fruta tropical",
@@ -687,7 +687,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 2,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "almendra",
     "flores blancas",
@@ -706,7 +706,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "manzana verde",
     "pera",
@@ -726,7 +726,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 1,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cítricos",
     "manzana verde"
@@ -742,7 +742,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "manzana",
     "cítricos",
@@ -763,7 +763,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cítricos",
     "hierbas",
@@ -780,7 +780,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "avellana",
     "pera",
@@ -799,7 +799,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "durazno",
     "cítricos",
@@ -819,7 +819,7 @@
    "acidez": 2,
    "tanino": 0,
    "intensidad": 5,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "lichi",
     "rosas",
@@ -839,7 +839,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 5,
-   "dulzor": 2,
+   "dulzor": 3,
    "aromas": [
     "uva",
     "azahar",
@@ -859,7 +859,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 2,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "manzana",
     "almendra",
@@ -878,7 +878,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cera",
     "miel",
@@ -895,7 +895,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "pimienta blanca",
     "limón",
@@ -912,7 +912,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "manzana",
     "hierbas",
@@ -931,7 +931,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 2,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "manzana",
     "flores blancas",
@@ -950,7 +950,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "manzana",
     "hierbas",
@@ -967,7 +967,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 2,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "flores",
     "cítricos",
@@ -986,7 +986,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 5,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "flores",
     "durazno",
@@ -1003,7 +1003,7 @@
    "acidez": 4,
    "tanino": 0,
    "intensidad": 2,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "cítricos",
     "manzana",
@@ -1020,7 +1020,7 @@
    "acidez": 3,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "pera",
     "almendra",
@@ -1039,7 +1039,7 @@
    "acidez": 2,
    "tanino": 0,
    "intensidad": 3,
-   "dulzor": 0,
+   "dulzor": 1,
    "aromas": [
     "manzana",
     "hierbas",

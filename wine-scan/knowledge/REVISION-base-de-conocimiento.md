@@ -4,133 +4,133 @@ Documento de lectura generado desde los JSON del repo. Fuente de verdad: los arc
 
 ## 1. Catálogo Viviendo Vino y cuándo recomendarlo
 
-Perfil en escala 1-5: Cuerpo / Acidez / Tanino / Dulzor / Intensidad. *Estimado por tipo y denominación; confirmar con ficha del productor.*
+Perfil en escala 1-5: Cuerpo / Acidez / Tanino / Dulzor / Intensidad (dulzor 1-5 desde la v0.2: 1 seco, 2 seco con fruta madura, 3 semiseco, 4 semidulce, 5 dulce). *Estimado por tipo y denominación; confirmar con ficha del productor.*
 
 ### Chardonnay IGT Vento — Levorato 2024
-- Lista 1 · blanco · perfil 3/3/0/0/3 · confianza alta
+- Lista 1 · blanco · perfil 3/3/0/1/3 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un blanco seco de cuerpo medio y acidez moderada, sobre todo Chardonnay joven o con poca barrica (por ejemplo Chablis, Mâcon, Chardonnay de Chile, Argentina o Italia), Pinot Bianco o Viognier ligero.
 - **No recomendar cuando:** El vino escaneado es un Chardonnay con mucha barrica y textura mantecosa (estilo California o Borgoña de guarda), o cualquier blanco de cuerpo pleno o dulce.
 - **Argumento neutral:** Es un Chardonnay seco del nordeste de Italia, de cuerpo medio y sin los tonos de mantequilla de uno con mucha barrica.
 - **Por confirmar:** Que 'VENTO' en el Excel sea 'Veneto'. · Si pasa o no por barrica (se asume que no). · Porcentaje de Chardonnay (se asume 100%).
 
 ### Sauvignon Blanc IGT Trevenezie — Levorato 2024
-- Lista 1 · blanco · perfil 2/4/0/0/4 · confianza alta
+- Lista 1 · blanco · perfil 2/4/0/1/4 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un blanco seco, fresco y aromático: Sauvignon Blanc de cualquier origen (Sancerre, Marlborough, Chile), Verdejo, Grüner Veltliner o Albariño.
 - **No recomendar cuando:** El vino escaneado es un blanco de cuerpo pleno, con barrica o dulce.
 - **Argumento neutral:** Es un Sauvignon Blanc seco y fresco, con aromas de cítricos y hierba.
 - **Por confirmar:** Porcentaje de Sauvignon Blanc (se asume 100%).
 
 ### Pinot Grigio delle Venezie DOC — Levorato 2024
-- Lista 1 · blanco · perfil 2/3/0/0/2 · confianza alta
+- Lista 1 · blanco · perfil 2/3/0/1/2 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un blanco seco, ligero y de sabor limpio: Pinot Grigio o Pinot Gris ligero, Soave, Vinho Verde, Gavi, Muscadet, Pinot Bianco o Trebbiano.
 - **No recomendar cuando:** El vino escaneado es un blanco aromático, de cuerpo pleno o con barrica. Un Pinot Gris de Alsacia es más pleno: no es equivalente.
 - **Argumento neutral:** Es un Pinot Grigio italiano ligero, de sabor limpio y pensado para beberse joven.
 
 ### Traminer Aromatico IGT Trevenezie — Levorato 2025
-- Lista 1 · blanco · perfil 3/3/0/1/5 · confianza alta
+- Lista 1 · blanco · perfil 3/3/0/2/5 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un blanco muy aromático: Gewürztraminer, Moscatel o Moscato seco, Torrontés, Viognier o Riesling aromático.
 - **No recomendar cuando:** El vino escaneado es un blanco neutro, de baja intensidad aromática o con barrica.
 - **Argumento neutral:** Es un Traminer Aromatico (la versión italiana del Gewürztraminer): huele a lichi y rosas, aunque es seco.
-- **Por confirmar:** Si es totalmente seco o con algo de azúcar residual (se asume dulzor 1).
+- **Por confirmar:** Si es totalmente seco o con algo de azúcar residual (se asume dulzor 2: seco con fruta madura, escala v0.2).
 
 ### Falanghina IGT Puglia — Levorato
-- Lista 1 · blanco · perfil 3/3/0/0/3 · confianza alta
+- Lista 1 · blanco · perfil 3/3/0/1/3 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un blanco seco del sur de Italia o del Mediterráneo, de cuerpo medio: Falanghina, Fiano, Greco, Vermentino, Godello o Chenin Blanc seco.
 - **No recomendar cuando:** El vino escaneado es un blanco muy ligero o muy aromático.
 - **Argumento neutral:** Es una Falanghina del sur de Italia, de cuerpo medio y notas de manzana y almendra.
 - **Por confirmar:** La añada (no aparece en el Excel).
 
 ### Soave DOC — Levorato 2024
-- Lista 1 · blanco · perfil 2/3/0/0/2 · confianza alta
+- Lista 1 · blanco · perfil 2/3/0/1/2 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un Soave o un blanco italiano ligero y fresco: Pinot Bianco, Gavi, Orvieto, Trebbiano, Garganega, Vermentino ligero.
 - **No recomendar cuando:** El vino escaneado es aromático, de cuerpo pleno o dulce.
 - **Argumento neutral:** Es un Soave: blanco de Garganega con notas de almendra y flores blancas, ligero y fresco.
 - **Por confirmar:** Si lleva algo de Trebbiano de Soave (se asume Garganega como base).
 
 ### Pinot Grigio 'Blush' Rosado delle Venezie DOC — Levorato 2025
-- Lista 1 · rosado · perfil 2/3/0/0/2 · confianza alta
+- Lista 1 · rosado · perfil 2/3/0/1/2 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un rosado seco, ligero y fresco: rosado de Provenza, rosado de Garnacha o Pinot Noir ligero, Pinot Grigio ramato.
 - **No recomendar cuando:** El vino escaneado es un rosado dulce o espumoso, o un rosado de cuerpo muy pleno.
 - **Argumento neutral:** Es un rosado seco y ligero, hecho con Pinot Grigio.
 
 ### Cabernet Sauvignon IGT Veneto — Levorato 2024
-- Lista 2 · tinto · perfil 4/3/4/0/4 · confianza alta
+- Lista 2 · tinto · perfil 4/3/4/1/4 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un tinto de cuerpo medio-alto y tanino marcado: Cabernet Sauvignon, mezclas de Burdeos, Petit Verdot, Merlot de cuerpo, Tempranillo con crianza.
 - **No recomendar cuando:** El vino escaneado es un tinto ligero (Pinot Noir, Gamay) o un tinto muy potente y de guarda. El nuestro es un Cabernet joven: no igualarlo con un gran Burdeos.
 - **Argumento neutral:** Es un Cabernet Sauvignon joven de cuerpo medio-alto, con notas de fruta negra y tanino firme.
 - **Por confirmar:** Porcentaje de Cabernet Sauvignon (se asume 100%). · Si pasa por barrica.
 
 ### Merlot IGT Veneto — Levorato 2024
-- Lista 2 · tinto · perfil 3/3/3/0/3 · confianza alta
+- Lista 2 · tinto · perfil 3/3/3/1/3 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un tinto suave y redondo, de cuerpo medio: Merlot, Carmenere, Garnacha, Côtes du Rhône, Tempranillo joven.
 - **No recomendar cuando:** El vino escaneado es un tinto muy ligero o muy potente.
 - **Argumento neutral:** Es un Merlot de cuerpo medio, con fruta madura (ciruela y cereza) y tanino suave.
 - **Por confirmar:** Porcentaje de Merlot (se asume 100%).
 
 ### Montepulciano d'Abruzzo DOC — Levorato 2024
-- Lista 2 · tinto · perfil 4/3/3/0/3 · confianza alta
+- Lista 2 · tinto · perfil 4/3/3/1/3 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un tinto de cuerpo medio-alto y fruta oscura con tanino redondo: Montepulciano, Nero d'Avola, Negroamaro, Tempranillo con crianza, Sangiovese de cuerpo.
 - **No recomendar cuando:** El vino escaneado es un Vino Nobile di Montepulciano (que es de Sangiovese): aclarar la diferencia en lugar de presentarlo como equivalente.
 - **Argumento neutral:** Es un Montepulciano de Abruzzo: tinto de fruta oscura, cuerpo medio-alto y tanino redondo.
 
 ### Langhe Nebbiolo — Bertino Fiorella
-- Lista 2 · tinto · perfil 3/5/4/0/4 · confianza alta
+- Lista 2 · tinto · perfil 3/5/4/1/4 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es Nebbiolo (Barolo, Barbaresco, Gattinara, Ghemme, Roero) o un tinto de acidez alta y tanino firme con color claro: Sangiovese de Chianti o Brunello, Aglianico, Nerello Mascalese, Pinot Noir de estructura.
 - **No recomendar cuando:** El vino escaneado es un tinto de fruta madura y poca acidez. Al presentarlo junto a un Barolo, decir que es la misma uva en una versión más accesible, sin igualarlos.
 - **Argumento neutral:** Es Nebbiolo, la misma uva del Barolo y el Barbaresco, en una versión de la zona Langhe.
 - **Por confirmar:** Si el Excel omitió la añada. · Denominación exacta en la etiqueta (Langhe DOC).
 
 ### Rosso IGT Veneto 'Don Carlo' — Levorato 2018
-- Lista 2 · tinto · perfil 3/3/3/0/3 · confianza media
+- Lista 2 · tinto · perfil 3/3/3/1/3 · confianza media
 - **Recomendar cuando el escaneado es:** El vino escaneado es un tinto de cuerpo medio, armonioso y con algo de añejamiento, de fruta roja y negra madura y especias suaves: Valpolicella Superiore, Ripasso ligero, Chianti Classico, Rioja Crianza, Montepulciano.
 - **No recomendar cuando:** El vino escaneado es un tinto ligero o uno muy potente y concentrado (Amarone, Priorat). No afirmar uvas ni método hasta confirmar la ficha.
 - **Argumento neutral:** Es un tinto del Véneto de la añada 2018, de cuerpo medio, con fruta madura y especias sutiles.
 - **Por confirmar:** Mezcla de uvas. · Si usa uva semiseca (appassimento). · Tiempo de crianza. · Perfil basado solo en la descripción de la tienda.
 
 ### Primitivo di Manduria DOC 'Villa Fulvia' — Levorato 2023
-- Lista 2 · tinto · perfil 5/2/3/1/5 · confianza alta
+- Lista 2 · tinto · perfil 5/2/3/2/5 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un tinto maduro, de cuerpo pleno, fruta dulce y poca acidez: Primitivo, Zinfandel de California, Negroamaro, Monastrell, Garnacha madura, Shiraz australiano.
 - **No recomendar cuando:** El vino escaneado es un tinto fresco, ligero o de acidez alta.
 - **Argumento neutral:** Es un Primitivo de Manduria: tinto de fruta muy madura, cuerpo pleno y poca acidez, de la misma uva del Zinfandel.
 - **Por confirmar:** Porcentaje de Primitivo (se asume 100%).
 
 ### Valpolicella Ripasso Classico Superiore DOC — Levorato 2020
-- Lista 2 · tinto · perfil 4/4/3/0/4 · confianza alta
+- Lista 2 · tinto · perfil 4/4/3/1/4 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un tinto de cuerpo medio-alto con acidez viva: Valpolicella, Ripasso, Chianti Classico, Barbera, Rioja Crianza o Reserva, Sangiovese de estructura.
 - **No recomendar cuando:** El vino escaneado es un tinto ligero o uno muy potente y alcohólico.
 - **Argumento neutral:** Es un Ripasso: un Valpolicella que gana cuerpo al fermentar de nuevo sobre los hollejos del Amarone.
 - **Por confirmar:** Mezcla exacta de uvas (se asume Corvina, Corvinone y Rondinella).
 
 ### Amarone della Valpolicella Classico DOCG — Levorato 2017
-- Lista 2 · tinto · perfil 5/3/4/1/5 · confianza alta
+- Lista 2 · tinto · perfil 5/3/4/2/5 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un tinto muy concentrado y de guarda, de cuerpo pleno y alcohol alto: Amarone, Valpolicella Ripasso Superiore, Priorat, Ribera del Duero Gran Reserva, Cabernet de gran cuerpo.
 - **No recomendar cuando:** El vino escaneado es ligero o de uso diario. Es el vino más caro de la gama: recomendarlo solo cuando el parecido sea claro.
 - **Argumento neutral:** Es un Amarone: tinto de uvas secadas antes de fermentar, concentrado y de cuerpo pleno, aunque seco.
 - **Por confirmar:** Mezcla exacta de uvas (se asume Corvina, Corvinone y Rondinella).
 
 ### Sangiovese IGT Puglia — Bodega Rocca 2024
-- Lista 3 · tinto · perfil 3/3/3/0/3 · confianza alta
+- Lista 3 · tinto · perfil 3/3/3/1/3 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un tinto de cuerpo medio, frutal y fácil de tomar: Sangiovese, Chianti, Barbera, Montepulciano ligero, Tempranillo joven, Garnacha.
 - **No recomendar cuando:** El vino escaneado es un tinto potente o de guarda.
 - **Argumento neutral:** Es un Sangiovese de Puglia: tinto frutal, de cuerpo medio y fácil de combinar.
 - **Por confirmar:** Perfil de acidez (se asume 3 por el clima cálido de Puglia; el Sangiovese suele tener más). · Reconocimiento 'Double Gold' (confirmar concurso y año antes de mencionarlo).
 
 ### Primitivo — Bodega Rocca 2025
-- Lista 3 · tinto · perfil 4/2/3/1/4 · confianza alta
+- Lista 3 · tinto · perfil 4/2/3/2/4 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un tinto frutal, suave y de cuerpo medio-alto con poca acidez: Primitivo, Zinfandel, Garnacha, Malbec, Shiraz joven.
 - **No recomendar cuando:** El vino escaneado es un tinto fresco y ligero.
 - **Argumento neutral:** Es un Primitivo joven, más ligero que un Manduria, con fruta madura y tanino suave.
 - **Por confirmar:** Denominación exacta (en el Excel solo dice Primitivo Rocca). · Reconocimiento 'Double Gold' (confirmar concurso y año antes de mencionarlo).
 
 ### Prosecco DOC Spumante Brut 'Imperial' — Carlov
-- Lista 4 · espumoso · perfil 2/4/0/1/2 · confianza alta
+- Lista 4 · espumoso · perfil 2/4/0/2/2 · confianza alta
 - **Recomendar cuando el escaneado es:** El vino escaneado es un espumoso seco, ligero y frutal: Prosecco, Cava, Crémant, Franciacorta joven, espumoso de método tanque.
 - **No recomendar cuando:** El vino escaneado es un Champagne o un espumoso de crianza larga: son estilos distintos (más tostados, con burbuja más fina). Si se menciona, decir que es una alternativa de otro estilo, más frutal y ligera.
 - **Argumento neutral:** Es un Prosecco Brut: espumoso seco, ligero y frutal, de método tanque.
 - **Por confirmar:** Nombre exacto del producto (en el Excel: 'Carlov Imperial').
 
 ### Rosé Extra Dry 921 — Collevento
-- Lista 4 · espumoso · perfil 2/3/0/2/3 · confianza media
+- Lista 4 · espumoso · perfil 2/3/0/3/3 · confianza media
 - **Recomendar cuando el escaneado es:** El vino escaneado es un espumoso rosado o un espumoso suave y ligero, de baja graduación (Extra Dry, Dry, Demi-sec): Prosecco Rosé, Cava rosado, Moscato espumoso suave.
 - **No recomendar cuando:** El vino escaneado es un espumoso Brut Nature o Extra Brut muy seco. Aclarar que Extra Dry es más dulce que Brut.
 - **Argumento neutral:** Es un espumoso rosado Extra Dry, de baja graduación: suave, con aromas de rosa y frutos rojos y final limpio.

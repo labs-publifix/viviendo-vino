@@ -76,7 +76,7 @@ test("Champagne lleva el aviso de estilo distinto; Cava (sin método tradicional
 });
 
 test("dulces, fortificados y naranjas nunca reciben recomendación; confianza baja y no disponibles se excluyen", () => {
-  const base = { perfil: { cuerpo: 3, acidez: 3, tanino: 0, dulzor: 0, intensidad: 3 }, uvas: [], pais: "Italia" };
+  const base = { perfil: { cuerpo: 3, acidez: 3, tanino: 0, dulzor: 1, intensidad: 3 }, uvas: [], pais: "Italia" };
   for (const grupo of ["dulce", "fortificado", "naranja"]) assert.equal(recommendFromCatalog({ ...base, grupo }, candidatos, reglas), null);
   const chablis = reglas.casos_de_prueba.find((c) => c.escaneado === "Chablis");
   const sinChardonnay = candidatos.filter((c) => c.slug !== "chardonnay-vento-igt-2024");
@@ -97,7 +97,7 @@ test("empate: gana el que comparte uva y luego el de menor precio", () => {
 });
 
 test("aviso del Vino Nobile di Montepulciano", () => {
-  const nobile = { grupo: "tinto", perfil: { cuerpo: 4, acidez: 3, tanino: 3, dulzor: 0, intensidad: 3 }, uvas: ["sangiovese"], pais: "Italia", texto: "Vino Nobile di Montepulciano DOCG" };
+  const nobile = { grupo: "tinto", perfil: { cuerpo: 4, acidez: 3, tanino: 3, dulzor: 1, intensidad: 3 }, uvas: ["sangiovese"], pais: "Italia", texto: "Vino Nobile di Montepulciano DOCG" };
   const solo = candidatos.filter((c) => c.slug === "montepulciano-d-abruzzo-doc-2024");
   assert.equal(recommendFromCatalog(nobile, solo, reglas)?.avisoNobile, true);
 });
@@ -106,7 +106,7 @@ const guiaValida = {
   accion: "ok",
   mensaje_usuario: null,
   identificacion: { confianza: "alta", productor: "Prueba", nombre_vino: "Barolo", denominacion: "DOCG", anada: 2019, uvas: ["nebbiolo"], region: "Piamonte", pais: "Italia", alcohol_pct: 14, grupo: "tinto", metodo_espumoso: null, campos_leidos: ["productor"] },
-  perfil_estimado: { cuerpo: 4, acidez: 5, tanino: 5, dulzor: 0, intensidad: 4 },
+  perfil_estimado: { cuerpo: 4, acidez: 5, tanino: 5, dulzor: 1, intensidad: 4 },
   resumen_perfil: "Suele ser un tinto de mucha acidez.",
   servicio: { estilo: "tinto_estructurado", temperatura_min_c: 16, temperatura_max_c: 18, copa: "Copa grande", decantar: "Sí", texto: "Ábrelo antes." },
   maridajes: [
@@ -166,43 +166,46 @@ test("el prompt pide resolver el servicio con la edad de la cosecha", () => {
   assert.ok(prompt.includes("edad de la cosecha") && prompt.includes("Nunca copies el texto de la base tal cual"));
 });
 
-test("dulzor: un vino dulce no puede quedar en 0", async () => {
+test("dulzor (escala 1-5): un vino dulce no puede quedar en seco y ninguno en 0", async () => {
   const { minSweetness } = await import("../lib/wine-scan/schema.ts");
   const id = (over) => ({ identificacion: { ...guiaValida.identificacion, ...over } });
-  assert.equal(minSweetness(id({ grupo: "dulce", nombre_vino: "Sauternes" })), 4);
-  assert.equal(minSweetness(id({ grupo: "blanco", nombre_vino: "Moscato d'Asti" })), 2);
-  assert.equal(minSweetness(id({ grupo: "espumoso", nombre_vino: "Prosecco Extra Dry" })), 1);
-  assert.equal(minSweetness(id({ grupo: "espumoso", nombre_vino: "Prosecco Brut" })), 0);
-  assert.equal(minSweetness(id({ grupo: "espumoso", nombre_vino: "Champagne Demi-Sec" })), 3);
-  assert.equal(minSweetness(id({ grupo: "tinto", nombre_vino: "Barolo" })), 0);
+  assert.equal(minSweetness(id({ grupo: "dulce", nombre_vino: "Sauternes" })), 5);
+  assert.equal(minSweetness(id({ grupo: "blanco", nombre_vino: "Moscato d'Asti" })), 3);
+  assert.equal(minSweetness(id({ grupo: "espumoso", nombre_vino: "Prosecco Extra Dry" })), 2);
+  assert.equal(minSweetness(id({ grupo: "espumoso", nombre_vino: "Prosecco Brut" })), 1);
+  assert.equal(minSweetness(id({ grupo: "espumoso", nombre_vino: "Champagne Demi-Sec" })), 4);
+  assert.equal(minSweetness(id({ grupo: "tinto", nombre_vino: "Barolo" })), 1);
   const dulceEnCero = { ...guiaValida, identificacion: { ...guiaValida.identificacion, grupo: "dulce", nombre_vino: "Tokaji Aszú" } };
   assert.ok(checkGuide(dulceEnCero, ids).some((p) => p.includes("dulzor")));
   const dulceBien = { ...dulceEnCero, perfil_estimado: { ...dulceEnCero.perfil_estimado, dulzor: 5 } };
   assert.ok(!checkGuide(dulceBien, ids).some((p) => p.includes("dulzor")));
+  assert.equal(GuideSchema.safeParse({ ...guiaValida, perfil_estimado: { ...guiaValida.perfil_estimado, dulzor: 0 } }).success, false);
 });
 
 test("el prompt explica la escala de dulzor por estilo y etiqueta", () => {
   const prompt = buildSystemPrompt(knowledge);
-  assert.ok(prompt.includes("perfil_estimado.dulzor NO sale de la uva") && prompt.includes("Demi-sec"));
+  assert.ok(prompt.includes("perfil_estimado.dulzor NO sale de la uva") && prompt.includes("Demi-sec") && prompt.includes("nunca es 0"));
+  assert.ok(knowledge.grapes.uvas.every((u) => u.dulzor >= 1), "ninguna uva con dulzor 0");
+  assert.ok(catalogo.every((c) => c.perfil.dulzor >= 1), "ningún vino del catálogo con dulzor 0");
 });
 
 test("calibración: el perfil queda a máximo un punto del rango típico de sus uvas y respeta el alcohol", async () => {
   const { calibrateProfile } = await import("../lib/wine-scan/calibrate.ts");
   const uvas = new Map(knowledge.grapes.uvas.map((u) => [u.id, u]));
   // Merlot (cuerpo 3, acidez 3, tanino 3) inflado a 5 en todo → acidez, tanino e intensidad a 4; el cuerpo admite 5.
-  const merlot = calibrateProfile({ cuerpo: 5, acidez: 5, tanino: 5, dulzor: 0, intensidad: 5 }, { grupo: "tinto", uvas: ["merlot"], alcohol: 13.5 }, uvas);
-  assert.deepEqual(merlot.perfil, { cuerpo: 5, acidez: 4, tanino: 4, dulzor: 0, intensidad: 4 });
+  const merlot = calibrateProfile({ cuerpo: 5, acidez: 5, tanino: 5, dulzor: 1, intensidad: 5 }, { grupo: "tinto", uvas: ["merlot"], alcohol: 13.5 }, uvas);
+  assert.deepEqual(merlot.perfil, { cuerpo: 5, acidez: 4, tanino: 4, dulzor: 1, intensidad: 4 });
   assert.equal(merlot.ajustes.length, 3);
   // Pinot Grigio (cuerpo 2) inflado a 5 de cuerpo → 4.
-  assert.equal(calibrateProfile({ cuerpo: 5, acidez: 3, tanino: 0, dulzor: 0, intensidad: 2 }, { grupo: "blanco", uvas: ["pinot-grigio"], alcohol: null }, uvas).perfil.cuerpo, 4);
+  assert.equal(calibrateProfile({ cuerpo: 5, acidez: 3, tanino: 0, dulzor: 1, intensidad: 2 }, { grupo: "blanco", uvas: ["pinot-grigio"], alcohol: null }, uvas).perfil.cuerpo, 4);
   // Un valor razonable no se toca.
-  const ok = calibrateProfile({ cuerpo: 3, acidez: 3, tanino: 3, dulzor: 0, intensidad: 3 }, { grupo: "tinto", uvas: ["merlot"], alcohol: 13.5 }, uvas);
+  const ok = calibrateProfile({ cuerpo: 3, acidez: 3, tanino: 3, dulzor: 1, intensidad: 3 }, { grupo: "tinto", uvas: ["merlot"], alcohol: 13.5 }, uvas);
   assert.equal(ok.ajustes.length, 0);
   // Poco alcohol no da cuerpo pleno, aunque la uva sea de cuerpo.
-  const ligero = calibrateProfile({ cuerpo: 5, acidez: 4, tanino: 5, dulzor: 0, intensidad: 4 }, { grupo: "tinto", uvas: ["cabernet-sauvignon"], alcohol: 12 }, uvas);
+  const ligero = calibrateProfile({ cuerpo: 5, acidez: 4, tanino: 5, dulzor: 1, intensidad: 4 }, { grupo: "tinto", uvas: ["cabernet-sauvignon"], alcohol: 12 }, uvas);
   assert.equal(ligero.perfil.cuerpo, 3);
   // Blancos sin tanino; uva desconocida: no se limita por uva.
-  const blanco = calibrateProfile({ cuerpo: 3, acidez: 4, tanino: 2, dulzor: 0, intensidad: 3 }, { grupo: "blanco", uvas: ["uva-rara"], alcohol: null }, uvas);
+  const blanco = calibrateProfile({ cuerpo: 3, acidez: 4, tanino: 2, dulzor: 1, intensidad: 3 }, { grupo: "blanco", uvas: ["uva-rara"], alcohol: null }, uvas);
   assert.equal(blanco.perfil.tanino, 0);
   assert.equal(blanco.perfil.acidez, 4);
 });

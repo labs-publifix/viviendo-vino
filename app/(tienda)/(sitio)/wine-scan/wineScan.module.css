@@ -188,7 +188,8 @@
 .blockTitle { margin: 0; font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; }
 
 .scales { display: flex; flex-direction: column; gap: var(--s-3); padding: var(--s-2) 0; }
-.scaleRow { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); grid-template-areas: "label value" "track track"; gap: 6px var(--s-3); align-items: center; }
+.scaleRow { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); grid-template-areas: "label value" "track track" "note note"; gap: 6px var(--s-3); align-items: center; }
+.scaleNote { grid-area: note; font-size: 12px; color: var(--muted); }
 .scaleLabel {
   grid-area: label;
   font-family: var(--font-label);

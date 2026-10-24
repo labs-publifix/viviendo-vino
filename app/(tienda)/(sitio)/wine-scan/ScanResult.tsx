@@ -17,8 +17,11 @@ const NIVELES = {
   cuerpo: ["", "Ligero", "Ligero a medio", "Medio", "Medio-alto", "Pleno"],
   acidez: ["", "Suave", "Moderada", "Media", "Fresca", "Muy fresca"],
   tanino: ["Sin tanino", "Muy suave", "Suave", "Medio", "Firme", "Muy marcado"],
-  dulzor: ["Seco", "Seco con fruta madura", "Semiseco", "Semidulce", "Dulce", "Muy dulce"],
+  dulzor: ["", "Seco", "Seco con fruta madura", "Semiseco", "Semidulce", "Dulce"],
 } as const;
+
+// Azúcar residual de referencia por nivel de dulzor (escala de wine-scan/knowledge/README.md).
+const AZUCAR = ["", "menos de 4 g/L de azúcar residual", "menos de 4 g/L; se siente más dulce por la fruta madura", "4 a 12 g/L de azúcar residual", "12 a 45 g/L de azúcar residual", "más de 45 g/L de azúcar residual"];
 
 const CONFIANZA = {
   alta: { label: "Confianza alta", note: "La etiqueta se leyó con claridad." },
@@ -37,7 +40,7 @@ const CAMPOS: Record<string, string> = {
   alcohol_pct: "alcohol",
 };
 
-function Scale({ label, value, words, min }: { label: string; value: number; words: readonly string[]; min: 0 | 1 }) {
+function Scale({ label, value, words, min, note }: { label: string; value: number; words: readonly string[]; min: 0 | 1; note?: string }) {
   const filled = Math.max(0, Math.min(5, value));
   return (
     <div className={styles.scaleRow}>
@@ -48,6 +51,7 @@ function Scale({ label, value, words, min }: { label: string; value: number; wor
         ))}
       </span>
       <span className={styles.scaleValue}>{words[filled]}</span>
+      {note && <span className={styles.scaleNote}>{note}</span>}
     </div>
   );
 }
@@ -132,7 +136,7 @@ export function ScanResult({ data, preview, onScanAgain }: { data: Data; preview
           <Scale label="Cuerpo" value={g.perfil_estimado.cuerpo} words={NIVELES.cuerpo} min={1} />
           <Scale label="Acidez" value={g.perfil_estimado.acidez} words={NIVELES.acidez} min={1} />
           {conTanino && <Scale label="Tanino" value={g.perfil_estimado.tanino} words={NIVELES.tanino} min={0} />}
-          <Scale label="Dulzor" value={g.perfil_estimado.dulzor} words={NIVELES.dulzor} min={0} />
+          <Scale label="Dulzor" value={g.perfil_estimado.dulzor} words={NIVELES.dulzor} min={1} note={AZUCAR[g.perfil_estimado.dulzor]} />
         </div>
         <p className={styles.small}>Es una estimación por la uva, la región y el estilo, no una cata de esta botella.</p>
       </section>

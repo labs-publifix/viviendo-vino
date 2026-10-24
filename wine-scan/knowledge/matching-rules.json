@@ -32,7 +32,7 @@
     "cuerpo": 4,
     "acidez": 5,
     "tanino": 5,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 4
    },
    "grupo": "tinto",
@@ -50,7 +50,7 @@
     "cuerpo": 3,
     "acidez": 3,
     "tanino": 4,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "grupo": "tinto",
@@ -68,7 +68,7 @@
     "cuerpo": 5,
     "acidez": 2,
     "tanino": 3,
-    "dulzor": 1,
+    "dulzor": 2,
     "intensidad": 5
    },
    "grupo": "tinto",
@@ -86,7 +86,7 @@
     "cuerpo": 2,
     "acidez": 5,
     "tanino": 0,
-    "dulzor": 1,
+    "dulzor": 2,
     "intensidad": 3
    },
    "grupo": "espumoso",
@@ -102,7 +102,7 @@
     "cuerpo": 2,
     "acidez": 4,
     "tanino": 2,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "grupo": "tinto",
@@ -118,7 +118,7 @@
     "cuerpo": 5,
     "acidez": 3,
     "tanino": 5,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 5
    },
    "grupo": "tinto",
@@ -136,7 +136,7 @@
     "cuerpo": 4,
     "acidez": 3,
     "tanino": 4,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 4
    },
    "grupo": "tinto",
@@ -152,7 +152,7 @@
     "cuerpo": 2,
     "acidez": 4,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 4
    },
    "grupo": "blanco",
@@ -168,7 +168,7 @@
     "cuerpo": 2,
     "acidez": 5,
     "tanino": 0,
-    "dulzor": 2,
+    "dulzor": 3,
     "intensidad": 4
    },
    "grupo": "blanco",
@@ -184,7 +184,7 @@
     "cuerpo": 3,
     "acidez": 4,
     "tanino": 4,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "grupo": "tinto",
@@ -202,7 +202,7 @@
     "cuerpo": 2,
     "acidez": 4,
     "tanino": 1,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "grupo": "tinto",
@@ -218,7 +218,7 @@
     "cuerpo": 2,
     "acidez": 3,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 2
    },
    "grupo": "rosado",
@@ -234,7 +234,7 @@
     "cuerpo": 5,
     "acidez": 2,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 4
    },
    "grupo": "blanco",
@@ -252,7 +252,7 @@
     "cuerpo": 3,
     "acidez": 4,
     "tanino": 0,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 3
    },
    "grupo": "blanco",
@@ -270,7 +270,7 @@
     "cuerpo": 2,
     "acidez": 4,
     "tanino": 0,
-    "dulzor": 1,
+    "dulzor": 2,
     "intensidad": 2
    },
    "grupo": "espumoso",
@@ -286,7 +286,7 @@
     "cuerpo": 4,
     "acidez": 2,
     "tanino": 0,
-    "dulzor": 1,
+    "dulzor": 2,
     "intensidad": 5
    },
    "grupo": "blanco",
@@ -304,7 +304,7 @@
     "cuerpo": 4,
     "acidez": 3,
     "tanino": 4,
-    "dulzor": 0,
+    "dulzor": 1,
     "intensidad": 4
    },
    "grupo": "tinto",
@@ -317,5 +317,6 @@
    "nota": ""
   }
  ],
- "desempate": "Si dos vinos empatan en score: 1) el que comparte uva con el escaneado; 2) el de menor precio en Supabase (más accesible)."
+ "desempate": "Si dos vinos empatan en score: 1) el que comparte uva con el escaneado; 2) el de menor precio en Supabase (más accesible).",
+ "nota_dulzor": "Desde la v0.2 (26 oct 2026) el dulzor va de 1 a 5 (antes 0-5): todos los perfiles sumaron 1, así que los resultados esperados no cambian."
 }

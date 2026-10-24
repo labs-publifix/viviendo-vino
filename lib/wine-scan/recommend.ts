@@ -76,7 +76,7 @@ const NIVELES: Record<keyof Perfil, string[]> = {
   cuerpo: ["", "ligero", "ligero a medio", "medio", "medio-alto", "pleno"],
   acidez: ["", "suave", "moderada", "media", "fresca", "muy fresca"],
   tanino: ["sin tanino", "muy suave", "suave", "medio", "firme", "muy marcado"],
-  dulzor: ["seco", "seco con fruta madura", "semiseco", "semidulce", "dulce", "muy dulce"],
+  dulzor: ["", "seco", "seco con fruta madura", "semiseco", "semidulce", "dulce"],
   intensidad: ["", "discreta", "suave", "media", "intensa", "muy intensa"],
 };
 const NOMBRE_GRUPO: Record<string, string> = { tinto: "tintos", blanco: "blancos", rosado: "rosados", espumoso: "espumosos" };

@@ -27,7 +27,7 @@ Cómo llenar la guía cuando accion es "ok":
 - identificacion.grupo: tinto, blanco, rosado, espumoso, dulce (vinos de postre o vendimia tardía dulces), fortificado (Oporto, Jerez, Marsala…) o naranja. Un espumoso es "espumoso" aunque sea rosado.
 - identificacion.metodo_espumoso: solo en espumosos ("tradicional" para Champagne, Cava, Franciacorta o "metodo classico"; "tanque" para Prosecco o Charmat; "desconocido" si no se sabe). En los demás, null.
 - identificacion.pais: en español (Italia, Francia, España, México, Estados Unidos, Argentina, Chile…).
-- perfil_estimado: escalas de la base (cuerpo 1-5, acidez 1-5, tanino 0-5 con 0 en blancos, rosados y espumosos, dulzor 0-5, intensidad 1-5). Empieza con el perfil de la uva en la base (en mezclas, el de la uva principal) y muévelo como máximo un punto, solo si hay una razón concreta.
+- perfil_estimado: escalas de la base (cuerpo 1-5, acidez 1-5, tanino 0-5 con 0 en blancos, rosados y espumosos, dulzor 1-5, intensidad 1-5). Empieza con el perfil de la uva en la base (en mezclas, el de la uva principal) y muévelo como máximo un punto, solo si hay una razón concreta.
   - Calibra con esta escala; 3 es el centro y el valor más común. La mayoría de los vinos quedan entre 2 y 4 en cada eje; 5 es solo para los casos más extremos de su categoría, y 1 para los más ligeros o suaves.
     - Cuerpo: 1 Moscato d'Asti o Vinho Verde · 2 Pinot Grigio, Soave, Prosecco, Pinot Noir, Beaujolais · 3 Merlot, Chianti, Chardonnay sin barrica, Rioja Crianza · 4 Malbec, Cabernet Sauvignon, Syrah, Montepulciano d'Abruzzo, Chardonnay con barrica · 5 Amarone, Primitivo di Manduria, Cabernet de Napa, Priorat.
     - Acidez: 2 Viognier, Gewürztraminer, Garnacha, Primitivo · 3 Merlot, Malbec, Chardonnay, Pinot Grigio · 4 Sangiovese, Cabernet Sauvignon, Pinot Noir, Albariño · 5 Riesling, Sauvignon Blanc del Loira, Nebbiolo, Barbera, Champagne.
@@ -35,14 +35,13 @@ Cómo llenar la guía cuando accion es "ok":
     - Intensidad: 2 Pinot Grigio, Trebbiano · 3 la mayoría · 4 Sauvignon Blanc, Malbec, Syrah · 5 Gewürztraminer, Moscatel, Amarone.
   - Lo que NO sube los valores: Reserva, Gran Reserva, Riserva, Classico, Superiore o una añada vieja no suben la acidez ni el tanino; con los años el tanino se suaviza (resta un punto si el tinto tiene más de 8 años). Un vino básico, joven o de precio de entrada de una uva intensa queda en el valor de la uva o un punto abajo, no arriba.
   - Usa el alcohol de la etiqueta para el cuerpo: 12% o menos suele ser cuerpo 2-3; 13-14% cuerpo 3-4; 14.5% o más cuerpo 4-5.
-- perfil_estimado.dulzor NO sale de la uva: casi todas las uvas tienen dulzor 0 en la base porque la uva sola no dice si el vino es dulce. Decide el dulzor por el estilo del vino y por lo que dice la etiqueta, con esta escala (azúcar que queda en el vino):
-  - 0 seco (menos de 4 g/L): la mayoría de los tintos, blancos y rosados de mesa; espumosos Brut Nature, Extra Brut y Brut con poca azúcar.
-  - 1 seco con fruta madura: secos que se sienten dulces por la fruta o el alcohol (Primitivo, Zinfandel, Amarone, Shiraz australiano, blancos muy aromáticos secos); espumoso Brut.
-  - 2 semiseco: Extra Dry en espumosos; Kabinett o Halbtrocken; "off-dry"; Moscato seco o Gewürztraminer con algo de azúcar; Lambrusco o rosados "semi-secco".
-  - 3 semidulce: Dry o Sec en espumosos; Spätlese no seco; "amabile", "abboccato", "semidulce", "medium sweet"; Moscato d'Asti; Lambrusco amabile; blush o white zinfandel.
-  - 4 dulce: Demi-sec o Semisecco en espumosos; Auslese; vendimia tardía o late harvest; Oporto Ruby o Tawny; Marsala dolce; vinos de postre en general.
-  - 5 muy dulce: Doux o Dolce; Beerenauslese, Trockenbeerenauslese, Eiswein; Sauternes y Tokaji Aszú; Pedro Ximénez; vin santo; passito.
-  Si el vino es de grupo "dulce", el dulzor es 4 o 5. Si es fortificado, depende del estilo (un Fino es 0; un Oporto, 4 o 5). Explica el dulzor en resumen_perfil cuando no sea 0.
+- perfil_estimado.dulzor NO sale de la uva: casi todas las uvas tienen dulzor 1 en la base porque la uva sola no dice si el vino es dulce. Todo vino conserva algo de azúcar después de la fermentación, así que el dulzor nunca es 0. Decide por el estilo del vino, lo que dice la etiqueta y cómo se percibe, con esta escala:
+  - 1 seco (menos de 4 g/L de azúcar residual): tintos, blancos y rosados de mesa frescos o de clima fresco, de fruta discreta; espumosos Brut Nature y Extra Brut.
+  - 2 seco con fruta madura: igual de seco, pero se percibe más dulce por la fruta madura o el alcohol. Úsalo en tintos de clima cálido, de añada cálida, con mucha fruta o con 14% de alcohol o más (Ribera del Duero, Toro, Priorat, Primitivo, Zinfandel, Amarone, Malbec y Shiraz maduros, Cabernet de Napa), en blancos muy aromáticos secos y en espumosos Brut.
+  - 3 semiseco (4 a 12 g/L): Extra Dry en espumosos; Kabinett o Halbtrocken; "off-dry"; Moscato seco o Gewürztraminer con algo de azúcar; Lambrusco o rosados "semi-secco".
+  - 4 semidulce (12 a 45 g/L): Dry o Sec y Demi-sec en espumosos; Spätlese no seco; "amabile", "abboccato", "semidulce", "medium sweet"; Moscato d'Asti; Lambrusco amabile; blush o white zinfandel; Auslese.
+  - 5 dulce (más de 45 g/L): vendimia tardía o late harvest; Oporto; Doux o Dolce; Beerenauslese, Trockenbeerenauslese, Eiswein; Sauternes y Tokaji Aszú; Pedro Ximénez; vin santo; passito; vinos de postre en general.
+  Si el vino es de grupo "dulce", el dulzor es 5. Si es fortificado, depende del estilo (un Fino es 1; un Oporto, 5). Explica el dulzor en resumen_perfil cuando sea 2 o más.
 - resumen_perfil: 1 o 2 frases que expliquen el perfil en palabras simples.
 - servicio.estilo: uno de los "estilo" de la base de servicio. Toma de ahí la temperatura (temperatura_min_c y temperatura_max_c) y la copa.
 - La guía es para ESTA botella, no para el estilo en general. El mensaje de la persona trae la fecha de hoy: calcula la edad de la cosecha (año actual menos añada) y úsala. Nunca copies el texto de la base tal cual ni escribas condiciones que tú puedes resolver ("si es joven…", "si es viejo…", "según la añada…") cuando la añada se conoce: decide y dilo en una frase directa.

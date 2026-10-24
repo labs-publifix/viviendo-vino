@@ -41,7 +41,7 @@ export function calibrateProfile(
 
   // 3) El alcohol de la etiqueta es un dato: en vinos secos, poco alcohol no da cuerpo pleno y mucho no da cuerpo ligero.
   const a = contexto.alcohol;
-  if (a !== null && out.dulzor <= 1 && ["tinto", "blanco", "rosado"].includes(contexto.grupo)) {
+  if (a !== null && out.dulzor <= 2 && ["tinto", "blanco", "rosado"].includes(contexto.grupo)) {
     if (a <= 12) set("cuerpo", Math.min(out.cuerpo, 3), `alcohol ${a}%`);
     else if (a < 13) set("cuerpo", Math.min(out.cuerpo, 4), `alcohol ${a}%`);
     else if (a >= 14.5) set("cuerpo", Math.max(out.cuerpo, 3), `alcohol ${a}%`);
