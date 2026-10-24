@@ -11,7 +11,19 @@ Esta guía es para las sesiones de Claude Code que escriben el blog. Cada artíc
 5. **Revisa** con la lista de abajo.
 6. **Publica**: pon `publicado: true`, cambia el estado en el backlog a `publicado`, haz commit y push a `develop`. Revisa el artículo en dev.viviendovino.com.
 
-Si es una **guía**: crea el PDF de una página (puedes partir de `guias/temperatura-de-servicio.html`), guárdalo en `public/guias/<nombre>.pdf` y pon esa ruta en el campo `pdf`. Las guías usan siempre `color: "acento"`.
+Si es una **guía**: además del artículo, crea su PDF con la plantilla de marca (ver "Guías en PDF" abajo) y pon la ruta en el campo `pdf`. Las guías usan siempre `color: "acento"`.
+
+## Guías en PDF
+
+Todas las guías descargables salen de la misma plantilla (`scripts/guias/guia.css`), así que se ven iguales: hoja carta en hueso, logotipo a color arriba a la izquierda (nunca se deforma: solo se fija su ancho), número y fecha en mono, categoría, titular enorme con el número fantasma detrás, bloque oscuro "En pocas palabras", secciones numeradas y el pie con viviendovino.com y la leyenda legal. Las guías hablan como marca: **no llevan nombre de persona**.
+
+1. Copia `guias/_plantilla.md` a `guias/<nombre>.md` y llena los datos: `titulo`, `numero` (la cifra del artículo, con dos dígitos), `categoria`, `entradilla` (una o dos frases), `fecha`, `resumen` (2 o 3 frases cortas) y `ejemplo`.
+2. Escribe las secciones en Markdown: cada `##` es una sección numerada (01, 02…). Las secciones van a dos columnas; la que lleva una tabla ocupa todo el ancho. En las tablas, una celda corta que empieza con número ("6 a 8 °C") sale como cifra destacada. Una cita (`>`) fuera de las secciones queda como consejo destacado.
+3. Genera el PDF: `npm run guides:build -- <nombre>` (o `npm run guides:build` para todas). Sale en `public/guias/<nombre>.pdf`. Necesita Chrome instalado (o `CHROME_PATH` apuntando a Chromium).
+4. La guía es de **una sola página**. Si no cabe, el script se detiene y lo dice: recorta texto o quita una sección, no cambies la plantilla.
+5. En el artículo, pon `pdf: "/guias/<nombre>.pdf"`.
+
+Para revisar la imagen de la página sin abrir el PDF: `GUIDE_PREVIEW=<carpeta> npm run guides:build -- <nombre>` guarda una captura en esa carpeta.
 
 ## Datos del inicio (front matter)
 

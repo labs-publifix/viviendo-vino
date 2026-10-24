@@ -45,6 +45,7 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [ ] Feed de Instagram en `/nosotros`: requiere conectar la API de Instagram (fase de funcionalidades). Hoy hay un espacio reservado solo en dev.
 - [x] Blog construido: `/blog`, `/blog/[slug]` y el teaser de la portada leen `content/blog/*.md` (guía en `content/blog/README.md`, backlog en `content/blog/BACKLOG.md`).
 - [ ] Los 3 artículos actuales son de **ejemplo** (`ejemplo: true`, etiqueta visible solo en dev). Reemplazarlos o quitarles la marca al revisarlos.
+- [x] Plantilla de marca para las guías en PDF (`npm run guides:build`, guía en `content/blog/README.md`). Muestra: `public/guias/temperatura-de-servicio.pdf`; falta tu visto bueno.
 - [ ] Descarga de guías por correo: hoy la ventana solo valida y muestra "Función pendiente de conectar" (no envía ni guarda nada).
 
 ## Portada

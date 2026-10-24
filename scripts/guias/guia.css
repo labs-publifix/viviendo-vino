@@ -1,0 +1,158 @@
+/* Plantilla de las guías descargables (PDF carta). Tokens del manual de identidad (§6) y de app/globals.css.
+   Base: hoja membretada carta del manual (10.13): fondo hueso, logotipo a color arriba a la izquierda,
+   dato en mono a la derecha, filete y pie en mono. Elementos: titular enorme, etiqueta numerada,
+   número fantasma al 5 % y bloque oscuro con atmósfera ("nunca negro plano"). */
+@font-face { font-family: Inter; font-weight: 400; src: url("{{fonts}}/inter/files/inter-latin-400-normal.woff"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("{{fonts}}/inter/files/inter-latin-700-normal.woff"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("{{fonts}}/inter/files/inter-latin-800-normal.woff"); }
+@font-face { font-family: Inter; font-weight: 900; src: url("{{fonts}}/inter/files/inter-latin-900-normal.woff"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 500; src: url("{{fonts}}/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff"); }
+
+:root {
+  --vv-negro: #0a0206;
+  --vv-hueso: #f3ece4;
+  --vv-vino: #9a2030;
+  --vv-ciruela: #641f53;
+  --vv-orquidea: #d2a5c8;
+  --muted: #5c5454;
+  --line: rgb(10 2 6 / 0.14);
+  --surface: #faf6f1;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --margin-x: 0.7in;
+}
+
+/* Margen 0 para que el hueso llegue al borde; el aire lo da cada página con padding. */
+@page { size: Letter; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--vv-hueso); }
+body {
+  font-family: Inter, sans-serif;
+  color: var(--vv-negro);
+  font-size: 12.5px;
+  line-height: 1.5;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  position: relative;
+  width: 8.5in;
+  height: 11in;
+  padding: 0.45in var(--margin-x) 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  break-after: page;
+}
+.page:last-child { break-after: auto; }
+
+/* Etiqueta mono del manual: mayúsculas, 10 % de espaciado, nunca menos de 11 px. */
+.mono {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+/* Encabezado: logotipo a color sobre hueso. Solo se fija el ancho (alto automático): nunca se deforma.
+   1.6 in de ancho ≈ 41 mm, arriba del mínimo impreso de 30 mm. Espacio libre ¼ D ≈ 0.13 in alrededor. */
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.08in;
+  border-bottom: 1px solid var(--line);
+}
+.logo { display: block; width: 1.6in; height: auto; margin: 0.13in 0.13in 0.13in 0; }
+.meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; color: var(--muted); text-align: right; }
+.ejemplo { color: var(--vv-vino); border: 1px dashed var(--vv-vino); border-radius: 999px; padding: 3px 9px; }
+
+/* Portada de la guía: etiqueta, titular enorme y entradilla, con el número fantasma detrás. */
+.hero { position: relative; padding: 0.28in 0 0.22in; }
+.ghost {
+  position: absolute;
+  right: 0;
+  top: 0.1in;
+  font-size: 200px;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+  color: rgb(10 2 6 / 0.05);
+  pointer-events: none;
+}
+.label { color: var(--vv-vino); margin: 0 0 14px; position: relative; }
+h1 {
+  position: relative;
+  margin: 0;
+  max-width: 5.6in;
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+.lede { position: relative; margin: 16px 0 0; max-width: 5in; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+
+/* En pocas palabras: bloque oscuro con resplandor vino y eco ciruela, como el bloque oscuro del sitio. */
+.resumen {
+  border-radius: 16px;
+  padding: 16px 24px 18px;
+  color: var(--vv-hueso);
+  background:
+    radial-gradient(ellipse 70% 120% at 100% 0%, rgb(154 32 48 / 0.45), rgb(154 32 48 / 0.12) 55%, transparent),
+    radial-gradient(ellipse 50% 90% at 0% 100%, rgb(100 31 83 / 0.38), transparent),
+    var(--vv-negro);
+}
+.resumen .mono { color: var(--vv-orquidea); margin: 0 0 12px; }
+.resumen ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 20px; }
+.resumen li { font-size: 13px; line-height: 1.45; border-top: 1px solid rgb(243 236 228 / 0.28); padding-top: 10px; }
+.resumen li .mono { display: block; margin: 0 0 6px; }
+.resumen strong { font-weight: 800; }
+
+/* Secciones: etiqueta numerada + título. Dos columnas; una sección con tabla ocupa todo el ancho. */
+.body { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.32in; row-gap: 0.2in; padding: 0.22in 0 0.2in; align-content: start; }
+.section { break-inside: avoid; }
+.section.ancha { grid-column: 1 / -1; }
+.section .num { color: var(--vv-vino); margin: 0 0 6px; display: flex; align-items: center; gap: 10px; }
+.section .num::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+h2 { margin: 0 0 10px; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+p { margin: 0 0 8px; }
+ul, ol.lista { margin: 0; padding-left: 16px; }
+li { margin-bottom: 5px; }
+li::marker { color: var(--vv-vino); }
+strong { font-weight: 700; }
+
+table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 12px; overflow: hidden; font-size: 12.5px; }
+th { text-align: left; color: var(--muted); padding: 9px 16px; font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid var(--line); }
+td { padding: 7px 16px; border-bottom: 1px solid rgb(10 2 6 / 0.08); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+/* Cifra con unidad: las celdas que empiezan con número van en Black y vino. */
+td.dato { font-weight: 900; font-size: 15px; letter-spacing: -0.01em; color: var(--vv-vino); white-space: nowrap; }
+
+/* Cita del texto: un consejo destacado a todo el ancho. */
+blockquote {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 14px 20px;
+  border-left: 3px solid var(--vv-vino);
+  background: var(--surface);
+  border-radius: 0 12px 12px 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+blockquote p { margin: 0; }
+
+/* Pie: el mismo en todas las guías. */
+.foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0 0.36in;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+.foot .sitio { color: var(--vv-negro); }
