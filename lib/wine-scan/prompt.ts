@@ -28,6 +28,14 @@ Cómo llenar la guía cuando accion es "ok":
 - identificacion.metodo_espumoso: solo en espumosos ("tradicional" para Champagne, Cava, Franciacorta o "metodo classico"; "tanque" para Prosecco o Charmat; "desconocido" si no se sabe). En los demás, null.
 - identificacion.pais: en español (Italia, Francia, España, México, Estados Unidos, Argentina, Chile…).
 - perfil_estimado: escalas de la base (cuerpo 1-5, acidez 1-5, tanino 0-5 con 0 en blancos, rosados y espumosos, dulzor 0-5, intensidad 1-5). Parte del perfil típico de la uva y ajústalo por región, denominación, añada, alcohol y términos de la etiqueta (Reserva, Kabinett, Brut…).
+- perfil_estimado.dulzor NO sale de la uva: casi todas las uvas tienen dulzor 0 en la base porque la uva sola no dice si el vino es dulce. Decide el dulzor por el estilo del vino y por lo que dice la etiqueta, con esta escala (azúcar que queda en el vino):
+  - 0 seco (menos de 4 g/L): la mayoría de los tintos, blancos y rosados de mesa; espumosos Brut Nature, Extra Brut y Brut con poca azúcar.
+  - 1 seco con fruta madura: secos que se sienten dulces por la fruta o el alcohol (Primitivo, Zinfandel, Amarone, Shiraz australiano, blancos muy aromáticos secos); espumoso Brut.
+  - 2 semiseco: Extra Dry en espumosos; Kabinett o Halbtrocken; "off-dry"; Moscato seco o Gewürztraminer con algo de azúcar; Lambrusco o rosados "semi-secco".
+  - 3 semidulce: Dry o Sec en espumosos; Spätlese no seco; "amabile", "abboccato", "semidulce", "medium sweet"; Moscato d'Asti; Lambrusco amabile; blush o white zinfandel.
+  - 4 dulce: Demi-sec o Semisecco en espumosos; Auslese; vendimia tardía o late harvest; Oporto Ruby o Tawny; Marsala dolce; vinos de postre en general.
+  - 5 muy dulce: Doux o Dolce; Beerenauslese, Trockenbeerenauslese, Eiswein; Sauternes y Tokaji Aszú; Pedro Ximénez; vin santo; passito.
+  Si el vino es de grupo "dulce", el dulzor es 4 o 5. Si es fortificado, depende del estilo (un Fino es 0; un Oporto, 4 o 5). Explica el dulzor en resumen_perfil cuando no sea 0.
 - resumen_perfil: 1 o 2 frases que expliquen el perfil en palabras simples.
 - servicio.estilo: uno de los "estilo" de la base de servicio. Toma de ahí la temperatura (temperatura_min_c y temperatura_max_c) y la copa.
 - La guía es para ESTA botella, no para el estilo en general. El mensaje de la persona trae la fecha de hoy: calcula la edad de la cosecha (año actual menos añada) y úsala. Nunca copies el texto de la base tal cual ni escribas condiciones que tú puedes resolver ("si es joven…", "si es viejo…", "según la añada…") cuando la añada se conoce: decide y dilo en una frase directa.

@@ -165,3 +165,23 @@ test("el prompt pide resolver el servicio con la edad de la cosecha", () => {
   const prompt = buildSystemPrompt(knowledge);
   assert.ok(prompt.includes("edad de la cosecha") && prompt.includes("Nunca copies el texto de la base tal cual"));
 });
+
+test("dulzor: un vino dulce no puede quedar en 0", async () => {
+  const { minSweetness } = await import("../lib/wine-scan/schema.ts");
+  const id = (over) => ({ identificacion: { ...guiaValida.identificacion, ...over } });
+  assert.equal(minSweetness(id({ grupo: "dulce", nombre_vino: "Sauternes" })), 4);
+  assert.equal(minSweetness(id({ grupo: "blanco", nombre_vino: "Moscato d'Asti" })), 2);
+  assert.equal(minSweetness(id({ grupo: "espumoso", nombre_vino: "Prosecco Extra Dry" })), 1);
+  assert.equal(minSweetness(id({ grupo: "espumoso", nombre_vino: "Prosecco Brut" })), 0);
+  assert.equal(minSweetness(id({ grupo: "espumoso", nombre_vino: "Champagne Demi-Sec" })), 3);
+  assert.equal(minSweetness(id({ grupo: "tinto", nombre_vino: "Barolo" })), 0);
+  const dulceEnCero = { ...guiaValida, identificacion: { ...guiaValida.identificacion, grupo: "dulce", nombre_vino: "Tokaji Aszú" } };
+  assert.ok(checkGuide(dulceEnCero, ids).some((p) => p.includes("dulzor")));
+  const dulceBien = { ...dulceEnCero, perfil_estimado: { ...dulceEnCero.perfil_estimado, dulzor: 5 } };
+  assert.ok(!checkGuide(dulceBien, ids).some((p) => p.includes("dulzor")));
+});
+
+test("el prompt explica la escala de dulzor por estilo y etiqueta", () => {
+  const prompt = buildSystemPrompt(knowledge);
+  assert.ok(prompt.includes("perfil_estimado.dulzor NO sale de la uva") && prompt.includes("Demi-sec"));
+});
