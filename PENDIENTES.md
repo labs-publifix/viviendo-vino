@@ -69,3 +69,15 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [x] Proyecto de Supabase de staging, variables en Preview y catálogo cargado.
 - [ ] Producción: correr `supabase/seed/catalogo-completo.sql` en el proyecto de producción antes de abrir (las páginas de la tienda no consultan la base mientras `STORE_OPEN` no sea `true`).
 - [ ] Credenciales de prueba de Mercado Pago (fase de pagos).
+
+## Wine Scan (25 oct 2026)
+
+- [x] Construido en dev: `/wine-scan` (escáner móvil, QR en escritorio), `POST /api/wine-scan`, `POST /api/wine-scan/feedback`, tabla `wine_scans` y vista `wine_scans_resumen`. Base de conocimiento en `wine-scan/knowledge/`.
+- [ ] **Correr en Supabase** `supabase/migrations/20261025000000_wine_scans.sql` (staging y luego producción).
+- [ ] **Vercel:** `ANTHROPIC_API_KEY` (ya está), `WINE_SCAN_IP_SALT` (Sensitive, Production y Preview). Opcionales: `WINE_SCAN_MODEL`, `WINE_SCAN_ENABLED`, `WINE_SCAN_MAX_PER_HOUR`.
+- [ ] Confirmar la tabla de slugs (`wine-scan/knowledge/SLUGS.md`).
+- [ ] Decidir el caso "Rioja Reserva": empate exacto Sangiovese/Merlot; por la regla de desempate (precio) hoy gana el Merlot.
+- [ ] Revisar con el aliado los campos `por_confirmar` de `catalog-profiles.json` (barrica, mezclas, denominación del Primitivo Rocca y del Rosé 921, premio Double Gold).
+- [ ] Probar en un celular real con la clave de Anthropic y fotos de `wine-scan/eval-images/` (`npm run wine-scan:eval`): latencia, caché (`tokens_cache` > 0 desde el segundo escaneo), foto borrosa, imagen que no es vino y etiqueta con texto que intente dar órdenes.
+- [ ] Fuera de alcance en v1: cuentas y límites por persona (punto de extensión en `lib/wine-scan/guard.ts`), visor de cámara en vivo, guía por correo, historial.
+

@@ -1,0 +1,118 @@
+{
+ "version": "0.1",
+ "estilos": [
+  {
+   "estilo": "espumoso_seco",
+   "descripcion": "Espumoso seco (Prosecco, Cava, Brut)",
+   "temp_min_c": 6,
+   "temp_max_c": 8,
+   "copa": "Copa de tulipán o copa de vino blanco pequeña; la flauta funciona, pero la copa blanca deja ver mejor los aromas.",
+   "decantar": "No",
+   "nota": "Sírvelo muy frío; al calentarse pierde frescura y la burbuja se siente menos fina.",
+   "cuando_tomarlo": "Los espumosos jóvenes de método tanque se disfrutan en el año o dos años siguientes a la cosecha."
+  },
+  {
+   "estilo": "espumoso_rosado",
+   "descripcion": "Espumoso rosado",
+   "temp_min_c": 6,
+   "temp_max_c": 8,
+   "copa": "Copa de tulipán.",
+   "decantar": "No",
+   "nota": "Sírvelo bien frío.",
+   "cuando_tomarlo": "Mismo criterio que un espumoso joven."
+  },
+  {
+   "estilo": "blanco_ligero",
+   "descripcion": "Blanco ligero (Pinot Grigio, Soave, Albariño, Vinho Verde)",
+   "temp_min_c": 7,
+   "temp_max_c": 9,
+   "copa": "Copa de vino blanco estándar.",
+   "decantar": "No",
+   "nota": "Evita servirlo helado: si está demasiado frío, se sienten menos los aromas.",
+   "cuando_tomarlo": "Se disfruta en los 1-3 años siguientes a la cosecha."
+  },
+  {
+   "estilo": "blanco_aromatico",
+   "descripcion": "Blanco aromático (Sauvignon Blanc, Traminer, Riesling, Torrontés)",
+   "temp_min_c": 8,
+   "temp_max_c": 10,
+   "copa": "Copa de vino blanco con cierto tulipán para concentrar el aroma.",
+   "decantar": "No",
+   "nota": "Un poco más cálido que un blanco ligero para que se abran los aromas.",
+   "cuando_tomarlo": "Los Sauvignon Blanc jóvenes, 1-3 años; el Riesling de calidad puede guardarse mucho más."
+  },
+  {
+   "estilo": "blanco_pleno",
+   "descripcion": "Blanco de cuerpo pleno (Chardonnay con crianza, Viognier, Garnacha Blanca)",
+   "temp_min_c": 10,
+   "temp_max_c": 12,
+   "copa": "Copa amplia.",
+   "decantar": "Normalmente no; si es con barrica, 10-15 min en copa ayudan.",
+   "nota": "Si lo sirves muy frío, el cuerpo y la textura se pierden.",
+   "cuando_tomarlo": "Depende del estilo; los con crianza en barrica suelen aguantar algunos años más."
+  },
+  {
+   "estilo": "rosado",
+   "descripcion": "Rosado",
+   "temp_min_c": 7,
+   "temp_max_c": 10,
+   "copa": "Copa de vino blanco.",
+   "decantar": "No",
+   "nota": "Mejor bien fresco.",
+   "cuando_tomarlo": "Los rosados están pensados para beberse jóvenes, normalmente dentro de los 1-2 años de la cosecha."
+  },
+  {
+   "estilo": "tinto_ligero",
+   "descripcion": "Tinto ligero (Pinot Noir, Gamay, Dolcetto, Valpolicella básico)",
+   "temp_min_c": 13,
+   "temp_max_c": 15,
+   "copa": "Copa amplia de tinto, tipo Borgoña.",
+   "decantar": "No",
+   "nota": "Tomarlo ligeramente fresco, unos minutos en refrigerador, realza la frescura.",
+   "cuando_tomarlo": "Tintos frutales: 2-5 años desde la cosecha."
+  },
+  {
+   "estilo": "tinto_medio",
+   "descripcion": "Tinto de cuerpo medio (Merlot, Sangiovese, Montepulciano, Barbera, Ripasso)",
+   "temp_min_c": 15,
+   "temp_max_c": 17,
+   "copa": "Copa de vino tinto estándar.",
+   "decantar": "Opcional: 15-20 min en copa o decantador abren los aromas.",
+   "nota": "Servir a 'temperatura ambiente' viene de bodegas europeas frescas: en clima cálido conviene enfriarlo 15-20 minutos en el refrigerador.",
+   "cuando_tomarlo": "Normalmente 3-8 años desde la cosecha, según estructura."
+  },
+  {
+   "estilo": "tinto_estructurado",
+   "descripcion": "Tinto estructurado (Cabernet Sauvignon, Nebbiolo, Tempranillo con crianza, Malbec)",
+   "temp_min_c": 16,
+   "temp_max_c": 18,
+   "copa": "Copa grande de tinto.",
+   "decantar": "Si es joven, decantar 30-60 minutos suaviza el tanino.",
+   "nota": "Mismo consejo: en climas cálidos, enfriar brevemente antes de servir.",
+   "cuando_tomarlo": "Muchos aguantan de 5 a 15 años o más; depende de la añada y la bodega."
+  },
+  {
+   "estilo": "tinto_potente",
+   "descripcion": "Tinto potente y concentrado (Amarone, Primitivo di Manduria, Tannat, Priorat)",
+   "temp_min_c": 16,
+   "temp_max_c": 18,
+   "copa": "Copa grande y de cuenco amplio.",
+   "decantar": "Sí: abrir la botella 1 hora antes o decantar; con añadas muy viejas, solo decantar al momento para no perder aroma.",
+   "nota": "El alcohol alto se nota más si se sirve caliente: mejor a la baja.",
+   "cuando_tomarlo": "Amarone: muchos años. Primitivo: 3-8 años, salvo etiquetas de guarda."
+  },
+  {
+   "estilo": "dulce",
+   "descripcion": "Vino dulce / de vendimia tardía",
+   "temp_min_c": 6,
+   "temp_max_c": 10,
+   "copa": "Copa pequeña de vino blanco o copa de postre.",
+   "decantar": "No",
+   "nota": "Sírvelo bien frío; el frío equilibra el dulzor.",
+   "cuando_tomarlo": "Suele aguantar más años que un seco gracias al azúcar y la acidez."
+  }
+ ],
+ "cuando_tomarlo_aviso": {
+  "aviso": "Estas son referencias orientativas por estilo. Desde una foto no se puede saber cómo se guardó esa botella concreta ni su estado actual. Nunca afirmar una 'ventana de consumo' exacta."
+ }
+}

@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
     "/inicio": ["./content/blog/**/*"],
     "/blog": ["./content/blog/**/*"],
     "/blog/*": ["./content/blog/**/*"],
+    // Wine Scan lee su base de conocimiento (prompt de sistema y perfiles del catálogo) en cada instancia.
+    "/api/wine-scan": ["./wine-scan/knowledge/**/*"],
     "/blog/*/opengraph-image*": ["./content/blog/**/*", "./node_modules/@fontsource/inter/files/inter-latin-*-normal.woff", "./public/img/rafa-avatar.png"],
   },
   // El preview (dev.viviendovino.com y despliegues de Preview) nunca se indexa,

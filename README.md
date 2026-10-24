@@ -28,6 +28,11 @@ Las claves secretas (`RESEND_API_KEY`, `SUPABASE_SECRET_KEY`, `WAITLIST_TOKEN_SE
 | `CRON_SECRET` | Autoriza al workflow de GitHub a disparar la secuencia. Mismo valor en Vercel y en GitHub → Secrets → Actions. |
 | `WAITLIST_SEQUENCE_ENABLED` | `true` para enviar la secuencia de verdad. Cualquier otro valor: solo simula. |
 | `WAITLIST_NOTIFY_TO` | Quién recibe el aviso de cada registro nuevo (correos separados por coma). Si está vacía, no se avisa. |
+| `ANTHROPIC_API_KEY` | Wine Scan. Solo servidor, *Sensitive*. Una clave en Production y otra distinta en Preview. |
+| `WINE_SCAN_MODEL` | Modelo de Wine Scan (por omisión `claude-sonnet-5-5`). Se cambia sin tocar código. |
+| `WINE_SCAN_ENABLED` | `false` pausa Wine Scan con un mensaje amable sin llamar a la API. |
+| `WINE_SCAN_MAX_PER_HOUR` | Tope de seguridad de escaneos por hora por IP (por omisión 30). |
+| `WINE_SCAN_IP_SALT` | Sal del hash de la IP para ese tope (≥ 32 caracteres aleatorios, *Sensitive*). La IP nunca se guarda. |
 
 ## Ramas y entornos
 

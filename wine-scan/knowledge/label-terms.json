@@ -1,0 +1,280 @@
+{
+ "version": "0.1",
+ "terminos": [
+  {
+   "termino": "DOC / DOCG",
+   "origen": "Italia",
+   "significado": "Denominación de origen controlada. La DOCG (garantita) tiene reglas más estrictas y un control adicional. Indican origen y método de producción, no calidad en sí.",
+   "cuidado": null
+  },
+  {
+   "termino": "IGT / IGP",
+   "origen": "Italia / UE",
+   "significado": "Indicación geográfica típica. Da más libertad al productor en uvas y estilo que una DOC; muchos vinos de excelente nivel van como IGT.",
+   "cuidado": "Que sea IGT no significa que sea de menor nivel."
+  },
+  {
+   "termino": "Classico",
+   "origen": "Italia",
+   "significado": "El vino viene de la zona histórica original de la denominación, que suele ser la de mejor tradición.",
+   "cuidado": null
+  },
+  {
+   "termino": "Superiore",
+   "origen": "Italia",
+   "significado": "Cumple requisitos más exigentes que la versión base de su denominación, como un grado alcohólico mayor o más tiempo de crianza. Las reglas cambian según la denominación.",
+   "cuidado": null
+  },
+  {
+   "termino": "Riserva",
+   "origen": "Italia",
+   "significado": "Vino con crianza más larga que la versión base. El tiempo exacto depende de cada denominación.",
+   "cuidado": null
+  },
+  {
+   "termino": "Ripasso",
+   "origen": "Italia (Valpolicella)",
+   "significado": "Vino de Valpolicella que fermenta una segunda vez sobre los hollejos que quedaron del Amarone. Gana cuerpo, estructura y profundidad respecto a un Valpolicella normal, aunque menos que un Amarone.",
+   "cuidado": null
+  },
+  {
+   "termino": "Amarone",
+   "origen": "Italia (Valpolicella)",
+   "significado": "Vino hecho con uvas que se secan varias semanas antes de fermentar (técnica llamada appassimento). Resulta concentrado, de cuerpo pleno, alcohol alto y sabor intenso.",
+   "cuidado": "Aunque el nombre viene de 'amaro' (amargo), el vino es seco."
+  },
+  {
+   "termino": "Appassimento",
+   "origen": "Italia",
+   "significado": "Técnica de secar las uvas antes de fermentar para concentrar azúcares y sabor. Resulta en vinos de más cuerpo y alcohol.",
+   "cuidado": null
+  },
+  {
+   "termino": "Spumante",
+   "origen": "Italia",
+   "significado": "Espumoso. Si dice Spumante, la burbuja es completa (más presión que un 'Frizzante').",
+   "cuidado": null
+  },
+  {
+   "termino": "Frizzante",
+   "origen": "Italia",
+   "significado": "Vino con burbuja ligera, menos presión que el espumante.",
+   "cuidado": null
+  },
+  {
+   "termino": "Brut",
+   "origen": "General (espumosos)",
+   "significado": "Espumoso seco: hasta 12 g/L de azúcar.",
+   "cuidado": "En espumosos, Extra Dry es MÁS dulce que Brut."
+  },
+  {
+   "termino": "Extra Dry",
+   "origen": "General (espumosos)",
+   "significado": "En espumosos: entre 12 y 17 g/L de azúcar, es decir, ligeramente más dulce que un Brut.",
+   "cuidado": "El nombre confunde: 'Extra Dry' no es 'extra seco'."
+  },
+  {
+   "termino": "Brut Nature / Pas Dosé",
+   "origen": "General (espumosos)",
+   "significado": "Espumoso sin azúcar añadida (menos de 3 g/L).",
+   "cuidado": null
+  },
+  {
+   "termino": "Extra Brut",
+   "origen": "General (espumosos)",
+   "significado": "Espumoso muy seco: hasta 6 g/L de azúcar.",
+   "cuidado": null
+  },
+  {
+   "termino": "Dry / Sec",
+   "origen": "General (espumosos)",
+   "significado": "En espumosos: entre 17 y 32 g/L, es decir, semiseco.",
+   "cuidado": null
+  },
+  {
+   "termino": "Demi-sec / Semisecco",
+   "origen": "General (espumosos)",
+   "significado": "En espumosos: entre 32 y 50 g/L, perceptiblemente dulce.",
+   "cuidado": null
+  },
+  {
+   "termino": "Doux / Dolce",
+   "origen": "General",
+   "significado": "Vino dulce.",
+   "cuidado": null
+  },
+  {
+   "termino": "Método tradicional / Metodo Classico",
+   "origen": "General (espumosos)",
+   "significado": "Segunda fermentación en botella. Da burbuja más fina y sabores más tostados. Es el método de Champagne y Cava.",
+   "cuidado": null
+  },
+  {
+   "termino": "Método Charmat / Martinotti",
+   "origen": "Italia / General",
+   "significado": "Segunda fermentación en tanque. Conserva la fruta y es más ligero, como en el Prosecco.",
+   "cuidado": null
+  },
+  {
+   "termino": "Blush",
+   "origen": "General",
+   "significado": "Rosado muy claro, normalmente hecho con una uva de piel rosada como el Pinot Grigio o con un contacto muy breve con las pieles.",
+   "cuidado": null
+  },
+  {
+   "termino": "Blanc de Blancs",
+   "origen": "Francia",
+   "significado": "Espumoso o blanco hecho solo con uvas blancas (en Champagne, solo Chardonnay).",
+   "cuidado": null
+  },
+  {
+   "termino": "Blanc de Noirs",
+   "origen": "Francia",
+   "significado": "Blanco o espumoso hecho con uvas tintas prensadas sin dejar color.",
+   "cuidado": null
+  },
+  {
+   "termino": "Joven",
+   "origen": "España",
+   "significado": "Vino sin crianza o con crianza muy corta, pensado para beberse pronto.",
+   "cuidado": null
+  },
+  {
+   "termino": "Crianza",
+   "origen": "España",
+   "significado": "Rioja: mínimo 2 años de envejecimiento, al menos 1 en barrica. Resto de España: 24 meses, al menos 6 en barrica.",
+   "cuidado": "Las reglas cambian según la zona."
+  },
+  {
+   "termino": "Reserva",
+   "origen": "España / Portugal",
+   "significado": "España, Rioja: mínimo 3 años, al menos 1 en barrica. Resto de España: 36 meses, al menos 12 en barrica.",
+   "cuidado": "En EE.UU., Argentina y Chile, 'Reserva/Reserve' suele no tener el mismo significado legal; en EE.UU. no significa nada oficial."
+  },
+  {
+   "termino": "Gran Reserva",
+   "origen": "España",
+   "significado": "Rioja: mínimo 5 años, al menos 2 en barrica. Resto de España: 60 meses, al menos 18 en barrica.",
+   "cuidado": null
+  },
+  {
+   "termino": "Garrafeira",
+   "origen": "Portugal",
+   "significado": "Reserva especial de Portugal: selección de añadas notables con crianza larga.",
+   "cuidado": null
+  },
+  {
+   "termino": "Cosecha / Añada / Vintage / Millésime",
+   "origen": "General",
+   "significado": "Año en que se cosechó la uva, no el año en que se embotelló.",
+   "cuidado": "Si no hay año, es una mezcla de varias cosechas (común en Champagne y Oporto)."
+  },
+  {
+   "termino": "Vendimia tardía / Late Harvest / Spätlese",
+   "origen": "General / Alemania",
+   "significado": "Uvas cosechadas más maduras. Puede salir dulce o simplemente muy maduro; revisa el resto de la etiqueta.",
+   "cuidado": "En Alemania, Spätlese puede ser seco o dulce."
+  },
+  {
+   "termino": "Trocken / Halbtrocken",
+   "origen": "Alemania",
+   "significado": "Trocken = seco; Halbtrocken = semiseco.",
+   "cuidado": null
+  },
+  {
+   "termino": "Kabinett / Spätlese / Auslese",
+   "origen": "Alemania",
+   "significado": "Niveles de madurez de la uva. A mayor nivel, uva más madura y, por lo general, vino más dulce y concentrado.",
+   "cuidado": null
+  },
+  {
+   "termino": "AOC / AOP",
+   "origen": "Francia",
+   "significado": "Denominación de origen. Garantiza origen y reglas, no una uva en la etiqueta.",
+   "cuidado": null
+  },
+  {
+   "termino": "Grand Cru / Premier Cru",
+   "origen": "Francia",
+   "significado": "Viñedos clasificados como de mayor calidad; en Borgoña es el viñedo, en otras regiones puede significar otra cosa.",
+   "cuidado": null
+  },
+  {
+   "termino": "Château / Domaine / Maison",
+   "origen": "Francia",
+   "significado": "Productor o finca. Domaine suele ser el productor que cultiva y elabora; Maison puede comprar uva.",
+   "cuidado": null
+  },
+  {
+   "termino": "Cuvée",
+   "origen": "Francia",
+   "significado": "Mezcla o lote particular.",
+   "cuidado": null
+  },
+  {
+   "termino": "Sur lie",
+   "origen": "Francia",
+   "significado": "Vino que reposó sobre sus lías (levaduras muertas). Aporta textura y un toque de pan.",
+   "cuidado": null
+  },
+  {
+   "termino": "Vieilles Vignes / Viñas Viejas / Old Vines",
+   "origen": "General",
+   "significado": "Viñas de mucha edad; da menos fruto pero más concentrado. No tiene definición legal.",
+   "cuidado": null
+  },
+  {
+   "termino": "DO / DOCa",
+   "origen": "España",
+   "significado": "Denominación de origen. DOCa es la 'calificada', nivel más alto (solo Rioja y Priorat).",
+   "cuidado": null
+  },
+  {
+   "termino": "Cava",
+   "origen": "España",
+   "significado": "Espumoso español de método tradicional.",
+   "cuidado": null
+  },
+  {
+   "termino": "Sin filtrar / Non filtré",
+   "origen": "General",
+   "significado": "El vino no se filtró; puede presentar un ligero sedimento sin que sea un defecto.",
+   "cuidado": null
+  },
+  {
+   "termino": "Orgánico / Biodinámico / Natural",
+   "origen": "General",
+   "significado": "Orgánico: viñedo sin químicos de síntesis. Biodinámico: filosofía agrícola más amplia. En la mayoría de los países 'natural' no tiene definición legal.",
+   "cuidado": null
+  },
+  {
+   "termino": "Alc. XX% vol.",
+   "origen": "General",
+   "significado": "Graduación alcohólica. Cerca de 11-12.5% suele indicar un vino ligero o medio; 14.5% o más suele indicar un vino maduro y de cuerpo pleno.",
+   "cuidado": null
+  },
+  {
+   "termino": "Contiene sulfitos",
+   "origen": "General",
+   "significado": "Aviso legal; casi todo vino lleva sulfitos, naturales o añadidos.",
+   "cuidado": null
+  },
+  {
+   "termino": "Mis en bouteille au château / Imbottigliato all'origine",
+   "origen": "Francia / Italia",
+   "significado": "Embotellado en la propia finca, lo que indica control sobre el producto.",
+   "cuidado": null
+  }
+ ],
+ "falsos_amigos": [
+  "Extra Dry en un espumoso es MÁS dulce que Brut.",
+  "Montepulciano d'Abruzzo es un vino de la uva Montepulciano en Abruzzo; el Vino Nobile di Montepulciano es de Toscana y de Sangiovese.",
+  "Pinot Grigio y Pinot Gris son la misma uva; el estilo cambia según el país.",
+  "Primitivo y Zinfandel son la misma uva.",
+  "Reserva no significa lo mismo en todos los países; en España tiene reglas legales y en EE.UU. no.",
+  "Un vino dulce de aroma (como Gewürztraminer o Moscatel) puede ser seco.",
+  "Amarone es seco aunque se haga con uva seca.",
+  "El año de la etiqueta es de la cosecha, no del embotellado.",
+  "IGT no significa menor calidad; significa menos reglas."
+ ]
+}

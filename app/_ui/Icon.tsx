@@ -27,6 +27,12 @@ const PATHS = {
   // Archivo (guía en PDF) y descarga
   file: "M7 3.5h6.5l4.5 4.5v12.5H7zM13.5 3.5V8H18",
   download: "M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19.5h14",
+  // Wine Scan: compartir, buscar, repetir y opinión (me sirvió / no me sirvió).
+  share: "M12 15V4M8 7.5L12 3.5l4 4M6.5 11H5.5v9.5h13V11h-1",
+  search: "M10.5 17.5a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM15.5 15.5l5 5",
+  refresh: "M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4v4h-4",
+  thumbUp: "M7.5 10.5v9.5H4.5v-9.5zM7.5 10.5l3.6-6.3a1.6 1.6 0 0 1 2.9 1.2l-.8 3.6h5.1a1.7 1.7 0 0 1 1.7 2l-1.4 6.9a1.7 1.7 0 0 1-1.7 1.4H7.5",
+  thumbDown: "M7.5 13.5V4H4.5v9.5zM7.5 13.5l3.6 6.3a1.6 1.6 0 0 0 2.9-1.2l-.8-3.6h5.1a1.7 1.7 0 0 0 1.7-2l-1.4-6.9A1.7 1.7 0 0 0 16.9 4H7.5",
   // Redes sociales, en el mismo trazo fino que el resto del set.
   instagram: "M7.5 3.5h9a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4h-9a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4zM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM17 6.9v.01",
   facebook: "M15.5 3.5h-2A3.5 3.5 0 0 0 10 7v13.5M7 10.5h7.5",

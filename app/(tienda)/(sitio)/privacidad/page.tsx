@@ -59,13 +59,23 @@ export default function Privacidad() {
           <Pendiente>requisitos de la solicitud y plazo de respuesta</Pendiente>.
         </p>
       </Section>
-      <Section n={6} title="Almacenamiento en tu navegador">
+      <Section n={6} title="Wine Scan">
         <p>
-          Tu carrito y el kit que estás armando se guardan en tu propio navegador para que no se pierdan. Tus datos de
-          envío no se guardan ahí. <Pendiente>cookies de analítica, si se agregan</Pendiente>.
+          Cuando usas Wine Scan, la foto de la etiqueta (o el nombre que escribes) se envía a nuestro proveedor de
+          inteligencia artificial, Anthropic, solo para generar tu guía. <strong>La foto no se guarda</strong>: se procesa
+          en el momento y se descarta. Guardamos únicamente el resultado (el vino identificado y la guía), sin tu nombre,
+          tu correo ni tu dirección IP, para mejorar la función. Si nos das tu opinión con los botones de la guía, también
+          la guardamos de forma anónima.
         </p>
       </Section>
-      <Section n={7} title="Cambios a este aviso">
+      <Section n={7} title="Almacenamiento en tu navegador">
+        <p>
+          Tu carrito y el kit que estás armando se guardan en tu propio navegador para que no se pierdan. Tus datos de
+          envío no se guardan ahí. Wine Scan guarda en tu navegador un identificador anónimo para contar escaneos de la
+          misma sesión; no está ligado a tu nombre ni a tu correo. <Pendiente>cookies de analítica, si se agregan</Pendiente>.
+        </p>
+      </Section>
+      <Section n={8} title="Cambios a este aviso">
         <p>Publicaremos cualquier cambio en esta página, con su fecha.</p>
       </Section>
     </InfoPage>

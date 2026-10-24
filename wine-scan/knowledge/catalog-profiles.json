@@ -1,0 +1,618 @@
+{
+ "version": "0.1",
+ "nota": "Perfiles en escala 1-5 (dulzor 0-5). Los campos 'por_confirmar' deben revisarse con el aliado de Córdoba antes del lanzamiento.",
+ "vinos": [
+  {
+   "slug": "chardonnay-vento-igt-2024",
+   "nombre": "Chardonnay IGT Vento",
+   "productor": "Levorato",
+   "denominacion": "IGT",
+   "pais": "Italia",
+   "region": "veneto",
+   "uvas": [
+    "chardonnay"
+   ],
+   "anada": 2024,
+   "lista": 1,
+   "grupo": "blanco",
+   "estilo_servicio": "blanco_ligero",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 3,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "recomendar_cuando": "El vino escaneado es un blanco seco de cuerpo medio y acidez moderada, sobre todo Chardonnay joven o con poca barrica (por ejemplo Chablis, Mâcon, Chardonnay de Chile, Argentina o Italia), Pinot Bianco o Viognier ligero.",
+   "no_recomendar_cuando": "El vino escaneado es un Chardonnay con mucha barrica y textura mantecosa (estilo California o Borgoña de guarda), o cualquier blanco de cuerpo pleno o dulce.",
+   "argumento": "Es un Chardonnay seco del nordeste de Italia, de cuerpo medio y sin los tonos de mantequilla de uno con mucha barrica.",
+   "por_confirmar": [
+    "Que 'VENTO' en el Excel sea 'Veneto'.",
+    "Si pasa o no por barrica (se asume que no).",
+    "Porcentaje de Chardonnay (se asume 100%)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "chardonnay-igt-vento-levorato-2024"
+  },
+  {
+   "slug": "sauvignon-blanc-trevenezie-igt-2024",
+   "nombre": "Sauvignon Blanc IGT Trevenezie",
+   "productor": "Levorato",
+   "denominacion": "IGT",
+   "pais": "Italia",
+   "region": "trevenezie",
+   "uvas": [
+    "sauvignon-blanc"
+   ],
+   "anada": 2024,
+   "lista": 1,
+   "grupo": "blanco",
+   "estilo_servicio": "blanco_aromatico",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 4,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 4
+   },
+   "recomendar_cuando": "El vino escaneado es un blanco seco, fresco y aromático: Sauvignon Blanc de cualquier origen (Sancerre, Marlborough, Chile), Verdejo, Grüner Veltliner o Albariño.",
+   "no_recomendar_cuando": "El vino escaneado es un blanco de cuerpo pleno, con barrica o dulce.",
+   "argumento": "Es un Sauvignon Blanc seco y fresco, con aromas de cítricos y hierba.",
+   "por_confirmar": [
+    "Porcentaje de Sauvignon Blanc (se asume 100%)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "sauvignon-blanc-igt-trevenezie-levorato-2024"
+  },
+  {
+   "slug": "pinot-grigio-delle-venezie-doc-2024",
+   "nombre": "Pinot Grigio delle Venezie DOC",
+   "productor": "Levorato",
+   "denominacion": "DOC",
+   "pais": "Italia",
+   "region": "delle-venezie",
+   "uvas": [
+    "pinot-grigio"
+   ],
+   "anada": 2024,
+   "lista": 1,
+   "grupo": "blanco",
+   "estilo_servicio": "blanco_ligero",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 3,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 2
+   },
+   "recomendar_cuando": "El vino escaneado es un blanco seco, ligero y de sabor limpio: Pinot Grigio o Pinot Gris ligero, Soave, Vinho Verde, Gavi, Muscadet, Pinot Bianco o Trebbiano.",
+   "no_recomendar_cuando": "El vino escaneado es un blanco aromático, de cuerpo pleno o con barrica. Un Pinot Gris de Alsacia es más pleno: no es equivalente.",
+   "argumento": "Es un Pinot Grigio italiano ligero, de sabor limpio y pensado para beberse joven.",
+   "por_confirmar": [],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "pinot-grigio-delle-venezie-doc-levorato-2024"
+  },
+  {
+   "slug": "traminer-aromatico-trevenezie-igt-2025",
+   "nombre": "Traminer Aromatico IGT Trevenezie",
+   "productor": "Levorato",
+   "denominacion": "IGT",
+   "pais": "Italia",
+   "region": "trevenezie",
+   "uvas": [
+    "gewurztraminer"
+   ],
+   "anada": 2025,
+   "lista": 1,
+   "grupo": "blanco",
+   "estilo_servicio": "blanco_aromatico",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 3,
+    "tanino": 0,
+    "dulzor": 1,
+    "intensidad": 5
+   },
+   "recomendar_cuando": "El vino escaneado es un blanco muy aromático: Gewürztraminer, Moscatel o Moscato seco, Torrontés, Viognier o Riesling aromático.",
+   "no_recomendar_cuando": "El vino escaneado es un blanco neutro, de baja intensidad aromática o con barrica.",
+   "argumento": "Es un Traminer Aromatico (la versión italiana del Gewürztraminer): huele a lichi y rosas, aunque es seco.",
+   "por_confirmar": [
+    "Si es totalmente seco o con algo de azúcar residual (se asume dulzor 1)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "traminer-aromatico-igt-trevenezie-levorato-2025"
+  },
+  {
+   "slug": "falanghina-puglia-igt",
+   "nombre": "Falanghina IGT Puglia",
+   "productor": "Levorato",
+   "denominacion": "IGT",
+   "pais": "Italia",
+   "region": "puglia",
+   "uvas": [
+    "falanghina"
+   ],
+   "anada": null,
+   "lista": 1,
+   "grupo": "blanco",
+   "estilo_servicio": "blanco_ligero",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 3,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "recomendar_cuando": "El vino escaneado es un blanco seco del sur de Italia o del Mediterráneo, de cuerpo medio: Falanghina, Fiano, Greco, Vermentino, Godello o Chenin Blanc seco.",
+   "no_recomendar_cuando": "El vino escaneado es un blanco muy ligero o muy aromático.",
+   "argumento": "Es una Falanghina del sur de Italia, de cuerpo medio y notas de manzana y almendra.",
+   "por_confirmar": [
+    "La añada (no aparece en el Excel)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "falanghina-igt-puglia-levorato"
+  },
+  {
+   "slug": "soave-doc-2024",
+   "nombre": "Soave DOC",
+   "productor": "Levorato",
+   "denominacion": "DOC",
+   "pais": "Italia",
+   "region": "soave",
+   "uvas": [
+    "garganega"
+   ],
+   "anada": 2024,
+   "lista": 1,
+   "grupo": "blanco",
+   "estilo_servicio": "blanco_ligero",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 3,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 2
+   },
+   "recomendar_cuando": "El vino escaneado es un Soave o un blanco italiano ligero y fresco: Pinot Bianco, Gavi, Orvieto, Trebbiano, Garganega, Vermentino ligero.",
+   "no_recomendar_cuando": "El vino escaneado es aromático, de cuerpo pleno o dulce.",
+   "argumento": "Es un Soave: blanco de Garganega con notas de almendra y flores blancas, ligero y fresco.",
+   "por_confirmar": [
+    "Si lleva algo de Trebbiano de Soave (se asume Garganega como base)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "soave-doc-levorato-2024"
+  },
+  {
+   "slug": "pinot-grigio-delle-venezie-doc-blush-rosado-2025",
+   "nombre": "Pinot Grigio 'Blush' Rosado delle Venezie DOC",
+   "productor": "Levorato",
+   "denominacion": "DOC",
+   "pais": "Italia",
+   "region": "delle-venezie",
+   "uvas": [
+    "pinot-grigio"
+   ],
+   "anada": 2025,
+   "lista": 1,
+   "grupo": "rosado",
+   "estilo_servicio": "rosado",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 3,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 2
+   },
+   "recomendar_cuando": "El vino escaneado es un rosado seco, ligero y fresco: rosado de Provenza, rosado de Garnacha o Pinot Noir ligero, Pinot Grigio ramato.",
+   "no_recomendar_cuando": "El vino escaneado es un rosado dulce o espumoso, o un rosado de cuerpo muy pleno.",
+   "argumento": "Es un rosado seco y ligero, hecho con Pinot Grigio.",
+   "por_confirmar": [],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "pinot-grigio-blush-rosado-delle-venezie-doc-levorato-2025"
+  },
+  {
+   "slug": "cabernet-sauvignon-veneto-igt-2024",
+   "nombre": "Cabernet Sauvignon IGT Veneto",
+   "productor": "Levorato",
+   "denominacion": "IGT",
+   "pais": "Italia",
+   "region": "veneto",
+   "uvas": [
+    "cabernet-sauvignon"
+   ],
+   "anada": 2024,
+   "lista": 2,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_estructurado",
+   "perfil": {
+    "cuerpo": 4,
+    "acidez": 3,
+    "tanino": 4,
+    "dulzor": 0,
+    "intensidad": 4
+   },
+   "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio-alto y tanino marcado: Cabernet Sauvignon, mezclas de Burdeos, Petit Verdot, Merlot de cuerpo, Tempranillo con crianza.",
+   "no_recomendar_cuando": "El vino escaneado es un tinto ligero (Pinot Noir, Gamay) o un tinto muy potente y de guarda. El nuestro es un Cabernet joven: no igualarlo con un gran Burdeos.",
+   "argumento": "Es un Cabernet Sauvignon joven de cuerpo medio-alto, con notas de fruta negra y tanino firme.",
+   "por_confirmar": [
+    "Porcentaje de Cabernet Sauvignon (se asume 100%).",
+    "Si pasa por barrica."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "cabernet-sauvignon-igt-veneto-levorato-2024"
+  },
+  {
+   "slug": "merlot-veneto-igt-2024",
+   "nombre": "Merlot IGT Veneto",
+   "productor": "Levorato",
+   "denominacion": "IGT",
+   "pais": "Italia",
+   "region": "veneto",
+   "uvas": [
+    "merlot"
+   ],
+   "anada": 2024,
+   "lista": 2,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_medio",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 3,
+    "tanino": 3,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "recomendar_cuando": "El vino escaneado es un tinto suave y redondo, de cuerpo medio: Merlot, Carmenere, Garnacha, Côtes du Rhône, Tempranillo joven.",
+   "no_recomendar_cuando": "El vino escaneado es un tinto muy ligero o muy potente.",
+   "argumento": "Es un Merlot de cuerpo medio, con fruta madura (ciruela y cereza) y tanino suave.",
+   "por_confirmar": [
+    "Porcentaje de Merlot (se asume 100%)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "merlot-igt-veneto-levorato-2024"
+  },
+  {
+   "slug": "montepulciano-d-abruzzo-doc-2024",
+   "nombre": "Montepulciano d'Abruzzo DOC",
+   "productor": "Levorato",
+   "denominacion": "DOC",
+   "pais": "Italia",
+   "region": "abruzzo",
+   "uvas": [
+    "montepulciano"
+   ],
+   "anada": 2024,
+   "lista": 2,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_medio",
+   "perfil": {
+    "cuerpo": 4,
+    "acidez": 3,
+    "tanino": 3,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio-alto y fruta oscura con tanino redondo: Montepulciano, Nero d'Avola, Negroamaro, Tempranillo con crianza, Sangiovese de cuerpo.",
+   "no_recomendar_cuando": "El vino escaneado es un Vino Nobile di Montepulciano (que es de Sangiovese): aclarar la diferencia en lugar de presentarlo como equivalente.",
+   "argumento": "Es un Montepulciano de Abruzzo: tinto de fruta oscura, cuerpo medio-alto y tanino redondo.",
+   "por_confirmar": [],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "montepulciano-dabruzzo-doc-levorato-2024"
+  },
+  {
+   "slug": "langhe-nebbiolo",
+   "nombre": "Langhe Nebbiolo",
+   "productor": "Bertino Fiorella",
+   "denominacion": "DOC Langhe (Nebbiolo)",
+   "pais": "Italia",
+   "region": "langhe",
+   "uvas": [
+    "nebbiolo"
+   ],
+   "anada": null,
+   "lista": 2,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_estructurado",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 5,
+    "tanino": 4,
+    "dulzor": 0,
+    "intensidad": 4
+   },
+   "recomendar_cuando": "El vino escaneado es Nebbiolo (Barolo, Barbaresco, Gattinara, Ghemme, Roero) o un tinto de acidez alta y tanino firme con color claro: Sangiovese de Chianti o Brunello, Aglianico, Nerello Mascalese, Pinot Noir de estructura.",
+   "no_recomendar_cuando": "El vino escaneado es un tinto de fruta madura y poca acidez. Al presentarlo junto a un Barolo, decir que es la misma uva en una versión más accesible, sin igualarlos.",
+   "argumento": "Es Nebbiolo, la misma uva del Barolo y el Barbaresco, en una versión de la zona Langhe.",
+   "por_confirmar": [
+    "Si el Excel omitió la añada.",
+    "Denominación exacta en la etiqueta (Langhe DOC)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "langhe-nebbiolo-bertino-fiorella"
+  },
+  {
+   "slug": "don-carlo-rosso-veneto-igt-2018",
+   "nombre": "Rosso IGT Veneto 'Don Carlo'",
+   "productor": "Levorato",
+   "denominacion": "IGT",
+   "pais": "Italia",
+   "region": "veneto",
+   "uvas": [],
+   "anada": 2018,
+   "lista": 2,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_medio",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 3,
+    "tanino": 3,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio, armonioso y con algo de añejamiento, de fruta roja y negra madura y especias suaves: Valpolicella Superiore, Ripasso ligero, Chianti Classico, Rioja Crianza, Montepulciano.",
+   "no_recomendar_cuando": "El vino escaneado es un tinto ligero o uno muy potente y concentrado (Amarone, Priorat). No afirmar uvas ni método hasta confirmar la ficha.",
+   "argumento": "Es un tinto del Véneto de la añada 2018, de cuerpo medio, con fruta madura y especias sutiles.",
+   "por_confirmar": [
+    "Mezcla de uvas.",
+    "Si usa uva semiseca (appassimento).",
+    "Tiempo de crianza.",
+    "Perfil basado solo en la descripción de la tienda."
+   ],
+   "perfil_confianza": "media",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "grupo_tienda": "I Grandi Rossi",
+   "descripcion_tienda": "Tinto del Véneto, cosecha 2018. Cuerpo medio y armonioso: frutos rojos y negros maduros, especias sutiles y un toque terroso."
+  },
+  {
+   "slug": "primitivo-di-manduria-doc-2023",
+   "nombre": "Primitivo di Manduria DOC 'Villa Fulvia'",
+   "productor": "Levorato",
+   "denominacion": "DOC",
+   "pais": "Italia",
+   "region": "manduria",
+   "uvas": [
+    "primitivo"
+   ],
+   "anada": 2023,
+   "lista": 2,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_potente",
+   "perfil": {
+    "cuerpo": 5,
+    "acidez": 2,
+    "tanino": 3,
+    "dulzor": 1,
+    "intensidad": 5
+   },
+   "recomendar_cuando": "El vino escaneado es un tinto maduro, de cuerpo pleno, fruta dulce y poca acidez: Primitivo, Zinfandel de California, Negroamaro, Monastrell, Garnacha madura, Shiraz australiano.",
+   "no_recomendar_cuando": "El vino escaneado es un tinto fresco, ligero o de acidez alta.",
+   "argumento": "Es un Primitivo de Manduria: tinto de fruta muy madura, cuerpo pleno y poca acidez, de la misma uva del Zinfandel.",
+   "por_confirmar": [
+    "Porcentaje de Primitivo (se asume 100%)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "primitivo-di-manduria-doc-villa-fulvia-levorato-2023"
+  },
+  {
+   "slug": "valpolicella-ripasso-classico-superiore-doc-2020",
+   "nombre": "Valpolicella Ripasso Classico Superiore DOC",
+   "productor": "Levorato",
+   "denominacion": "DOC",
+   "pais": "Italia",
+   "region": "valpolicella",
+   "uvas": [
+    "corvina"
+   ],
+   "anada": 2020,
+   "lista": 2,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_medio",
+   "perfil": {
+    "cuerpo": 4,
+    "acidez": 4,
+    "tanino": 3,
+    "dulzor": 0,
+    "intensidad": 4
+   },
+   "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio-alto con acidez viva: Valpolicella, Ripasso, Chianti Classico, Barbera, Rioja Crianza o Reserva, Sangiovese de estructura.",
+   "no_recomendar_cuando": "El vino escaneado es un tinto ligero o uno muy potente y alcohólico.",
+   "argumento": "Es un Ripasso: un Valpolicella que gana cuerpo al fermentar de nuevo sobre los hollejos del Amarone.",
+   "por_confirmar": [
+    "Mezcla exacta de uvas (se asume Corvina, Corvinone y Rondinella)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "valpolicella-ripasso-classico-superiore-doc-levorato-2020"
+  },
+  {
+   "slug": "amarone-della-valpolicella-classico-docg-2017",
+   "nombre": "Amarone della Valpolicella Classico DOCG",
+   "productor": "Levorato",
+   "denominacion": "DOCG",
+   "pais": "Italia",
+   "region": "valpolicella",
+   "uvas": [
+    "corvina"
+   ],
+   "anada": 2017,
+   "lista": 2,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_potente",
+   "perfil": {
+    "cuerpo": 5,
+    "acidez": 3,
+    "tanino": 4,
+    "dulzor": 1,
+    "intensidad": 5
+   },
+   "recomendar_cuando": "El vino escaneado es un tinto muy concentrado y de guarda, de cuerpo pleno y alcohol alto: Amarone, Valpolicella Ripasso Superiore, Priorat, Ribera del Duero Gran Reserva, Cabernet de gran cuerpo.",
+   "no_recomendar_cuando": "El vino escaneado es ligero o de uso diario. Es el vino más caro de la gama: recomendarlo solo cuando el parecido sea claro.",
+   "argumento": "Es un Amarone: tinto de uvas secadas antes de fermentar, concentrado y de cuerpo pleno, aunque seco.",
+   "por_confirmar": [
+    "Mezcla exacta de uvas (se asume Corvina, Corvinone y Rondinella)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "amarone-della-valpolicella-classico-docg-levorato-2017"
+  },
+  {
+   "slug": "sangiovese-puglia-igt-2024-double-gold",
+   "nombre": "Sangiovese IGT Puglia",
+   "productor": "Bodega Rocca",
+   "denominacion": "IGT",
+   "pais": "Italia",
+   "region": "puglia",
+   "uvas": [
+    "sangiovese"
+   ],
+   "anada": 2024,
+   "lista": 3,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_medio",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 3,
+    "tanino": 3,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "recomendar_cuando": "El vino escaneado es un tinto de cuerpo medio, frutal y fácil de tomar: Sangiovese, Chianti, Barbera, Montepulciano ligero, Tempranillo joven, Garnacha.",
+   "no_recomendar_cuando": "El vino escaneado es un tinto potente o de guarda.",
+   "argumento": "Es un Sangiovese de Puglia: tinto frutal, de cuerpo medio y fácil de combinar.",
+   "por_confirmar": [
+    "Perfil de acidez (se asume 3 por el clima cálido de Puglia; el Sangiovese suele tener más).",
+    "Reconocimiento 'Double Gold' (confirmar concurso y año antes de mencionarlo)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "sangiovese-igt-puglia-bodega-rocca-2024"
+  },
+  {
+   "slug": "primitivo-2025-double-gold",
+   "nombre": "Primitivo",
+   "productor": "Bodega Rocca",
+   "denominacion": "Por confirmar (probable IGT Puglia)",
+   "pais": "Italia",
+   "region": "puglia",
+   "uvas": [
+    "primitivo"
+   ],
+   "anada": 2025,
+   "lista": 3,
+   "grupo": "tinto",
+   "estilo_servicio": "tinto_medio",
+   "perfil": {
+    "cuerpo": 4,
+    "acidez": 2,
+    "tanino": 3,
+    "dulzor": 1,
+    "intensidad": 4
+   },
+   "recomendar_cuando": "El vino escaneado es un tinto frutal, suave y de cuerpo medio-alto con poca acidez: Primitivo, Zinfandel, Garnacha, Malbec, Shiraz joven.",
+   "no_recomendar_cuando": "El vino escaneado es un tinto fresco y ligero.",
+   "argumento": "Es un Primitivo joven, más ligero que un Manduria, con fruta madura y tanino suave.",
+   "por_confirmar": [
+    "Denominación exacta (en el Excel solo dice Primitivo Rocca).",
+    "Reconocimiento 'Double Gold' (confirmar concurso y año antes de mencionarlo)."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "primitivo-igt-rocca-2025"
+  },
+  {
+   "slug": "prosecco-doc-spumante-brut-imperial",
+   "nombre": "Prosecco DOC Spumante Brut 'Imperial'",
+   "productor": "Carlov",
+   "denominacion": "DOC",
+   "pais": "Italia",
+   "region": "prosecco",
+   "uvas": [
+    "glera"
+   ],
+   "anada": null,
+   "lista": 4,
+   "grupo": "espumoso",
+   "estilo_servicio": "espumoso_seco",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 4,
+    "tanino": 0,
+    "dulzor": 1,
+    "intensidad": 2
+   },
+   "recomendar_cuando": "El vino escaneado es un espumoso seco, ligero y frutal: Prosecco, Cava, Crémant, Franciacorta joven, espumoso de método tanque.",
+   "no_recomendar_cuando": "El vino escaneado es un Champagne o un espumoso de crianza larga: son estilos distintos (más tostados, con burbuja más fina). Si se menciona, decir que es una alternativa de otro estilo, más frutal y ligera.",
+   "argumento": "Es un Prosecco Brut: espumoso seco, ligero y frutal, de método tanque.",
+   "por_confirmar": [
+    "Nombre exacto del producto (en el Excel: 'Carlov Imperial')."
+   ],
+   "perfil_confianza": "alta",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "slug_provisional": "prosecco-doc-spumante-brut-carlov-imperial"
+  },
+  {
+   "slug": "rose-extra-dry-921",
+   "nombre": "Rosé Extra Dry 921",
+   "productor": "Collevento",
+   "denominacion": "Por confirmar",
+   "pais": "Italia",
+   "region": "veneto",
+   "uvas": [],
+   "anada": null,
+   "lista": 4,
+   "grupo": "espumoso",
+   "estilo_servicio": "espumoso_rosado",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 3,
+    "tanino": 0,
+    "dulzor": 2,
+    "intensidad": 3
+   },
+   "recomendar_cuando": "El vino escaneado es un espumoso rosado o un espumoso suave y ligero, de baja graduación (Extra Dry, Dry, Demi-sec): Prosecco Rosé, Cava rosado, Moscato espumoso suave.",
+   "no_recomendar_cuando": "El vino escaneado es un espumoso Brut Nature o Extra Brut muy seco. Aclarar que Extra Dry es más dulce que Brut.",
+   "argumento": "Es un espumoso rosado Extra Dry, de baja graduación: suave, con aromas de rosa y frutos rojos y final limpio.",
+   "por_confirmar": [
+    "Denominación (si es Prosecco DOC Rosé u otra).",
+    "Uvas (en un Prosecco Rosé serían Glera y Pinot Nero).",
+    "Método de elaboración."
+   ],
+   "perfil_confianza": "media",
+   "perfil_nota": "Estimado por tipo de uva y denominación; confirmar con la ficha técnica del productor.",
+   "precio_y_stock": "No se guarda aquí: viven en Supabase, relacionados por slug.",
+   "grupo_tienda": "Bollicine",
+   "descripcion_tienda": "Espumoso rosado extra dry, de baja graduación. Rosa y frutos rojos en nariz; suave, fácil de beber y con final limpio."
+  }
+ ],
+ "nota_slugs": "Slugs alineados con la tabla productos de Supabase el 24 oct 2026 (ver SLUGS.md). El slug provisional anterior queda en 'slug_provisional'. Pendiente: confirmación del equipo."
+}

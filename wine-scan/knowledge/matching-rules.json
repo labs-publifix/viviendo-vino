@@ -1,0 +1,321 @@
+{
+ "version": "0.1",
+ "idea": "La IA NO elige el vino a recomendar. Devuelve un perfil estructurado del vino escaneado; el código calcula la similitud contra catalog-profiles.json y decide si se muestra algo.",
+ "puertas_duras": [
+  "Mismo grupo: blanco↔blanco, tinto↔tinto, rosado↔rosado, espumoso↔espumoso. Dulces, fortificados y naranjas no reciben recomendación.",
+  "|cuerpo escaneado − cuerpo catálogo| ≤ 1",
+  "|dulzor escaneado − dulzor catálogo| ≤ 1",
+  "En tintos: |tanino escaneado − tanino catálogo| ≤ 1"
+ ],
+ "pesos": {
+  "cuerpo": 1.0,
+  "acidez": 0.8,
+  "tanino": 1.0,
+  "dulzor": 1.2,
+  "intensidad": 0.7
+ },
+ "formula": "score = 1 − (Σ peso·|Δ| / Σ peso) / 4 ; en blancos, rosados y espumosos no se cuenta tanino. Bonos: +0.05 si comparten uva (id), +0.03 si comparten país. Acotar a 1.0.",
+ "umbral_minimo": 0.88,
+ "maximo_recomendaciones": 1,
+ "segunda_recomendacion": "Solo si score ≥ 0.93 y es de otro vino con perfil distinto; por defecto, una sola.",
+ "si_no_hay_coincidencia": "No mostrar bloque de recomendación. No inventar ni 'forzar' un vino. Es una función de engagement, no de venta.",
+ "avisos": [
+  "Si el escaneado es espumoso de método tradicional (Champagne, Cava, Franciacorta) y el sugerido es de método tanque: mostrar con la frase 'estilo distinto: más frutal y ligero'.",
+  "Si el escaneado es Vino Nobile di Montepulciano y el sugerido es Montepulciano d'Abruzzo: aclarar que son distintos.",
+  "No recomendar un vino con perfil_confianza 'baja'; hoy ninguno lo tiene. Los de confianza 'media' (Don Carlo, Rosé 921) se basan solo en la descripción de la tienda."
+ ],
+ "nota_calibracion": "El umbral 0.88 se calibró con 17 casos; reajustar con datos reales de wine_scans.",
+ "casos_de_prueba": [
+  {
+   "escaneado": "Barolo",
+   "perfil": {
+    "cuerpo": 4,
+    "acidez": 5,
+    "tanino": 5,
+    "dulzor": 0,
+    "intensidad": 4
+   },
+   "grupo": "tinto",
+   "uvas": [
+    "nebbiolo"
+   ],
+   "pais": "Italia",
+   "esperado_top": "langhe-nebbiolo",
+   "esperado_score": 0.974,
+   "nota": ""
+  },
+  {
+   "escaneado": "Rioja Reserva",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 3,
+    "tanino": 4,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "grupo": "tinto",
+   "uvas": [
+    "tempranillo"
+   ],
+   "pais": "España",
+   "esperado_top": "merlot-veneto-igt-2024",
+   "esperado_score": 0.947,
+   "nota": "Empate exacto (0.947) con sangiovese-puglia-igt-2024-double-gold. Ninguno comparte uva; por la regla de desempate gana el de menor precio (Merlot). La v0.1 esperaba el Sangiovese: confirmar con el equipo (24 oct 2026)."
+  },
+  {
+   "escaneado": "Zinfandel California",
+   "perfil": {
+    "cuerpo": 5,
+    "acidez": 2,
+    "tanino": 3,
+    "dulzor": 1,
+    "intensidad": 5
+   },
+   "grupo": "tinto",
+   "uvas": [
+    "primitivo"
+   ],
+   "pais": "EEUU",
+   "esperado_top": "primitivo-di-manduria-doc-2023",
+   "esperado_score": 1.0,
+   "nota": ""
+  },
+  {
+   "escaneado": "Champagne Brut",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 5,
+    "tanino": 0,
+    "dulzor": 1,
+    "intensidad": 3
+   },
+   "grupo": "espumoso",
+   "uvas": [],
+   "pais": "Francia",
+   "esperado_top": "prosecco-doc-spumante-brut-imperial",
+   "esperado_score": 0.899,
+   "nota": "Mostrar con aviso 'estilo distinto' (método tradicional vs tanque)."
+  },
+  {
+   "escaneado": "Pinot Noir Borgoña",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 4,
+    "tanino": 2,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "grupo": "tinto",
+   "uvas": [],
+   "pais": "Francia",
+   "esperado_top": null,
+   "esperado_score": null,
+   "nota": "Sin recomendación: ningún vino alcanza el umbral."
+  },
+  {
+   "escaneado": "Cabernet Napa",
+   "perfil": {
+    "cuerpo": 5,
+    "acidez": 3,
+    "tanino": 5,
+    "dulzor": 0,
+    "intensidad": 5
+   },
+   "grupo": "tinto",
+   "uvas": [
+    "cabernet-sauvignon"
+   ],
+   "pais": "EEUU",
+   "esperado_top": "cabernet-sauvignon-veneto-igt-2024",
+   "esperado_score": 0.906,
+   "nota": ""
+  },
+  {
+   "escaneado": "Malbec Mendoza",
+   "perfil": {
+    "cuerpo": 4,
+    "acidez": 3,
+    "tanino": 4,
+    "dulzor": 0,
+    "intensidad": 4
+   },
+   "grupo": "tinto",
+   "uvas": [],
+   "pais": "Argentina",
+   "esperado_top": "cabernet-sauvignon-veneto-igt-2024",
+   "esperado_score": 1.0,
+   "nota": ""
+  },
+  {
+   "escaneado": "Albariño",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 4,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 4
+   },
+   "grupo": "blanco",
+   "uvas": [],
+   "pais": "España",
+   "esperado_top": "sauvignon-blanc-trevenezie-igt-2024",
+   "esperado_score": 1.0,
+   "nota": ""
+  },
+  {
+   "escaneado": "Riesling Kabinett",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 5,
+    "tanino": 0,
+    "dulzor": 2,
+    "intensidad": 4
+   },
+   "grupo": "blanco",
+   "uvas": [],
+   "pais": "Alemania",
+   "esperado_top": null,
+   "esperado_score": null,
+   "nota": "Sin recomendación: ningún vino alcanza el umbral."
+  },
+  {
+   "escaneado": "Chianti Classico",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 4,
+    "tanino": 4,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "grupo": "tinto",
+   "uvas": [
+    "sangiovese"
+   ],
+   "pais": "Italia",
+   "esperado_top": "sangiovese-puglia-igt-2024-double-gold",
+   "esperado_score": 0.984,
+   "nota": ""
+  },
+  {
+   "escaneado": "Beaujolais",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 4,
+    "tanino": 1,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "grupo": "tinto",
+   "uvas": [],
+   "pais": "Francia",
+   "esperado_top": null,
+   "esperado_score": null,
+   "nota": "Sin recomendación: ningún vino alcanza el umbral."
+  },
+  {
+   "escaneado": "Rosado Provenza",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 3,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 2
+   },
+   "grupo": "rosado",
+   "uvas": [],
+   "pais": "Francia",
+   "esperado_top": "pinot-grigio-delle-venezie-doc-blush-rosado-2025",
+   "esperado_score": 1.0,
+   "nota": ""
+  },
+  {
+   "escaneado": "Chardonnay Napa barrica",
+   "perfil": {
+    "cuerpo": 5,
+    "acidez": 2,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 4
+   },
+   "grupo": "blanco",
+   "uvas": [
+    "chardonnay"
+   ],
+   "pais": "EEUU",
+   "esperado_top": null,
+   "esperado_score": null,
+   "nota": "Sin recomendación: ningún vino alcanza el umbral."
+  },
+  {
+   "escaneado": "Chablis",
+   "perfil": {
+    "cuerpo": 3,
+    "acidez": 4,
+    "tanino": 0,
+    "dulzor": 0,
+    "intensidad": 3
+   },
+   "grupo": "blanco",
+   "uvas": [
+    "chardonnay"
+   ],
+   "pais": "Francia",
+   "esperado_top": "chardonnay-vento-igt-2024",
+   "esperado_score": 0.996,
+   "nota": ""
+  },
+  {
+   "escaneado": "Cava Brut",
+   "perfil": {
+    "cuerpo": 2,
+    "acidez": 4,
+    "tanino": 0,
+    "dulzor": 1,
+    "intensidad": 2
+   },
+   "grupo": "espumoso",
+   "uvas": [],
+   "pais": "España",
+   "esperado_top": "prosecco-doc-spumante-brut-imperial",
+   "esperado_score": 1.0,
+   "nota": ""
+  },
+  {
+   "escaneado": "Gewürz Alsacia",
+   "perfil": {
+    "cuerpo": 4,
+    "acidez": 2,
+    "tanino": 0,
+    "dulzor": 1,
+    "intensidad": 5
+   },
+   "grupo": "blanco",
+   "uvas": [
+    "gewurztraminer"
+   ],
+   "pais": "Francia",
+   "esperado_top": "traminer-aromatico-trevenezie-igt-2025",
+   "esperado_score": 0.928,
+   "nota": ""
+  },
+  {
+   "escaneado": "Ribera Gran Reserva",
+   "perfil": {
+    "cuerpo": 4,
+    "acidez": 3,
+    "tanino": 4,
+    "dulzor": 0,
+    "intensidad": 4
+   },
+   "grupo": "tinto",
+   "uvas": [
+    "tempranillo"
+   ],
+   "pais": "España",
+   "esperado_top": "cabernet-sauvignon-veneto-igt-2024",
+   "esperado_score": 1.0,
+   "nota": ""
+  }
+ ],
+ "desempate": "Si dos vinos empatan en score: 1) el que comparte uva con el escaneado; 2) el de menor precio en Supabase (más accesible)."
+}

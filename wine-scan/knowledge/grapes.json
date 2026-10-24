@@ -1,0 +1,1051 @@
+{
+ "version": "0.1",
+ "escala": "1-5 (tanino 0 en blancas). dulzor: 0 seco total, 1 seco con fruta madura, 2 semiseco, 3 semidulce, 4 dulce, 5 muy dulce. Perfiles TÍPICOS de la uva; el vino concreto puede variar.",
+ "uvas": [
+  {
+   "id": "cabernet-sauvignon",
+   "nombre": "Cabernet Sauvignon",
+   "sinonimos": [
+    "Cab Sauv",
+    "Cabernet"
+   ],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 4,
+   "tanino": 5,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "grosella negra",
+    "cedro",
+    "pimiento verde si madura poco"
+   ],
+   "dato": "Tiene la piel gruesa y muchas semillas, por eso da vinos con mucho tanino. Es la base de los tintos de Burdeos junto con el Merlot."
+  },
+  {
+   "id": "merlot",
+   "nombre": "Merlot",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 3,
+   "tanino": 3,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "ciruela",
+    "cereza negra",
+    "chocolate"
+   ],
+   "dato": "Madura antes que el Cabernet y da vinos más suaves y redondos. Domina en Pomerol y Saint-Émilion, en Burdeos."
+  },
+  {
+   "id": "cabernet-franc",
+   "nombre": "Cabernet Franc",
+   "sinonimos": [
+    "Franc"
+   ],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 3,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "frambuesa",
+    "pimiento",
+    "hierbas"
+   ],
+   "dato": "Es uno de los padres del Cabernet Sauvignon. En el Loira (Chinon) da tintos frescos y herbales."
+  },
+  {
+   "id": "malbec",
+   "nombre": "Malbec",
+   "sinonimos": [
+    "Côt",
+    "Auxerrois"
+   ],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 3,
+   "tanino": 4,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "ciruela",
+    "mora",
+    "violeta"
+   ],
+   "dato": "Nació en el suroeste de Francia (Cahors), pero su casa actual es Mendoza, en Argentina."
+  },
+  {
+   "id": "syrah",
+   "nombre": "Syrah",
+   "sinonimos": [
+    "Shiraz"
+   ],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 3,
+   "tanino": 4,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "mora",
+    "pimienta negra",
+    "humo"
+   ],
+   "dato": "Se llama Shiraz en Australia y Sudáfrica, donde suele salir más maduro y de fruta más dulce. En el Ródano francés es más especiado y fresco."
+  },
+  {
+   "id": "garnacha",
+   "nombre": "Garnacha",
+   "sinonimos": [
+    "Grenache",
+    "Cannonau"
+   ],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 2,
+   "tanino": 2,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "fresa",
+    "frambuesa",
+    "especias dulces"
+   ],
+   "dato": "Madura tarde y acumula mucho alcohol, así que da tintos de color claro, cuerpo medio-alto y poco tanino. En Cerdeña se llama Cannonau."
+  },
+  {
+   "id": "tempranillo",
+   "nombre": "Tempranillo",
+   "sinonimos": [
+    "Tinto Fino",
+    "Tinta Roriz",
+    "Aragonez",
+    "Cencibel"
+   ],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 3,
+   "tanino": 4,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "cereza",
+    "cuero",
+    "tabaco",
+    "vainilla si pasa por barrica"
+   ],
+   "dato": "Su nombre viene de 'temprano', porque madura antes que otras uvas. Es la base de Rioja y Ribera del Duero."
+  },
+  {
+   "id": "sangiovese",
+   "nombre": "Sangiovese",
+   "sinonimos": [
+    "Brunello",
+    "Prugnolo Gentile",
+    "Morellino"
+   ],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 4,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "cereza ácida",
+    "ciruela roja",
+    "té",
+    "hierbas secas"
+   ],
+   "dato": "Es la uva tinta más plantada de Italia. Es la base del Chianti y del Brunello di Montalcino."
+  },
+  {
+   "id": "nebbiolo",
+   "nombre": "Nebbiolo",
+   "sinonimos": [
+    "Spanna",
+    "Chiavennasca"
+   ],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 5,
+   "tanino": 5,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "rosas",
+    "cereza",
+    "regaliz",
+    "alquitrán"
+   ],
+   "dato": "Tiene color claro pero mucho tanino y mucha acidez, algo poco común. Da el Barolo y el Barbaresco, y en Langhe se embotella también como Langhe Nebbiolo."
+  },
+  {
+   "id": "barbera",
+   "nombre": "Barbera",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 5,
+   "tanino": 2,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "cereza",
+    "ciruela",
+    "especias"
+   ],
+   "dato": "Combina acidez alta con tanino bajo, por eso es un tinto jugoso y fácil de combinar. Su casa es el Piamonte."
+  },
+  {
+   "id": "montepulciano",
+   "nombre": "Montepulciano",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 3,
+   "tanino": 3,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "mora",
+    "ciruela",
+    "especias"
+   ],
+   "dato": "Es una uva, y es la base del Montepulciano d'Abruzzo. No debe confundirse con el Vino Nobile di Montepulciano, que es un vino de la Toscana hecho con Sangiovese."
+  },
+  {
+   "id": "primitivo",
+   "nombre": "Primitivo",
+   "sinonimos": [
+    "Zinfandel",
+    "Crljenak Kaštelanski"
+   ],
+   "color": "tinta",
+   "cuerpo": 5,
+   "acidez": 2,
+   "tanino": 3,
+   "intensidad": 5,
+   "dulzor": 1,
+   "aromas": [
+    "mermelada de ciruela",
+    "mora",
+    "higo",
+    "pimienta"
+   ],
+   "dato": "Primitivo y Zinfandel son genéticamente la misma uva. En Apulia (Puglia) da tintos maduros, de cuerpo pleno y alcohol alto, con una sensación de fruta dulce aunque sean secos."
+  },
+  {
+   "id": "nero-davola",
+   "nombre": "Nero d'Avola",
+   "sinonimos": [
+    "Calabrese"
+   ],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 3,
+   "tanino": 3,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "ciruela",
+    "cereza negra",
+    "especias"
+   ],
+   "dato": "Es la uva tinta principal de Sicilia."
+  },
+  {
+   "id": "corvina",
+   "nombre": "Corvina, Corvinone y Rondinella",
+   "sinonimos": [
+    "Corvina",
+    "Corvinone",
+    "Rondinella"
+   ],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 2,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "cereza ácida",
+    "almendra amarga",
+    "especias"
+   ],
+   "dato": "Son las tres uvas base de Valpolicella, Ripasso y Amarone, en el Véneto. La Corvina aporta fruta fresca y acidez."
+  },
+  {
+   "id": "pinot-noir",
+   "nombre": "Pinot Noir",
+   "sinonimos": [
+    "Pinot Nero",
+    "Spätburgunder",
+    "Blauburgunder"
+   ],
+   "color": "tinta",
+   "cuerpo": 2,
+   "acidez": 4,
+   "tanino": 2,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "fresa",
+    "cereza",
+    "hongos",
+    "tierra húmeda"
+   ],
+   "dato": "Tiene la piel fina y es difícil de cultivar. Es la uva tinta de la Borgoña y también de muchos espumosos, como el Champagne."
+  },
+  {
+   "id": "gamay",
+   "nombre": "Gamay",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 2,
+   "acidez": 4,
+   "tanino": 1,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "fresa",
+    "frambuesa",
+    "flores"
+   ],
+   "dato": "Es la uva del Beaujolais. Suele darse ligeramente fría y funciona mejor joven."
+  },
+  {
+   "id": "carmenere",
+   "nombre": "Carmenere",
+   "sinonimos": [
+    "Carménère"
+   ],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 3,
+   "tanino": 3,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "frutos negros",
+    "pimiento",
+    "especias"
+   ],
+   "dato": "Llegó a Chile desde Burdeos y por muchos años se confundió con Merlot. Hoy es la uva distintiva de Chile."
+  },
+  {
+   "id": "tannat",
+   "nombre": "Tannat",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 5,
+   "acidez": 4,
+   "tanino": 5,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "mora",
+    "ciruela",
+    "tabaco"
+   ],
+   "dato": "Es de las uvas con más tanino. Su país emblema es Uruguay; su origen es el suroeste de Francia (Madiran)."
+  },
+  {
+   "id": "touriga-nacional",
+   "nombre": "Touriga Nacional",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 3,
+   "tanino": 4,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "violeta",
+    "mora",
+    "jara"
+   ],
+   "dato": "Es la uva más prestigiosa de Portugal. Se usa en el Douro y el Dão, tanto en tintos secos como en Oporto."
+  },
+  {
+   "id": "mencia",
+   "nombre": "Mencía",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 3,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "frutos rojos",
+    "flores",
+    "notas minerales"
+   ],
+   "dato": "Es la uva tinta de Bierzo y Ribeira Sacra, en el noroeste de España."
+  },
+  {
+   "id": "monastrell",
+   "nombre": "Monastrell",
+   "sinonimos": [
+    "Mourvèdre",
+    "Mataró"
+   ],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 3,
+   "tanino": 4,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "mora",
+    "hierbas mediterráneas",
+    "carne seca"
+   ],
+   "dato": "Le gusta el calor y el sol. Es la base de los tintos de Jumilla y Yecla, y se llama Mourvèdre en Francia."
+  },
+  {
+   "id": "carinena",
+   "nombre": "Cariñena",
+   "sinonimos": [
+    "Carignan",
+    "Mazuelo",
+    "Samsó"
+   ],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 4,
+   "tanino": 4,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "frutos negros",
+    "hierbas",
+    "especias"
+   ],
+   "dato": "En viñedos muy viejos, como los de Priorat y Languedoc, da vinos de mucha profundidad."
+  },
+  {
+   "id": "pinotage",
+   "nombre": "Pinotage",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 3,
+   "tanino": 3,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "mora",
+    "ciruela",
+    "notas ahumadas"
+   ],
+   "dato": "Es un cruce de Pinot Noir y Cinsault, creado en Sudáfrica en 1925."
+  },
+  {
+   "id": "aglianico",
+   "nombre": "Aglianico",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 5,
+   "tanino": 5,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "cereza negra",
+    "ciruela",
+    "humo",
+    "tierra"
+   ],
+   "dato": "Es una uva del sur de Italia, de Campania y Basilicata. Tiene mucha acidez y tanino, por eso gana con los años."
+  },
+  {
+   "id": "nerello-mascalese",
+   "nombre": "Nerello Mascalese",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 4,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "cereza",
+    "especias",
+    "notas volcánicas"
+   ],
+   "dato": "Es la uva tinta principal del Etna, en Sicilia."
+  },
+  {
+   "id": "dolcetto",
+   "nombre": "Dolcetto",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 3,
+   "acidez": 2,
+   "tanino": 3,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "ciruela",
+    "almendra",
+    "cereza negra"
+   ],
+   "dato": "El nombre significa 'dulcecito', pero los vinos se hacen secos. Es una uva del Piamonte."
+  },
+  {
+   "id": "negroamaro",
+   "nombre": "Negroamaro",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 3,
+   "tanino": 3,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "ciruela",
+    "frutos negros",
+    "especias"
+   ],
+   "dato": "Es una uva típica de Salento, en la parte sur de Puglia."
+  },
+  {
+   "id": "petit-verdot",
+   "nombre": "Petit Verdot",
+   "sinonimos": [],
+   "color": "tinta",
+   "cuerpo": 4,
+   "acidez": 4,
+   "tanino": 5,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "violeta",
+    "mora",
+    "especias"
+   ],
+   "dato": "Se usa sobre todo en mezclas, a las que da color y estructura."
+  },
+  {
+   "id": "chardonnay",
+   "nombre": "Chardonnay",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "manzana",
+    "cítricos",
+    "mantequilla y vainilla si pasa por barrica"
+   ],
+   "dato": "Se adapta a cualquier clima: en lugares fríos da vinos tensos, como Chablis, y en lugares cálidos, más tropicales. El roble cambia mucho su estilo."
+  },
+  {
+   "id": "sauvignon-blanc",
+   "nombre": "Sauvignon Blanc",
+   "sinonimos": [
+    "Fumé Blanc"
+   ],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 5,
+   "tanino": 0,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "pomelo",
+    "hierba recién cortada",
+    "maracuyá"
+   ],
+   "dato": "Es muy aromática y fresca. Sus casas clásicas son el Loira (Sancerre) y Marlborough, en Nueva Zelanda."
+  },
+  {
+   "id": "pinot-grigio",
+   "nombre": "Pinot Grigio",
+   "sinonimos": [
+    "Pinot Gris",
+    "Grauburgunder",
+    "Ruländer"
+   ],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 2,
+   "dulzor": 0,
+   "aromas": [
+    "pera",
+    "manzana verde",
+    "almendra"
+   ],
+   "dato": "Es la misma uva que el Pinot Gris. En el nordeste de Italia se hace ligero y de corte limpio; en Alsacia, más pleno y aromático. Tiene la piel rosada, por eso con maceración sale rosado ('Blush')."
+  },
+  {
+   "id": "riesling",
+   "nombre": "Riesling",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 5,
+   "tanino": 0,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "durazno",
+    "limón",
+    "flores",
+    "notas de petróleo con los años"
+   ],
+   "dato": "Puede ser seco o dulce. En Alemania, la etiqueta dice cuál (Trocken = seco)."
+  },
+  {
+   "id": "chenin-blanc",
+   "nombre": "Chenin Blanc",
+   "sinonimos": [
+    "Steen"
+   ],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 5,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "manzana",
+    "membrillo",
+    "miel"
+   ],
+   "dato": "Se usa para vinos secos, dulces y espumosos. Su casa es el Loira, y en Sudáfrica se llama Steen."
+  },
+  {
+   "id": "viognier",
+   "nombre": "Viognier",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 4,
+   "acidez": 2,
+   "tanino": 0,
+   "intensidad": 5,
+   "dulzor": 0,
+   "aromas": [
+    "durazno",
+    "damasco",
+    "flores"
+   ],
+   "dato": "Es una uva muy aromática, de cuerpo pleno y acidez baja. Su casa es el Ródano norte (Condrieu)."
+  },
+  {
+   "id": "albarino",
+   "nombre": "Albariño",
+   "sinonimos": [
+    "Alvarinho"
+   ],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "durazno",
+    "cítricos",
+    "sal marina"
+   ],
+   "dato": "Es la uva de Rías Baixas, en Galicia, y de Portugal (Vinho Verde) con el nombre Alvarinho."
+  },
+  {
+   "id": "verdejo",
+   "nombre": "Verdejo",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 4,
+   "dulzor": 0,
+   "aromas": [
+    "hierba",
+    "fruta tropical",
+    "almendra amarga"
+   ],
+   "dato": "Es la uva de Rueda, en Castilla y León."
+  },
+  {
+   "id": "garganega",
+   "nombre": "Garganega",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 2,
+   "dulzor": 0,
+   "aromas": [
+    "almendra",
+    "flores blancas",
+    "fruta de hueso"
+   ],
+   "dato": "Es la uva base del Soave, en el Véneto."
+  },
+  {
+   "id": "glera",
+   "nombre": "Glera",
+   "sinonimos": [
+    "Prosecco"
+   ],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "manzana verde",
+    "pera",
+    "flores blancas"
+   ],
+   "dato": "Es la uva del Prosecco. Hasta 2009 se llamaba Prosecco; se renombró para proteger la denominación."
+  },
+  {
+   "id": "trebbiano",
+   "nombre": "Trebbiano",
+   "sinonimos": [
+    "Ugni Blanc",
+    "Trebbiano di Soave"
+   ],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 1,
+   "dulzor": 0,
+   "aromas": [
+    "cítricos",
+    "manzana verde"
+   ],
+   "dato": "Es una de las uvas blancas más plantadas del mundo. Suele dar vinos neutros y ácidos."
+  },
+  {
+   "id": "falanghina",
+   "nombre": "Falanghina",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "manzana",
+    "cítricos",
+    "flores",
+    "almendra"
+   ],
+   "dato": "Es una uva del sur de Italia, con origen en Campania y plantada también en Puglia."
+  },
+  {
+   "id": "vermentino",
+   "nombre": "Vermentino",
+   "sinonimos": [
+    "Rolle",
+    "Favorita"
+   ],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "cítricos",
+    "hierbas",
+    "salinidad"
+   ],
+   "dato": "Es una uva de costa: Cerdeña, Liguria, Toscana. En Provenza se llama Rolle."
+  },
+  {
+   "id": "fiano",
+   "nombre": "Fiano",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "avellana",
+    "pera",
+    "miel"
+   ],
+   "dato": "Es una uva blanca de Campania, famosa por la denominación Fiano di Avellino."
+  },
+  {
+   "id": "greco",
+   "nombre": "Greco",
+   "sinonimos": [
+    "Greco di Tufo"
+   ],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "durazno",
+    "cítricos",
+    "almendra"
+   ],
+   "dato": "Es una uva blanca de Campania. Da vinos con buena acidez y cierta textura."
+  },
+  {
+   "id": "gewurztraminer",
+   "nombre": "Gewürztraminer",
+   "sinonimos": [
+    "Traminer Aromatico",
+    "Traminer"
+   ],
+   "color": "blanca",
+   "cuerpo": 4,
+   "acidez": 2,
+   "tanino": 0,
+   "intensidad": 5,
+   "dulzor": 0,
+   "aromas": [
+    "lichi",
+    "rosas",
+    "jengibre"
+   ],
+   "dato": "Es muy aromática y huele dulce, pero suele hacerse seca o semiseca. En Italia, en Trentino-Alto Adige, se llama Traminer Aromatico."
+  },
+  {
+   "id": "moscatel",
+   "nombre": "Moscatel",
+   "sinonimos": [
+    "Moscato",
+    "Muscat"
+   ],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 5,
+   "dulzor": 2,
+   "aromas": [
+    "uva",
+    "azahar",
+    "durazno"
+   ],
+   "dato": "Es de las pocas uvas de vino que huelen a uva. Puede ser seca, ligeramente burbujeante (Moscato d'Asti) o dulce."
+  },
+  {
+   "id": "pinot-bianco",
+   "nombre": "Pinot Bianco",
+   "sinonimos": [
+    "Pinot Blanc",
+    "Weissburgunder"
+   ],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 2,
+   "dulzor": 0,
+   "aromas": [
+    "manzana",
+    "almendra",
+    "flores blancas"
+   ],
+   "dato": "Es un pariente cercano del Pinot Grigio, con vinos limpios y de cuerpo ligero a medio."
+  },
+  {
+   "id": "semillon",
+   "nombre": "Sémillon",
+   "sinonimos": [
+    "Semillon"
+   ],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "cera",
+    "miel",
+    "cítricos"
+   ],
+   "dato": "Es la uva de los vinos dulces de Sauternes y también se usa en blancos secos de Burdeos y Australia."
+  },
+  {
+   "id": "gruner-veltliner",
+   "nombre": "Grüner Veltliner",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "pimienta blanca",
+    "limón",
+    "manzana verde"
+   ],
+   "dato": "Es la uva blanca insignia de Austria."
+  },
+  {
+   "id": "godello",
+   "nombre": "Godello",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "manzana",
+    "hierbas",
+    "cítricos"
+   ],
+   "dato": "Es una uva del noroeste de España (Valdeorras y Bierzo), de textura media y buena acidez."
+  },
+  {
+   "id": "macabeo",
+   "nombre": "Macabeo",
+   "sinonimos": [
+    "Viura"
+   ],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 2,
+   "dulzor": 0,
+   "aromas": [
+    "manzana",
+    "flores blancas",
+    "almendra"
+   ],
+   "dato": "Se llama Viura en Rioja y es una de las uvas clásicas del Cava."
+  },
+  {
+   "id": "xarello",
+   "nombre": "Xarel·lo",
+   "sinonimos": [
+    "Xarel-lo"
+   ],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "manzana",
+    "hierbas",
+    "notas terrosas"
+   ],
+   "dato": "Es una de las tres uvas clásicas del Cava, junto con Macabeo y Parellada."
+  },
+  {
+   "id": "parellada",
+   "nombre": "Parellada",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 1,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 2,
+   "dulzor": 0,
+   "aromas": [
+    "flores",
+    "cítricos",
+    "manzana verde"
+   ],
+   "dato": "Es una de las tres uvas clásicas del Cava y aporta frescura."
+  },
+  {
+   "id": "torrontes",
+   "nombre": "Torrontés",
+   "sinonimos": [
+    "Torrontés Riojano"
+   ],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 5,
+   "dulzor": 0,
+   "aromas": [
+    "flores",
+    "durazno",
+    "lichi"
+   ],
+   "dato": "Es la uva blanca insignia de Argentina, sobre todo en Salta. Es muy aromática pero suele ser seca."
+  },
+  {
+   "id": "cortese",
+   "nombre": "Cortese",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 2,
+   "acidez": 4,
+   "tanino": 0,
+   "intensidad": 2,
+   "dulzor": 0,
+   "aromas": [
+    "cítricos",
+    "manzana",
+    "notas minerales"
+   ],
+   "dato": "Es la uva del Gavi, en el Piamonte."
+  },
+  {
+   "id": "arneis",
+   "nombre": "Arneis",
+   "sinonimos": [],
+   "color": "blanca",
+   "cuerpo": 3,
+   "acidez": 3,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "pera",
+    "almendra",
+    "flores"
+   ],
+   "dato": "Es una uva blanca del Piamonte, en la zona de Roero."
+  },
+  {
+   "id": "garnacha-blanca",
+   "nombre": "Garnacha Blanca",
+   "sinonimos": [
+    "Grenache Blanc"
+   ],
+   "color": "blanca",
+   "cuerpo": 4,
+   "acidez": 2,
+   "tanino": 0,
+   "intensidad": 3,
+   "dulzor": 0,
+   "aromas": [
+    "manzana",
+    "hierbas",
+    "almendra"
+   ],
+   "dato": "Da vinos de cuerpo pleno y acidez baja. Se usa en Cataluña y el sur del Ródano."
+  }
+ ]
+}

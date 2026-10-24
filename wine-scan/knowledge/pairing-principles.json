@@ -1,0 +1,104 @@
+{
+ "version": "0.1",
+ "regla_general": "Cada sugerencia de maridaje debe nombrar su principio y su porqué en lenguaje simple. No usar pares de 'plato ↔ vino' como fórmula cerrada; usar categorías de plato y explicar el razonamiento. Tampoco sugerir platos específicos como 'el clásico', solo categorías y rasgos (grasa, picante, ácido, dulce, intensidad).",
+ "principios": [
+  {
+   "id": "acidez-corta-grasa",
+   "principio": "La acidez limpia la grasa",
+   "porque": "Un vino con acidez viva refresca el paladar después de un bocado graso y lo deja listo para el siguiente.",
+   "aplica_a": "Platos fritos, cremosos, con mantequilla o con carnes grasas.",
+   "vinos_que_ayudan": "Vinos de acidez alta: Sauvignon Blanc, Riesling, espumosos, Nebbiolo, Barbera, Sangiovese."
+  },
+  {
+   "id": "tanino-pide-proteina",
+   "principio": "El tanino necesita proteína o grasa",
+   "porque": "El tanino (esa sensación que seca la boca) se suaviza con proteína y grasa. Sin ellas, se siente áspero.",
+   "aplica_a": "Cortes de carne con grasa, guisos, quesos curados.",
+   "vinos_que_ayudan": "Tintos con tanino marcado: Cabernet Sauvignon, Nebbiolo, Tannat, Amarone."
+  },
+  {
+   "id": "intensidad-con-intensidad",
+   "principio": "La intensidad del vino y del plato debe parecerse",
+   "porque": "Un plato delicado se pierde ante un vino potente, y un plato intenso hace parecer plano a un vino ligero.",
+   "aplica_a": "Cualquier combinación: antes de pensar en sabores, compara qué tan 'fuerte' es cada uno.",
+   "vinos_que_ayudan": "Platos ligeros: blancos y tintos ligeros. Platos intensos: tintos de cuerpo."
+  },
+  {
+   "id": "burbuja-refresca",
+   "principio": "La burbuja refresca y limpia",
+   "porque": "La burbuja y la acidez limpian el paladar y compensan la sal y el aceite.",
+   "aplica_a": "Frituras, snacks salados, platos con mucha sal.",
+   "vinos_que_ayudan": "Espumosos secos."
+  },
+  {
+   "id": "picante-y-alcohol",
+   "principio": "El picante se intensifica con el alcohol y el tanino",
+   "porque": "El alcohol y el tanino resaltan la sensación de picor. Un poco de dulzor y poca graduación lo equilibran.",
+   "aplica_a": "Platos con chile, cocina especiada.",
+   "vinos_que_ayudan": "Blancos aromáticos de poco alcohol (Riesling, Traminer, Moscatel), rosados y espumosos; evita tintos muy tánicos y alcohólicos."
+  },
+  {
+   "id": "dulce-con-dulce",
+   "principio": "El vino debe ser tan dulce como el plato, o más",
+   "porque": "Si el plato es más dulce que el vino, éste parece ácido y delgado.",
+   "aplica_a": "Postres, salsas dulces, platos con fruta o miel.",
+   "vinos_que_ayudan": "Vinos dulces o con ligero dulzor residual."
+  },
+  {
+   "id": "sal-y-fruta",
+   "principio": "La sal resalta la fruta y reduce el amargor",
+   "porque": "La sal suaviza el tanino y la acidez, y hace que la fruta del vino se sienta más.",
+   "aplica_a": "Quesos salados, embutidos, platos curados.",
+   "vinos_que_ayudan": "Tintos frutales, espumosos y blancos con acidez."
+  },
+  {
+   "id": "pescado-y-tanino",
+   "principio": "Los tintos con mucho tanino chocan con pescados y mariscos",
+   "porque": "El tanino mezclado con ciertos componentes del pescado puede dejar un sabor metálico.",
+   "aplica_a": "Mariscos y pescados, especialmente crudos o muy iodados.",
+   "vinos_que_ayudan": "Blancos frescos, espumosos, rosados o tintos muy ligeros y fríos."
+  },
+  {
+   "id": "acido-con-acido",
+   "principio": "Un plato ácido pide un vino con acidez",
+   "porque": "Si el plato lleva limón, jitomate o vinagre, un vino de poca acidez se siente plano.",
+   "aplica_a": "Pescado marinado en cítricos, ensaladas, salsas con jitomate, aderezos ácidos.",
+   "vinos_que_ayudan": "Blancos de acidez alta; tintos con acidez (Sangiovese, Barbera)."
+  },
+  {
+   "id": "madera-con-brasa",
+   "principio": "La crianza en barrica combina con lo asado y ahumado",
+   "porque": "La madera aporta notas tostadas y ahumadas que se parecen a las de la cocción a la parrilla o al horno de leña.",
+   "aplica_a": "Asados, brasas, parrilla, horno.",
+   "vinos_que_ayudan": "Tintos con crianza en barrica."
+  },
+  {
+   "id": "origen-comparte",
+   "principio": "Lo que crece junto suele combinar",
+   "porque": "Platos y vinos de la misma región suelen haberse ajustado entre sí con los siglos. Es una guía, no una regla.",
+   "aplica_a": "Cocina regional.",
+   "vinos_que_ayudan": "Un vino con la cocina de su zona."
+  },
+  {
+   "id": "queso-por-madurez",
+   "principio": "En quesos, importa la madurez más que el color",
+   "porque": "Quesos frescos y de cabra piden acidez; los curados piden cuerpo y algo de tanino; los azules piden vinos dulces.",
+   "aplica_a": "Tablas de quesos.",
+   "vinos_que_ayudan": "Frescos: blancos de acidez. Curados: tintos de cuerpo. Azules: vinos dulces."
+  },
+  {
+   "id": "sin-plato",
+   "principio": "Muchos vinos funcionan sin comida",
+   "porque": "No todo vino necesita plato. Algunos están pensados como aperitivo, para platicar o para disfrutarse solos.",
+   "aplica_a": "Aperitivo, reuniones, momento de relajación.",
+   "vinos_que_ayudan": "Espumosos, blancos ligeros, rosados y tintos frutales."
+  },
+  {
+   "id": "estructura-fuerte",
+   "principio": "Un vino muy concentrado merece plato con carácter",
+   "porque": "Un vino potente puede ser el protagonista; mejor acompañarlo con pocos sabores para que no compitan.",
+   "aplica_a": "Cortes a la parrilla, caza, quesos curados.",
+   "vinos_que_ayudan": "Amarone, Primitivo de Manduria, Cabernet de cuerpo."
+  }
+ ]
+}

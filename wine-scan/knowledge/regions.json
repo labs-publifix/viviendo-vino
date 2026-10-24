@@ -1,0 +1,481 @@
+{
+ "version": "0.1",
+ "regiones": [
+  {
+   "id": "veneto",
+   "nombre": "Véneto",
+   "pais": "Italia",
+   "uvas_clave": [
+    "glera",
+    "garganega",
+    "corvina",
+    "pinot-grigio",
+    "merlot",
+    "cabernet-sauvignon"
+   ],
+   "estilo": "Región muy variada: espumosos, blancos ligeros y tintos desde frescos hasta muy concentrados.",
+   "que_implica": "Dentro del Véneto caben desde un Prosecco ligero hasta un Amarone potente; lo que define el estilo es la denominación.",
+   "dato": "Aquí se hacen Prosecco, Soave, Valpolicella, Ripasso y Amarone."
+  },
+  {
+   "id": "valpolicella",
+   "nombre": "Valpolicella",
+   "pais": "Italia",
+   "uvas_clave": [
+    "corvina"
+   ],
+   "estilo": "Tintos de cereza y frescura, con tres niveles de intensidad: Valpolicella, Ripasso y Amarone.",
+   "que_implica": "Valpolicella: ligero y fresco. Ripasso: más cuerpo y estructura. Amarone: el más concentrado y alcohólico.",
+   "dato": "Se trabaja con uvas parcialmente secadas (Amarone) o con el hollejo del Amarone (Ripasso)."
+  },
+  {
+   "id": "soave",
+   "nombre": "Soave",
+   "pais": "Italia",
+   "uvas_clave": [
+    "garganega",
+    "trebbiano"
+   ],
+   "estilo": "Blancos secos de cuerpo ligero a medio, con almendra y frescura.",
+   "que_implica": "Un Soave 'Classico' viene de la zona histórica y suele tener más carácter que el Soave básico.",
+   "dato": "Garganega es la uva principal."
+  },
+  {
+   "id": "prosecco",
+   "nombre": "Prosecco",
+   "pais": "Italia",
+   "uvas_clave": [
+    "glera"
+   ],
+   "estilo": "Espumoso ligero, frutal y fácil de tomar, hecho con segunda fermentación en tanque.",
+   "que_implica": "La burbuja viene de un método rápido (tanque), no de botella; por eso resulta más frutal y menos tostado que un Champagne.",
+   "dato": "La denominación Prosecco DOC cubre varias provincias del Véneto y del Friuli."
+  },
+  {
+   "id": "delle-venezie",
+   "nombre": "Delle Venezie",
+   "pais": "Italia",
+   "uvas_clave": [
+    "pinot-grigio"
+   ],
+   "estilo": "DOC amplia del nordeste de Italia; es la zona donde se produce más Pinot Grigio.",
+   "que_implica": "Un Pinot Grigio delle Venezie suele ser ligero, limpio y pensado para beberse joven.",
+   "dato": "Abarca Véneto, Friuli-Venezia Giulia y Trento."
+  },
+  {
+   "id": "trevenezie",
+   "nombre": "Tre Venezie",
+   "pais": "Italia",
+   "uvas_clave": [],
+   "estilo": "IGT del nordeste de Italia (Véneto, Friuli y Trentino-Alto Adige).",
+   "que_implica": "IGT significa que el productor tiene libertad en uvas y estilo, con menos reglas que una DOC.",
+   "dato": "A menudo agrupa vinos varietales (de una sola uva) pensados para beberse jóvenes."
+  },
+  {
+   "id": "piamonte",
+   "nombre": "Piamonte",
+   "pais": "Italia",
+   "uvas_clave": [
+    "nebbiolo",
+    "barbera",
+    "dolcetto",
+    "moscatel",
+    "cortese",
+    "arneis"
+   ],
+   "estilo": "Tintos de acidez y tanino marcados, y blancos finos.",
+   "que_implica": "Un Barolo o un Barbaresco son tintos de guarda; un Langhe Nebbiolo es una versión más accesible.",
+   "dato": "Casa del Nebbiolo."
+  },
+  {
+   "id": "langhe",
+   "nombre": "Langhe",
+   "pais": "Italia",
+   "uvas_clave": [
+    "nebbiolo",
+    "barbera",
+    "dolcetto"
+   ],
+   "estilo": "Zona de colinas del Piamonte, alrededor de Alba.",
+   "que_implica": "Langhe Nebbiolo suele ser más accesible y menos caro que Barolo o Barbaresco, con el mismo carácter de rosas, cereza y tanino firme.",
+   "dato": "Es la zona donde están Barolo y Barbaresco."
+  },
+  {
+   "id": "toscana",
+   "nombre": "Toscana",
+   "pais": "Italia",
+   "uvas_clave": [
+    "sangiovese"
+   ],
+   "estilo": "Tintos de Sangiovese, con acidez alta y tanino firme.",
+   "que_implica": "Chianti es más ligero; Brunello di Montalcino es más concentrado y se guarda más años.",
+   "dato": "Los 'Super Toscanos' como Bolgheri combinan uvas francesas e italianas."
+  },
+  {
+   "id": "puglia",
+   "nombre": "Puglia (Apulia)",
+   "pais": "Italia",
+   "uvas_clave": [
+    "primitivo",
+    "negroamaro",
+    "sangiovese",
+    "falanghina"
+   ],
+   "estilo": "Clima cálido y soleado: tintos de cuerpo pleno, fruta madura y poca acidez.",
+   "que_implica": "Un tinto de Puglia casi siempre será maduro, redondo y de graduación alcohólica alta.",
+   "dato": "Primitivo di Manduria es una de sus denominaciones más conocidas."
+  },
+  {
+   "id": "manduria",
+   "nombre": "Primitivo di Manduria",
+   "pais": "Italia",
+   "uvas_clave": [
+    "primitivo"
+   ],
+   "estilo": "DOC de Primitivo en el sur de Puglia: tintos potentes y de fruta muy madura.",
+   "que_implica": "Es el estilo más concentrado y alcohólico de Primitivo.",
+   "dato": "Suele sentirse algo dulce por la fruta madura, aunque sea seco."
+  },
+  {
+   "id": "salento",
+   "nombre": "Salento",
+   "pais": "Italia",
+   "uvas_clave": [
+    "negroamaro",
+    "primitivo"
+   ],
+   "estilo": "Península del sur de Puglia con tintos cálidos y de cuerpo pleno.",
+   "que_implica": "IGT Salento: tintos maduros, frutales y redondos.",
+   "dato": "Negroamaro es su uva emblemática."
+  },
+  {
+   "id": "abruzzo",
+   "nombre": "Abruzzo",
+   "pais": "Italia",
+   "uvas_clave": [
+    "montepulciano"
+   ],
+   "estilo": "Tintos de Montepulciano, de cuerpo medio-alto, fruta oscura y tanino redondo.",
+   "que_implica": "Montepulciano d'Abruzzo es una uva en una región, no el pueblo toscano del mismo nombre.",
+   "dato": "Cubre también el Trebbiano d'Abruzzo, blanco."
+  },
+  {
+   "id": "campania",
+   "nombre": "Campania",
+   "pais": "Italia",
+   "uvas_clave": [
+    "aglianico",
+    "falanghina",
+    "fiano",
+    "greco"
+   ],
+   "estilo": "Blancos con carácter mineral y tintos de mucha estructura.",
+   "que_implica": "Taurasi (Aglianico) es de los tintos más longevos del sur de Italia.",
+   "dato": "Fiano di Avellino y Greco di Tufo son sus blancos clásicos."
+  },
+  {
+   "id": "sicilia",
+   "nombre": "Sicilia",
+   "pais": "Italia",
+   "uvas_clave": [
+    "nero-davola",
+    "nerello-mascalese"
+   ],
+   "estilo": "Mucho sol: tintos maduros; en el Etna, tintos finos de altura.",
+   "que_implica": "Nero d'Avola: cuerpo y fruta. Etna: más fino y mineral.",
+   "dato": "Isla con enorme variedad."
+  },
+  {
+   "id": "friuli",
+   "nombre": "Friuli-Venezia Giulia",
+   "pais": "Italia",
+   "uvas_clave": [
+    "pinot-grigio",
+    "sauvignon-blanc"
+   ],
+   "estilo": "Blancos de alta calidad, frescos y aromáticos.",
+   "que_implica": "Un Pinot Grigio del Friuli suele ser más estructurado que el de la DOC Delle Venezie.",
+   "dato": "Fuerte tradición en blancos."
+  },
+  {
+   "id": "trentino",
+   "nombre": "Trentino-Alto Adige",
+   "pais": "Italia",
+   "uvas_clave": [
+    "gewurztraminer",
+    "pinot-grigio",
+    "pinot-bianco"
+   ],
+   "estilo": "Zona alpina: blancos aromáticos y limpios.",
+   "que_implica": "Aquí el Gewürztraminer se llama Traminer Aromatico.",
+   "dato": "Cultivo en altura, noches frescas."
+  },
+  {
+   "id": "rioja",
+   "nombre": "Rioja",
+   "pais": "España",
+   "uvas_clave": [
+    "tempranillo",
+    "garnacha"
+   ],
+   "estilo": "Tintos de Tempranillo con crianza en barrica: de fruta fresca (Joven) a notas de cuero y especias (Reserva).",
+   "que_implica": "El tiempo de crianza (Crianza, Reserva, Gran Reserva) indica cuánto reposó el vino y suele marcar su suavidad.",
+   "dato": "Primera DOCa de España."
+  },
+  {
+   "id": "ribera-del-duero",
+   "nombre": "Ribera del Duero",
+   "pais": "España",
+   "uvas_clave": [
+    "tempranillo"
+   ],
+   "estilo": "Tintos de Tempranillo más concentrados y de color profundo.",
+   "que_implica": "Clima de altura con noches frías: da vinos de cuerpo, acidez viva y tanino marcado.",
+   "dato": "Se conoce la uva localmente como Tinto Fino."
+  },
+  {
+   "id": "priorat",
+   "nombre": "Priorat",
+   "pais": "España",
+   "uvas_clave": [
+    "garnacha",
+    "carinena"
+   ],
+   "estilo": "Tintos intensos de suelos de pizarra y viñas viejas.",
+   "que_implica": "Vinos de mucha concentración, mineralidad y graduación alcohólica alta.",
+   "dato": "Producción pequeña."
+  },
+  {
+   "id": "rias-baixas",
+   "nombre": "Rías Baixas",
+   "pais": "España",
+   "uvas_clave": [
+    "albarino"
+   ],
+   "estilo": "Blancos de Albariño frescos y salinos.",
+   "que_implica": "Es un blanco fresco, pensado para beberse joven.",
+   "dato": "Clima atlántico y húmedo."
+  },
+  {
+   "id": "rueda",
+   "nombre": "Rueda",
+   "pais": "España",
+   "uvas_clave": [
+    "verdejo",
+    "sauvignon-blanc"
+   ],
+   "estilo": "Blancos frescos de Verdejo.",
+   "que_implica": "Un blanco aromático, de acidez viva y buen precio.",
+   "dato": "Zona de Castilla y León."
+  },
+  {
+   "id": "penedes",
+   "nombre": "Penedès / Cava",
+   "pais": "España",
+   "uvas_clave": [
+    "macabeo",
+    "xarello",
+    "parellada"
+   ],
+   "estilo": "Zona del Cava, espumoso con segunda fermentación en botella.",
+   "que_implica": "Cava es el método tradicional español; suele tener más textura y menos fruta que un Prosecco.",
+   "dato": "Se produce cerca de Barcelona."
+  },
+  {
+   "id": "burdeos",
+   "nombre": "Burdeos",
+   "pais": "Francia",
+   "uvas_clave": [
+    "cabernet-sauvignon",
+    "merlot",
+    "cabernet-franc"
+   ],
+   "estilo": "Tintos de mezcla; la 'margen izquierda' domina el Cabernet y la 'derecha', el Merlot.",
+   "que_implica": "Quien compra Burdeos busca estructura y capacidad de guarda.",
+   "dato": "Hay también blancos de Sauvignon Blanc y Sémillon, y dulces de Sauternes."
+  },
+  {
+   "id": "borgona",
+   "nombre": "Borgoña",
+   "pais": "Francia",
+   "uvas_clave": [
+    "pinot-noir",
+    "chardonnay"
+   ],
+   "estilo": "Tintos de Pinot Noir y blancos de Chardonnay, vinos de mucha finura.",
+   "que_implica": "Aquí el lugar importa más que la uva: la etiqueta muestra el pueblo o el viñedo (Premier Cru, Grand Cru).",
+   "dato": "Casi nunca verás la uva en la etiqueta."
+  },
+  {
+   "id": "champagne",
+   "nombre": "Champagne",
+   "pais": "Francia",
+   "uvas_clave": [
+    "chardonnay",
+    "pinot-noir"
+   ],
+   "estilo": "Espumoso con segunda fermentación en botella, con crianza larga sobre lías.",
+   "que_implica": "La burbuja es fina y el sabor, tostado; es una categoría distinta al Prosecco o al Cava.",
+   "dato": "Solo es Champagne el vino de esa región."
+  },
+  {
+   "id": "loira",
+   "nombre": "Valle del Loira",
+   "pais": "Francia",
+   "uvas_clave": [
+    "sauvignon-blanc",
+    "chenin-blanc",
+    "cabernet-franc"
+   ],
+   "estilo": "Blancos frescos, tintos ligeros y espumosos.",
+   "que_implica": "Sancerre y Pouilly-Fumé son Sauvignon Blanc; Chinon es Cabernet Franc.",
+   "dato": "Región larga, con estilos muy distintos."
+  },
+  {
+   "id": "rodano",
+   "nombre": "Valle del Ródano",
+   "pais": "Francia",
+   "uvas_clave": [
+    "syrah",
+    "garnacha",
+    "viognier"
+   ],
+   "estilo": "Norte: Syrah. Sur: mezclas de Garnacha, Syrah y Monastrell.",
+   "que_implica": "Châteauneuf-du-Pape es la denominación más conocida del sur.",
+   "dato": "Condrieu (Viognier) al norte."
+  },
+  {
+   "id": "alsacia",
+   "nombre": "Alsacia",
+   "pais": "Francia",
+   "uvas_clave": [
+    "riesling",
+    "gewurztraminer",
+    "pinot-grigio"
+   ],
+   "estilo": "Blancos aromáticos, con uva en la etiqueta.",
+   "que_implica": "Una de las pocas regiones francesas que menciona la uva.",
+   "dato": "Estilos de seco a dulce: revisa el término."
+  },
+  {
+   "id": "douro",
+   "nombre": "Douro",
+   "pais": "Portugal",
+   "uvas_clave": [
+    "touriga-nacional"
+   ],
+   "estilo": "Tintos de cuerpo pleno y también Oporto.",
+   "que_implica": "Los Douro tintos son de fruta madura y estructura.",
+   "dato": "Valle del río Duero portugués."
+  },
+  {
+   "id": "vinho-verde",
+   "nombre": "Vinho Verde",
+   "pais": "Portugal",
+   "uvas_clave": [
+    "albarino"
+   ],
+   "estilo": "Blancos ligeros, frescos, a veces con ligera burbuja.",
+   "que_implica": "Es un blanco de baja graduación, muy fresco.",
+   "dato": "'Verde' significa joven, no color."
+  },
+  {
+   "id": "mosela",
+   "nombre": "Mosela",
+   "pais": "Alemania",
+   "uvas_clave": [
+    "riesling"
+   ],
+   "estilo": "Rieslings ligeros, de acidez alta y baja graduación.",
+   "que_implica": "La etiqueta indica el nivel de madurez (Kabinett, Spätlese) y el dulzor.",
+   "dato": "Viñedos en laderas muy pronunciadas."
+  },
+  {
+   "id": "mendoza",
+   "nombre": "Mendoza",
+   "pais": "Argentina",
+   "uvas_clave": [
+    "malbec",
+    "torrontes"
+   ],
+   "estilo": "Malbec de cuerpo pleno, fruta oscura y tanino suave.",
+   "que_implica": "Valle de Uco, en altura, da vinos más frescos y finos.",
+   "dato": "Región más importante de Argentina."
+  },
+  {
+   "id": "chile",
+   "nombre": "Valles de Chile",
+   "pais": "Chile",
+   "uvas_clave": [
+    "carmenere",
+    "cabernet-sauvignon",
+    "sauvignon-blanc"
+   ],
+   "estilo": "Tintos de Cabernet y Carmenere; blancos frescos de valles costeros.",
+   "que_implica": "Los valles costeros (Casablanca, Leyda) dan blancos más frescos.",
+   "dato": "Larga franja con muchas zonas."
+  },
+  {
+   "id": "valle-de-guadalupe",
+   "nombre": "Valle de Guadalupe",
+   "pais": "México",
+   "uvas_clave": [
+    "tempranillo",
+    "garnacha",
+    "cabernet-sauvignon",
+    "chenin-blanc"
+   ],
+   "estilo": "Tintos de cuerpo medio-alto y mezclas, en clima mediterráneo.",
+   "que_implica": "Es la zona de vino mexicana más conocida, en Baja California.",
+   "dato": "Muchas bodegas boutique."
+  },
+  {
+   "id": "queretaro",
+   "nombre": "Querétaro",
+   "pais": "México",
+   "uvas_clave": [
+    "tempranillo",
+    "cabernet-sauvignon",
+    "macabeo"
+   ],
+   "estilo": "Región de altura con espumosos y tintos.",
+   "que_implica": "Viñedos en el semidesierto queretano; destacan espumosos.",
+   "dato": "Zona vinícola en crecimiento."
+  },
+  {
+   "id": "coahuila",
+   "nombre": "Valle de Parras",
+   "pais": "México",
+   "uvas_clave": [
+    "cabernet-sauvignon",
+    "chenin-blanc"
+   ],
+   "estilo": "Tintos y blancos de clima árido y de altura, en el norte de México.",
+   "que_implica": "Aquí está Casa Madero, fundada en 1597 y considerada la bodega más antigua de América.",
+   "dato": "Clima árido y de altura."
+  },
+  {
+   "id": "napa",
+   "nombre": "Napa Valley",
+   "pais": "Estados Unidos",
+   "uvas_clave": [
+    "cabernet-sauvignon",
+    "chardonnay"
+   ],
+   "estilo": "Tintos de Cabernet potentes y maduros.",
+   "que_implica": "En EE.UU. 'Reserve' no tiene un significado legal.",
+   "dato": "Tiene sub-AVAs (zonas) con matices distintos."
+  },
+  {
+   "id": "marlborough",
+   "nombre": "Marlborough",
+   "pais": "Nueva Zelanda",
+   "uvas_clave": [
+    "sauvignon-blanc"
+   ],
+   "estilo": "Sauvignon Blanc muy aromático y fresco.",
+   "que_implica": "Si ves Marlborough, espera un blanco herbal y cítrico.",
+   "dato": "Gran parte del Sauvignon Blanc neozelandés."
+  }
+ ]
+}
