@@ -1,10 +1,10 @@
-import Link from "next/link";
+import { ArticleCard } from "@/app/_ui/ArticleCard";
 import { ButtonLink } from "@/app/_ui/Button";
 import { DarkBlock } from "@/app/_ui/DarkBlock";
 import { Icon } from "@/app/_ui/Icon";
-import { Heading, MonoTag, NumberedLabel } from "@/app/_ui/Typography";
+import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { IS_PREVIEW, RAFA_PHOTO } from "@/lib/about";
-import { ARTICULOS_EJEMPLO } from "@/lib/blog/ejemplo";
+import { getArticles, toSummary } from "@/lib/blog/content";
 import { TYPE_LABELS } from "@/lib/catalog/types";
 import styles from "./descubre.module.css";
 
@@ -23,6 +23,7 @@ const QUIZ_BOTTLES = [
 ];
 
 export function Descubre() {
+  const recientes = getArticles().slice(0, 3).map(toSummary);
   return (
     <>
       <section className={`${styles.section} ${styles.teaser} ${styles.beforeDark}`} aria-labelledby="quiz-title">
@@ -136,31 +137,16 @@ export function Descubre() {
           </div>
         </div>
 
-        {/* EJEMPLO: artículos de muestra (lib/blog/ejemplo.ts) hasta que el blog tenga contenido. */}
-        <ul className={styles.articles}>
-          {ARTICULOS_EJEMPLO.map((a) => (
-            <li key={a.slug}>
-              <article className={styles.article}>
-                <div className={styles.articleMedia}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- fotos ya optimizadas */}
-                  <img src={a.imagen.src} alt={a.imagen.alt} width={1000} height={625} loading="lazy" decoding="async" />
-                  {IS_PREVIEW && <span className={styles.sample}>Ejemplo</span>}
-                </div>
-                <div className={styles.articleBody}>
-                  <MonoTag>{a.categoria}</MonoTag>
-                  <h3 className={styles.articleTitle}>
-                    <Link href="/blog" className={styles.articleLink}>
-                      {a.titulo}
-                    </Link>
-                  </h3>
-                  <p className={styles.articleMeta}>
-                    <Icon name="clock" size={14} /> {a.minutos} min de lectura
-                  </p>
-                </div>
-              </article>
-            </li>
-          ))}
-        </ul>
+        {/* Los 3 artículos más recientes del blog (content/blog/), con la misma tarjeta de color. */}
+        {recientes.length > 0 && (
+          <ul className={styles.articles}>
+            {recientes.map((a) => (
+              <li key={a.slug}>
+                <ArticleCard article={a} />
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </>
   );

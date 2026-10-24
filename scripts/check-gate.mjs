@@ -9,7 +9,7 @@ const HOST = process.env.HOST;
 const PASSWORD = process.env.PASSWORD ?? "";
 
 const STORE = ["/inicio", "/vinos", "/vinos/chardonnay-vento-igt-2024", "/arma-tu-kit", "/carrito", "/checkout", "/envios",
-  "/preguntas-frecuentes", "/terminos", "/privacidad", "/componentes", "/quiz", "/wine-scan", "/nosotros", "/blog", "/api/tienda/estado", "/api/carrito/validar", "/api/checkout/revisar", "/acceso", "/api/acceso"];
+  "/preguntas-frecuentes", "/terminos", "/privacidad", "/componentes", "/quiz", "/wine-scan", "/nosotros", "/blog", "/blog/como-leer-la-etiqueta-de-un-vino", "/guias/temperatura-de-servicio.pdf", "/api/tienda/estado", "/api/carrito/validar", "/api/checkout/revisar", "/acceso", "/api/acceso"];
 
 let failed = 0;
 const check = (ok, label) => {

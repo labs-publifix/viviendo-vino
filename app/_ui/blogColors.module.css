@@ -1,0 +1,42 @@
+/* Variantes de color del blog (lib/blog/meta.ts). Solo colores del manual (§6); contrastes AA verificados:
+   oscuro 17.5:1 (cifra orquídea 9.7:1) · claro 17.5:1 (cifra vino 6.8:1) · vino 6.8:1 · acento 9.6:1
+   (cifra orquídea 5.3:1). El vino es acento: solo una de las cuatro variantes lo usa de fondo. */
+.oscuro {
+  --b-bg:
+    radial-gradient(ellipse 70% 90% at 100% 0%, rgb(154 32 48 / 0.42), rgb(154 32 48 / 0.12) 50%, transparent),
+    radial-gradient(ellipse 50% 60% at 0% 100%, rgb(100 31 83 / 0.32), transparent),
+    var(--vv-negro);
+  --b-fg: var(--vv-hueso);
+  --b-muted: rgb(243 236 228 / 0.78);
+  --b-cifra: var(--vv-orquidea);
+  --b-tag-bg: var(--vv-hueso);
+  --b-tag-fg: var(--vv-negro);
+  --b-line: rgb(243 236 228 / 0.38);
+}
+.claro {
+  --b-bg: var(--vv-hueso);
+  --b-fg: var(--vv-negro);
+  --b-muted: var(--muted);
+  --b-cifra: var(--vv-vino);
+  --b-tag-bg: var(--vv-negro);
+  --b-tag-fg: var(--vv-hueso);
+  --b-line: rgb(10 2 6 / 0.28);
+}
+.vino {
+  --b-bg: var(--vv-vino);
+  --b-fg: var(--vv-hueso);
+  --b-muted: rgb(243 236 228 / 0.85);
+  --b-cifra: var(--vv-hueso);
+  --b-tag-bg: var(--vv-hueso);
+  --b-tag-fg: var(--vv-vino);
+  --b-line: rgb(243 236 228 / 0.5);
+}
+.acento {
+  --b-bg: var(--vv-ciruela);
+  --b-fg: var(--vv-hueso);
+  --b-muted: rgb(243 236 228 / 0.82);
+  --b-cifra: var(--vv-orquidea);
+  --b-tag-bg: var(--vv-hueso);
+  --b-tag-fg: var(--vv-ciruela);
+  --b-line: rgb(243 236 228 / 0.45);
+}

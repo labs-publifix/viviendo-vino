@@ -121,3 +121,18 @@ console.log("hero ilustrado → public/img/hero-rafa.webp");
 // Foto de Rafa (Nosotros): cuadrada; cada lugar la encuadra con object-fit.
 await sharp(join(root, "fotos-vinos/rafa-nosotros.png")).webp({ quality: 82 }).toFile(join(out(""), "rafa.webp"));
 console.log("Rafa → public/img/rafa.webp");
+
+// Avatar de Rafa (blog): recorte cuadrado de su rostro desde la misma foto.
+await sharp(join(root, "fotos-vinos/rafa-nosotros.png"))
+  .extract({ left: 320, top: 30, width: 340, height: 340 })
+  .resize(192, 192)
+  .webp({ quality: 85 })
+  .toFile(join(out(""), "rafa-avatar.webp"));
+console.log("avatar → public/img/rafa-avatar.webp");
+// Copia en PNG para las imágenes para compartir (next/og no lee WebP).
+await sharp(join(root, "fotos-vinos/rafa-nosotros.png"))
+  .extract({ left: 320, top: 30, width: 340, height: 340 })
+  .resize(192, 192)
+  .png()
+  .toFile(join(out(""), "rafa-avatar.png"));
+console.log("avatar PNG → public/img/rafa-avatar.png");

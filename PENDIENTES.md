@@ -36,14 +36,16 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 
 ## Descubrir (Quiz IA, Wine Scan, Nosotros, Blog)
 - [x] `/nosotros` construida (con placeholders de contenido de Rafa).
-- [ ] Páginas `/quiz`, `/wine-scan` y `/blog` son provisionales (título, una línea y regreso al inicio); se reemplazan al construir cada función.
+- [ ] Páginas `/quiz` y `/wine-scan` son provisionales (título, una línea y regreso al inicio); se reemplazan al construir cada función.
 - [ ] Contenido de Rafa (portada y `/nosotros`), todo en `lib/about.ts`. Mientras falte, dev muestra un placeholder y producción no muestra esa pieza:
   - [x] `RAFA_PHOTO`: foto de Rafa (`public/img/rafa.webp`).
   - `RAFA_STORY`: su historia con el vino, con sus palabras.
   - `RAFA_QUOTE`: una frase suya.
   - `RAFA_CRITERIA`: 3 o 4 criterios reales con los que elige cada vino (título y una línea).
 - [ ] Feed de Instagram en `/nosotros`: requiere conectar la API de Instagram (fase de funcionalidades). Hoy hay un espacio reservado solo en dev.
-- [ ] Artículos del blog en la portada: hoy son de **ejemplo** (`lib/blog/ejemplo.ts`, con la etiqueta "Ejemplo" visible solo en dev). Reemplazar por artículos reales.
+- [x] Blog construido: `/blog`, `/blog/[slug]` y el teaser de la portada leen `content/blog/*.md` (guía en `content/blog/README.md`, backlog en `content/blog/BACKLOG.md`).
+- [ ] Los 3 artículos actuales son de **ejemplo** (`ejemplo: true`, etiqueta visible solo en dev). Reemplazarlos o quitarles la marca al revisarlos.
+- [ ] Descarga de guías por correo: hoy la ventana solo valida y muestra "Función pendiente de conectar" (no envía ni guarda nada).
 
 ## Portada
 - [ ] Textos de la marquesina de anuncios: hoy son de muestra (`app/(tienda)/(sitio)/layout.tsx`).

@@ -130,42 +130,8 @@
   .articles { grid-template-columns: repeat(3, minmax(0, 1fr)); } /* tres siempre juntas, sin huérfana */
 }
 .articles li { display: flex; }
-.article {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  background: var(--surface);
-  overflow: hidden;
-  transition: border-color var(--vv-dur) var(--vv-ease);
-}
-.article:hover { border-color: rgb(10 2 6 / 0.3); }
-.articleMedia { position: relative; border-bottom: 1px solid var(--line); }
-.articleMedia img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
-.sample {
-  position: absolute;
-  top: var(--s-3);
-  left: var(--s-3);
-  padding: 4px 10px;
-  border-radius: var(--vv-radius-pill);
-  background: var(--vv-negro);
-  color: var(--vv-hueso);
-  font-family: var(--font-label);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.articleBody { display: flex; flex-direction: column; gap: var(--s-2); flex: 1; padding: var(--s-4) var(--s-5) var(--s-5); }
-.articleTitle { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; text-wrap: balance; }
-.articleLink { color: inherit; text-decoration: none; }
-.articleLink::after { content: ""; position: absolute; inset: 0; } /* toda la tarjeta es el enlace */
-.article:hover .articleLink { text-decoration: underline; text-decoration-thickness: 1px; }
-.articleMeta { display: inline-flex; align-items: center; gap: 6px; margin: auto 0 0; padding-top: var(--s-2); font-size: var(--t-small); color: var(--muted); }
+.articles li > * { flex: 1; }
 
-/* Tableta y móvil: la foto de Rafa en 3:2 (manual §8, sitio) para no ocupar toda la pantalla. */
 @media (max-width: 899px) {
   .aboutPhoto,
   .aboutPlaceholder { max-width: none; aspect-ratio: 3 / 2; }

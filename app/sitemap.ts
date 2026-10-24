@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getArticles } from "@/lib/blog/content";
 import { getCatalog } from "@/lib/catalog/repo";
 import { SITE_URL } from "@/lib/site";
 
@@ -16,5 +17,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...wines.map((w) => ({ url: `${SITE_URL}/vinos/${w.slug}`, changeFrequency: "weekly" as const, priority: 0.8 })),
     { url: `${SITE_URL}/envios`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/preguntas-frecuentes`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${SITE_URL}/blog`, changeFrequency: "weekly", priority: 0.7 },
+    ...getArticles()
+      .filter((a) => !a.ejemplo)
+      .map((a) => ({ url: `${SITE_URL}/blog/${a.slug}`, lastModified: a.actualizado ?? a.fecha, changeFrequency: "monthly" as const, priority: 0.6 })),
   ];
 }
