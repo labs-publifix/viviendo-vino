@@ -165,7 +165,8 @@
 .downloadBody h2 { margin: 0; font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
 .downloadBody p { margin: 0; color: var(--muted); }
 
-/* Ventana de descarga */
+/* Ventana de descarga. Va también dentro de .downloadBody, cuyos h2 y p no llevan margen: por eso los
+   márgenes de la ventana se declaran con .dialog delante. */
 .dialog {
   width: min(100% - 2 * var(--gutter), 440px);
   padding: var(--s-6) var(--s-5) var(--s-5);
@@ -180,8 +181,8 @@
 .dialogClose button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; color: var(--fg); cursor: pointer; }
 .dialogClose button:hover { background: rgb(10 2 6 / 0.06); }
 .dialogLabel { color: var(--vv-vino); }
-.dialogTitle { margin: 0 0 var(--s-2); padding-right: var(--s-6); font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
-.dialogText { margin: 0 0 var(--s-5); color: var(--muted); }
+.dialog .dialogTitle { margin: 0 0 var(--s-2); padding-right: var(--s-6); font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+.dialog .dialogText { margin: 0 0 var(--s-5); color: var(--muted); }
 .dialogForm { position: relative; display: flex; flex-direction: column; gap: var(--s-4); }
 .trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 @media (prefers-reduced-motion: no-preference) {
