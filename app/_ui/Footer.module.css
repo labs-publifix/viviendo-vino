@@ -11,6 +11,18 @@
 .brand { display: flex; flex-direction: column; gap: var(--s-3); max-width: 22rem; }
 .brand img { width: 140px; height: auto; }
 .brand p { margin: 0; color: var(--muted); font-size: var(--t-small); }
+.cols { display: flex; flex-wrap: wrap; gap: var(--s-6) var(--s-8); }
+/* La columna de información no lleva título: se alinea con los enlaces de Descubrir. */
+.cols > nav:first-child { padding-top: calc(var(--t-label) * 1.5 + var(--s-2)); }
+.colTitle {
+  margin: 0 0 var(--s-2);
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vv-vino);
+}
 .links { display: grid; gap: var(--s-1); margin: 0; padding: 0; list-style: none; }
 .links a { display: inline-block; padding: 10px 0; color: var(--fg); text-decoration: none; font-size: var(--t-small); }
 .links a:hover { color: var(--vv-vino); text-decoration: underline; }

@@ -13,14 +13,25 @@ export function Footer() {
           <p>Kits de 6 botellas de vino italiano. Envío incluido.</p>
           <SocialLinks />
         </div>
-        <nav aria-label="Información">
-          <ul className={styles.links}>
-            <li><Link href="/envios">Envíos</Link></li>
-            <li><Link href="/preguntas-frecuentes">Preguntas frecuentes</Link></li>
-            <li><Link href="/terminos">Términos y condiciones</Link></li>
-            <li><Link href="/privacidad">Aviso de privacidad</Link></li>
-          </ul>
-        </nav>
+        <div className={styles.cols}>
+          <nav aria-label="Información">
+            <ul className={styles.links}>
+              <li><Link href="/envios">Envíos</Link></li>
+              <li><Link href="/preguntas-frecuentes">Preguntas frecuentes</Link></li>
+              <li><Link href="/terminos">Términos y condiciones</Link></li>
+              <li><Link href="/privacidad">Aviso de privacidad</Link></li>
+            </ul>
+          </nav>
+          <nav aria-label="Descubrir">
+            <p className={styles.colTitle}>Descubrir</p>
+            <ul className={styles.links}>
+              <li><Link href="/quiz">Quiz IA</Link></li>
+              <li><Link href="/wine-scan">Wine Scan</Link></li>
+              <li><Link href="/blog">Blog</Link></li>
+              <li><Link href="/nosotros">Nosotros</Link></li>
+            </ul>
+          </nav>
+        </div>
       </div>
       <div className={styles.legal}>
         <p className={styles.age}>Venta solo a mayores de 18 años</p>

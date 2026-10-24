@@ -35,6 +35,42 @@
 .navLink:hover { color: var(--vv-vino); }
 .navSocial { display: none; }
 
+/* Descubrir: botón con el mismo estilo que los enlaces y panel flotante en escritorio. */
+.discover { position: relative; }
+.discoverBtn { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; cursor: pointer; }
+.discoverBtn svg { transition: transform var(--vv-dur) var(--vv-ease); }
+.discoverBtn[aria-expanded="true"] { color: var(--vv-vino); }
+.discoverBtn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.nav .dropdown {
+  position: absolute;
+  top: calc(100% + var(--s-2));
+  left: calc(-1 * var(--s-4));
+  z-index: 60;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 200px;
+  padding: var(--s-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+}
+.nav .dropdownOpen { display: flex; }
+.dropdownLink {
+  display: block;
+  padding: 12px var(--s-3);
+  border-radius: 10px;
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+}
+.dropdownLink:hover { background: rgb(10 2 6 / 0.05); color: var(--vv-vino); }
+
 .actions { display: flex; align-items: center; gap: var(--s-2); }
 .cart,
 .menuBtn {
@@ -69,7 +105,7 @@
 }
 .menuBtn { display: none; }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) { /* con Descubrir y Nosotros, la barra completa necesita más de 900 px */
   .menuBtn { display: grid; }
   .actions { margin-left: auto; }
   .cta { display: none; }
@@ -88,4 +124,17 @@
   .nav ul { flex-direction: column; gap: 0; }
   .navSocial ul { flex-direction: row; gap: var(--s-2); } /* la lista del menú no aplica a los íconos */
   .navLink { display: block; padding: 14px 0; font-size: 13px; border-bottom: 1px solid var(--line); }
+  /* Descubrir en el móvil: sección expandible dentro del menú, con sangría. */
+  .discoverBtn { display: flex; width: 100%; justify-content: space-between; text-align: left; }
+  .nav .dropdown {
+    position: static;
+    min-width: 0;
+    padding: 0 0 0 var(--s-4);
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .dropdownLink { padding: 14px 0; border-radius: 0; font-size: 13px; border-bottom: 1px solid var(--line); }
+  .dropdownLink:hover { background: none; }
 }

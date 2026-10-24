@@ -34,6 +34,11 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 ## Grupos
 - [ ] Correr `supabase/seed/grupos-editoriales.sql` en **producción** antes de abrir (en staging ya se corre en esta ronda). Si se corre `catalogo-completo.sql` completo, ya incluye los nombres nuevos.
 
+## Descubrir (Quiz IA, Wine Scan, Nosotros, Blog)
+- [ ] Páginas `/quiz`, `/wine-scan`, `/nosotros` y `/blog` son provisionales (título, una línea y regreso al inicio); se reemplazan al construir cada función.
+- [ ] Foto de Rafa para la sección Nosotros: agregarla en `lib/about.ts` (`RAFA_PHOTO`). Mientras no exista, dev muestra un placeholder y producción muestra la sección sin foto.
+- [ ] Artículos del blog en la portada: hoy son de **ejemplo** (`lib/blog/ejemplo.ts`, con la etiqueta "Ejemplo" visible solo en dev). Reemplazar por artículos reales.
+
 ## Portada
 - [ ] Textos de la marquesina de anuncios: hoy son de muestra (`app/(tienda)/(sitio)/layout.tsx`).
 - [ ] Ilustración del hero en mayor resolución (ideal 2560 × 1440): la actual mide 1280 × 720.

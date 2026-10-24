@@ -13,6 +13,7 @@ import { getCatalog } from "@/lib/catalog/repo";
 import { GROUP_IMAGES, KIT_IMAGES } from "@/lib/catalog/media";
 import { formatMXN } from "@/lib/money";
 import { SOCIAL } from "@/lib/social";
+import { Descubre } from "./Descubre";
 import styles from "./inicio.module.css";
 
 // Portada de la tienda. Con STORE_OPEN=true, proxy.ts la muestra en "/".
@@ -130,7 +131,7 @@ export default async function TiendaInicio() {
         </ul>
       </section>
 
-      <section className={`${styles.section} ${kits.length === 0 ? styles.lastSection : ""}`} aria-labelledby="cat-title">
+      <section className={styles.section} aria-labelledby="cat-title">
         <div className={styles.sectionHead}>
           <NumberedLabel n={3}>El catálogo</NumberedLabel>
           <Heading id="cat-title">{categories.reduce((s, c) => s + c.wineCount, 0)} vinos italianos.</Heading>
@@ -154,7 +155,7 @@ export default async function TiendaInicio() {
       </section>
 
       {kits.length > 0 && (
-        <section className={`${styles.section} ${styles.lastSection}`} aria-labelledby="kits-title">
+        <section className={styles.section} aria-labelledby="kits-title">
           <div className={styles.sectionHead}>
             <NumberedLabel n={4}>Kits prearmados</NumberedLabel>
             <Heading id="kits-title">¿Sin tiempo?</Heading>
@@ -179,6 +180,9 @@ export default async function TiendaInicio() {
           </div>
         </section>
       )}
+
+      {/* 05 Quiz IA, 06 Wine Scan, Nosotros y Blog (el espacio final antes del cierre va en Blog). */}
+      <Descubre />
 
       <DarkBlock aria-labelledby="cierre-title">
         <div className={styles.closing}>

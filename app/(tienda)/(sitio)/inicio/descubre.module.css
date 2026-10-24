@@ -1,0 +1,171 @@
+/* Secciones 05, 06, Nosotros y Blog. Mismo contenedor, ritmo y tokens que 01 a 04 (inicio.module.css). */
+.section { max-width: var(--container); margin: 0 auto; padding: var(--s-9) var(--gutter) 0; }
+.blog { padding-bottom: var(--s-9); }
+
+.copy { display: flex; flex-direction: column; gap: var(--s-3); max-width: 44rem; min-width: 0; }
+.lede { margin: 0; font-size: var(--t-body-lg); color: var(--muted); }
+.detail {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.detail svg { color: var(--vv-vino); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s-3); padding-top: var(--s-3); }
+
+/* Teasers 05 y 06: texto e ilustración lado a lado en escritorio; apilados en móvil. */
+.teaser { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); align-items: center; }
+.visual { min-width: 0; }
+
+/* Ilustración del quiz */
+.quizCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  padding: var(--s-6) var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.quizSteps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 0; padding: 0; list-style: none; }
+.quizSteps li { height: 4px; border-radius: 2px; background: rgb(10 2 6 / 0.1); }
+.quizSteps .done { background: var(--vv-vino); }
+.quizOptions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
+.quizOptions li {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--vv-radius-pill);
+  font-size: var(--t-small);
+  font-weight: 600;
+}
+.quizOptions .picked { background: var(--vv-negro); border-color: var(--vv-negro); color: var(--vv-hueso); }
+.quizKit { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--s-2); margin: 0; padding: var(--s-4) 0 0; list-style: none; border-top: 1px solid var(--line); }
+.quizKit img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 8px; }
+
+/* Ilustración del escáner: visor con esquinas y una línea que recorre la etiqueta. */
+.scanFrame {
+  position: relative;
+  max-width: 360px;
+  margin: 0 auto;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.scanFrame img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+.scanCorners {
+  position: absolute;
+  inset: 14% 22%;
+  --c: var(--vv-vino);
+  background:
+    linear-gradient(var(--c), var(--c)) top left / 24px 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) top left / 2px 24px no-repeat,
+    linear-gradient(var(--c), var(--c)) top right / 24px 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) top right / 2px 24px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / 24px 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / 2px 24px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right / 24px 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right / 2px 24px no-repeat;
+}
+.scanLine {
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  top: 50%;
+  height: 2px;
+  background: var(--vv-carmin);
+  box-shadow: 0 0 12px rgb(207 44 75 / 0.6);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .scanLine { animation: scan 2.8s var(--vv-ease) infinite alternate; }
+  @keyframes scan { from { top: 18%; } to { top: 82%; } }
+}
+
+/* Nosotros: foto y texto. Sin foto (producción), solo texto. */
+.about { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); align-items: center; }
+.aboutPhoto { display: block; width: 100%; max-width: 420px; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r-card); }
+.aboutPlaceholder {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--s-2);
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 4 / 5;
+  border: 1px dashed rgb(154 32 48 / 0.5);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  color: var(--vv-vino);
+  text-align: center;
+}
+.aboutPlaceholder span { font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+.aboutPlaceholder small { font-size: var(--t-small); color: var(--muted); }
+
+/* Blog y guías */
+.blogHead { display: flex; flex-direction: column; gap: var(--s-3); margin-bottom: var(--s-6); }
+.articles {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 760px) {
+  .articles { grid-template-columns: repeat(3, minmax(0, 1fr)); } /* tres siempre juntas, sin huérfana */
+}
+.articles li { display: flex; }
+.article {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color var(--vv-dur) var(--vv-ease);
+}
+.article:hover { border-color: rgb(10 2 6 / 0.3); }
+.articleMedia { position: relative; border-bottom: 1px solid var(--line); }
+.articleMedia img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+.sample {
+  position: absolute;
+  top: var(--s-3);
+  left: var(--s-3);
+  padding: 4px 10px;
+  border-radius: var(--vv-radius-pill);
+  background: var(--vv-negro);
+  color: var(--vv-hueso);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.articleBody { display: flex; flex-direction: column; gap: var(--s-2); flex: 1; padding: var(--s-4) var(--s-5) var(--s-5); }
+.articleTitle { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; text-wrap: balance; }
+.articleLink { color: inherit; text-decoration: none; }
+.articleLink::after { content: ""; position: absolute; inset: 0; } /* toda la tarjeta es el enlace */
+.article:hover .articleLink { text-decoration: underline; text-decoration-thickness: 1px; }
+.articleMeta { display: inline-flex; align-items: center; gap: 6px; margin: auto 0 0; padding-top: var(--s-2); font-size: var(--t-small); color: var(--muted); }
+
+/* Tableta y móvil: la foto de Rafa en 3:2 (manual §8, sitio) para no ocupar toda la pantalla. */
+@media (max-width: 899px) {
+  .aboutPhoto,
+  .aboutPlaceholder { max-width: none; aspect-ratio: 3 / 2; }
+}
+@media (min-width: 900px) {
+  .teaser { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s-8); }
+  .reverse .copy { order: 2; }
+  .about { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s-8); }
+  .about:not(:has(img, [role="img"])) { grid-template-columns: minmax(0, 1fr); }
+  .blogHead { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: var(--s-6); }
+  .blogHead .actions { flex: none; padding-top: 0; }
+}

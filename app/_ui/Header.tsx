@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/lib/cart/store";
 import { ButtonLink } from "./Button";
 import { SocialLinks } from "./SocialLinks";
@@ -16,11 +16,45 @@ const NAV = [
   { href: "/envios", label: "Envíos" },
 ];
 
+// "Descubrir": desplegable en escritorio, sección expandible en el menú móvil.
+const DISCOVER = [
+  { href: "/quiz", label: "Quiz IA" },
+  { href: "/wine-scan", label: "Wine Scan" },
+  { href: "/blog", label: "Blog" },
+];
+
 /** `cartCount` solo para la página de componentes; en la tienda se lee del carrito guardado. */
 export function Header({ cartCount: forcedCount }: { cartCount?: number }) {
   const [open, setOpen] = useState(false);
+  const [discover, setDiscover] = useState(false);
+  const discoverRef = useRef<HTMLLIElement>(null);
+  const discoverBtnRef = useRef<HTMLButtonElement>(null);
   const { kits } = useCart();
   const cartCount = forcedCount ?? kits.length;
+
+  // Desplegable: se cierra con Escape (el foco vuelve al botón) o al hacer clic fuera.
+  useEffect(() => {
+    if (!discover) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setDiscover(false);
+      discoverBtnRef.current?.focus();
+    };
+    const onPointer = (e: PointerEvent) => {
+      if (!discoverRef.current?.contains(e.target as Node)) setDiscover(false);
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onPointer);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onPointer);
+    };
+  }, [discover]);
+
+  const closeAll = () => {
+    setOpen(false);
+    setDiscover(false);
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -41,11 +75,44 @@ export function Header({ cartCount: forcedCount }: { cartCount?: number }) {
           <ul>
             {NAV.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className={styles.navLink} onClick={() => setOpen(false)}>
+                <Link href={item.href} className={styles.navLink} onClick={closeAll}>
                   {item.label}
                 </Link>
               </li>
             ))}
+            <li
+              ref={discoverRef}
+              className={styles.discover}
+              onBlur={(e) => {
+                // Al salir con Tab del desplegable, se cierra.
+                if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDiscover(false);
+              }}
+            >
+              <button
+                ref={discoverBtnRef}
+                type="button"
+                className={`${styles.navLink} ${styles.discoverBtn}`}
+                aria-expanded={discover}
+                aria-controls="menu-descubrir"
+                onClick={() => setDiscover((v) => !v)}
+              >
+                Descubrir <Icon name="chevron" size={14} />
+              </button>
+              <ul id="menu-descubrir" className={`${styles.dropdown} ${discover ? styles.dropdownOpen : ""}`}>
+                {DISCOVER.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className={styles.dropdownLink} onClick={closeAll}>
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+            <li>
+              <Link href="/nosotros" className={styles.navLink} onClick={closeAll}>
+                Nosotros
+              </Link>
+            </li>
           </ul>
           {/* Solo en el menú desplegable del móvil. */}
           <div className={styles.navSocial}>

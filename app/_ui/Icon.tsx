@@ -20,6 +20,10 @@ const PATHS = {
   info: "M12 11v5M12 7.5v.01M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z",
   pause: "M9 6v12M15 6v12",
   play: "M8 5.5v13l10.5-6.5z",
+  chevron: "M6 9.5l6 6 6-6",
+  // Cámara (Wine Scan) y reloj (tiempo de lectura)
+  camera: "M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.4-2h5.6l1.4 2h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5zM12 9.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z",
+  clock: "M12 7.5V12l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z",
   // Redes sociales, en el mismo trazo fino que el resto del set.
   instagram: "M7.5 3.5h9a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4h-9a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4zM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM17 6.9v.01",
   facebook: "M15.5 3.5h-2A3.5 3.5 0 0 0 10 7v13.5M7 10.5h7.5",
