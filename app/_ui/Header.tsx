@@ -58,7 +58,7 @@ export function Header({ cartCount: forcedCount }: { cartCount?: number }) {
             Arma tu kit
           </ButtonLink>
           <Link href="/carrito" className={styles.cart} aria-label={`Carrito, ${cartCount} ${cartCount === 1 ? "kit" : "kits"}`}>
-            <Icon name="box" size={22} />
+            <Icon name="cart" size={22} />
             {cartCount > 0 && <span className={styles.count}>{cartCount}</span>}
           </Link>
           <button

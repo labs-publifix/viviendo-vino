@@ -28,7 +28,6 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [ ] Aviso de privacidad: responsable, transferencias, ubicación de servidores, procedimiento y plazo ARCO.
 - [ ] Legislación aplicable y tribunales.
 - [ ] Número de WhatsApp de atención.
-- [ ] Cifra de seguidores de Instagram en la portada ("+30 mil seguidores", oct 2026): actualizarla de vez en cuando en `lib/social.ts`.
 - [ ] Refresco inmediato del catálogo: hoy un cambio hecho por SQL (precio, foto, stock) tarda en verse y la primera visita a cada página puede mostrar la versión anterior (al navegar del catálogo a una ficha se ve la ficha vieja hasta recargar). Es el caché de la tienda (`cacheLife("minutes")`), no un error de datos. Solución: el panel de administración invalida el caché al guardar (`revalidateTag("catalogo", { expire: 0 })`); antes, opcional, un webhook de Supabase que haga lo mismo.
 - [ ] Al conectar pagos: el pedido debe leer precios sin caché (hoy la validación usa el catálogo cacheado ~1 minuto).
 

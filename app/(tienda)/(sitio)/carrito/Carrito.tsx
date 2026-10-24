@@ -56,7 +56,7 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
       <div className={styles.page}>
         <Intro />
         <div className={styles.empty}>
-          <Icon name="box" size={32} />
+          <Icon name="cart" size={32} />
           <p className={styles.emptyTitle}>Tu carrito está vacío.</p>
           <p className={styles.emptyText}>Arma un kit de {KIT_SIZE} botellas del mismo grupo o empieza con uno prearmado.</p>
           <ButtonLink href="/arma-tu-kit" size="lg">

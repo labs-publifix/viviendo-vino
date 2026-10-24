@@ -10,6 +10,8 @@ const PATHS = {
   menu: "M4 7h16M4 12h16M4 17h16",
   // Caja de 6
   box: "M3.5 8.5L12 4l8.5 4.5v8L12 21l-8.5-4.5v-8zM3.5 8.5L12 13l8.5-4.5M12 13v8",
+  // Carrito de compras (encabezado y carrito vacío). La caja de arriba queda para "kit de 6".
+  cart: "M3 4h2.4l2.1 11.1a1.6 1.6 0 0 0 1.6 1.3h8.6a1.6 1.6 0 0 0 1.6-1.2L21 8H6.1M8.6 20.2a1.1 1.1 0 1 0 2.2 0 1.1 1.1 0 1 0-2.2 0M16.6 20.2a1.1 1.1 0 1 0 2.2 0 1.1 1.1 0 1 0-2.2 0",
   // Envío
   truck: "M3 6.5h11v9H3zM14 9.5h3.5l3 3v3h-6.5M6.5 18.5a1.5 1.5 0 1 0 0-.01M17 18.5a1.5 1.5 0 1 0 0-.01",
   // Copa
