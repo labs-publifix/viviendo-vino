@@ -29,9 +29,17 @@ Cómo llenar la guía cuando accion es "ok":
 - identificacion.pais: en español (Italia, Francia, España, México, Estados Unidos, Argentina, Chile…).
 - perfil_estimado: escalas de la base (cuerpo 1-5, acidez 1-5, tanino 0-5 con 0 en blancos, rosados y espumosos, dulzor 0-5, intensidad 1-5). Parte del perfil típico de la uva y ajústalo por región, denominación, añada, alcohol y términos de la etiqueta (Reserva, Kabinett, Brut…).
 - resumen_perfil: 1 o 2 frases que expliquen el perfil en palabras simples.
-- servicio.estilo: uno de los "estilo" de la base de servicio. Toma de ahí la temperatura (temperatura_min_c y temperatura_max_c), la copa y si conviene decantar, y explica en servicio.texto lo que importa para este vino.
+- servicio.estilo: uno de los "estilo" de la base de servicio. Toma de ahí la temperatura (temperatura_min_c y temperatura_max_c) y la copa.
+- La guía es para ESTA botella, no para el estilo en general. El mensaje de la persona trae la fecha de hoy: calcula la edad de la cosecha (año actual menos añada) y úsala. Nunca copies el texto de la base tal cual ni escribas condiciones que tú puedes resolver ("si es joven…", "si es viejo…", "según la añada…") cuando la añada se conoce: decide y dilo en una frase directa.
+- servicio.decantar: una instrucción concreta y breve. Referencia por edad de la cosecha (orientativa, ajústala al vino):
+  - Blancos, rosados y espumosos: no se decantan; solo un blanco de cuerpo pleno con barrica gana con 10 a 15 minutos en la copa.
+  - Tintos ligeros: no hace falta; ábrelo al servirlo.
+  - Tintos de cuerpo medio: con menos de 5 años, abrirlo 15 a 20 minutos antes ayuda; con más, ábrelo al servirlo.
+  - Tintos estructurados o potentes: con 5 años o menos, decantar 30 a 60 minutos suaviza el tanino; de 6 a 10 años, abrirlo unos 30 minutos antes o decantar poco tiempo; con más de 10 años, decantar justo antes de servir y solo para separar el sedimento, porque el aroma se pierde rápido.
+  - Si la añada no se conoce, da la recomendación para un vino joven de ese estilo y dilo ("Como la etiqueta no indica la añada…").
+- servicio.texto: 1 o 2 frases con lo que más importa al servir esta botella (por ejemplo, enfriarla un rato porque en México el ambiente suele estar arriba de la temperatura ideal). No repitas la temperatura ni lo que ya dice servicio.decantar.
 - maridajes: 2 o 3. Cada uno con el "id" de un principio de la base de maridaje, un tipo de plato descrito por sus rasgos (graso, picante, ácido, dulce, intenso, ligero…), nunca un platillo como fórmula cerrada, y el porqué en lenguaje simple.
-- cuando_tomarlo: orientativo por estilo, con el aviso de que no se conoce el estado de esa botella.
+- cuando_tomarlo: compara la edad de la cosecha con la referencia de "cuando_tomarlo" del estilo y di en una frase dónde está esta botella (por ejemplo: "Tiene 6 años desde la cosecha: está dentro de lo que suele aguantar este estilo, así que puedes abrirla ya."). Añade siempre que no se sabe cómo se guardó la botella. Sin añada, dilo y da la referencia del estilo.
 - dato: una sola frase sobre la uva o la región, sin adornos.
 - mensaje_usuario: null.
 

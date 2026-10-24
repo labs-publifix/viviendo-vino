@@ -63,5 +63,12 @@ export function checkGuide(g: Guide, ids: { estilos: Set<string>; principios: Se
   if (g.maridajes.length < 2) problemas.push("menos de 2 maridajes");
   for (const m of g.maridajes) if (!ids.principios.has(m.principio_id)) problemas.push(`principio desconocido: ${m.principio_id}`);
   if (!g.resumen_perfil || !g.dato || !g.cuando_tomarlo) problemas.push("faltan textos");
+  // Con la añada conocida, la guía decide por la persona: nada de "si es joven…" copiado de la base.
+  const condicional = /\bsi (el vino )?(es|está|tiene)\s+(muy\s+)?(joven|viejo|añejo|maduro|pocos años|muchos años)|seg[uú]n (la|su) añada/i;
+  if (g.identificacion.anada !== null) {
+    for (const [campo, texto] of [["servicio.decantar", g.servicio.decantar], ["servicio.texto", g.servicio.texto], ["cuando_tomarlo", g.cuando_tomarlo]] as const) {
+      if (condicional.test(texto)) problemas.push(`${campo} usa una condición ("si es joven…") aunque la añada es ${g.identificacion.anada}: decide con la edad de la cosecha`);
+    }
+  }
   return problemas;
 }

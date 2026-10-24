@@ -150,3 +150,18 @@ test("la razón de la recomendación nombra lo que comparten", () => {
   const r = recommendFromCatalog(barolo, candidatos, reglas, (id) => (id === "nebbiolo" ? "Nebbiolo" : id));
   assert.equal(r.razon, "Los dos son tintos de acidez muy fresca y se parecen en cuerpo y tanino. Comparten la uva Nebbiolo.");
 });
+
+test("con la añada conocida, la guía no puede dejar condiciones como 'si es joven'", () => {
+  const generico = { ...guiaValida, servicio: { ...guiaValida.servicio, decantar: "Si es joven, decantar 30-60 minutos suaviza el tanino." } };
+  assert.ok(checkGuide(generico, ids).some((p) => p.includes("servicio.decantar")));
+  const resuelto = { ...guiaValida, servicio: { ...guiaValida.servicio, decantar: "Con 7 años, ábrelo unos 30 minutos antes de servir." } };
+  assert.deepEqual(checkGuide(resuelto, ids), []);
+  // Sin añada sí se vale explicar que no se sabe.
+  const sinAnada = { ...generico, identificacion: { ...generico.identificacion, anada: null } };
+  assert.deepEqual(checkGuide(sinAnada, ids), []);
+});
+
+test("el prompt pide resolver el servicio con la edad de la cosecha", () => {
+  const prompt = buildSystemPrompt(knowledge);
+  assert.ok(prompt.includes("edad de la cosecha") && prompt.includes("Nunca copies el texto de la base tal cual"));
+});
