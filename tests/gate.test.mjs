@@ -57,6 +57,8 @@ test("preview sin contraseña: todo pide acceso, nada de la tienda se muestra", 
   }
   assert.deepEqual(decide({ pathname: "/acceso", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
   assert.deepEqual(decide({ pathname: "/brand/logo-color.svg", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
+  // El logo de los correos se ve en Gmail y Outlook aunque el correo salga de dev.
+  assert.deepEqual(decide({ pathname: "/email/logo-viviendo-vino.png", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
   assert.deepEqual(decide({ pathname: "/favicon.svg", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
   // Un archivo con nombre parecido no se cuela.
   assert.deepEqual(decide({ pathname: "/favicon-catalogo.json", host: WWW, env: PROD_CLOSED, hasPreviewAccess: false }), { action: "not-found" });

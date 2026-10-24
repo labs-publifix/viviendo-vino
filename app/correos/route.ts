@@ -1,5 +1,5 @@
 import { renderConfirmationEmail } from "@/lib/email/confirmation";
-import { escapeHtml } from "@/lib/email/brand-layout";
+import { LOGO_PATH, LOGO_URL, escapeHtml } from "@/lib/email/brand-layout";
 import { renderGuideEmail } from "@/lib/email/guide";
 import { SEQUENCE, renderSequenceEmail } from "@/lib/email/sequence";
 import { capitalize, longDay, timeOfDay } from "@/lib/launch";
@@ -14,11 +14,15 @@ function when(ms: number) {
   return `${capitalize(longDay(ms))}, ${timeOfDay(ms)}`;
 }
 
-const html = (body: string) =>
-  new Response(body, { headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex" } });
-
 export function GET(request: Request) {
-  const id = new URL(request.url).searchParams.get("correo");
+  const url = new URL(request.url);
+  const id = url.searchParams.get("correo");
+  // En la vista previa el logo sale del mismo sitio donde se abre (dev, preview o producción), no de
+  // NEXT_PUBLIC_SITE_URL: así se ve aunque esa dirección todavía no sirva el archivo.
+  const html = (body: string) =>
+    new Response(body.replaceAll(LOGO_URL, `${url.origin}${LOGO_PATH}`), {
+      headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex" },
+    });
 
   if (id === "e1") return html(renderConfirmationEmail({ wineTypes: ["blancos", "tintos"], unsubscribeUrl: SAMPLE_UNSUBSCRIBE }).html);
   if (id === "guia") {

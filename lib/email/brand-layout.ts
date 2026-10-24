@@ -6,7 +6,8 @@ import { SITE_URL } from "@/lib/site";
 // hueso, negro tinto y vino; titulares en Arial/Helvetica Bold; botón píldora.
 
 const FONT = "Helvetica,Arial,sans-serif";
-export const LOGO_URL = `${SITE_URL}/email/logo-viviendo-vino.png`;
+export const LOGO_PATH = "/email/logo-viviendo-vino.png";
+export const LOGO_URL = `${SITE_URL}${LOGO_PATH}`;
 
 export type BrandEmail = {
   /** <title> del HTML y asunto sugerido. */

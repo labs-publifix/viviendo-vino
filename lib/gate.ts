@@ -46,8 +46,9 @@ const WAITLIST_PREFIXES = ["/api/waitlist", "/api/cron/email-sequence", "/_next/
 const BRAND_KIT_FILE =
   /^\/(favicon(-\d+x\d+\.png|\.svg|\.ico)|apple-touch-icon\.png|safari-pinned-tab\.svg|site\.webmanifest|browserconfig\.xml|(android-chrome|maskable-icon|mstile|icon)-\d+x\d+\.png)$/;
 
-// Lo que la pantalla de acceso del preview necesita sin contraseña.
-const LOGIN_PREFIXES = ["/_next/", "/brand/", "/robots.txt"];
+// Lo que se sirve sin contraseña en el preview: lo que necesita la pantalla de acceso y el logo de los
+// correos (/email/), que los clientes de correo descargan sin la cookie del preview.
+const LOGIN_PREFIXES = ["/_next/", "/brand/", "/email/", "/robots.txt"];
 
 export function isWaitlistPath(pathname: string): boolean {
   return (
