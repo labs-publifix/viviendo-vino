@@ -166,7 +166,8 @@ async function record(
         grupo: guide?.accion === "ok" ? ident?.grupo : null,
         confianza: guide?.accion === "ok" ? ident?.confianza : null,
         accion: guide?.accion ?? `error:${result.ok ? "" : result.reason}`,
-        resultado: guide,
+        // Se guardan los ajustes de calibración para revisar qué tanto infla la IA cada eje.
+        resultado: guide ? { ...guide, calibracion: result.ok ? result.ajustes : [] } : null,
         slug_recomendado: rec?.slug ?? null,
         similitud: rec?.similitud ?? null,
         modelo: result.model || scanModel(),

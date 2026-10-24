@@ -185,3 +185,34 @@ test("el prompt explica la escala de dulzor por estilo y etiqueta", () => {
   const prompt = buildSystemPrompt(knowledge);
   assert.ok(prompt.includes("perfil_estimado.dulzor NO sale de la uva") && prompt.includes("Demi-sec"));
 });
+
+test("calibración: el perfil queda a máximo un punto del rango típico de sus uvas y respeta el alcohol", async () => {
+  const { calibrateProfile } = await import("../lib/wine-scan/calibrate.ts");
+  const uvas = new Map(knowledge.grapes.uvas.map((u) => [u.id, u]));
+  // Merlot (cuerpo 3, acidez 3, tanino 3) inflado a 5 en todo → acidez, tanino e intensidad a 4; el cuerpo admite 5.
+  const merlot = calibrateProfile({ cuerpo: 5, acidez: 5, tanino: 5, dulzor: 0, intensidad: 5 }, { grupo: "tinto", uvas: ["merlot"], alcohol: 13.5 }, uvas);
+  assert.deepEqual(merlot.perfil, { cuerpo: 5, acidez: 4, tanino: 4, dulzor: 0, intensidad: 4 });
+  assert.equal(merlot.ajustes.length, 3);
+  // Pinot Grigio (cuerpo 2) inflado a 5 de cuerpo → 4.
+  assert.equal(calibrateProfile({ cuerpo: 5, acidez: 3, tanino: 0, dulzor: 0, intensidad: 2 }, { grupo: "blanco", uvas: ["pinot-grigio"], alcohol: null }, uvas).perfil.cuerpo, 4);
+  // Un valor razonable no se toca.
+  const ok = calibrateProfile({ cuerpo: 3, acidez: 3, tanino: 3, dulzor: 0, intensidad: 3 }, { grupo: "tinto", uvas: ["merlot"], alcohol: 13.5 }, uvas);
+  assert.equal(ok.ajustes.length, 0);
+  // Poco alcohol no da cuerpo pleno, aunque la uva sea de cuerpo.
+  const ligero = calibrateProfile({ cuerpo: 5, acidez: 4, tanino: 5, dulzor: 0, intensidad: 4 }, { grupo: "tinto", uvas: ["cabernet-sauvignon"], alcohol: 12 }, uvas);
+  assert.equal(ligero.perfil.cuerpo, 3);
+  // Blancos sin tanino; uva desconocida: no se limita por uva.
+  const blanco = calibrateProfile({ cuerpo: 3, acidez: 4, tanino: 2, dulzor: 0, intensidad: 3 }, { grupo: "blanco", uvas: ["uva-rara"], alcohol: null }, uvas);
+  assert.equal(blanco.perfil.tanino, 0);
+  assert.equal(blanco.perfil.acidez, 4);
+});
+
+test("calibración: los 17 casos de prueba siguen igual después de calibrar", async () => {
+  const { calibrateProfile } = await import("../lib/wine-scan/calibrate.ts");
+  const uvas = new Map(knowledge.grapes.uvas.map((u) => [u.id, u]));
+  for (const caso of reglas.casos_de_prueba) {
+    const { perfil } = calibrateProfile(caso.perfil, { grupo: caso.grupo, uvas: caso.uvas, alcohol: null }, uvas);
+    const r = recommendFromCatalog({ ...caso, perfil, metodo_espumoso: null, texto: caso.escaneado }, candidatos, reglas);
+    assert.equal(r?.slug ?? null, caso.esperado_top, caso.escaneado);
+  }
+});

@@ -2,6 +2,7 @@ import "server-only";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildSystemPrompt } from "./prompt";
+import type { UvaBase } from "./calibrate";
 import type { PerfilCatalogo, Reglas } from "./recommend";
 
 // Base de conocimiento de Wine Scan (wine-scan/knowledge/, versionada en el repo). Se lee una vez por instancia.
@@ -11,7 +12,7 @@ const DIR = join(process.cwd(), "wine-scan/knowledge");
 const read = (file: string) => readFileSync(join(DIR, file), "utf8");
 const readJson = <T>(file: string) => JSON.parse(read(file)) as T;
 
-type Uva = { id: string; nombre: string };
+type Uva = UvaBase & { nombre: string };
 type Estilo = { estilo: string; descripcion: string };
 type Principio = { id: string; principio: string };
 
@@ -37,6 +38,8 @@ export const KNOWN_IDS = {
 };
 
 const UVAS = new Map(grapes.uvas.map((u) => [u.id, u.nombre]));
+/** Perfil típico de cada uva, para calibrar lo que estima la IA. */
+export const GRAPE_PROFILES = new Map<string, UvaBase>(grapes.uvas.map((u) => [u.id, u]));
 const PRINCIPIOS = new Map(pairing.principios.map((p) => [p.id, p.principio]));
 
 /** "pinot-grigio" → "Pinot Grigio"; un nombre libre se devuelve igual. */

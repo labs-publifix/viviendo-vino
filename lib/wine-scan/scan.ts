@@ -1,7 +1,8 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
-import { KNOWN_IDS, SYSTEM_PROMPT } from "./knowledge";
+import { calibrateProfile, type Ajuste } from "./calibrate";
+import { GRAPE_PROFILES, KNOWN_IDS, SYSTEM_PROMPT } from "./knowledge";
 import { GuideSchema, checkGuide, type Guide } from "./schema";
 
 // Llamada a Claude: lee la etiqueta (o el nombre escrito) y devuelve la guía en formato estructurado.
@@ -13,7 +14,7 @@ export const scanModel = () => process.env.WINE_SCAN_MODEL?.trim() || DEFAULT_MO
 export type ScanInput = { kind: "image"; jpegBase64: string } | { kind: "text"; query: string };
 export type Usage = { input: number; output: number; cacheRead: number; cacheWrite: number };
 export type ScanResult =
-  | { ok: true; guide: Guide; usage: Usage; model: string }
+  | { ok: true; guide: Guide; usage: Usage; model: string; ajustes: Ajuste[] }
   | { ok: false; reason: "timeout" | "overloaded" | "refusal" | "invalid" | "config" | "error"; usage: Usage; model: string };
 
 // El esquema se envía como salida estructurada: la API garantiza el formato y aquí se valida otra vez con zod.
@@ -110,7 +111,16 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
       retryNote = problems.join("; ");
       continue;
     }
-    return { ok: true, guide: result.data, usage, model };
+    const guide = result.data;
+    if (guide.accion !== "ok") return { ok: true, guide, usage, model, ajustes: [] };
+    // La IA tiende a inflar las escalas: se acotan con el perfil típico de las uvas y el alcohol de la etiqueta.
+    const { perfil, ajustes } = calibrateProfile(
+      guide.perfil_estimado,
+      { grupo: guide.identificacion.grupo, uvas: guide.identificacion.uvas, alcohol: guide.identificacion.alcohol_pct },
+      GRAPE_PROFILES,
+    );
+    if (ajustes.length > 0) console.info("wine-scan: perfil calibrado", ajustes.map((a) => `${a.eje} ${a.de}→${a.a}`).join(", "));
+    return { ok: true, guide: { ...guide, perfil_estimado: perfil }, usage, model, ajustes };
   }
   console.error("wine-scan: la guía no pasó la validación después del reintento");
   return { ok: false, reason: "invalid", usage, model };
