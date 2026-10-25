@@ -71,8 +71,10 @@ export async function Descubre() {
             <NumberedLabel n={6} tone="dark">
               Wine Scan
             </NumberedLabel>
-            <Heading id="scan-title">Fotografía la etiqueta. Entérate de todo.</Heading>
-            <p className={styles.lede}>Escanea cualquier botella y descubre cómo sabe, cómo servirla y qué comer con ella.</p>
+            <Heading id="scan-title">Toma una foto de la etiqueta y descubre tu vino</Heading>
+            <p className={styles.lede}>
+              Obtén al instante la ficha técnica y la guía de maridaje de cualquier vino. Solo escanea la etiqueta y sabrás cómo servirlo y qué comer con él.
+            </p>
             <p className={styles.detail}>
               <Icon name="camera" size={16} /> Desde tu celular.
             </p>

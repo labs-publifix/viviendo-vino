@@ -3,7 +3,7 @@
 // Para publicarlo, basta con llenar estos campos.
 
 /** Foto de Rafa (scripts/build-home-images.mjs). Cuadrada; cada lugar la encuadra arriba, en su cara. */
-export const RAFA_PHOTO: { src: string; width: number; height: number } | null = { src: "/img/rafa.webp", width: 1024, height: 1024 };
+export const RAFA_PHOTO: { src: string; width: number; height: number } | null = { src: "/img/rafa.webp", width: 768, height: 1024 };
 
 /** Historia de Rafa con el vino, con sus palabras. Un párrafo por elemento. */
 export const RAFA_STORY: string[] | null = null;

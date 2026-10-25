@@ -119,7 +119,8 @@ await sharp(join(root, "fotos-vinos/hero-rafa-movil.jpg")).resize(1086, 1448).we
 console.log("hero ilustrado → public/img/hero-rafa.webp");
 
 // Foto de Rafa (Nosotros): cuadrada; cada lugar la encuadra con object-fit.
-await sharp(join(root, "fotos-vinos/rafa-nosotros.png")).webp({ quality: 82 }).toFile(join(out(""), "rafa.webp"));
+// Foto final de Nosotros (25 oct 2026), vertical 768×1024. El avatar del blog sigue saliendo de rafa-nosotros.png.
+await sharp(join(root, "fotos-vinos/rafa-nosotros-final.png")).webp({ quality: 82 }).toFile(join(out(""), "rafa.webp"));
 console.log("Rafa → public/img/rafa.webp");
 
 // Avatar de Rafa (blog): recorte cuadrado de su rostro desde la misma foto.
