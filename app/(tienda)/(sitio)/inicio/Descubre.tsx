@@ -73,7 +73,7 @@ export async function Descubre() {
             </NumberedLabel>
             <Heading id="scan-title">Toma una foto de la etiqueta y descubre tu vino</Heading>
             <p className={styles.lede}>
-              Obtén al instante la ficha técnica y la guía de maridaje de cualquier vino. Solo escanea la etiqueta y sabrás cómo servirlo y qué comer con él.
+              Obtén al instante la ficha técnica y la guía de maridaje de cualquier vino. Solo escanea la etiqueta o sube una foto de ella y sabrás cómo servirlo y qué comer con él.
             </p>
             <p className={styles.detail}>
               <Icon name="camera" size={16} /> Desde tu celular.
