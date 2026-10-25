@@ -41,6 +41,18 @@
 .quote p::after { content: "”"; color: var(--vv-vino); }
 .quote footer { margin-top: var(--s-3); font-family: var(--font-label); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
+/* Franja de datos de Rafa: mono de las etiquetas, tres columnas que en móvil se apilan. */
+.facts { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4); margin: 0; padding-top: var(--s-5); border-top: 1px solid var(--line); }
+.fact { display: flex; flex-direction: column; gap: var(--s-1); }
+.fact dt { font-family: var(--font-label); font-size: clamp(20px, 2.4vw, 26px); font-weight: 500; letter-spacing: 0.02em; color: var(--vv-vino); }
+.fact dd { margin: 0; font-family: var(--font-label); font-size: var(--t-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.onDark .facts { border-top-color: var(--line-dark); }
+.onDark .fact dt { color: var(--vv-orquidea); }
+.onDark .fact dd { color: rgb(243 236 228 / 0.7); }
+.note { margin: 0; font-size: var(--t-small); color: var(--muted); }
+.onDark .note { color: rgb(243 236 228 / 0.6); }
+@media (min-width: 640px) { .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
 /* 3 y 4. Columnas cortas con número (mismo trazo que "Cómo funciona" de la portada). */
 .columns {
   display: grid;
@@ -74,7 +86,6 @@
 /* 5. Comunidad */
 .community { padding-bottom: var(--s-9); }
 .communityHead { display: flex; flex-direction: column; gap: var(--s-4); align-items: flex-start; }
-.feed { display: flex; flex-direction: column; gap: var(--s-3); }
 .feedGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
 .feedGrid li {
   display: grid;
@@ -89,9 +100,10 @@
 /* 6. Cierre (bloque oscuro, como el de la portada) */
 .closing { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-5); }
 .closingTitle { margin: 0; font-size: var(--t-section); font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; }
-.closingActions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-5); }
-.closingLink { display: inline-flex; align-items: center; gap: var(--s-2); min-height: 44px; color: var(--vv-hueso); font-weight: 600; text-decoration: underline; text-underline-offset: 0.2em; }
-.closingLink:hover { color: var(--vv-orquidea); }
+.closingCopy { display: flex; flex-direction: column; gap: var(--s-4); max-width: 40rem; }
+.closingText { margin: 0; font-size: var(--t-body-lg); color: rgb(243 236 228 / 0.85); }
+.closingActions { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-3); }
+.closingNote { margin: 0; max-width: 22rem; font-size: var(--t-small); color: rgb(243 236 228 / 0.7); }
 
 @media (min-width: 900px) {
   .hero { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s-8); }
@@ -99,7 +111,8 @@
   .bio { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s-8); align-items: start; }
   .communityHead { flex-direction: row; align-items: flex-end; justify-content: space-between; }
   .feedGrid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .closing { flex-direction: row; align-items: center; justify-content: space-between; }
+  .closing { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--s-8); }
+  .closingActions { flex: none; }
 }
 @media (max-width: 899px) {
   .hero .photo { max-width: none; aspect-ratio: 3 / 2; } /* en móvil la foto no ocupa toda la pantalla */
