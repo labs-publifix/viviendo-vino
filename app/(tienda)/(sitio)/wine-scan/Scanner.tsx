@@ -41,6 +41,8 @@ const isMobile = () => window.matchMedia("(pointer: coarse)").matches;
 
 export function Scanner() {
   const inputRef = useRef<HTMLInputElement>(null);
+  // Sin "capture": el teléfono ofrece la galería. Plan B si la cámara del navegador no abre o se ve en negro.
+  const galleryRef = useRef<HTMLInputElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>({ name: "idle" });
   const [stage, setStage] = useState(0);
@@ -95,8 +97,14 @@ export function Scanner() {
     inputRef.current?.click();
   }
 
+  function openGallery() {
+    if (!isMobile()) return;
+    galleryRef.current?.click();
+  }
+
   async function onPhoto(file: File | undefined) {
     if (inputRef.current) inputRef.current.value = "";
+    if (galleryRef.current) galleryRef.current.value = "";
     if (!file) return;
     let photo: Blob;
     try {
@@ -147,6 +155,15 @@ export function Scanner() {
         aria-hidden="true"
         onChange={(e) => onPhoto(e.target.files?.[0])}
       />
+      <input
+        ref={galleryRef}
+        type="file"
+        accept="image/*"
+        className={styles.fileInput}
+        tabIndex={-1}
+        aria-hidden="true"
+        onChange={(e) => onPhoto(e.target.files?.[0])}
+      />
 
       {phase.name === "working" && (
         <div className={styles.working} role="status" aria-live="polite">
@@ -176,6 +193,9 @@ export function Scanner() {
             <span className={styles.scanLabel}>Escanear etiqueta</span>
             <span className={styles.scanHint}>Abre la cámara. Toma la etiqueta de frente y con luz.</span>
           </button>
+          <button type="button" className={`${styles.linkButton} ${styles.gallery}`} onClick={openGallery}>
+            ¿La cámara no abre? Sube una foto de tu galería
+          </button>
           <ul className={styles.facts}>
             <li>Gratis y sin registro.</li>
             <li>La foto no se guarda: solo se usa para armar tu guía.</li>
@@ -200,6 +220,9 @@ export function Scanner() {
             <Button type="button" size="lg" block onClick={openCamera}>
               <Icon name="camera" size={20} /> Tomar otra foto
             </Button>
+            <button type="button" className={`${styles.linkButton} ${styles.gallery}`} onClick={openGallery}>
+              ¿La cámara no abre? Sube una foto de tu galería
+            </button>
             <p className={styles.or}>o escribe el nombre del vino</p>
             {manualForm}
           </div>
@@ -213,6 +236,9 @@ export function Scanner() {
             <Button type="button" size="lg" block onClick={openCamera}>
               <Icon name="camera" size={20} /> Intentar de nuevo
             </Button>
+            <button type="button" className={`${styles.linkButton} ${styles.gallery}`} onClick={openGallery}>
+              ¿La cámara no abre? Sube una foto de tu galería
+            </button>
             <p className={styles.or}>o escribe el nombre del vino</p>
             {manualForm}
           </div>
