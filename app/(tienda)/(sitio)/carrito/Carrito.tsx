@@ -92,7 +92,7 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
           {kits.map((k, i) => {
             const r = resultFor(k);
             const group = (r?.ok ? r.group : bySlug.get(k.items[0]?.slug)?.group) as BottleGroup | undefined;
-            const preset = k.preset ? presets.find((p) => p.slug === k.preset)?.name : undefined;
+            const preset = k.preset?.startsWith("quiz:") ? "Tu caja del quiz" : k.preset ? presets.find((p) => p.slug === k.preset)?.name : undefined;
             const name = preset ?? `Kit ${i + 1}`;
             const lines = r?.ok
               ? r.lines

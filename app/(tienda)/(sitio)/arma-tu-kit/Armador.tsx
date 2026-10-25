@@ -22,6 +22,7 @@ import {
   kitTotalCents,
   quantityOf,
   removeBottle,
+  validateKit,
   type KitItem,
 } from "@/lib/kit/rules";
 import { formatMXN } from "@/lib/money";
@@ -48,7 +49,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
   const total = kitTotalCents(items, bySlug);
   const editing = draft.editing && kits.some((k) => k.id === draft.editing) ? draft.editing : null;
 
-  // Enlaces desde el catálogo, la ficha y la portada: ?vino=, ?kit=, ?grupo=, ?editar=. Se aplican una vez
+  // Enlaces desde el catálogo, la ficha, la portada y el quiz: ?vino=, ?kit=, ?grupo=, ?editar=, ?vinos=. Se aplican una vez
   // y se limpian de la dirección para que recargar no repita la acción.
   // Lee la dirección y el carrito guardado (sistemas externos al render), por eso actualiza estado aquí.
   /* eslint-disable react-hooks/set-state-in-effect */
@@ -87,6 +88,28 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
       cart.setDraft({ items: preset.items.map((i) => ({ slug: i.slug, quantity: i.quantity })), preset: preset.slug, ...(editingNow ? { editing: editingNow } : {}) });
       setFilter(preset.group);
       return setMessage({ kind: "ok", text: `Cargamos “${preset.name}”. Cambia las botellas que quieras.` });
+    }
+    const vinos = params.get("vinos");
+    if (vinos) {
+      // Caja del Quiz IA: "slug:3,slug:2,slug:1". Se carga completa y editable; la marca "quiz:<id>" se pierde
+      // si la persona cambia una botella (así se distingue después una compra sin editar).
+      const items = vinos
+        .split(",")
+        .map((part) => part.split(":"))
+        .map(([slug, n]) => ({ slug, quantity: Number(n) }));
+      const check = validateKit(items, new Map(wines.map((w) => [w.slug, { slug: w.slug, name: w.name, group: w.group, priceCents: w.priceCents, available: w.available }])));
+      if (!check.ok) {
+        return setMessage({ kind: "aviso", text: `No pudimos cargar tu caja del quiz: ${check.message}` });
+      }
+      const quiz = params.get("quiz");
+      const editingNow = cart.getState().draft.editing;
+      cart.setDraft({
+        items: check.lines.map((l) => ({ slug: l.slug, quantity: l.quantity })),
+        ...(quiz && /^[0-9a-f-]{36}$/i.test(quiz) ? { preset: `quiz:${quiz.toLowerCase()}` } : {}),
+        ...(editingNow ? { editing: editingNow } : {}),
+      });
+      setFilter(check.group as BottleGroup);
+      return setMessage({ kind: "ok", text: "Cargamos tu caja del quiz. Cambia las botellas que quieras." });
     }
     if (vino) {
       const wine = bySlug.get(vino);

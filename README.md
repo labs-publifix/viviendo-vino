@@ -32,7 +32,10 @@ Las claves secretas (`RESEND_API_KEY`, `SUPABASE_SECRET_KEY`, `WAITLIST_TOKEN_SE
 | `WINE_SCAN_MODEL` | Modelo de Wine Scan (por omisión `claude-sonnet-5-5`). Se cambia sin tocar código. |
 | `WINE_SCAN_ENABLED` | `false` pausa Wine Scan con un mensaje amable sin llamar a la API. |
 | `WINE_SCAN_MAX_PER_HOUR` | Tope de seguridad de escaneos por hora por IP (por omisión 30). |
-| `WINE_SCAN_IP_SALT` | Sal del hash de la IP para ese tope (≥ 32 caracteres aleatorios, *Sensitive*). La IP nunca se guarda. |
+| `WINE_SCAN_IP_SALT` | Sal del hash de la IP para ese tope (≥ 32 caracteres aleatorios, *Sensitive*). La IP nunca se guarda. El Quiz IA usa la misma sal. |
+| `QUIZ_MODEL` | Modelo de los textos del Quiz IA (por omisión `claude-sonnet-5-5`; por ejemplo `claude-haiku-5-5`). Se cambia sin tocar código. |
+| `QUIZ_ENABLED` | `false` pausa el Quiz IA con un mensaje amable sin llamar a la API. |
+| `QUIZ_RATE_LIMIT_PER_HOUR` | Tope de seguridad de quizzes por hora por IP (por omisión 20). |
 
 ## Ramas y entornos
 

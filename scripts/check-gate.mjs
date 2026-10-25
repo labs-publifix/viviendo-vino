@@ -9,7 +9,7 @@ const HOST = process.env.HOST;
 const PASSWORD = process.env.PASSWORD ?? "";
 
 const STORE = ["/inicio", "/vinos", "/vinos/chardonnay-vento-igt-2024", "/arma-tu-kit", "/carrito", "/checkout", "/envios",
-  "/preguntas-frecuentes", "/terminos", "/privacidad", "/componentes", "/quiz", "/wine-scan", "/nosotros", "/blog", "/blog/como-leer-la-etiqueta-de-un-vino", "/guias/temperatura-de-servicio.pdf", "/guias/guia-de-maridaje.pdf", "/blog/guia-de-maridaje-vino-y-comida", "/api/guias", "/api/wine-scan", "/api/wine-scan/feedback", "/api/tienda/estado", "/api/carrito/validar", "/api/checkout/revisar", "/acceso", "/api/acceso"];
+  "/preguntas-frecuentes", "/terminos", "/privacidad", "/componentes", "/quiz", "/wine-scan", "/nosotros", "/blog", "/blog/como-leer-la-etiqueta-de-un-vino", "/guias/temperatura-de-servicio.pdf", "/guias/guia-de-maridaje.pdf", "/blog/guia-de-maridaje-vino-y-comida", "/api/guias", "/quiz/r/00000000-0000-4000-8000-000000000000", "/quiz/tarjeta/intenso-caracter", "/quiz/og/intenso-caracter", "/guias/perfil-intenso-y-con-caracter.pdf", "/api/quiz/submit", "/api/quiz/event", "/api/quiz/save-profile", "/api/quiz/result/00000000-0000-4000-8000-000000000000", "/api/wine-scan", "/api/wine-scan/feedback", "/api/tienda/estado", "/api/carrito/validar", "/api/checkout/revisar", "/acceso", "/api/acceso"];
 
 let failed = 0;
 const check = (ok, label) => {

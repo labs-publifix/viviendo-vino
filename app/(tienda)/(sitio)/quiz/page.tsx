@@ -1,12 +1,25 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { storeEnabled } from "@/lib/catalog/enabled";
-import { Provisional } from "../_info/Provisional";
+import { SITE_URL } from "@/lib/site";
+import { Quiz } from "./Quiz";
+import styles from "./quiz.module.css";
 
-// Provisional: se reemplaza cuando se construya Quiz IA.
-export const metadata: Metadata = { title: "Quiz IA · Viviendo Vino", robots: { index: false, follow: true } };
+// Quiz IA (/quiz): 8 preguntas → caja de 6 botellas lista para el carrito. Concepto: quiz/concepto-quiz-ia.md.
+// Oculto en producción hasta la apertura: proxy.ts responde 404 y, por si acaso, storeEnabled() también.
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: "Quiz IA · Viviendo Vino",
+  description: "Dinos cómo eres y te armamos una caja de 6 vinos italianos lista para el carrito. Ocho preguntas, unos 90 segundos.",
+  alternates: { canonical: `${SITE_URL}/quiz` },
+  openGraph: { title: "¿Qué perfil de vino eres? · Viviendo Vino", description: "Ocho preguntas sobre café, limonada y ocasiones. Al final, tu caja de 6 vinos.", locale: "es_MX" },
+};
+
+export default function QuizPage() {
   if (!storeEnabled()) notFound();
-  return <Provisional label="Quiz IA" title="¿No sabes cuál elegir? Te ayudamos." text="Estamos preparando el quiz. Muy pronto podrás usarlo aquí." />;
+  return (
+    <div className={styles.page}>
+      <Quiz />
+    </div>
+  );
 }

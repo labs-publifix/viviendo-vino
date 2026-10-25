@@ -21,6 +21,10 @@ export type BrandEmail = {
   /** Párrafos del cuerpo, en texto plano (se escapan). */
   paragraphs: string[];
   cta: { label: string; url: string };
+  /** Lista corta después de los párrafos (por ejemplo, las botellas de una caja). */
+  items?: string[];
+  /** Enlace de texto bajo el botón, para una segunda acción. */
+  secondary?: { label: string; url: string };
   /** Enlace de baja; los correos que no son de la lista (p. ej. una guía pedida) no lo llevan. */
   unsubscribeUrl?: string;
   /** Por qué recibe el correo. Por omisión, el texto de la lista de espera. */
@@ -133,6 +137,18 @@ ${email.highlight ? highlightHtml(email.highlight) : ""}
           </td>
         </tr>
 
+${
+  email.items?.length
+    ? `
+        <!-- Lista -->
+        <tr>
+          <td class="px" style="padding:20px 40px 0 40px;font-family:${FONT};font-size:15px;line-height:24px;font-weight:400;color:#0a0206;">
+            ${email.items.map((i) => `<p style="margin:0 0 6px 0;">·&nbsp; ${escapeHtml(i)}</p>`).join("\n            ")}
+          </td>
+        </tr>
+`
+    : ""
+}
         <!-- Botón -->
         <tr>
           <td align="center" class="px" style="padding:36px 40px 0 40px;">
@@ -145,7 +161,17 @@ ${email.highlight ? highlightHtml(email.highlight) : ""}
             </table>
           </td>
         </tr>
-
+${
+  email.secondary
+    ? `
+        <tr>
+          <td align="center" class="px" style="padding:18px 40px 0 40px;font-family:${FONT};font-size:14px;line-height:20px;">
+            <a href="${email.secondary.url}" style="color:#9a2030;text-decoration:underline;font-weight:700;">${escapeHtml(email.secondary.label)}</a>
+          </td>
+        </tr>
+`
+    : ""
+}
         <!-- Pie -->
         <tr>
           <td align="center" class="px" style="padding:44px 40px 36px 40px;">
@@ -180,7 +206,9 @@ ${email.highlight ? highlightHtml(email.highlight) : ""}
     "",
     ...(h ? [[h.label + ":", h.value, h.sub ? `(${h.sub})` : ""].filter(Boolean).join(" "), ...(h.note ? [h.note] : []), ""] : []),
     ...email.paragraphs.flatMap((p) => [p, ""]),
+    ...(email.items?.length ? [...email.items.map((i) => `- ${i}`), ""] : []),
     `${email.cta.label}: ${email.cta.url}`,
+    ...(email.secondary ? [`${email.secondary.label}: ${email.secondary.url}`] : []),
     "",
     "--",
     "Viviendo Vino · Tienda en línea · Consumo exclusivo para mayores de edad.",

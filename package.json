@@ -13,7 +13,8 @@
     "photos:build": "node scripts/build-photos.mjs",
     "home-images:build": "node scripts/build-home-images.mjs",
     "guides:build": "node scripts/build-guides.mjs",
-    "wine-scan:eval": "node scripts/wine-scan-eval.mjs"
+    "wine-scan:eval": "node scripts/wine-scan-eval.mjs",
+    "quiz:seed": "node scripts/build-quiz-seed.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",

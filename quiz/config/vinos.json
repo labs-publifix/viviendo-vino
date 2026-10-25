@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "nota": "Datos del Quiz IA que catalog-profiles.json no tiene: familias aromáticas, ocasiones, tipos de plato y rol en el kit. El perfil de sabor (cuerpo, acidez, tanino, dulzor, intensidad), la lista y el grupo salen SOLO de wine-scan/knowledge/catalog-profiles.json (única fuente de verdad); precio, foto y stock salen de Supabase. Todo lo de aquí es una primera propuesta: POR CONFIRMAR con Rafa Aguirre. scripts/build-quiz-seed.mjs junta ambos archivos en supabase/seed/wine_profiles.sql.",
+  "familias_aromaticas": {
+    "frutas_rojas": "Frutas rojas",
+    "fruta_hueso": "Durazno y fruta de hueso",
+    "citricos_hierbas": "Cítricos y hierbas",
+    "especias_chocolate": "Especias y chocolate",
+    "flores": "Flores"
+  },
+  "platos": {
+    "pescados_mariscos": "Pescados y mariscos",
+    "aves_cerdo": "Pollo, pavo y cerdo",
+    "carnes_rojas": "Carnes rojas y asados",
+    "pastas_pizza": "Pastas y pizza",
+    "quesos_botanas": "Quesos y botanas",
+    "picante": "Comida picante",
+    "vegetariano": "Verduras y ensaladas",
+    "postres": "Postres"
+  },
+  "roles": {
+    "basico": "Básico de diario",
+    "descubrimiento": "De descubrimiento",
+    "especial": "Especial"
+  },
+  "vinos": {
+    "chardonnay-vento-igt-2024": { "familias_aromaticas": ["fruta_hueso", "citricos_hierbas"], "ocasiones": ["diario", "amigos", "pareja"], "platos": ["aves_cerdo", "pescados_mariscos", "pastas_pizza"], "rol_kit": "basico" },
+    "sauvignon-blanc-trevenezie-igt-2024": { "familias_aromaticas": ["citricos_hierbas"], "ocasiones": ["diario", "amigos"], "platos": ["pescados_mariscos", "vegetariano", "quesos_botanas"], "rol_kit": "basico" },
+    "pinot-grigio-delle-venezie-doc-2024": { "familias_aromaticas": ["fruta_hueso", "citricos_hierbas"], "ocasiones": ["diario", "amigos"], "platos": ["pescados_mariscos", "vegetariano", "quesos_botanas"], "rol_kit": "basico" },
+    "traminer-aromatico-trevenezie-igt-2025": { "familias_aromaticas": ["flores", "fruta_hueso"], "ocasiones": ["explorar", "pareja", "regalo"], "platos": ["picante", "quesos_botanas", "aves_cerdo"], "rol_kit": "descubrimiento" },
+    "falanghina-puglia-igt": { "familias_aromaticas": ["fruta_hueso", "citricos_hierbas"], "ocasiones": ["explorar", "diario"], "platos": ["pescados_mariscos", "pastas_pizza", "vegetariano"], "rol_kit": "descubrimiento" },
+    "soave-doc-2024": { "familias_aromaticas": ["flores", "fruta_hueso"], "ocasiones": ["diario", "amigos"], "platos": ["pescados_mariscos", "vegetariano", "pastas_pizza"], "rol_kit": "basico" },
+    "pinot-grigio-delle-venezie-doc-blush-rosado-2025": { "familias_aromaticas": ["frutas_rojas", "flores"], "ocasiones": ["amigos", "diario", "pareja"], "platos": ["quesos_botanas", "pescados_mariscos", "picante"], "rol_kit": "basico" },
+    "cabernet-sauvignon-veneto-igt-2024": { "familias_aromaticas": ["frutas_rojas", "especias_chocolate"], "ocasiones": ["diario", "amigos"], "platos": ["carnes_rojas", "quesos_botanas"], "rol_kit": "basico" },
+    "merlot-veneto-igt-2024": { "familias_aromaticas": ["frutas_rojas"], "ocasiones": ["diario", "amigos", "pareja"], "platos": ["pastas_pizza", "aves_cerdo", "carnes_rojas"], "rol_kit": "basico" },
+    "montepulciano-d-abruzzo-doc-2024": { "familias_aromaticas": ["frutas_rojas", "especias_chocolate"], "ocasiones": ["diario", "amigos"], "platos": ["pastas_pizza", "carnes_rojas", "quesos_botanas"], "rol_kit": "basico" },
+    "langhe-nebbiolo": { "familias_aromaticas": ["flores", "frutas_rojas"], "ocasiones": ["pareja", "explorar", "regalo"], "platos": ["carnes_rojas", "pastas_pizza", "quesos_botanas"], "rol_kit": "descubrimiento" },
+    "don-carlo-rosso-veneto-igt-2018": { "familias_aromaticas": ["frutas_rojas", "especias_chocolate"], "ocasiones": ["regalo", "pareja"], "platos": ["carnes_rojas", "pastas_pizza", "quesos_botanas"], "rol_kit": "especial" },
+    "primitivo-di-manduria-doc-2023": { "familias_aromaticas": ["especias_chocolate", "frutas_rojas"], "ocasiones": ["amigos", "regalo", "explorar"], "platos": ["carnes_rojas", "picante", "quesos_botanas"], "rol_kit": "descubrimiento" },
+    "valpolicella-ripasso-classico-superiore-doc-2020": { "familias_aromaticas": ["frutas_rojas", "especias_chocolate"], "ocasiones": ["pareja", "regalo"], "platos": ["carnes_rojas", "pastas_pizza", "quesos_botanas"], "rol_kit": "especial" },
+    "amarone-della-valpolicella-classico-docg-2017": { "familias_aromaticas": ["especias_chocolate", "frutas_rojas"], "ocasiones": ["regalo", "pareja"], "platos": ["carnes_rojas", "quesos_botanas"], "rol_kit": "especial" },
+    "sangiovese-puglia-igt-2024-double-gold": { "familias_aromaticas": ["frutas_rojas", "citricos_hierbas"], "ocasiones": ["diario", "amigos"], "platos": ["pastas_pizza", "aves_cerdo", "quesos_botanas"], "rol_kit": "descubrimiento" },
+    "primitivo-2025-double-gold": { "familias_aromaticas": ["frutas_rojas", "especias_chocolate"], "ocasiones": ["amigos", "explorar"], "platos": ["carnes_rojas", "picante", "pastas_pizza"], "rol_kit": "descubrimiento" },
+    "prosecco-doc-spumante-brut-imperial": { "familias_aromaticas": ["fruta_hueso", "citricos_hierbas", "flores"], "ocasiones": ["amigos", "diario", "regalo"], "platos": ["quesos_botanas", "pescados_mariscos", "picante"], "rol_kit": "basico" },
+    "rose-extra-dry-921": { "familias_aromaticas": ["frutas_rojas", "flores"], "ocasiones": ["pareja", "amigos", "regalo"], "platos": ["quesos_botanas", "postres", "picante"], "rol_kit": "descubrimiento" }
+  }
+}

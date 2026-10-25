@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "nota": "Textos del Quiz IA que no escribe la IA: mensajes de carga, avisos y los textos prearmados que se muestran si la API falla o tarda de más (con QUIZ_ENABLED=false el quiz entero se pausa con un mensaje amable). Voz neutra de marca (wine-scan/knowledge/voice.md): tú, frases cortas, sin jerga ni clichés. 'motivo' explica por qué el vino entra en tu zona; 'reto' lo presenta como invitación cuando es la botella para probar algo distinto.",
+  "carga": ["Leyendo tu paladar…", "Buscando tu zona…", "Armando tu caja…", "Revisando que todo esté en stock…"],
+  "carga_regalo": ["Leyendo el paladar de esa persona…", "Buscando su zona…", "Armando la caja…", "Revisando que todo esté en stock…"],
+  "roles": {
+    "zona": "Tu zona",
+    "cerca": "Cerca de tu zona",
+    "reto": "Tu reto"
+  },
+  "roles_ayuda": {
+    "zona": "Lo más parecido a lo que te gusta.",
+    "cerca": "Vecinos que muy probablemente te gusten.",
+    "reto": "Algo distinto, para probar."
+  },
+  "invitacion_reto": "Esta botella está fuera de tu zona a propósito. Ábrela sin prisa y fíjate qué te gusta y qué no: eso afina tu siguiente caja.",
+  "avisos": {
+    "dulce": "No tenemos vinos dulces. Te armamos la caja con los que tienen más fruta y menos acidez, que es lo más cercano.",
+    "sin_coincidencia": "Ningún vino del catálogo encaja del todo con lo que buscas. Esta caja es lo más cercano; si quieres, cambia botellas en el armador.",
+    "presupuesto": "Con ese presupuesto no alcanza una caja de {familia}: la más accesible cuesta {minimo}. Te armamos una de {alternativa}, lo más cercano dentro de tu presupuesto.",
+    "presupuesto_sin_alternativa": "Con ese presupuesto no alcanza ninguna caja de 6 de lo que elegiste. La más accesible cuesta {minimo}.",
+    "color_comentario": "Tomamos en cuenta tu comentario para elegir entre lo que marcaste."
+  },
+  "familias": {
+    "blanco": "blancos y rosado",
+    "tinto": "tintos",
+    "espumoso": "burbujas"
+  },
+  "vinos": {
+    "chardonnay-vento-igt-2024": {
+      "motivo": "Un Chardonnay seco de cuerpo medio, sin los tonos de mantequilla de la barrica. Tiene fruta madura y una acidez equilibrada que no cansa.",
+      "reto": "Si sueles ir por blancos más ligeros, este tiene un poco más de cuerpo. Pruébalo con pollo o pasta en salsa blanca y nota la diferencia."
+    },
+    "sauvignon-blanc-trevenezie-igt-2024": {
+      "motivo": "Seco y fresco, con aromas de cítricos y hierba. Su acidez hace salivar y limpia la boca entre un bocado y otro.",
+      "reto": "Es de los blancos más ácidos de la tienda. Si te gusta lo suave, sírvelo bien frío con algo salado y verás cómo cambia."
+    },
+    "pinot-grigio-delle-venezie-doc-2024": {
+      "motivo": "Ligero y de sabor limpio, pensado para tomarse joven. Es el blanco para abrir sin pensarlo mucho.",
+      "reto": "Es más discreto que lo que sueles buscar. Justo por eso deja ver el plato: pruébalo con pescado o una ensalada."
+    },
+    "traminer-aromatico-trevenezie-igt-2025": {
+      "motivo": "Huele a lichi y a rosas desde que lo sirves, aunque es seco. Para quien busca un blanco con mucho aroma.",
+      "reto": "Es el blanco más aromático de la tienda: huele dulce pero no lo es. Pruébalo con comida un poco picante."
+    },
+    "falanghina-puglia-igt": {
+      "motivo": "Un blanco del sur de Italia, de cuerpo medio, con notas de manzana y almendra. Fresco, pero con algo más de textura.",
+      "reto": "Una uva poco conocida fuera de Italia. Tiene más textura que un blanco ligero; pruébalo con mariscos o pasta."
+    },
+    "soave-doc-2024": {
+      "motivo": "Ligero y fresco, con notas de almendra y flores blancas. Fácil de tomar solo o con comida sencilla.",
+      "reto": "Un blanco discreto y floral, distinto a los más intensos. Ábrelo con verduras o pescado blanco."
+    },
+    "pinot-grigio-delle-venezie-doc-blush-rosado-2025": {
+      "motivo": "Un rosado seco y ligero. Fresco como un blanco, con un toque de fruta roja.",
+      "reto": "Un rosado seco, para quien casi no los toma. Sírvelo frío con botanas o algo con chile."
+    },
+    "cabernet-sauvignon-veneto-igt-2024": {
+      "motivo": "Un Cabernet joven, con fruta negra y tanino firme. Tiene presencia sin ser pesado.",
+      "reto": "Su tanino es más firme, esa sensación que seca un poco la boca. Con carne asada se suaviza: pruébalo así."
+    },
+    "merlot-veneto-igt-2024": {
+      "motivo": "Cuerpo medio, fruta madura de ciruela y cereza y tanino suave. Es el tinto amable de la caja.",
+      "reto": "Más suave de lo que sueles buscar. Es buen punto de partida para comparar con los tintos con más cuerpo."
+    },
+    "montepulciano-d-abruzzo-doc-2024": {
+      "motivo": "Fruta oscura, cuerpo medio-alto y tanino redondo. Un tinto con presencia que se toma fácil.",
+      "reto": "Un tinto del centro de Italia con fruta oscura. Pruébalo con pasta en salsa de tomate."
+    },
+    "langhe-nebbiolo": {
+      "motivo": "La misma uva del Barolo: aroma de rosas y cereza, acidez alta y tanino firme. Cambia en la copa conforme se abre.",
+      "reto": "Se ve claro en la copa, pero tiene tanino y acidez altos. Ábrelo un rato antes y tómalo con comida."
+    },
+    "don-carlo-rosso-veneto-igt-2018": {
+      "motivo": "Un tinto del Véneto de la añada 2018, de cuerpo medio, con fruta madura y especias sutiles. Para una cena especial.",
+      "reto": "Un tinto con algunos años en botella: más fruta seca y especias que fruta fresca. Sírvelo en una cena tranquila."
+    },
+    "primitivo-di-manduria-doc-2023": {
+      "motivo": "Fruta muy madura, cuerpo pleno y poca acidez. Es de la misma uva del Zinfandel.",
+      "reto": "Es de los tintos con más cuerpo de la tienda. Pruébalo con carne asada o algo con chile seco."
+    },
+    "valpolicella-ripasso-classico-superiore-doc-2020": {
+      "motivo": "Un Valpolicella que gana cuerpo al fermentar otra vez sobre los hollejos del Amarone. Fruta madura con buena acidez.",
+      "reto": "Un estilo que casi solo existe en el Véneto. Tiene más cuerpo que un tinto ligero y acidez para acompañar comida."
+    },
+    "amarone-della-valpolicella-classico-docg-2017": {
+      "motivo": "Hecho con uvas secadas antes de fermentar: concentrado y de cuerpo pleno, aunque seco. La botella para una ocasión.",
+      "reto": "El tinto más concentrado de la tienda. Ábrelo con tiempo y tómalo despacio, con quesos maduros o un corte de carne."
+    },
+    "sangiovese-puglia-igt-2024-double-gold": {
+      "motivo": "Un Sangiovese de Puglia: frutal, de cuerpo medio y fácil de combinar con comida de todos los días.",
+      "reto": "Más fresco y frutal de lo que sueles buscar. Pruébalo con pizza o pasta."
+    },
+    "primitivo-2025-double-gold": {
+      "motivo": "Un Primitivo joven, más ligero que uno de Manduria, con fruta madura y tanino suave.",
+      "reto": "Fruta madura y tanino suave, un tinto distinto a los más secos. Pruébalo con algo a la parrilla."
+    },
+    "prosecco-doc-spumante-brut-imperial": {
+      "motivo": "Un espumoso seco, ligero y frutal. Burbuja fresca para abrir con cualquier pretexto.",
+      "reto": "Un espumoso seco, para quien casi no toma burbujas. Ábrelo con botanas saladas y fíjate cómo limpia la boca."
+    },
+    "rose-extra-dry-921": {
+      "motivo": "Un espumoso rosado Extra Dry, suave, con aromas de rosa y frutos rojos y un toque de fruta dulce.",
+      "reto": "Más suave y frutal que un Brut. Pruébalo con fruta o un postre poco dulce."
+    }
+  }
+}

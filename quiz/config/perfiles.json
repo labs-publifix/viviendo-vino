@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "nota": "Los 6 perfiles del Quiz IA. Nombres y frases PROVISIONALES: se revisan con Rafa Aguirre. El código asigna el perfil más cercano al vector del usuario entre los perfiles de las familias que eligió (tinto, blanco, espumoso). 'vector' está en la misma escala que el perfil del usuario (cuerpo, acidez, tanino = tolerancia a lo amargo/secante, dulzor, intensidad). 'aromas' da un pequeño bono si coincide con lo que eligió. 'guia' es el PDF de public/guias/<guia>.pdf que se manda al guardar el perfil. Los ids no se cambian: se guardan en quiz_sessions y en las imágenes para compartir.",
+  "perfiles": [
+    {
+      "id": "fresco-directo",
+      "nombre": "Fresco y directo",
+      "familia": "blanco",
+      "frase": "Te gusta lo que se siente limpio: blancos ligeros, con acidez que despierta.",
+      "frase_regalo": "Le gusta lo que se siente limpio: blancos ligeros, con acidez que despierta.",
+      "descripcion": "Blancos ligeros y ácidos, de sabor limpio y aromas cítricos o de fruta fresca.",
+      "vector": { "cuerpo": 2, "acidez": 4.5, "tanino": 1.5, "dulzor": 1, "intensidad": 2.5 },
+      "aromas": ["citricos_hierbas", "fruta_hueso"],
+      "guia": "perfil-fresco-y-directo"
+    },
+    {
+      "id": "aromatico-curioso",
+      "nombre": "Aromático y curioso",
+      "familia": "blanco",
+      "frase": "Buscas vinos que se huelan desde que sirves la copa: flores, fruta y algo distinto.",
+      "frase_regalo": "Busca vinos que se huelan desde que se sirve la copa: flores, fruta y algo distinto.",
+      "descripcion": "Blancos y rosados con más aroma y un poco más de cuerpo; flores y fruta madura.",
+      "vector": { "cuerpo": 3, "acidez": 3, "tanino": 2, "dulzor": 2, "intensidad": 4.5 },
+      "aromas": ["flores", "fruta_hueso"],
+      "guia": "perfil-aromatico-y-curioso"
+    },
+    {
+      "id": "suave-redondo",
+      "nombre": "Suave y redondo",
+      "familia": "tinto",
+      "frase": "Tintos amables: fruta madura, cuerpo medio y nada que raspe.",
+      "frase_regalo": "Tintos amables: fruta madura, cuerpo medio y nada que raspe.",
+      "descripcion": "Tintos de cuerpo medio, tanino suave y fruta roja; fáciles de tomar solos o con comida.",
+      "vector": { "cuerpo": 3, "acidez": 3, "tanino": 2.5, "dulzor": 1.5, "intensidad": 3 },
+      "aromas": ["frutas_rojas"],
+      "guia": "perfil-suave-y-redondo"
+    },
+    {
+      "id": "burbujas-siempre",
+      "nombre": "Burbujas siempre",
+      "familia": "espumoso",
+      "frase": "Para ti, cualquier día es buen día para abrir algo con burbujas.",
+      "frase_regalo": "Para esa persona, cualquier día es buen día para abrir algo con burbujas.",
+      "descripcion": "Espumosos ligeros y frescos, del más seco al que tiene un toque de fruta dulce.",
+      "vector": { "cuerpo": 2, "acidez": 4, "tanino": 1.5, "dulzor": 2, "intensidad": 2.5 },
+      "aromas": ["fruta_hueso", "flores", "citricos_hierbas"],
+      "guia": "perfil-burbujas-siempre"
+    },
+    {
+      "id": "intenso-caracter",
+      "nombre": "Intenso y con carácter",
+      "familia": "tinto",
+      "frase": "Tintos con cuerpo, fruta madura y presencia. Que se note en la copa.",
+      "frase_regalo": "Tintos con cuerpo, fruta madura y presencia. Que se note en la copa.",
+      "descripcion": "Tintos de cuerpo pleno, fruta muy madura y notas de especias o chocolate.",
+      "vector": { "cuerpo": 4.5, "acidez": 2.5, "tanino": 3.5, "dulzor": 2, "intensidad": 4.5 },
+      "aromas": ["especias_chocolate", "frutas_rojas"],
+      "guia": "perfil-intenso-y-con-caracter"
+    },
+    {
+      "id": "elegante-serio",
+      "nombre": "Elegante y serio",
+      "familia": "tinto",
+      "frase": "Tintos con estructura y acidez, de los que cambian en la copa conforme se abren.",
+      "frase_regalo": "Tintos con estructura y acidez, de los que cambian en la copa conforme se abren.",
+      "descripcion": "Tintos estructurados, con tanino firme y acidez marcada; aguantan años de guarda.",
+      "vector": { "cuerpo": 3.5, "acidez": 4, "tanino": 4, "dulzor": 1, "intensidad": 4 },
+      "aromas": ["flores", "especias_chocolate"],
+      "guia": "perfil-elegante-y-serio"
+    }
+  ]
+}

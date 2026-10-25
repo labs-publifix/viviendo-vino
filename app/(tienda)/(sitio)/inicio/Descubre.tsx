@@ -32,7 +32,7 @@ export async function Descubre() {
           <Heading id="quiz-title">¿No sabes cuál elegir? Te ayudamos.</Heading>
           <p className={styles.lede}>Contesta unas preguntas y te sugerimos un kit de 6 botellas, según lo que te gusta.</p>
           <p className={styles.detail}>
-            <Icon name="clock" size={16} /> Toma menos de un minuto.
+            <Icon name="clock" size={16} /> Toma unos 90 segundos.
           </p>
           <div className={styles.actions}>
             <ButtonLink href="/quiz">Hacer el quiz</ButtonLink>

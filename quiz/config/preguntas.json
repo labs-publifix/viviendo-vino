@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "nota": "Preguntas del Quiz IA. Los textos se afinan con Rafa Aguirre sin tocar la lógica. 'perfil' son valores objetivo (escala 1-5 de Wine Scan; tanino 0-5) que la respuesta aporta a cada eje: el perfil del usuario es el promedio de lo que aportan sus respuestas (sin aportes, el eje queda en 'perfil_base'). 'titulo_regalo' y 'texto_regalo' reemplazan el texto cuando la caja es para regalar. Los ids no se cambian: se guardan en quiz_sessions.",
+  "perfil_base": { "cuerpo": 3, "acidez": 3, "tanino": 2.5, "dulzor": 1.5, "intensidad": 3 },
+  "comentario": {
+    "titulo": "¿Algo más que debamos saber?",
+    "titulo_regalo": "¿Algo más que debamos saber de esa persona o de la ocasión?",
+    "ayuda": "Opcional. Una cena, un platillo, cuántas personas. Por ejemplo: «Cena de mariscos para 8».",
+    "max": 280
+  },
+  "preguntas": [
+    {
+      "id": "ocasion",
+      "tipo": "unica",
+      "titulo": "¿Para qué es esta caja?",
+      "ayuda": "Así sabemos para cuándo pensar los vinos.",
+      "opciones": [
+        { "id": "diario", "texto": "Para el día a día" },
+        { "id": "pareja", "texto": "Cenas en pareja" },
+        { "id": "amigos", "texto": "Reuniones con amigos" },
+        { "id": "regalo", "texto": "Para regalar", "detalle": "Las preguntas siguientes serán sobre la otra persona." },
+        { "id": "explorar", "texto": "Para explorar" }
+      ]
+    },
+    {
+      "id": "colores",
+      "tipo": "multiple",
+      "max": 3,
+      "titulo": "¿Qué sueles tomar?",
+      "titulo_regalo": "¿Qué suele tomar esa persona?",
+      "ayuda": "Puedes marcar varias.",
+      "opciones": [
+        { "id": "tinto", "texto": "Tinto", "familias": ["tinto"] },
+        { "id": "blanco", "texto": "Blanco o rosado", "familias": ["blanco"] },
+        { "id": "burbujas", "texto": "Burbujas", "familias": ["espumoso"] },
+        { "id": "todo", "texto": "De todo", "familias": ["tinto", "blanco", "espumoso"], "exclusiva": true }
+      ]
+    },
+    {
+      "id": "cafe",
+      "tipo": "unica",
+      "titulo": "¿Cómo tomas el café?",
+      "titulo_regalo": "¿Cómo toma el café?",
+      "ayuda": "Dice mucho de cómo te cae lo amargo y lo dulce.",
+      "ayuda_regalo": "Dice mucho de cómo le cae lo amargo y lo dulce.",
+      "opciones": [
+        { "id": "fuerte", "texto": "Sin azúcar y fuerte", "perfil": { "tanino": 4, "dulzor": 1, "intensidad": 4 } },
+        { "id": "leche", "texto": "Con leche", "perfil": { "tanino": 2.5, "cuerpo": 3.5, "dulzor": 1.5 } },
+        { "id": "azucar", "texto": "Con azúcar", "perfil": { "tanino": 2, "dulzor": 2.5 } },
+        { "id": "no", "texto": "No tomo café", "texto_regalo": "No toma café" }
+      ]
+    },
+    {
+      "id": "limonada",
+      "tipo": "unica",
+      "titulo": "¿Cómo prefieres una limonada?",
+      "titulo_regalo": "¿Cómo prefiere una limonada?",
+      "opciones": [
+        { "id": "acida", "texto": "Bien ácida", "perfil": { "acidez": 4.5, "dulzor": 1 } },
+        { "id": "equilibrada", "texto": "Equilibrada", "perfil": { "acidez": 3, "dulzor": 1.5 } },
+        { "id": "dulce", "texto": "Dulce", "perfil": { "acidez": 2, "dulzor": 3 } }
+      ]
+    },
+    {
+      "id": "textura",
+      "tipo": "unica",
+      "titulo": "¿Qué textura te gusta más?",
+      "titulo_regalo": "¿Qué textura le gusta más?",
+      "opciones": [
+        { "id": "ligera", "texto": "Ligera y fresca", "detalle": "Como un agua fresca.", "perfil": { "cuerpo": 2, "intensidad": 2.5 } },
+        { "id": "media", "texto": "Media", "detalle": "Como un jugo.", "perfil": { "cuerpo": 3 } },
+        { "id": "densa", "texto": "Densa y envolvente", "detalle": "Como un licuado.", "perfil": { "cuerpo": 4.5, "intensidad": 4 } }
+      ]
+    },
+    {
+      "id": "aromas",
+      "tipo": "multiple",
+      "max": 2,
+      "titulo": "¿Qué aromas te llaman más?",
+      "titulo_regalo": "¿Qué aromas le llaman más?",
+      "ayuda": "Elige hasta dos.",
+      "opciones": [
+        { "id": "frutas_rojas", "texto": "Frutas rojas" },
+        { "id": "fruta_hueso", "texto": "Durazno y fruta de hueso" },
+        { "id": "citricos_hierbas", "texto": "Cítricos y hierbas", "perfil": { "acidez": 4 } },
+        { "id": "especias_chocolate", "texto": "Especias y chocolate", "perfil": { "intensidad": 4.5, "cuerpo": 4 } },
+        { "id": "flores", "texto": "Flores", "perfil": { "intensidad": 4 } }
+      ]
+    },
+    {
+      "id": "aventura",
+      "tipo": "unica",
+      "titulo": "¿Qué tanto quieres salirte de lo conocido?",
+      "titulo_regalo": "¿Qué tanto quieres que se salga de lo conocido?",
+      "ayuda": "Decide cuántas botellas de la caja son para probar algo distinto.",
+      "opciones": [
+        { "id": "conocido", "texto": "Lo que sé que me gusta", "texto_regalo": "Lo que sé que le gusta", "reto": 0 },
+        { "id": "variedad", "texto": "Algo de variedad", "reto": 1 },
+        { "id": "sorprendeme", "texto": "Sorpréndeme", "texto_regalo": "Que le sorprenda", "reto": 2 }
+      ]
+    },
+    {
+      "id": "presupuesto",
+      "tipo": "unica",
+      "titulo": "¿Cuánto quieres invertir en la caja?",
+      "ayuda": "Es el total de las 6 botellas, con envío incluido.",
+      "opciones": [
+        { "id": "hasta-2100", "texto": "Hasta $2,100", "min_centavos": 0, "max_centavos": 210000 },
+        { "id": "2100-2800", "texto": "De $2,100 a $2,800", "min_centavos": 210000, "max_centavos": 280000 },
+        { "id": "2800-4000", "texto": "De $2,800 a $4,000", "min_centavos": 280000, "max_centavos": 400000 },
+        { "id": "sin-tope", "texto": "Sin tope", "min_centavos": 280000, "max_centavos": null }
+      ]
+    }
+  ]
+}

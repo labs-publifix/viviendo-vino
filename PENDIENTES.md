@@ -36,7 +36,7 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 
 ## Descubrir (Quiz IA, Wine Scan, Nosotros, Blog)
 - [x] `/nosotros` construida (con placeholders de contenido de Rafa).
-- [ ] Páginas `/quiz` y `/wine-scan` son provisionales (título, una línea y regreso al inicio); se reemplazan al construir cada función.
+- [x] `/quiz` y `/wine-scan` construidos (ver sus secciones abajo).
 - [ ] Contenido de Rafa (portada y `/nosotros`), todo en `lib/about.ts`. Mientras falte, dev muestra un placeholder y producción no muestra esa pieza:
   - [x] `RAFA_PHOTO`: foto de Rafa (`public/img/rafa.webp`).
   - `RAFA_STORY`: su historia con el vino, con sus palabras.
@@ -81,3 +81,18 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [ ] Probar en un celular real con la clave de Anthropic y fotos de `wine-scan/eval-images/` (`npm run wine-scan:eval`): latencia, caché (`tokens_cache` > 0 desde el segundo escaneo), foto borrosa, imagen que no es vino y etiqueta con texto que intente dar órdenes.
 - [ ] Fuera de alcance en v1: cuentas y límites por persona (punto de extensión en `lib/wine-scan/guard.ts`), visor de cámara en vivo, guía por correo, historial.
 
+
+## Quiz IA (25 oct 2026)
+Concepto: `quiz/concepto-quiz-ia.md`. Configuración editable: `quiz/config/` (preguntas, perfiles, vinos, textos).
+- [ ] Correr en **staging y producción**: `supabase/migrations/20261026000000_quiz.sql` y después `supabase/seed/wine_profiles.sql`. Sin la tabla, el quiz usa los mismos archivos del repo, pero no guarda sesiones (no hay enlace para compartir ni correo).
+- [ ] Variables en Vercel (Production y Preview): `QUIZ_MODEL`, `QUIZ_ENABLED`, `QUIZ_RATE_LIMIT_PER_HOUR` (la clave de Anthropic ya existe).
+- [ ] **Lista 3 (Rocca):** el armador la trata como su propio grupo (Selezione d’Oro) y **no** la mezcla con los tintos de la lista 2; el quiz sigue esa misma regla. Confirmar con el aliado; si se pueden mezclar, se cambia en la base (grupo del producto) y el quiz lo sigue solo.
+- [ ] **Lista 2 en el armador:** Cabernet, Merlot, Montepulciano y Langhe Nebbiolo están en La Selezione (con los blancos); Don Carlo, Primitivo di Manduria, Ripasso y Amarone en I Grandi Rossi. Un kit no mezcla esos dos grupos.
+- [ ] Nombres y frases definitivos de los 6 perfiles, con Rafa (`quiz/config/perfiles.json`).
+- [ ] Textos de las 8 preguntas, con Rafa (`quiz/config/preguntas.json`).
+- [ ] Aromas, ocasiones, platos y rol de cada vino: primera propuesta (`quiz/config/vinos.json`), por confirmar con Rafa. Después: `npm run quiz:seed` y correr el SQL.
+- [ ] Modelo por defecto: comparar `claude-sonnet-5-5` y `claude-haiku-5-5` con casos reales (calidad del texto, costo y latencia) y fijar `QUIZ_MODEL`.
+- [ ] Revisar las 6 guías en PDF por perfil (`content/blog/guias/perfil-*.md` → `public/guias/`).
+- [ ] Regalo de la lista de espera (48 h): el sistema no identifica en el quiz a quien se registró en la lista, así que el resultado no lo recuerda. Se puede hacer en el checkout comparando el correo del pedido con `waitlist_signups`.
+- [ ] Compra del kit con o sin edición: el carrito marca el kit del quiz como `quiz:<id>` y la marca se pierde si se cambia una botella; falta la tabla de pedidos para medirlo.
+- [ ] Diciembre: correo de seguimiento tras la compra (tabla `quiz_feedback` lista), ediciones de temporada. Fase 2: modo dúo, puente con Wine Scan, perfil con cuenta.

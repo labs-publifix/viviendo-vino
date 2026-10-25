@@ -68,14 +68,26 @@ export default function Privacidad() {
           la guardamos de forma anónima.
         </p>
       </Section>
-      <Section n={7} title="Almacenamiento en tu navegador">
+      <Section n={7} title="Quiz IA">
+        <p>
+          Tus respuestas del quiz se usan para armar tu caja de 6 vinos y se guardan sin tu nombre ni tu dirección IP,
+          para medir y mejorar el quiz. Si escribes el comentario opcional, ese texto se envía a nuestro proveedor de
+          inteligencia artificial, Anthropic, solo para entender la ocasión y redactar tu resultado; te pedimos no incluir
+          datos personales en él. <strong>Tu correo es opcional</strong>: solo lo pedimos después del resultado, si quieres
+          que te enviemos tu perfil y su guía en PDF, y lo usamos para eso (y para novedades solo si lo marcas).
+          Cualquier persona con el enlace de tu resultado puede verlo; el enlace no muestra tus respuestas, tu comentario
+          ni tu correo.
+        </p>
+      </Section>
+      <Section n={8} title="Almacenamiento en tu navegador">
         <p>
           Tu carrito y el kit que estás armando se guardan en tu propio navegador para que no se pierdan. Tus datos de
           envío no se guardan ahí. Wine Scan guarda en tu navegador un identificador anónimo para contar escaneos de la
-          misma sesión; no está ligado a tu nombre ni a tu correo. <Pendiente>cookies de analítica, si se agregan</Pendiente>.
+          misma sesión; el Quiz IA guarda tu perfil y tus respuestas para que la siguiente vez solo te pregunte la ocasión
+          y el presupuesto. Nada de esto está ligado a tu nombre ni a tu correo. <Pendiente>cookies de analítica, si se agregan</Pendiente>.
         </p>
       </Section>
-      <Section n={8} title="Cambios a este aviso">
+      <Section n={9} title="Cambios a este aviso">
         <p>Publicaremos cualquier cambio en esta página, con su fecha.</p>
       </Section>
     </InfoPage>
