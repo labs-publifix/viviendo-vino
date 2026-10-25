@@ -204,7 +204,7 @@ function SecondKit({ kit, quizId }: { kit: ResultKit; quizId?: string }) {
 }
 
 function Share({ result }: { result: QuizResult }) {
-  const [status, setStatus] = useState<"" | "copiado" | "error">("");
+  const [status, setStatus] = useState<"" | "copiado" | "error" | "tarjeta">("");
   const card = useRef<File | null>(null);
   const url = () => `${window.location.origin}/quiz/r/${result.id}?origen=compartido`;
   const cardUrl = `/quiz/tarjeta/${result.perfil.id}`;
@@ -262,15 +262,29 @@ function Share({ result }: { result: QuizResult }) {
         <Icon name="share" size={18} /> Compartir mi perfil
       </Button>
       <div className={styles.shareLinks}>
+        <a
+          className={`${styles.textBtn} ${styles.igLink}`}
+          href={cardUrl}
+          download={`perfil-${result.perfil.id}.png`}
+          onClick={() => {
+            setStatus("tarjeta");
+            track("tarjeta", { quiz_id: result.id });
+          }}
+        >
+          <Icon name="instagram" size={18} /> Súbelo a tus historias de Instagram
+        </a>
         <button type="button" className={styles.textBtn} onClick={copy}>
           Copiar enlace
         </button>
-        <a className={styles.textBtn} href={cardUrl} download={`perfil-${result.perfil.id}.png`} onClick={() => track("tarjeta", { quiz_id: result.id })}>
-          Descargar tarjeta para historias
-        </a>
       </div>
       <p className={styles.small} role="status" aria-live="polite">
-        {status === "copiado" ? "Enlace copiado." : status === "error" ? `Copia este enlace: ${url()}` : ""}
+        {status === "copiado"
+          ? "Enlace copiado."
+          : status === "error"
+            ? `Copia este enlace: ${url()}`
+            : status === "tarjeta"
+              ? "Listo, se descargó tu tarjeta. Abre Instagram, súbela a tus historias y etiqueta a @viviendovino."
+              : ""}
       </p>
     </div>
   );
