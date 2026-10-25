@@ -12,7 +12,7 @@ import { useHydrated } from "@/lib/use-hydrated";
 import { Result } from "./Result";
 import styles from "./quiz.module.css";
 
-// Quiz IA: entrada → 8 preguntas (una por pantalla, sin teclear) → comentario opcional → carga → resultado.
+// Quiz IA: entrada → 8 preguntas (una por pantalla, sin teclear; se avanza con "Siguiente") → comentario opcional → carga → resultado.
 // La segunda vez, con el perfil guardado en el navegador, solo pregunta ocasión y presupuesto.
 // Cada paso entra al historial del navegador: el "atrás" del teléfono regresa a la pregunta anterior sin
 // perder respuestas.
@@ -23,7 +23,6 @@ type Outcome = { resultado: QuizResult; compartible: boolean };
 
 const ALL = PREGUNTAS.preguntas as PreguntaUI[];
 const REPEAT_IDS = ["ocasion", "presupuesto"];
-const AUTO_ADVANCE_MS = 220;
 const NETWORK_ERROR = "No hubo conexión. Revisa tu internet e intenta de nuevo.";
 
 export function Quiz() {
@@ -39,7 +38,6 @@ export function Quiz() {
   const [error, setError] = useState("");
   const [loadingStep, setLoadingStep] = useState(0);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const advanceTimer = useRef<number | undefined>(undefined);
   const origin = useRef<string | undefined>(undefined);
 
   const steps = mode === "repetir" ? ALL.filter((q) => REPEAT_IDS.includes(q.id)) : ALL;
@@ -52,7 +50,6 @@ export function Quiz() {
     window.history.replaceState({ ...(window.history.state ?? {}), quiz: 0 }, "");
     const onPop = (e: PopStateEvent) => {
       const to = typeof e.state?.quiz === "number" ? e.state.quiz : 0;
-      window.clearTimeout(advanceTimer.current);
       setPhase((p) => (p === "cargando" ? p : "pasos"));
       setPos(to);
     };
@@ -73,7 +70,6 @@ export function Quiz() {
   }, [phase]);
 
   function go(to: number) {
-    window.clearTimeout(advanceTimer.current);
     window.history.pushState({ ...(window.history.state ?? {}), quiz: to }, "");
     setPhase("pasos");
     setPos(to);
@@ -89,7 +85,6 @@ export function Quiz() {
     setOutcome(null);
     track(repeat ? "repetir_perfil" : "inicio", { origen: origin.current });
     if (repeat) track("inicio", { origen: origin.current });
-    window.clearTimeout(advanceTimer.current);
     window.history.pushState({ ...(window.history.state ?? {}), quiz: 1 }, "");
     setPhase("pasos");
     setPos(1);
@@ -98,7 +93,6 @@ export function Quiz() {
   function pick(q: PreguntaUI, id: string) {
     if (q.tipo === "unica") {
       setAnswers((a) => ({ ...a, [q.id]: id }));
-      advanceTimer.current = window.setTimeout(() => go(pos + 1), AUTO_ADVANCE_MS);
       return;
     }
     setAnswers((a) => {
@@ -276,11 +270,10 @@ export function Quiz() {
           );
         })}
       </div>
-      {(q.tipo === "multiple" || selected.length > 0) && (
-        <Button type="button" size="lg" block disabled={selected.length === 0} onClick={() => go(pos + 1)}>
-          Siguiente
-        </Button>
-      )}
+      {/* Mismo criterio en todas las preguntas: se elige y se avanza con "Siguiente". */}
+      <Button type="button" size="lg" block disabled={selected.length === 0} onClick={() => go(pos + 1)}>
+        Siguiente
+      </Button>
     </div>
   );
 }
