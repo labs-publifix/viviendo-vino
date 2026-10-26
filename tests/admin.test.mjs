@@ -1,0 +1,50 @@
+// Reglas del panel /admin y su paso por el interruptor de apertura: `npm test`.
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { decide } from "../lib/gate.ts";
+import { needsAdminSession, passwordProblem, safeAdminNext, SECCIONES } from "../lib/admin/rules.ts";
+
+const ADMIN_ROUTES = ["/admin", "/admin/acceso", "/admin/recuperar", "/admin/contrasena", "/admin/pedidos", "/admin/catalogo"];
+
+test("producción cerrada: el panel no existe (hasta aprobar su paso a www)", () => {
+  const env = { storeOpen: false, preview: false, vercelEnv: "production" };
+  for (const pathname of ADMIN_ROUTES) {
+    assert.deepEqual(decide({ pathname, host: "www.viviendovino.com", env, hasPreviewAccess: false }), { action: "not-found" }, pathname);
+  }
+});
+
+test("preview: el panel pide primero la contraseña del preview", () => {
+  const env = { storeOpen: true, preview: true, vercelEnv: "preview" };
+  for (const pathname of ADMIN_ROUTES) {
+    assert.equal(decide({ pathname, host: "dev.viviendovino.com", env, hasPreviewAccess: false }).action, "login", pathname);
+  }
+});
+
+test("needsAdminSession: solo entrar y crear contraseña se abren sin sesión", () => {
+  for (const p of ["/admin", "/admin/pedidos", "/admin/catalogo/vinos/x", "/admin/configuracion"]) assert.equal(needsAdminSession(p), true, p);
+  for (const p of ["/admin/acceso", "/admin/recuperar", "/admin/contrasena", "/inicio", "/administrador", "/"]) assert.equal(needsAdminSession(p), false, p);
+});
+
+test("safeAdminNext: solo destinos dentro del panel", () => {
+  assert.equal(safeAdminNext("/admin/pedidos"), "/admin/pedidos");
+  for (const v of [undefined, "", "//evil.com", "https://evil.com", "/inicio", "/admin\\..\\x", "/admin/acceso"]) assert.equal(safeAdminNext(v), "/admin", String(v));
+});
+
+test("passwordProblem: largo, correo y contraseñas predecibles", () => {
+  assert.match(passwordProblem("corta", "a@b.mx"), /al menos 10/);
+  assert.match(passwordProblem("x".repeat(73), "a@b.mx"), /máximo 72/);
+  assert.match(passwordProblem("rafael aguirre 2026", "rafael@x.mx"), /correo/);
+  assert.match(passwordProblem("aaaaaaaaaaaa", "a@b.mx"), /predecible/);
+  assert.match(passwordProblem("Password12345", "a@b.mx"), /predecible/);
+  assert.equal(passwordProblem("uvas de otoño 2026", "rafael@x.mx"), null);
+  // Sin correo (revisión previa a gastar el enlace) no se aplica la regla del correo.
+  assert.equal(passwordProblem("rafael aguirre 2026", ""), null);
+});
+
+test("menú: el admin ve las 9 secciones; aliado y atención no ven finanzas ni auditoría", () => {
+  assert.equal(SECCIONES.filter((s) => s.roles.includes("admin")).length, 9);
+  for (const rol of ["aliado", "atencion"]) {
+    const hrefs = SECCIONES.filter((s) => s.roles.includes(rol)).map((s) => s.href);
+    assert.ok(!hrefs.includes("/admin/finanzas") && !hrefs.includes("/admin/auditoria"), rol);
+  }
+});

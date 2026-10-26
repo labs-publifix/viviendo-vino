@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { LOGIN_PATH, decide, isPreviewHost } from "@/lib/gate";
+import { ADMIN_COOKIE_NAME, needsAdminSession } from "@/lib/admin/rules";
 import { PREVIEW_COOKIE, verifyPreviewCookie } from "@/lib/preview-access";
 
 // Interruptor de apertura (STORE_OPEN) y contraseña del preview (PREVIEW_PASSWORD).
@@ -40,7 +41,13 @@ export function proxy(request: NextRequest) {
       response = NextResponse.redirect(new URL(decision.to, request.url), 308);
       break;
     default:
-      response = NextResponse.next();
+      if (needsAdminSession(pathname) && !request.cookies.has(ADMIN_COOKIE_NAME)) {
+        const url = new URL("/admin/acceso", request.url);
+        if (pathname !== "/admin") url.searchParams.set("next", pathname);
+        response = NextResponse.redirect(url, 307);
+      } else {
+        response = NextResponse.next();
+      }
   }
 
   // Todo lo servido en el preview queda fuera de buscadores.
