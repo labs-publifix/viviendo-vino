@@ -29,6 +29,17 @@ producción (www) se hace después y solo con aprobación expresa.
 - **Todo lo que toca precios** (precio de cada vino, kits prearmados, comisión del aliado) **solo lo hace un
   administrador.** Se revisa en el servidor en cada acción, no solo ocultando botones.
 
+## Precio antes y descuento (decidido el 27 de octubre de 2026)
+
+- Cada vino tiene **precio final** (`precio_centavos`, lo único que se cobra; el servidor siempre recalcula con la
+  base) y, opcional, **precio antes** (`precio_antes_centavos`).
+- Si el precio antes es mayor que el final, la tienda lo muestra **tachado** junto al final y el **% de descuento**
+  calculado por la plataforma: redondeo de (antes − final) ÷ antes. Ejemplo: 380 y 300 → −21 %. Sin precio antes,
+  la tienda se ve igual que siempre.
+- Se ve en la tarjeta de vino (catálogo, armador, blog) y en la ficha. Los totales de kits suman precios finales.
+- Solo un administrador lo edita (Catálogo → vino → Precio). La base rechaza un precio antes que no sea mayor que
+  el final.
+
 ## Equipo inicial
 
 | Persona | Correo | Rol |

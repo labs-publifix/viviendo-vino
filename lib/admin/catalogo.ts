@@ -25,6 +25,7 @@ export type VinoPanel = {
   volumen: string;
   grado: string;
   precioCentavos: number;
+  precioAntesCentavos: number | null;
   premio: string;
   descripcion: string;
   descripcionAliado: string;
@@ -54,7 +55,7 @@ export async function getCatalogoPanel(user: AdminUser) {
 
   let qp = db
     .from("productos")
-    .select("id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo, orden")
+    .select("id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, precio_antes_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo, orden")
     .order("orden");
   let qg = db.from("grupos_botella").select("id, aliado_id, codigo, nombre, descripcion, solo_caja_completa, orden").order("orden");
   let qk = db.from("kits_prearmados").select("id, aliado_id, slug, nombre, descripcion, activo, orden").order("orden");
@@ -102,6 +103,7 @@ export async function getCatalogoPanel(user: AdminUser) {
       volumen: txt(x.volumen_ml),
       grado: txt(x.grado_alcohol),
       precioCentavos: x.precio_centavos,
+      precioAntesCentavos: x.precio_antes_centavos ?? null,
       premio: txt(x.premio),
       descripcion: x.descripcion,
       descripcionAliado: soloSuyos ? "" : txt(x.descripcion_aliado),

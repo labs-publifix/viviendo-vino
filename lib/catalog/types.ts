@@ -23,6 +23,8 @@ export type Wine = {
   vintage: number | null;
   volumeMl: number;
   priceCents: number;
+  /** Precio "antes", tachado en la tienda si es mayor que priceCents (solo informativo; se cobra priceCents). */
+  compareAtCents?: number | null;
   award: string | null;
   /** Descripción en voz de marca (la del aliado se guarda aparte y no se publica). */
   description: string;

@@ -31,6 +31,9 @@ export type Catalog = { wines: Wine[]; groups: GroupInfo[]; categories: Category
 const KIT_SIZE = 6;
 const PRODUCT_COLUMNS =
   "id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, precio_centavos, premio, descripcion, imagen_url, disponible, orden";
+// Columna nueva (migración 20261030000000_precio_antes.sql). Si la base aún no la tiene, se lee sin ella y la
+// tienda se ve como antes (sin precio tachado).
+const PRODUCT_COLUMNS_CON_PRECIO_ANTES = `${PRODUCT_COLUMNS}, precio_antes_centavos`;
 
 function client() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -51,7 +54,11 @@ export async function getCatalog(): Promise<Catalog> {
 
   const db = client();
   const [productos, grupos, categorias, kits, items] = await Promise.all([
-    db.from("productos").select(PRODUCT_COLUMNS).order("orden"),
+    db
+      .from("productos")
+      .select(PRODUCT_COLUMNS_CON_PRECIO_ANTES)
+      .order("orden")
+      .then((r) => (r.error?.code === "42703" ? db.from("productos").select(PRODUCT_COLUMNS).order("orden") : r)),
     db.from("grupos_botella").select("id, codigo, nombre, descripcion, solo_caja_completa, orden").order("orden"),
     db.from("categorias").select("slug, nombre, intro, orden").order("orden"),
     db.from("kits_prearmados").select("id, slug, nombre, descripcion, orden").order("orden"),
@@ -78,6 +85,7 @@ export async function getCatalog(): Promise<Catalog> {
       vintage: (p.anada as number | null) ?? null,
       volumeMl: p.volumen_ml as number,
       priceCents: p.precio_centavos as number,
+      compareAtCents: ((p as { precio_antes_centavos?: number | null }).precio_antes_centavos ?? null) || null,
       award: (p.premio as string | null) ?? null,
       description: p.descripcion as string,
       imageUrl: (p.imagen_url as string | null) ?? null,

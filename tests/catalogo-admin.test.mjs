@@ -51,7 +51,7 @@ test("validarAliado", () => {
   assert.equal(validarAliado({ ...aliadoBase, rfc: "ivv-010203-ab1" }).data.privados.rfc, "IVV010203AB1");
 });
 
-const vinoBase = { nombre_oficial: "Soave DOC 2024", productor: "Levorato", categoria_slug: "blancos-rosado", grupo_id: "g1", tipo: "blanco", uva: "Garganega", region: "Véneto", denominacion: "DOC", anada: "2024", volumen_ml: "750", grado_alcohol: "12", precio: "450", premio: "", descripcion: "Blanco del Véneto, fresco y floral, para la mesa de todos los días.", descripcion_aliado: "" };
+const vinoBase = { nombre_oficial: "Soave DOC 2024", productor: "Levorato", categoria_slug: "blancos-rosado", grupo_id: "g1", tipo: "blanco", uva: "Garganega", region: "Véneto", denominacion: "DOC", anada: "2024", volumen_ml: "750", grado_alcohol: "12", precio: "450", precio_antes: "", premio: "", descripcion: "Blanco del Véneto, fresco y floral, para la mesa de todos los días.", descripcion_aliado: "" };
 const opciones = { categorias: ["blancos-rosado", "tintos"], grupos: ["g1"] };
 
 test("validarVino", () => {
@@ -76,4 +76,23 @@ test("validarKit: 6 botellas, mismo grupo, activas y del aliado", () => {
   assert.match(validarKit([{ productoId: "a", cantidad: 3 }, { productoId: "d", cantidad: 3 }], vinos, "x"), /visibles/);
   assert.match(validarKit([{ productoId: "a", cantidad: 3 }, { productoId: "a", cantidad: 3 }], vinos, "x"), /una sola vez/);
   assert.match(validarKit([{ productoId: "a", cantidad: 6 }], vinos, "otro"), /ya no existe/);
+});
+
+import { discountPercent } from "../lib/money.ts";
+
+test("precio antes: descuento calculado y casos sin descuento", () => {
+  assert.equal(discountPercent(38000, 30000), 21);
+  assert.equal(discountPercent(50000, 25000), 50);
+  assert.equal(discountPercent(null, 30000), null);
+  assert.equal(discountPercent(30000, 30000), null);
+  assert.equal(discountPercent(29000, 30000), null);
+  assert.equal(discountPercent(30100, 30000), null); // 0.3 % se redondea a 0: no se muestra
+});
+
+test("validarVino: precio antes opcional y mayor que el final", () => {
+  const ok = validarVino({ ...vinoBase, precio: "300", precio_antes: "380" }, opciones);
+  assert.equal(ok.data.precio_antes_centavos, 38000);
+  assert.equal(validarVino(vinoBase, opciones).data.precio_antes_centavos, null);
+  assert.match(validarVino({ ...vinoBase, precio: "300", precio_antes: "300" }, opciones).errors.precio_antes, /mayor/);
+  assert.match(validarVino({ ...vinoBase, precio: "300", precio_antes: "abc" }, opciones).errors.precio_antes, /vacío/);
 });

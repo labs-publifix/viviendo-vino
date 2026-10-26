@@ -18,7 +18,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const SAVE_ERROR = "No se pudo guardar. Intenta otra vez.";
 const FOTO_MAX = 1.5 * 1024 * 1024;
 const VINO_COLS =
-  "id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo";
+  "id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, precio_antes_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo";
 
 function done(paginas: string[] = []) {
   updateTag("catalogo");
@@ -76,7 +76,7 @@ export async function cambiarDisponible(id: string, disponible: boolean): Promis
 
 // ---------- Vino (solo admin) ----------
 
-const CAMPOS_VINO = ["nombre_oficial", "productor", "categoria_slug", "grupo_id", "tipo", "uva", "region", "denominacion", "anada", "volumen_ml", "grado_alcohol", "precio", "premio", "descripcion", "descripcion_aliado"] as const;
+const CAMPOS_VINO = ["nombre_oficial", "productor", "categoria_slug", "grupo_id", "tipo", "uva", "region", "denominacion", "anada", "volumen_ml", "grado_alcohol", "precio", "precio_antes", "premio", "descripcion", "descripcion_aliado"] as const;
 
 export async function guardarVino(_prev: VinoState, form: FormData): Promise<VinoState> {
   const user = await requireAdmin(["admin"]);

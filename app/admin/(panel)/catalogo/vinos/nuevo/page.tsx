@@ -11,7 +11,7 @@ export default async function Page() {
   return (
     <VinoForm
       // Por defecto, el primer aliado que ya tiene grupos (al que sí se le pueden cargar vinos).
-      vino={{ aliadoId: (aliados.find((a) => grupos.some((g) => g.aliadoId === a.id)) ?? aliados[0])?.id ?? "", nombre_oficial: "", productor: "", categoria_slug: "", grupo_id: "", tipo: "", uva: "", region: "", denominacion: "", anada: "", volumen_ml: "750", grado_alcohol: "", precioCentavos: null, premio: "", descripcion: "", descripcion_aliado: "", imagen: null, activo: true, kits: [] }}
+      vino={{ aliadoId: (aliados.find((a) => grupos.some((g) => g.aliadoId === a.id)) ?? aliados[0])?.id ?? "", nombre_oficial: "", productor: "", categoria_slug: "", grupo_id: "", tipo: "", uva: "", region: "", denominacion: "", anada: "", volumen_ml: "750", grado_alcohol: "", precioCentavos: null, precioAntesCentavos: null, premio: "", descripcion: "", descripcion_aliado: "", imagen: null, activo: true, kits: [] }}
       categorias={categorias}
       grupos={grupos.map((g) => ({ id: g.id, nombre: g.nombre, aliadoId: g.aliadoId }))}
       aliados={aliados}

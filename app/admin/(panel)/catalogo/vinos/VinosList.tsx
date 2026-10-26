@@ -20,6 +20,7 @@ type Vino = {
   aliadoId: string;
   aliado: string;
   precioCentavos: number;
+  precioAntesCentavos: number | null;
   imagen: string | null;
   disponible: boolean;
   activo: boolean;
@@ -149,6 +150,12 @@ export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[];
                 </p>
               </div>
               <p className={styles.price}>
+                {v.precioAntesCentavos && v.precioAntesCentavos > v.precioCentavos && (
+                  <s className={styles.priceBefore}>
+                    <span className="vv-sr-only">Antes </span>
+                    {pesos(v.precioAntesCentavos)}
+                  </s>
+                )}
                 {pesos(v.precioCentavos)}
                 <span>por botella</span>
               </p>

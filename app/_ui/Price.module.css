@@ -11,3 +11,24 @@
 .sm .amount { font-size: 16px; }
 .md .amount { font-size: 22px; }
 .lg .amount { font-size: clamp(32px, 4vw, 44px); letter-spacing: -0.03em; }
+
+/* Con precio antes: tachado en gris, el final igual que siempre y el % de descuento en vino. */
+.withCompare { flex-wrap: wrap; row-gap: 2px; }
+.compare { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; text-decoration-thickness: 1px; }
+.dark .compare { color: rgb(243 236 228 / 0.6); }
+.sm .compare { font-size: 13px; }
+.md .compare { font-size: 15px; }
+.lg .compare { font-size: clamp(18px, 2vw, 22px); }
+.off {
+  align-self: center;
+  padding: 1px 7px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: var(--vv-vino);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+}
+.dark .off { color: var(--vv-carmin); }

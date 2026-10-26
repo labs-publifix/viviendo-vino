@@ -123,7 +123,7 @@ export default async function FichaVino({ params }: { params: Promise<{ slug: st
 
           <div className={styles.buy}>
             <div className={styles.priceRow}>
-              <Price cents={wine.priceCents} size="lg" />
+              <Price cents={wine.priceCents} compareCents={wine.compareAtCents} size="lg" />
               <span className={styles.per}>por botella</span>
             </div>
             <p className={styles.compat}>

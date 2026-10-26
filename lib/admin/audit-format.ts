@@ -79,6 +79,7 @@ const CAMPO_LABEL: Record<string, string> = {
   volumen_ml: "Volumen (ml)",
   grado_alcohol: "Alcohol (%)",
   precio_centavos: "Precio por botella",
+  precio_antes_centavos: "Precio antes (tachado)",
   premio: "Premio",
   descripcion: "Descripción",
   descripcion_aliado: "Texto del aliado",
@@ -95,7 +96,7 @@ export function valor(campo: string, v: unknown): string {
   if (v === null || v === undefined || v === "") return "—";
   if (typeof v === "boolean") return v ? "Sí" : "No";
   if (campo === "rol" && typeof v === "string") return ROLES[v] ?? v;
-  if (campo === "precio_centavos" && typeof v === "number") return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(v / 100);
+  if ((campo === "precio_centavos" || campo === "precio_antes_centavos") && typeof v === "number") return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(v / 100);
   if (campo === "comision_bps" && typeof v === "number") return `${v / 100} %`;
   if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}T/.test(v)) return fechaCdmx(v);
   if (typeof v === "object") return JSON.stringify(v);

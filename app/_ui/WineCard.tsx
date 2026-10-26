@@ -67,7 +67,7 @@ export function WineCard({
         <p className={styles.desc}>{wine.description}</p>
 
         <div className={styles.foot}>
-          <Price cents={wine.priceCents} size="sm" />
+          <Price cents={wine.priceCents} compareCents={wine.compareAtCents} size="sm" />
           {state === "sold-out" ? (
             <p className={styles.note}>Agotado por ahora</p>
           ) : state === "incompatible" ? (

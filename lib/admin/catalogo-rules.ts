@@ -134,7 +134,7 @@ export function validarAliado(i: AliadoInput): Resultado<AliadoLimpio> {
 // ---------- Vino ----------
 
 export type VinoInput = Record<
-  "nombre_oficial" | "productor" | "categoria_slug" | "grupo_id" | "tipo" | "uva" | "region" | "denominacion" | "anada" | "volumen_ml" | "grado_alcohol" | "precio" | "premio" | "descripcion" | "descripcion_aliado",
+  "nombre_oficial" | "productor" | "categoria_slug" | "grupo_id" | "tipo" | "uva" | "region" | "denominacion" | "anada" | "volumen_ml" | "grado_alcohol" | "precio" | "precio_antes" | "premio" | "descripcion" | "descripcion_aliado",
   string
 >;
 export type VinoLimpio = {
@@ -150,6 +150,8 @@ export type VinoLimpio = {
   volumen_ml: number;
   grado_alcohol: number | null;
   precio_centavos: number;
+  /** Precio "antes" (tachado en la tienda). null = sin descuento. */
+  precio_antes_centavos: number | null;
   premio: string | null;
   descripcion: string;
   descripcion_aliado: string | null;
@@ -174,6 +176,10 @@ export function validarVino(i: VinoInput, opciones: { categorias: string[]; grup
   if (gradoTxt && (Number.isNaN(grado) || grado! <= 0 || grado! >= 30)) e.grado_alcohol = "Escribe el % de alcohol, por ejemplo 13.5.";
   const precio = precioACentavos(i.precio);
   if (precio === null) e.precio = "Escribe el precio por botella en pesos, por ejemplo 450.";
+  const antesTxt = String(i.precio_antes ?? "").trim();
+  const antes = antesTxt ? precioACentavos(antesTxt) : null;
+  if (antesTxt && antes === null) e.precio_antes = "Escribe el precio antes en pesos, por ejemplo 380, o déjalo vacío.";
+  else if (antes !== null && precio !== null && antes <= precio) e.precio_antes = "El precio antes tiene que ser mayor que el precio final; si no hay descuento, déjalo vacío.";
   const descripcion = String(i.descripcion ?? "").trim();
   if (descripcion.length < 20 || descripcion.length > 600) e.descripcion = "Escribe la descripción para la tienda (de 20 a 600 caracteres).";
   const descAliado = String(i.descripcion_aliado ?? "").trim();
@@ -195,6 +201,7 @@ export function validarVino(i: VinoInput, opciones: { categorias: string[]; grup
       volumen_ml: volumen,
       grado_alcohol: grado,
       precio_centavos: precio!,
+      precio_antes_centavos: antes,
       premio: o(limpiar(i.premio).slice(0, 160)),
       descripcion,
       descripcion_aliado: o(descAliado),

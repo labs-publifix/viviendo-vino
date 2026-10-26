@@ -7,7 +7,9 @@ import { Button } from "@/app/_ui/Button";
 import { Checkbox, SelectField, TextField } from "@/app/_ui/Field";
 import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
+import { Price } from "@/app/_ui/Price";
 import { centavosATexto, pesos, precioACentavos, TIPOS } from "@/lib/admin/catalogo-rules";
+import { discountPercent } from "@/lib/money";
 import { guardarVino, type VinoState } from "../actions";
 import styles from "../catalogo.module.css";
 
@@ -27,6 +29,7 @@ export type VinoDatos = {
   volumen_ml: string;
   grado_alcohol: string;
   precioCentavos: number | null;
+  precioAntesCentavos: number | null;
   premio: string;
   descripcion: string;
   descripcion_aliado: string;
@@ -61,7 +64,11 @@ async function prepararFoto(file: File): Promise<File> {
 export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDatos; categorias: { slug: string; nombre: string }[]; grupos: Opcion[]; aliados: Opcion[] }) {
   const router = useRouter();
   const nuevo = !vino.id;
-  const [v, setV] = useState({ ...vino, precio: vino.precioCentavos ? centavosATexto(vino.precioCentavos) : "" });
+  const [v, setV] = useState({
+    ...vino,
+    precio: vino.precioCentavos ? centavosATexto(vino.precioCentavos) : "",
+    precio_antes: vino.precioAntesCentavos ? centavosATexto(vino.precioAntesCentavos) : "",
+  });
   const [foto, setFoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(vino.imagen);
   const [fotoError, setFotoError] = useState<string | null>(null);
@@ -79,6 +86,8 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
   const set = (k: string) => (ev: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setV((o) => ({ ...o, [k]: ev.target.value }));
   const gruposAliado = grupos.filter((g) => g.aliadoId === v.aliadoId);
   const precioNuevo = precioACentavos(v.precio);
+  const precioAntes = v.precio_antes.trim() ? precioACentavos(v.precio_antes) : null;
+  const descuento = precioNuevo ? discountPercent(precioAntes, precioNuevo) : null;
   const cambioPrecio = !nuevo && vino.precioCentavos !== null && precioNuevo !== null && precioNuevo !== vino.precioCentavos;
 
   return (
@@ -175,11 +184,33 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
         <aside className={styles.formSide}>
           <section className={styles.card}>
             <h3>Precio</h3>
-            <TextField name="precio" label="Precio por botella (MXN)" inputMode="decimal" value={v.precio} onChange={set("precio")} required error={e.precio} hint="Con envío incluido. Un kit de 6 suma 6 botellas." />
+            <TextField name="precio" label="Precio final por botella (MXN)" inputMode="decimal" value={v.precio} onChange={set("precio")} required error={e.precio} hint="Lo que paga el cliente, con envío incluido." />
+            <TextField
+              name="precio_antes"
+              label="Precio antes (MXN)"
+              optional
+              inputMode="decimal"
+              value={v.precio_antes}
+              onChange={set("precio_antes")}
+              error={e.precio_antes}
+              hint="Si lo llenas, la tienda lo muestra tachado junto al final, con el % de descuento. Déjalo vacío si no hay descuento."
+            />
+            {precioNuevo && (
+              <div className={styles.preview}>
+                <span>Así se ve en la tienda</span>
+                <Price cents={precioNuevo} compareCents={precioAntes} size="md" />
+                {descuento !== null && precioAntes && <small>Descuento de {descuento} %: el cliente ahorra {pesos(precioAntes - precioNuevo)} por botella.</small>}
+              </div>
+            )}
             {precioNuevo && (
               <p className={styles.small}>
                 Kit de 6 de este vino: <strong>{pesos(precioNuevo * 6)}</strong>
               </p>
+            )}
+            {cambioPrecio && (
+              <Notice kind="aviso">
+                Antes {pesos(vino.precioCentavos!)}. {vino.kits.length ? `También cambia el total de ${vino.kits.join(", ")}.` : ""} Las personas que ya tienen este vino en su carrito verán el precio nuevo.
+              </Notice>
             )}
             {cambioPrecio && (
               <Notice kind="aviso">
