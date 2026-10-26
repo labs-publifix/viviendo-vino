@@ -89,3 +89,31 @@ test("comunidad: CSV con BOM, comillas y sin fórmulas", () => {
   assert.equal(lines[1], `"'=HYPERLINK(""x"")@a.mx","dijo ""hola"", ok"`);
   assert.equal(lines[2], "ana@b.mx,Sí");
 });
+
+import { readFileSync } from "node:fs";
+import { estadoFicha, fechaDeTexto, parseBacklog } from "../lib/blog/backlog.ts";
+
+test("blog: el backlog real se lee completo (21 fichas con slug y fecha)", () => {
+  const fichas = parseBacklog(readFileSync(new URL("../content/blog/BACKLOG.md", import.meta.url), "utf8"));
+  assert.equal(fichas.length, 21);
+  assert.ok(fichas.every((f) => f.slug && f.fecha), "todas con slug y fecha");
+  assert.equal(fichas[6].numero, "07");
+  assert.equal(fichas[6].fecha, "2026-11-19");
+  assert.equal(fichas[6].slug, "que-es-el-prosecco");
+  assert.equal(fichas[1].tipo, "Guía");
+});
+
+test("blog: fecha en texto y estado real de cada ficha", () => {
+  assert.equal(fechaDeTexto("3 de diciembre de 2026"), "2026-12-03");
+  assert.equal(fechaDeTexto("sin fecha"), null);
+  const now = Date.parse("2026-11-14T12:00:00Z");
+  const apertura = Date.parse("2026-11-19T15:00:00Z");
+  const f = (fecha) => ({ fecha, slug: "x" });
+  assert.equal(estadoFicha(f("2026-10-24"), { slug: "x", fecha: "2026-10-24", publicado: true }, now, apertura), "listo");
+  assert.equal(estadoFicha(f("2026-10-24"), { slug: "x", fecha: "2026-10-24", publicado: true }, apertura + 1, apertura), "publicado");
+  assert.equal(estadoFicha(f("2026-11-19"), { slug: "x", fecha: "2026-11-19", publicado: true }, now, apertura), "programado");
+  assert.equal(estadoFicha(f("2026-11-19"), { slug: "x", fecha: "2026-11-19", publicado: false }, now, apertura), "borrador");
+  assert.equal(estadoFicha(f("2026-11-19"), undefined, now, apertura), "por-redactar");
+  assert.equal(estadoFicha(f("2026-11-10"), undefined, now, apertura), "atrasado");
+  assert.equal(estadoFicha(f("2027-01-07"), undefined, now, apertura), "idea");
+});

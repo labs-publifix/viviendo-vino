@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
     "/inicio": ["./content/blog/**/*"],
     "/blog": ["./content/blog/**/*"],
     "/blog/*": ["./content/blog/**/*"],
+    // El panel lee el backlog editorial y los archivos del blog.
+    "/admin/contenido/blog": ["./content/blog/**/*"],
     // Wine Scan lee su base de conocimiento (prompt de sistema y perfiles del catálogo) en cada instancia.
     "/api/wine-scan": ["./wine-scan/knowledge/**/*"],
     // El Quiz IA lee la guía de voz de Wine Scan para su prompt de sistema.

@@ -7,7 +7,7 @@ import { Tabs } from "../_ui/Tabs";
 export default function ContenidoLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <PageHead title="Contenido" text="Quiz IA, Wine Scan y blog: cómo los usa la gente y qué hay publicado." />
+      <PageHead title="Contenido" text="Cómo usa la gente el Quiz IA y el Wine Scan, y en qué va cada pieza del blog." />
       <Tabs label="Frentes de contenido" items={CONTENIDO_TABS} />
       {children}
     </>

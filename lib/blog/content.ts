@@ -245,3 +245,21 @@ export async function getRelated(slug: string, count = 3): Promise<ArticleSummar
   const ordered = [...new Set([...picked, ...same, ...others])];
   return ordered.slice(0, count).map(toSummary);
 }
+
+/** Para el panel (/admin/contenido/blog): todos los archivos, incluidos borradores y programados. Sin caché. */
+export type ArticleFile = { slug: string; titulo: string; fecha: string; tipo: "articulo" | "guia"; categoria: string; publicado: boolean; ejemplo: boolean; minutos: number; pdf: string | null };
+export function listArticleFiles(): ArticleFile[] {
+  const files = readdirSync(DIR).filter((f) => f.endsWith(".md") && f === f.toLowerCase() && !f.startsWith("_"));
+  return files.flatMap((file) => {
+    const { data, content } = matter(readFileSync(join(DIR, file), "utf8"));
+    const r = frontMatter.safeParse(data);
+    if (!r.success) return [];
+    const fm = r.data;
+    return [{ slug: fm.slug, titulo: fm.titulo, fecha: fm.fecha, tipo: fm.tipo, categoria: fm.categoria, publicado: fm.publicado, ejemplo: fm.ejemplo, minutos: readingMinutes(content), pdf: fm.pdf ?? null }];
+  });
+}
+
+/** El backlog editorial (content/blog/BACKLOG.md), tal cual, para que el panel lo lea. */
+export function readBacklog(): string {
+  return readFileSync(join(DIR, "BACKLOG.md"), "utf8");
+}

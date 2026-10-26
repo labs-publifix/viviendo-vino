@@ -12,7 +12,7 @@ export type Row = { id: string } & Record<string, Cell>;
 export type Column = {
   key: string;
   label: string;
-  kind?: "email" | "text" | "num" | "bool" | "estado" | "fecha";
+  kind?: "email" | "text" | "num" | "bool" | "estado" | "fecha" | "link";
   /** En el celular la fila-tarjeta usa esta columna como título. */
   primary?: boolean;
 };
@@ -170,10 +170,20 @@ function render(c: Column, r: Row) {
   if (c.kind === "bool") return <span className={v ? styles.yes : styles.no}>{v ? "Sí" : "No"}</span>;
   if (c.kind === "estado") {
     return (
-      <span className={styles.estado} data-estado={String(r.estado ?? "")}>
+      <span className={styles.estado} data-estado={String(r.tono ?? r.estado ?? "")}>
         <span className={styles.dot} aria-hidden="true" />
         {v}
       </span>
+    );
+  }
+  if (c.kind === "link") {
+    const href = r[`${c.key}Href`];
+    return typeof href === "string" && href ? (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={styles.link}>
+        {v}
+      </a>
+    ) : (
+      <span className={styles.strong}>{v}</span>
     );
   }
   if (c.kind === "email") return <span className={styles.email}>{v}</span>;

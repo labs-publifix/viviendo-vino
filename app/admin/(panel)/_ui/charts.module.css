@@ -1,0 +1,63 @@
+/* Gráficas del panel. Ciruela para las barras (dato), texto siempre en tinta, cuadrícula mínima. */
+
+.panel { display: flex; flex-direction: column; gap: 16px; min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+.panelHead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
+.panelHead h2 { margin: 0; font-size: 1rem; font-weight: 700; line-height: 1.3; }
+.panelHead p { margin: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.empty { margin: 0; color: var(--muted); font-size: 14px; }
+
+/* Barras horizontales y embudo */
+.barList,
+.funnel { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.barHead { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px; font-size: 14px; line-height: 1.35; }
+.barLabel { min-width: 0; overflow-wrap: anywhere; }
+.barValue { flex: none; font-weight: 600; font-variant-numeric: tabular-nums; }
+.barPct { color: var(--muted); font-weight: 400; }
+.track { display: block; height: 10px; border-radius: 4px; background: rgb(10 2 6 / 0.06); }
+.fill { display: block; height: 100%; border-radius: 4px; background: var(--vv-ciruela); }
+
+/* Columnas por día */
+.columns { display: grid; align-items: end; gap: 2px; height: 140px; padding-bottom: 1px; border-bottom: 1px solid var(--line); }
+.col { position: relative; display: flex; align-items: flex-end; height: 100%; cursor: default; }
+.col::before { content: ""; position: absolute; inset: 0 -1px; } /* área de hover más ancha que la barra */
+.colFill { display: block; width: 100%; min-height: 0; border-radius: 4px 4px 0 0; background: var(--vv-ciruela); transition: opacity 120ms ease-out; }
+.columns:hover .colFill { opacity: 0.45; }
+.columns .col:hover .colFill { opacity: 1; }
+.col:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  z-index: 2;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--vv-negro);
+  color: var(--vv-hueso);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+  box-shadow: var(--shadow-float);
+}
+.col:first-child:hover::after { left: 0; transform: none; }
+.col:last-child:hover::after { left: auto; right: 0; transform: none; }
+.axis { display: grid; gap: 2px; margin-top: 6px; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.axis span { overflow: visible; }
+.tickEnd { display: flex; justify-content: flex-end; } /* la última fecha crece hacia la izquierda */
+
+/* Periodo */
+.period { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.period a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: 999px; color: var(--fg); font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+.period a:hover { background: rgb(10 2 6 / 0.05); }
+.period a[aria-current="true"] { background: var(--vv-negro); color: var(--vv-hueso); }
+
+/* Rejilla de paneles */
+.grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+@media (min-width: 900px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .wide { grid-column: 1 / -1; } }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.toolbar p { margin: 0; color: var(--muted); font-size: 14px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0; padding: 0; list-style: none; font-size: 14px; }
+.facts li { display: flex; gap: 6px; }
+.facts span { color: var(--muted); }
+.facts strong { font-weight: 600; font-variant-numeric: tabular-nums; }
