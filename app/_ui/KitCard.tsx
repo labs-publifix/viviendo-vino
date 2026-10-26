@@ -2,6 +2,7 @@ import { GROUP_LABELS, type BottleGroup } from "@/lib/catalog/types";
 import { Button, ButtonLink } from "./Button";
 import { Icon } from "./Icon";
 import { Price } from "./Price";
+import { Savings } from "./Savings";
 import { MonoTag } from "./Typography";
 import styles from "./KitCard.module.css";
 
@@ -14,6 +15,7 @@ export function KitCard({
   group,
   lines,
   totalCents,
+  savingsCents,
   variant = "preset",
   imageUrl,
   href,
@@ -27,6 +29,8 @@ export function KitCard({
   lines: KitLine[];
   /** null mientras el servidor calcula el precio. */
   totalCents: number | null;
+  /** "Ahorras $X" bajo el total si alguna botella tiene precio antes. */
+  savingsCents?: number;
   variant?: "preset" | "cart";
   /** Foto del kit (solo prearmados). */
   imageUrl?: string;
@@ -51,7 +55,16 @@ export function KitCard({
           </MonoTag>
           <h3 className={styles.title}>{name}</h3>
         </div>
-        {totalCents === null ? <span className={styles.pending}>—</span> : <Price cents={totalCents} size="md" />}
+        {totalCents === null ? (
+          <span className={styles.pending}>—</span>
+        ) : savingsCents ? (
+          <span className={styles.priceStack}>
+            <Price cents={totalCents} size="md" />
+            <Savings cents={savingsCents} />
+          </span>
+        ) : (
+          <Price cents={totalCents} size="md" />
+        )}
       </header>
 
       <ul className={styles.lines}>

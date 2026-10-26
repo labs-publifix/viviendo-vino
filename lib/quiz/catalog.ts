@@ -45,12 +45,12 @@ async function profilesFromDb(): Promise<{ profiles: ProfileRow[]; extras: Recor
   }
 }
 
-export type WineInfo = { slug: string; name: string; priceCents: number; imageUrl: string | null; available: boolean; group: string };
+export type WineInfo = { slug: string; name: string; priceCents: number; compareAtCents?: number | null; imageUrl: string | null; available: boolean; group: string };
 export type GroupName = { code: string; name: string };
 
 let warned = "";
 
-export async function getQuizCatalog(): Promise<{ catalog: QuizCatalog; info: Map<string, WineInfo>; groups: GroupName[]; presets: { slug: string; name: string; description: string; totalCents: number }[] }> {
+export async function getQuizCatalog(): Promise<{ catalog: QuizCatalog; info: Map<string, WineInfo>; groups: GroupName[]; presets: { slug: string; name: string; description: string; totalCents: number; savingsCents?: number }[] }> {
   const [store, db] = await Promise.all([getCatalog(), profilesFromDb()]);
   const source = db ?? { profiles: JSON_PROFILES, extras: JSON_EXTRAS };
   const { catalog, missing } = mergeCatalog(
@@ -68,9 +68,9 @@ export async function getQuizCatalog(): Promise<{ catalog: QuizCatalog; info: Ma
   if (unavailable.length > 0) console.info("quiz: vinos sin stock (no se recomiendan):", unavailable.join(", "));
   return {
     catalog,
-    info: new Map(store.wines.map((w) => [w.slug, { slug: w.slug, name: w.name.replace(/\s*\(Double Gold\)/i, ""), priceCents: w.priceCents, imageUrl: w.imageUrl, available: w.available, group: w.group }])),
+    info: new Map(store.wines.map((w) => [w.slug, { slug: w.slug, name: w.name.replace(/\s*\(Double Gold\)/i, ""), priceCents: w.priceCents, compareAtCents: w.compareAtCents ?? null, imageUrl: w.imageUrl, available: w.available, group: w.group }])),
     groups: store.groups.map((g) => ({ code: g.code, name: g.name })),
-    presets: store.kits.map((k) => ({ slug: k.slug, name: k.name, description: k.description, totalCents: k.totalCents })),
+    presets: store.kits.map((k) => ({ slug: k.slug, name: k.name, description: k.description, totalCents: k.totalCents, savingsCents: k.savingsCents })),
   };
 }
 

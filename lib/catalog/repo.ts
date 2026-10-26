@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { cacheLife, cacheTag } from "next/cache";
+import { kitSavingsCents } from "@/lib/money";
 import { BOTTLE_GROUPS, CATEGORIES, type BottleGroup, type Category, type Wine } from "./types";
 
 // Lectura pública del catálogo desde Supabase con la llave publicable (RLS: solo lo activo).
@@ -23,8 +24,10 @@ export type PresetKit = {
   name: string;
   description: string;
   group: BottleGroup;
-  items: { slug: string; name: string; quantity: number; priceCents: number }[];
+  items: { slug: string; name: string; quantity: number; priceCents: number; compareAtCents: number | null }[];
   totalCents: number;
+  /** Ahorro por las botellas con precio antes (0 si ninguna tiene). */
+  savingsCents: number;
 };
 export type Catalog = { wines: Wine[]; groups: GroupInfo[]; categories: CategoryInfo[]; kits: PresetKit[]; kitSize: number };
 
@@ -134,8 +137,9 @@ export async function getCatalog(): Promise<Catalog> {
         name: k.nombre as string,
         description: (k.descripcion as string | null) ?? "",
         group: lines[0]?.wine.group,
-        items: lines.map((l) => ({ slug: l.wine.slug, name: l.wine.name, quantity: l.quantity, priceCents: l.wine.priceCents })),
+        items: lines.map((l) => ({ slug: l.wine.slug, name: l.wine.name, quantity: l.quantity, priceCents: l.wine.priceCents, compareAtCents: l.wine.compareAtCents ?? null })),
         totalCents: lines.reduce((s, l) => s + l.quantity * l.wine.priceCents, 0),
+        savingsCents: kitSavingsCents(lines.map((l) => ({ quantity: l.quantity, priceCents: l.wine.priceCents, compareAtCents: l.wine.compareAtCents }))),
       };
     })
     // Un kit con alguna etiqueta inactiva deja de sumar 6 y no se muestra.

@@ -172,6 +172,7 @@ export default async function TiendaInicio() {
                 group={k.group}
                 lines={k.items}
                 totalCents={k.totalCents}
+                savingsCents={k.savingsCents}
                 imageUrl={KIT_IMAGES[k.slug]}
                 href={`/arma-tu-kit?kit=${k.slug}&agregar=1`}
                 customizeHref={`/arma-tu-kit?kit=${k.slug}`}

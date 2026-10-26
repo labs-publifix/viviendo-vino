@@ -37,6 +37,9 @@ producción (www) se hace después y solo con aprobación expresa.
   calculado por la plataforma: redondeo de (antes − final) ÷ antes. Ejemplo: 380 y 300 → −21 %. Sin precio antes,
   la tienda se ve igual que siempre.
 - Se ve en la tarjeta de vino (catálogo, armador, blog) y en la ficha. Los totales de kits suman precios finales.
+- En los kits, si alguna botella tiene precio antes, se muestra **"Ahorras $X"** bajo el total: suma de
+  (antes − final) × cantidad. Aparece en los kits prearmados (inicio y ficha), el kit que se arma, cada kit del
+  carrito, el total del carrito y las cajas del Quiz IA. Sin descuentos no aparece.
 - Solo un administrador lo edita (Catálogo → vino → Precio). La base rechaza un precio antes que no sea mayor que
   el final.
 

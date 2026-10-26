@@ -6,6 +6,7 @@ import { Button, ButtonLink } from "@/app/_ui/Button";
 import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
 import { Price } from "@/app/_ui/Price";
+import { Savings } from "@/app/_ui/Savings";
 import { Heading, MonoTag, NumberedLabel } from "@/app/_ui/Typography";
 import { track } from "@/lib/quiz/client";
 import { TEXTOS } from "@/lib/quiz/config";
@@ -67,6 +68,7 @@ export function Result({
             <div className={styles.kitMeta}>
               {kit.grupoNombre && <MonoTag>{kit.grupoNombre}</MonoTag>}
               <Price cents={kit.totalCentavos} size="md" />
+              <Savings cents={kit.ahorroCentavos} />
             </div>
             <p className={styles.small}>6 botellas, envío incluido. En el armador puedes cambiar las que quieras.</p>
           </div>
@@ -112,6 +114,7 @@ export function Result({
           <p className={styles.small}>{result.prearmado.descripcion}</p>
           <div className={styles.altFoot}>
             <Price cents={result.prearmado.totalCentavos} size="sm" />
+            <Savings cents={result.prearmado.ahorroCentavos} />
             <ButtonLink href={`/arma-tu-kit?kit=${result.prearmado.slug}&agregar=1`} variant="secondary" onClick={() => track("prearmado", { quiz_id: quizId })}>
               Agregar este kit
             </ButtonLink>
@@ -179,6 +182,7 @@ function SecondKit({ kit, quizId }: { kit: ResultKit; quizId?: string }) {
       </h2>
       <div className={styles.altFoot}>
         <Price cents={kit.totalCentavos} size="sm" />
+        <Savings cents={kit.ahorroCentavos} />
         <button
           type="button"
           className={styles.textBtn}

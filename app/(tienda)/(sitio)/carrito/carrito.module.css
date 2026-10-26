@@ -42,3 +42,7 @@
   .layout { grid-template-columns: minmax(0, 1fr) 360px; gap: var(--s-7); }
   .summary { position: sticky; top: calc(72px + var(--s-5)); }
 }
+
+/* "Ahorras $X" del total, en su renglón bajo el total (solo si hay botellas con precio antes). */
+.savings { margin: -8px 0 0; text-align: right; }
+.savings:empty { display: none; }

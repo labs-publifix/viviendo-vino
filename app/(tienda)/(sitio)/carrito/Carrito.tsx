@@ -12,6 +12,8 @@ import { Price } from "@/app/_ui/Price";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { cart, useCart, type CartKit } from "@/lib/cart/store";
 import type { BottleGroup } from "@/lib/catalog/types";
+import { kitSavingsCents } from "@/lib/money";
+import { Savings } from "@/app/_ui/Savings";
 import { KIT_SIZE, MAX_KITS } from "@/lib/kit/rules";
 import { useCartValidation } from "@/lib/cart/useCartValidation";
 import styles from "./carrito.module.css";
@@ -19,7 +21,7 @@ import styles from "./carrito.module.css";
 // Carrito: los kits viven en el navegador; nombres, precios y totales los calcula el servidor con la base
 // (/api/carrito/validar) cada vez que el carrito cambia.
 
-type WineRef = { slug: string; name: string; group: BottleGroup };
+type WineRef = { slug: string; name: string; group: BottleGroup; priceCents: number; compareAtCents: number | null };
 
 
 export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug: string; name: string }[] }) {
@@ -39,6 +41,8 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
   }, []);
 
   const validation = useCartValidation(kits, hydrated);
+  // Ahorro informativo por botellas con precio antes; el total que se cobra lo calcula el servidor.
+  const ahorroDe = (k: CartKit) => kitSavingsCents(k.items.flatMap((it) => { const w = bySlug.get(it.slug); return w ? [{ quantity: it.quantity, priceCents: w.priceCents, compareAtCents: w.compareAtCents }] : []; }));
 
   if (!hydrated) {
     return (
@@ -104,6 +108,7 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
                   group={group ?? null}
                   lines={lines}
                   totalCents={r?.ok ? r.totalCents : null}
+                  savingsCents={r?.ok ? ahorroDe(k) : 0}
                   variant="cart"
                   onPrimary={() => edit(k.id)}
                   onRemove={() => cart.removeKit(k.id)}
@@ -139,6 +144,11 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
             <span>Total</span>
             {ready ? <Price cents={validation.totalCents} size="lg" /> : <span className={styles.calculating}>Calculando…</span>}
           </div>
+          {ready && (
+            <p className={styles.savings}>
+              <Savings cents={kits.reduce((s, k) => s + (resultFor(k)?.ok ? ahorroDe(k) : 0), 0)} />
+            </p>
+          )}
           {validation.status === "error" && <Notice kind="error">{validation.error} Recarga la página para intentar de nuevo.</Notice>}
           {allValid ? (
             <ButtonLink href="/checkout" size="lg" block>

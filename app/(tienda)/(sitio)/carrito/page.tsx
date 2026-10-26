@@ -14,7 +14,7 @@ export default async function CarritoPage() {
   const { wines, kits } = await getCatalog();
   return (
     <Carrito
-      wines={wines.map((w) => ({ slug: w.slug, name: w.name, group: w.group }))}
+      wines={wines.map((w) => ({ slug: w.slug, name: w.name, group: w.group, priceCents: w.priceCents, compareAtCents: w.compareAtCents ?? null }))}
       presets={kits.map((k) => ({ slug: k.slug, name: k.name }))}
     />
   );

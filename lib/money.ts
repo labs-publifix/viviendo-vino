@@ -21,3 +21,11 @@ export function discountPercent(compareCents: number | null | undefined, finalCe
   const pct = Math.round(((compareCents - finalCents) / compareCents) * 100);
   return pct >= 1 ? pct : null;
 }
+
+/**
+ * Ahorro de un kit: por cada botella con precio "antes" mayor que el final, la diferencia por la cantidad.
+ * 0 si ninguna botella tiene descuento. Solo informativo (lo que se cobra es la suma de precios finales).
+ */
+export function kitSavingsCents(lines: { quantity: number; priceCents: number; compareAtCents?: number | null }[]): number {
+  return lines.reduce((s, l) => s + (l.compareAtCents && l.compareAtCents > l.priceCents ? (l.compareAtCents - l.priceCents) * l.quantity : 0), 0);
+}

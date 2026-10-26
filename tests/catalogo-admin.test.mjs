@@ -96,3 +96,11 @@ test("validarVino: precio antes opcional y mayor que el final", () => {
   assert.match(validarVino({ ...vinoBase, precio: "300", precio_antes: "300" }, opciones).errors.precio_antes, /mayor/);
   assert.match(validarVino({ ...vinoBase, precio: "300", precio_antes: "abc" }, opciones).errors.precio_antes, /vacío/);
 });
+
+import { kitSavingsCents } from "../lib/money.ts";
+
+test("ahorro de un kit: suma por botella con precio antes", () => {
+  assert.equal(kitSavingsCents([{ quantity: 3, priceCents: 30000, compareAtCents: 38000 }, { quantity: 3, priceCents: 31000, compareAtCents: null }]), 24000);
+  assert.equal(kitSavingsCents([{ quantity: 6, priceCents: 30000 }]), 0);
+  assert.equal(kitSavingsCents([{ quantity: 2, priceCents: 30000, compareAtCents: 29000 }]), 0);
+});

@@ -25,7 +25,7 @@ import {
   validateKit,
   type KitItem,
 } from "@/lib/kit/rules";
-import { formatMXN } from "@/lib/money";
+import { formatMXN, kitSavingsCents } from "@/lib/money";
 import styles from "./armador.module.css";
 
 // Armador de kits (Fundamentos C-03 a C-07): la primera botella fija el grupo, los demás vinos se atenúan
@@ -47,6 +47,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
   const count = bottleCount(items);
   const group = kitGroup(items, bySlug) as BottleGroup | null;
   const total = kitTotalCents(items, bySlug);
+  const savings = kitSavingsCents(items.flatMap((i) => { const w = bySlug.get(i.slug); return w ? [{ quantity: i.quantity, priceCents: w.priceCents, compareAtCents: w.compareAtCents }] : []; }));
   const editing = draft.editing && kits.some((k) => k.id === draft.editing) ? draft.editing : null;
 
   // Enlaces desde el catálogo, la ficha, la portada y el quiz: ?vino=, ?kit=, ?grupo=, ?editar=, ?vinos=. Se aplican una vez
@@ -226,6 +227,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
   const progressProps = {
     count,
     totalCents: total,
+    savingsCents: savings,
     group,
     error,
     loading: saving,

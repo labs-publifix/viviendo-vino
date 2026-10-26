@@ -2,6 +2,7 @@ import { GROUP_LABELS, type BottleGroup } from "@/lib/catalog/types";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 import { Price } from "./Price";
+import { Savings } from "./Savings";
 import styles from "./KitProgress.module.css";
 
 // Progreso del kit (Manual · 7.03 "contador de avance" y 10.02 "3 de 6"; Fundamentos C-03, C-06, C-07).
@@ -12,6 +13,7 @@ export const KIT_SIZE = 6;
 export function KitProgress({
   count,
   totalCents,
+  savingsCents,
   group,
   error,
   loading,
@@ -22,6 +24,8 @@ export function KitProgress({
 }: {
   count: number;
   totalCents: number;
+  /** "Ahorras $X" junto al total si alguna botella tiene precio antes. */
+  savingsCents?: number;
   group: BottleGroup | null;
   error?: string | null;
   loading?: boolean;
@@ -67,6 +71,7 @@ export function KitProgress({
 
       <div className={styles.total}>
         <Price cents={totalCents} size={variant === "bar" ? "md" : "lg"} />
+        <Savings cents={savingsCents} />
         <span className={styles.shipping}>
           <Icon name="truck" size={16} /> Envío incluido
         </span>

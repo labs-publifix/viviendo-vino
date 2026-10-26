@@ -2,12 +2,12 @@
 // decidió el motor, los textos (IA o prearmados) y los datos actuales de la tienda (nombre, precio, foto, stock).
 // No incluye el comentario libre ni datos internos.
 
-import { formatMXN } from "@/lib/money";
+import { formatMXN, kitSavingsCents } from "@/lib/money";
 import { TEXTOS, perfilById } from "./config";
 import type { Aviso, Familia, Kit, Rol } from "./engine";
 import type { Narrative } from "./schema";
 
-export type WineRef = { slug: string; name: string; priceCents: number; imageUrl: string | null; available: boolean };
+export type WineRef = { slug: string; name: string; priceCents: number; compareAtCents?: number | null; imageUrl: string | null; available: boolean };
 
 export type ResultLine = {
   slug: string;
@@ -24,6 +24,8 @@ export type ResultKit = {
   grupoNombre: string;
   familia: Familia;
   totalCentavos: number;
+  /** Ahorro por botellas con precio antes (0 si ninguna). */
+  ahorroCentavos: number;
   lineas: ResultLine[];
   armadorUrl: string;
   disponible: boolean;
@@ -36,7 +38,7 @@ export type QuizResult = {
   invitacionReto: string | null;
   notaOcasion: string | null;
   alterno: ResultKit | null;
-  prearmado: { slug: string; nombre: string; descripcion: string; totalCentavos: number } | null;
+  prearmado: { slug: string; nombre: string; descripcion: string; totalCentavos: number; ahorroCentavos: number } | null;
   avisos: string[];
 };
 
@@ -72,7 +74,7 @@ export function buildResult(
   s: StoredSession,
   wines: Map<string, WineRef>,
   groups: { code: string; name: string }[],
-  presets: { slug: string; name: string; description: string; totalCents: number }[],
+  presets: { slug: string; name: string; description: string; totalCents: number; savingsCents?: number }[],
 ): QuizResult {
   const perfil = perfilById(s.perfil) ?? perfilById("suave-redondo")!;
   const regalo = s.ocasion === "regalo";
@@ -100,6 +102,7 @@ export function buildResult(
       familia: k.familia,
       // Precio actual de la tienda (el del momento del quiz puede haber cambiado).
       totalCentavos: lineas.reduce((sum, l) => sum + l.cantidad * l.precioCentavos, 0),
+      ahorroCentavos: kitSavingsCents(k.lineas.map((l) => { const w = wines.get(l.slug); return { quantity: l.cantidad, priceCents: w?.priceCents ?? 0, compareAtCents: w?.compareAtCents }; })),
       lineas,
       armadorUrl: armadorUrl(k, s.id),
       disponible: lineas.every((l) => l.disponible),
@@ -115,7 +118,7 @@ export function buildResult(
     invitacionReto: s.kit?.lineas.some((l) => l.rol === "reto") ? (s.narrativa?.invitacion_reto ?? TEXTOS.invitacion_reto) : null,
     notaOcasion: s.narrativa?.nota_ocasion ?? null,
     alterno: toKit(s.kit_alterno, false),
-    prearmado: preset ? { slug: preset.slug, nombre: preset.name, descripcion: preset.description, totalCentavos: preset.totalCents } : null,
+    prearmado: preset ? { slug: preset.slug, nombre: preset.name, descripcion: preset.description, totalCentavos: preset.totalCents, ahorroCentavos: preset.savingsCents ?? 0 } : null,
     avisos: s.avisos.map(avisoTexto),
   };
 }
