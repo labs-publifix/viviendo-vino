@@ -6,13 +6,13 @@ import { InfoPage, Pendiente, Section } from "../_info/InfoPage";
 
 export const metadata: Metadata = {
   title: "Envíos · Viviendo Vino",
-  description: "El envío va incluido en el precio de cada kit de 6 botellas. Sin compra mínima y sin cargos al final.",
+  description: "El envío va incluido en el precio de cada kit de 6 botellas y no hay cargos al final.",
 };
 
 export default function Envios() {
   if (!storeEnabled()) notFound();
   return (
-    <InfoPage label="Envíos" title="El envío ya va en el precio." lede="Sin compra mínima y sin cargos al final: lo que ves en el kit es lo que pagas." updated="borrador del 22 de octubre de 2026">
+    <InfoPage label="Envíos" title="El envío ya va en el precio." lede="El envío va incluido en cada kit y no hay cargos al final." updated="borrador del 22 de octubre de 2026">
       <Section n={1} title="Cuánto cuesta">
         <p>
           Nada extra. Cada kit de 6 botellas incluye su envío desde el primer kit. En el carrito y en el checkout el
