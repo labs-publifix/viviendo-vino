@@ -61,3 +61,31 @@ test("initials: iniciales del avatar", () => {
   assert.equal(initials("  Ana "), "A");
   assert.equal(initials(""), "?");
 });
+
+import { estadoEspera, fechaCdmx, origenLabel, toCsv } from "../lib/admin/comunidad-format.ts";
+
+test("comunidad: origen de cada registro", () => {
+  const perfiles = { "fresco-directo": "Fresco y directo" };
+  const guias = { "guia-de-temperaturas-para-servir-vino": "Guía de temperaturas" };
+  assert.equal(origenLabel(null, perfiles, guias), "Sitio");
+  assert.equal(origenLabel("quiz:fresco-directo", perfiles, guias), "Quiz · Fresco y directo");
+  // source recortado a 40 caracteres
+  assert.equal(origenLabel("guia:guia-de-temperaturas-para-servir-vi", perfiles, guias), "Guía · Guía de temperaturas");
+  assert.equal(origenLabel("instagram", perfiles, guias), "Enlace · instagram");
+});
+
+test("comunidad: estado y fecha en hora de CDMX", () => {
+  assert.equal(estadoEspera({}), "activa");
+  assert.equal(estadoEspera({ purchased_at: "2026-11-20T00:00:00Z" }), "compro");
+  assert.equal(estadoEspera({ purchased_at: "x", unsubscribed_at: "y" }), "baja");
+  assert.equal(fechaCdmx("2026-10-26T15:14:00Z"), "26 oct 2026 · 09:14");
+  assert.equal(fechaCdmx(null), "");
+});
+
+test("comunidad: CSV con BOM, comillas y sin fórmulas", () => {
+  const csv = toCsv(["Correo", "Nota"], [["=HYPERLINK(\"x\")@a.mx", 'dijo "hola", ok'], ["ana@b.mx", true]]);
+  assert.ok(csv.startsWith("﻿"));
+  const lines = csv.slice(1).trim().split("\r\n");
+  assert.equal(lines[1], `"'=HYPERLINK(""x"")@a.mx","dijo ""hola"", ok"`);
+  assert.equal(lines[2], "ana@b.mx,Sí");
+});

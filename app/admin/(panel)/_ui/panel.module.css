@@ -280,3 +280,38 @@
 /* Piezas comunes */
 .card { padding: 20px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
 .mono { font-family: var(--font-label); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+/* Cifras de cabecera (Comunidad y otras secciones) */
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 24px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+@media (min-width: 760px) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.stats > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 2px; padding: 14px 16px; }
+.stats > div + div { border-left: 1px solid var(--line); }
+@media (max-width: 759px) {
+  .stats > div:nth-child(3) { border-left: 0; }
+  .stats > div:nth-child(n + 3) { border-top: 1px solid var(--line); }
+}
+.stats dt { color: var(--muted); font-size: 13px; line-height: 1.3; }
+.stats dd { margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; font-variant-numeric: tabular-nums; }
+
+/* Encabezado de lista */
+.listHead { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+@media (min-width: 760px) { .listHead { flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; } }
+.listHead p { margin: 0; max-width: 70ch; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.export {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  flex: none;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--vv-negro);
+  border-radius: 999px;
+  color: var(--fg);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 150ms ease-out, color 150ms ease-out;
+}
+@media (min-width: 760px) { .export { align-self: center; } }
+.export:hover { background: var(--vv-negro); color: var(--vv-hueso); }
