@@ -35,19 +35,15 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [ ] Correr `supabase/seed/grupos-editoriales.sql` en **producción** antes de abrir (en staging ya se corre en esta ronda). Si se corre `catalogo-completo.sql` completo, ya incluye los nombres nuevos.
 
 ## Descubrir (Quiz IA, Wine Scan, Nosotros, Blog)
-- [x] `/nosotros` construida (con placeholders de contenido de Rafa).
+- [x] `/nosotros` construida con los textos finales de Rafa (26 oct).
 - [x] `/quiz` y `/wine-scan` construidos (ver sus secciones abajo).
-- [ ] Contenido de Rafa (portada y `/nosotros`), todo en `lib/about.ts`. Mientras falte, dev muestra un placeholder y producción no muestra esa pieza:
-  - [x] `RAFA_PHOTO`: foto de Rafa (`public/img/rafa.webp`).
-  - `RAFA_STORY`: su historia con el vino, con sus palabras.
-  - `RAFA_QUOTE`: una frase suya.
-  - `RAFA_CRITERIA`: 3 o 4 criterios reales con los que elige cada vino (título y una línea).
-- [ ] Feed de Instagram en `/nosotros`: requiere conectar la API de Instagram (fase de funcionalidades). Hoy hay un espacio reservado solo en dev.
+- [x] Contenido de Rafa (portada y `/nosotros`) en `lib/about.ts`: foto, historia, frase, datos y criterios.
+- [x] Feed de Instagram (Behold, `INSTAGRAM_FEED_URL`) en `/nosotros` y en la portada, componente `app/_ui/InstagramFeed.tsx`.
 - [x] Blog construido: `/blog`, `/blog/[slug]` y el teaser de la portada leen `content/blog/*.md` (guía en `content/blog/README.md`, backlog en `content/blog/BACKLOG.md`).
-- [ ] Los 3 artículos actuales son de **ejemplo** (`ejemplo: true`, etiqueta visible solo en dev). Reemplazarlos o quitarles la marca al revisarlos.
+- [ ] Aprobar las 6 piezas del blog (01 a 06) para que se publiquen al abrir la tienda.
 - [x] Plantilla de marca para las guías en PDF (`npm run guides:build`, guía en `content/blog/README.md`). Muestra: `public/guias/temperatura-de-servicio.pdf`; falta tu visto bueno.
 - [x] Descarga de guías por correo: `/api/guias` valida en servidor, guarda en `guide_requests` y envía el PDF con Resend (plantilla de marca; vista previa en `/correos?correo=guia`). Quien marca "novedades" entra a `waitlist_signups` con source `guia:<slug>`.
-- [ ] **Correr en Supabase** `supabase/migrations/20261024000000_guide_requests.sql`: primero staging, luego producción. Sin esa tabla el formulario de la guía responde con error.
+- [x] `guide_requests` corrida en staging y producción.
 - [x] Blog real: backlog en `content/blog/BACKLOG.md` (Excel en `docs/`), publicación programada los jueves 9:00 am CDMX sin cron, title tag, canonical, JSON-LD (Article, BreadcrumbList, FAQPage), sitemap con artículos visibles. Piezas 01 a 06 en revisión en dev.
 - [ ] 19 nov: dar de alta Search Console, enviar el sitemap y pedir indexación de 01 a 07 (backlog §4).
 - [ ] GA4 y sus eventos (descarga de guía, clic al armador, quiz y Wine Scan): pendiente, no hay GA4 instalado.
@@ -73,7 +69,7 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 ## Wine Scan (25 oct 2026)
 
 - [x] Construido en dev: `/wine-scan` (escáner móvil, QR en escritorio), `POST /api/wine-scan`, `POST /api/wine-scan/feedback`, tabla `wine_scans` y vista `wine_scans_resumen`. Base de conocimiento en `wine-scan/knowledge/`.
-- [ ] **Correr en Supabase** `supabase/migrations/20261025000000_wine_scans.sql` (staging y luego producción).
+- [x] `wine_scans` corrida en staging y producción.
 - [ ] **Vercel:** `ANTHROPIC_API_KEY` (ya está), `WINE_SCAN_IP_SALT` (Sensitive, Production y Preview). Opcionales: `WINE_SCAN_MODEL`, `WINE_SCAN_ENABLED`, `WINE_SCAN_MAX_PER_HOUR`.
 - [ ] Confirmar la tabla de slugs (`wine-scan/knowledge/SLUGS.md`).
 - [ ] Decidir el caso "Rioja Reserva": empate exacto Sangiovese/Merlot; por la regla de desempate (precio) hoy gana el Merlot.
@@ -84,7 +80,7 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 
 ## Quiz IA (25 oct 2026)
 Concepto: `quiz/concepto-quiz-ia.md`. Configuración editable: `quiz/config/` (preguntas, perfiles, vinos, textos).
-- [ ] Correr en **staging y producción**: `supabase/migrations/20261026000000_quiz.sql` y después `supabase/seed/wine_profiles.sql`. Sin la tabla, el quiz usa los mismos archivos del repo, pero no guarda sesiones (no hay enlace para compartir ni correo).
+- [x] `quiz.sql` y `wine_profiles.sql` corridas en staging y producción (26 oct).
 - [ ] Variables en Vercel (Production y Preview): `QUIZ_MODEL`, `QUIZ_ENABLED`, `QUIZ_RATE_LIMIT_PER_HOUR` (la clave de Anthropic ya existe).
 - [ ] **Lista 3 (Rocca):** el armador la trata como su propio grupo (Selezione d’Oro) y **no** la mezcla con los tintos de la lista 2; el quiz sigue esa misma regla. Confirmar con el aliado; si se pueden mezclar, se cambia en la base (grupo del producto) y el quiz lo sigue solo.
 - [ ] **Lista 2 en el armador:** Cabernet, Merlot, Montepulciano y Langhe Nebbiolo están en La Selezione (con los blancos); Don Carlo, Primitivo di Manduria, Ripasso y Amarone en I Grandi Rossi. Un kit no mezcla esos dos grupos.
