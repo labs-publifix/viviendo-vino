@@ -117,3 +117,33 @@ test("blog: fecha en texto y estado real de cada ficha", () => {
   assert.equal(estadoFicha(f("2026-11-10"), undefined, now, apertura), "atrasado");
   assert.equal(estadoFicha(f("2027-01-07"), undefined, now, apertura), "idea");
 });
+
+import { equipoProblema } from "../lib/admin/rules.ts";
+import { diferencias, resumen, valor } from "../lib/admin/audit-format.ts";
+
+test("equipo: nadie se quita el acceso ni el rol a sí mismo y siempre queda un admin", () => {
+  const equipo = [
+    { id: "jose", rol: "admin", activo: true },
+    { id: "rafa", rol: "admin", activo: true },
+    { id: "ana", rol: "atencion", activo: true },
+  ];
+  assert.match(equipoProblema(equipo, "jose", { id: "jose", activo: false }), /a ti mismo/);
+  assert.match(equipoProblema(equipo, "jose", { id: "jose", rol: "atencion" }), /tu propio rol/);
+  assert.equal(equipoProblema(equipo, "jose", { id: "rafa", activo: false }), null);
+  assert.equal(equipoProblema(equipo, "jose", { id: "ana", rol: "admin" }), null);
+  const solo = [{ id: "jose", rol: "admin", activo: true }, { id: "rafa", rol: "admin", activo: false }];
+  assert.equal(equipoProblema(solo, "rafa", { id: "jose", activo: false }), "Tiene que quedar al menos una persona administradora con acceso.");
+  assert.match(equipoProblema(equipo, "jose", { id: "nadie", activo: false }), /ya no está/);
+});
+
+test("auditoría: diferencias, valores y resumen", () => {
+  assert.deepEqual(diferencias({ texto: "A", activo: true, updated_at: "x" }, { texto: "B", activo: true, updated_at: "y" }), [{ campo: "Mensaje", antes: "A", despues: "B" }]);
+  assert.deepEqual(diferencias(null, { rol: "atencion" }), [{ campo: "Rol", antes: "—", despues: "Atención" }]);
+  assert.equal(valor("activo", false), "No");
+  assert.equal(valor("inicia_at", "2026-11-19T15:00:00.000Z"), "19 nov 2026 · 09:00");
+  assert.equal(resumen({ accion: "editar", entidad: "anuncios", entidad_id: "1", antes: { texto: "Viejo" }, despues: { texto: "Nuevo" } }), "“Nuevo”");
+  assert.equal(resumen({ accion: "exportar", entidad: "comunidad", entidad_id: "espera", antes: null, despues: { filas: 46 } }), "Lista de espera · 46 filas");
+  assert.equal(resumen({ accion: "invitar", entidad: "admin_usuarios", entidad_id: "1", antes: null, despues: { nombre: "Ana" } }), "Ana");
+  assert.equal(resumen({ accion: "contrasena", entidad: "admin_usuarios", entidad_id: "1", antes: null, despues: null }), "");
+  assert.equal(resumen({ accion: "editar", entidad: "cuenta", entidad_id: "1", antes: { nombre: "A" }, despues: { nombre: "B" } }), "sus datos");
+});

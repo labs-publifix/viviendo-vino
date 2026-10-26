@@ -87,3 +87,27 @@ export function initials(nombre: string): string {
 }
 
 export const ROL_LABEL: Record<Rol, string> = { admin: "Administrador", aliado: "Aliado", atencion: "Atención" };
+
+export const ROL_DESC: Record<Rol, string> = {
+  admin: "Ve y cambia todo el panel.",
+  atencion: "Ve los pedidos (sin montos) para dar seguimiento y atender clientes.",
+  aliado: "Ve los pedidos de su tienda y marca sus vinos como disponibles o agotados.",
+};
+
+type Miembro = { id: string; rol: Rol; activo: boolean };
+
+/**
+ * ¿Se puede aplicar este cambio al equipo? Nadie se quita el acceso ni el rol de admin a sí mismo (desde
+ * aquí), y siempre queda al menos un admin con acceso. Devuelve el problema o null.
+ */
+export function equipoProblema(equipo: Miembro[], yo: string, cambio: { id: string; rol?: Rol; activo?: boolean }): string | null {
+  const actual = equipo.find((m) => m.id === cambio.id);
+  if (!actual) return "Esa persona ya no está en el equipo. Recarga la página.";
+  if (cambio.id === yo) {
+    if (cambio.activo === false) return "No puedes quitarte el acceso a ti mismo. Pídeselo a otra persona administradora.";
+    if (cambio.rol && cambio.rol !== actual.rol) return "No puedes cambiar tu propio rol. Pídeselo a otra persona administradora.";
+  }
+  const despues = equipo.map((m) => (m.id === cambio.id ? { ...m, rol: cambio.rol ?? m.rol, activo: cambio.activo ?? m.activo } : m));
+  if (!despues.some((m) => m.rol === "admin" && m.activo)) return "Tiene que quedar al menos una persona administradora con acceso.";
+  return null;
+}

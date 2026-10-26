@@ -66,3 +66,17 @@ export async function requireAdmin(roles?: Rol[]): Promise<AdminUser> {
   if (roles && !roles.includes(user.rol)) redirect("/admin");
   return user;
 }
+
+/** Hash del token de la sesión actual (para no cerrarla junto con las demás). */
+export async function currentTokenHash(): Promise<string | null> {
+  const token = (await cookies()).get(ADMIN_COOKIE)?.value;
+  return token ? hashToken(token) : null;
+}
+
+/** Cierra las sesiones de una persona; con `except`, conserva esa (la del navegador actual). */
+export async function closeSessions(usuarioId: string, except?: string | null) {
+  let q = supabaseAdmin().from("admin_sesiones").delete().eq("usuario_id", usuarioId);
+  if (except) q = q.neq("token_hash", except);
+  const { error } = await q;
+  if (error) throw new Error(`No se pudieron cerrar las sesiones: ${error.code}`);
+}

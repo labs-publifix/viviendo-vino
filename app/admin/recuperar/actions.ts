@@ -1,10 +1,8 @@
 "use server";
 
-import { headers } from "next/headers";
 import { z } from "zod";
 import { emailHash } from "@/lib/admin/auth";
-import { sendPasswordLink } from "@/lib/admin/email";
-import { SITE_URL } from "@/lib/site";
+import { sendAccessLink } from "@/lib/admin/invite";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 // Enlace para crear o recuperar la contraseña. Solo se envía a personas dadas de alta en el panel; la respuesta
@@ -13,14 +11,6 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 export type LinkState = { sent?: boolean; error?: string };
 const MAX_PER_HOUR = 3;
 const schema = z.object({ email: z.string().trim().toLowerCase().email().max(254) });
-
-async function origin(): Promise<string> {
-  if (process.env.VERCEL_ENV === "production") return SITE_URL;
-  const h = await headers();
-  const host = (h.get("x-forwarded-host") ?? h.get("host") ?? "").split(",")[0].trim();
-  if (!/^[a-z0-9.-]+(:\d{2,5})?$/i.test(host)) return SITE_URL;
-  return `${host.startsWith("localhost") ? "http" : "https"}://${host}`;
-}
 
 export async function requestLink(_prev: LinkState, form: FormData): Promise<LinkState> {
   const parsed = schema.safeParse({ email: form.get("email") });
@@ -34,21 +24,11 @@ export async function requestLink(_prev: LinkState, form: FormData): Promise<Lin
   if ((count ?? 0) >= MAX_PER_HOUR) return { sent: true };
   await db.from("admin_intentos").insert({ email_hash: emailHash(`enlace:${email}`), exito: true });
 
-  const { data: usuario } = await db.from("admin_usuarios").select("id, nombre, activo, user_id").eq("email", email).maybeSingle();
+  const { data: usuario } = await db.from("admin_usuarios").select("id, email, nombre, activo, user_id").eq("email", email).maybeSingle();
   if (!usuario || !usuario.activo) return { sent: true };
 
   try {
-    const primera = !usuario.user_id;
-    if (primera) {
-      // Cuenta de acceso sin contraseña todavía; la crea la persona con el enlace.
-      const { error } = await db.auth.admin.createUser({ email, email_confirm: true });
-      if (error && error.code !== "email_exists") throw new Error(`createUser: ${error.code}`);
-    }
-    const { data, error } = await db.auth.admin.generateLink({ type: "recovery", email });
-    if (error || !data.properties?.hashed_token) throw new Error(`generateLink: ${error?.code ?? "sin token"}`);
-    if (data.user?.id && data.user.id !== usuario.user_id) await db.from("admin_usuarios").update({ user_id: data.user.id }).eq("id", usuario.id);
-    const url = `${await origin()}/admin/contrasena?t=${encodeURIComponent(data.properties.hashed_token)}`;
-    await sendPasswordLink(email, usuario.nombre, url, primera);
+    await sendAccessLink(usuario);
   } catch (err) {
     // Sin el correo en el log: solo el id interno.
     console.error("admin: no se envió el enlace de contraseña", usuario.id, err instanceof Error ? err.message : err);

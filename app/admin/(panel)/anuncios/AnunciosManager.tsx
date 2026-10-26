@@ -210,6 +210,10 @@ function AnuncioForm({ item, onDone }: { item?: Item; onDone: () => void }) {
   }, {});
   const [texto, setTexto] = useState(item?.texto ?? "");
   const [fechas, setFechas] = useState(Boolean(item?.iniciaAt || item?.terminaAt));
+  // Controlados: si el servidor regresa un error, lo escrito se conserva.
+  const [enlace, setEnlace] = useState(item?.enlace ?? "");
+  const [inicia, setInicia] = useState(item?.inicioLocal ?? "");
+  const [termina, setTermina] = useState(item?.finLocal ?? "");
   const e = state.errors ?? {};
 
   return (
@@ -232,7 +236,8 @@ function AnuncioForm({ item, onDone }: { item?: Item; onDone: () => void }) {
         name="enlace"
         label="Enlace"
         optional
-        defaultValue={item?.enlace ?? ""}
+        value={enlace}
+        onChange={(ev) => setEnlace(ev.target.value)}
         inputMode="url"
         autoComplete="off"
         spellCheck={false}
@@ -252,8 +257,8 @@ function AnuncioForm({ item, onDone }: { item?: Item; onDone: () => void }) {
         </label>
         {fechas && (
           <div className={styles.dates}>
-            <TextField name="inicia" type="datetime-local" label="Desde" optional defaultValue={item?.inicioLocal ?? ""} error={e.inicia} />
-            <TextField name="termina" type="datetime-local" label="Hasta" optional defaultValue={item?.finLocal ?? ""} error={e.termina} />
+            <TextField name="inicia" type="datetime-local" label="Desde" optional value={inicia} onChange={(ev) => setInicia(ev.target.value)} error={e.inicia} />
+            <TextField name="termina" type="datetime-local" label="Hasta" optional value={termina} onChange={(ev) => setTermina(ev.target.value)} error={e.termina} />
             <p className={styles.sub}>Hora de la Ciudad de México. Deja uno vacío si no tiene límite.</p>
           </div>
         )}

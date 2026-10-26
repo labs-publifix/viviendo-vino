@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { LOCKED_MESSAGE, authClient, isLocked, recordAttempt } from "@/lib/admin/auth";
+import { audit } from "@/lib/admin/audit";
 import { safeAdminNext } from "@/lib/admin/rules";
 import { startSession } from "@/lib/admin/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -61,5 +62,6 @@ export async function login(_prev: LoginState, form: FormData): Promise<LoginSta
   await recordAttempt(email, true);
   if (!usuario.user_id) await db.from("admin_usuarios").update({ user_id: data.user.id }).eq("id", usuario.id);
   await startSession(usuario.id);
+  await audit({ id: usuario.id, email }, "entrar", "sesion", usuario.id);
   redirect(safeAdminNext(next));
 }

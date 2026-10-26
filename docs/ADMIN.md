@@ -72,8 +72,8 @@ celular el menú se abre de lado desde la barra superior.
 | Comunidad | Hecho | `/admin/comunidad` |
 | Marquesina y anuncios | Hecho | `/admin/anuncios` |
 | Contenido (Quiz IA, Wine Scan, blog) | Hecho | `/admin/contenido` |
-| Configuración | Pendiente | `/admin/configuracion` |
-| Auditoría (pantalla; el registro ya se guarda) | Pendiente | `/admin/auditoria` |
+| Configuración (Mi cuenta y Equipo) | Hecho (27 oct) | `/admin/configuracion` |
+| Auditoría | Hecho (27 oct) | `/admin/auditoria` |
 | Catálogo | Pendiente | `/admin/catalogo` |
 | Inicio (tablero) | Pendiente | `/admin` |
 | Pedidos | Pendiente | `/admin/pedidos` |
@@ -82,9 +82,11 @@ celular el menú se abre de lado desde la barra superior.
 ### Pendientes del admin
 
 **Por construir**
-- [ ] Configuración: equipo y roles (invitar, cambiar rol, desactivar), datos del aliado, Mi cuenta (cambiar
-  contraseña y activar el código en dos pasos opcional).
-- [ ] Auditoría: pantalla de consulta con filtros por persona y sección (los cambios ya se registran).
+- [x] Configuración: Mi cuenta (nombre, contraseña, código en dos pasos opcional, cerrar otras sesiones) y Equipo
+  (invitar, editar nombre y rol, quitar o devolver acceso, reenviar enlace). Siempre queda al menos un admin.
+- [x] Auditoría: línea de tiempo por día con filtros por persona y sección, y el antes y después de cada cambio.
+  Registra también la entrada y salida del panel.
+- [ ] Datos del aliado (nombre, ciudad, comisión): se editan en Catálogo, junto con sus vinos.
 - [ ] Catálogo: aliados, grupos, vinos (precio, foto al bucket `vinos`, textos, disponible/agotado, activo) y kits
   prearmados; generalizar los grupos más allá de azul/rojo/verde/amarillo para aliados nuevos; mover a la base las
   fotos de grupos y kits (`lib/catalog/media.ts`); `updateTag("catalogo")` al guardar. Rol aliado: solo
