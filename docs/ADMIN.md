@@ -16,6 +16,16 @@ producción (www) se hace después y solo con aprobación expresa.
   Después de abrir el admin en producción, `supabase/seed/catalogo-completo.sql` **no se vuelve a correr**:
   reescribe precios y textos con los originales.
 
+## Aliados y permisos (decidido el 27 de octubre de 2026)
+
+- **Alta del aliado en Configuración → Aliados** (pestaña junto a Equipo, solo admin): nombre, ciudad y estado,
+  comisión y condiciones comerciales. Después, en Configuración → Equipo se invita a su gente con el rol Aliado.
+- **Catálogo** queda para los grupos, vinos y kits de cada aliado.
+- **El rol Aliado solo puede:** ver sus ventas y sus pedidos, y cambiar un vino suyo entre disponible y agotado.
+  **No puede** cambiar precios, textos, fotos, grupos ni kits, ni ver nada de otro aliado.
+- **Todo lo que toca precios** (precio de cada vino, kits prearmados, comisión del aliado) **solo lo hace un
+  administrador.** Se revisa en el servidor en cada acción, no solo ocultando botones.
+
 ## Equipo inicial
 
 | Persona | Correo | Rol |
@@ -33,12 +43,12 @@ celular el menú se abre de lado desde la barra superior.
 |---|---|---|
 | Inicio | Ventas del día y la semana, pedidos por preparar y atrasados, vinos agotados, por transferir, alertas | admin; aliado (su parte) |
 | Pedidos | Lista con búsqueda; detalle con kits, dirección, edad, regalo, factura, pago e historial; estados; guía; notas | todos (aliado y atención sin montos) |
-| Catálogo | Aliados, sus grupos, sus vinos (precio, foto, textos, disponible, activo) y kits prearmados | admin; aliado solo disponible/agotado de sus vinos |
+| Catálogo | Grupos, vinos (precio, foto, textos, disponible, activo) y kits prearmados de cada aliado | admin; aliado solo disponible/agotado de sus vinos |
 | Finanzas | Libro de liquidaciones, transferencias al aliado, exportación CSV | admin |
 | Marquesina y anuncios | Mensajes de la barra superior de la tienda, programables (hora de CDMX) | admin |
 | Contenido | Tres frentes en pestañas: Quiz IA, Wine Scan y Blog y guías (uso y lo publicado) | admin |
 | Comunidad | Lista de espera, correos guardados del quiz, guías pedidas, consentimientos; exportar | admin |
-| Configuración | Equipo y roles, datos del aliado, Mi cuenta (contraseña y código en dos pasos) | admin; cada quien su cuenta |
+| Configuración | Mi cuenta (todos), Equipo y Aliados (alta y condiciones comerciales; solo admin) | admin; cada quien su cuenta |
 | Auditoría | Quién cambió qué, cuándo, valor anterior y nuevo | admin, solo lectura |
 
 ## Técnica
@@ -86,7 +96,7 @@ celular el menú se abre de lado desde la barra superior.
   (invitar, editar nombre y rol, quitar o devolver acceso, reenviar enlace). Siempre queda al menos un admin.
 - [x] Auditoría: línea de tiempo por día con filtros por persona y sección, y el antes y después de cada cambio.
   Registra también la entrada y salida del panel.
-- [ ] Datos del aliado (nombre, ciudad, comisión): se editan en Catálogo, junto con sus vinos.
+- [ ] Configuración → Aliados: alta y edición del aliado (nombre, ciudad, comisión, condiciones). Solo admin.
 - [ ] Catálogo: aliados, grupos, vinos (precio, foto al bucket `vinos`, textos, disponible/agotado, activo) y kits
   prearmados; generalizar los grupos más allá de azul/rojo/verde/amarillo para aliados nuevos; mover a la base las
   fotos de grupos y kits (`lib/catalog/media.ts`); `updateTag("catalogo")` al guardar. Rol aliado: solo
