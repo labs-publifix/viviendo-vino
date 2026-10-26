@@ -134,7 +134,7 @@ Referencia aprobada: `temperatura-de-servicio.pdf` (hoja carta, 1 página). Las 
 | Tipo | Artículo |
 | Categoría | Aprende |
 | Clúster | A · Aprende lo básico |
-| Estado | En revisión (dev) |
+| Estado | Aprobado (26 oct 2026); se publica al abrir la tienda |
 | Existe | Sí (dev) |
 | Slug | `como-leer-la-etiqueta-de-un-vino` |
 | URL canónica | https://www.viviendovino.com/blog/como-leer-la-etiqueta-de-un-vino |
@@ -163,7 +163,7 @@ Referencia aprobada: `temperatura-de-servicio.pdf` (hoja carta, 1 página). Las 
 | Tipo | Guía · Guía N.º 02 |
 | Categoría | Guías de maridaje |
 | Clúster | A · Aprende lo básico |
-| Estado | En revisión (dev) |
+| Estado | Aprobado (26 oct 2026); se publica al abrir la tienda |
 | Existe | Sí (dev) |
 | Slug | `a-que-temperatura-servir-cada-vino` |
 | URL canónica | https://www.viviendovino.com/blog/a-que-temperatura-servir-cada-vino |
@@ -192,7 +192,7 @@ Referencia aprobada: `temperatura-de-servicio.pdf` (hoja carta, 1 página). Las 
 | Tipo | Artículo |
 | Categoría | Del catálogo |
 | Clúster | C · Ocasiones, regalos y compra |
-| Estado | En revisión (dev) |
+| Estado | Aprobado (26 oct 2026); se publica al abrir la tienda |
 | Existe | Sí (dev) |
 | Slug | `tu-primera-caja-de-vino` |
 | URL canónica | https://www.viviendovino.com/blog/tu-primera-caja-de-vino |
@@ -220,7 +220,7 @@ Referencia aprobada: `temperatura-de-servicio.pdf` (hoja carta, 1 página). Las 
 | Tipo | Guía · Guía N.º 01 |
 | Categoría | Guías de maridaje |
 | Clúster | A · Aprende lo básico |
-| Estado | En revisión (dev) |
+| Estado | Aprobado (26 oct 2026); se publica al abrir la tienda |
 | Existe | No (por redactar) |
 | Slug | `guia-de-maridaje-vino-y-comida` |
 | URL canónica | https://www.viviendovino.com/blog/guia-de-maridaje-vino-y-comida |
@@ -249,7 +249,7 @@ Referencia aprobada: `temperatura-de-servicio.pdf` (hoja carta, 1 página). Las 
 | Tipo | Artículo |
 | Categoría | Aprende |
 | Clúster | A · Aprende lo básico |
-| Estado | En revisión (dev) |
+| Estado | Aprobado (26 oct 2026); se publica al abrir la tienda |
 | Existe | No (por redactar) |
 | Slug | `como-saber-que-tipo-de-vino-te-gusta` |
 | URL canónica | https://www.viviendovino.com/blog/como-saber-que-tipo-de-vino-te-gusta |
@@ -278,7 +278,7 @@ Referencia aprobada: `temperatura-de-servicio.pdf` (hoja carta, 1 página). Las 
 | Tipo | Artículo |
 | Categoría | Del catálogo |
 | Clúster | C · Ocasiones, regalos y compra |
-| Estado | En revisión (dev) |
+| Estado | Aprobado (26 oct 2026); se publica al abrir la tienda |
 | Existe | No (por redactar) |
 | Slug | `comprar-vino-en-linea-mexico` |
 | URL canónica | https://www.viviendovino.com/blog/comprar-vino-en-linea-mexico |

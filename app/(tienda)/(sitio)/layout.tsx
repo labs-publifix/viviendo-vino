@@ -4,11 +4,10 @@ import { AnnouncementBar } from "@/app/_ui/AnnouncementBar";
 import { Footer } from "@/app/_ui/Footer";
 import { Header } from "@/app/_ui/Header";
 
-// Textos de muestra de la marquesina (en revisión con el equipo).
+// Textos de la marquesina (26 oct 2026). "Sin compra mínima" se quitó: el pedido mínimo es un kit de 6.
 const ANUNCIOS = [
   "Kits de 6 botellas con envío incluido",
   "Arma tu kit desde $1,800",
-  "Sin compra mínima",
   "Vino italiano de Véneto, Piamonte, Abruzzo y Puglia",
   "Repite las botellas que quieras",
 ];

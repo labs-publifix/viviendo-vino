@@ -99,22 +99,6 @@
 /* Nosotros: foto y texto. Sin foto (producción), solo texto. */
 .about { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); align-items: center; }
 .aboutPhoto { display: block; width: 100%; max-width: 420px; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 15%; border-radius: var(--r-card); }
-.aboutPlaceholder {
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: var(--s-2);
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 4 / 5;
-  border: 1px dashed rgb(154 32 48 / 0.5);
-  border-radius: var(--r-card);
-  background: var(--surface);
-  color: var(--vv-vino);
-  text-align: center;
-}
-.aboutPlaceholder span { font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
-.aboutPlaceholder small { font-size: var(--t-small); color: var(--muted); }
 
 /* Blog y guías */
 .blogHead { display: flex; flex-direction: column; gap: var(--s-3); margin-bottom: var(--s-6); }
@@ -134,8 +118,7 @@
 
 @media (max-width: 899px) {
   .aboutPhoto,
-  .aboutPlaceholder { max-width: none; aspect-ratio: 3 / 2; }
-}
+  }
 @media (min-width: 900px) {
   .teaser { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s-8); }
   .reverse .copy { order: 2; }

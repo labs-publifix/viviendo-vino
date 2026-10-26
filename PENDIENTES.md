@@ -40,7 +40,7 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [x] Contenido de Rafa (portada y `/nosotros`) en `lib/about.ts`: foto, historia, frase, datos y criterios.
 - [x] Feed de Instagram (Behold, `INSTAGRAM_FEED_URL`) en `/nosotros` y en la portada, componente `app/_ui/InstagramFeed.tsx`.
 - [x] Blog construido: `/blog`, `/blog/[slug]` y el teaser de la portada leen `content/blog/*.md` (guía en `content/blog/README.md`, backlog en `content/blog/BACKLOG.md`).
-- [ ] Aprobar las 6 piezas del blog (01 a 06) para que se publiquen al abrir la tienda.
+- [x] Piezas del blog 01 a 06 aprobadas (26 oct); se publican al abrir la tienda.
 - [x] Plantilla de marca para las guías en PDF (`npm run guides:build`, guía en `content/blog/README.md`). Muestra: `public/guias/temperatura-de-servicio.pdf`; falta tu visto bueno.
 - [x] Descarga de guías por correo: `/api/guias` valida en servidor, guarda en `guide_requests` y envía el PDF con Resend (plantilla de marca; vista previa en `/correos?correo=guia`). Quien marca "novedades" entra a `waitlist_signups` con source `guia:<slug>`.
 - [x] `guide_requests` corrida en staging y producción.
@@ -51,9 +51,9 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [ ] Confirmar con quien corresponda la leyenda de consumo responsable (hoy "Evita el exceso · Venta solo a mayores de 18 años").
 
 ## Portada
-- [ ] Textos de la marquesina de anuncios: hoy son de muestra (`app/(tienda)/(sitio)/layout.tsx`).
-- [ ] Ilustración del hero en mayor resolución (ideal 2560 × 1440): la actual mide 1280 × 720.
-- [ ] Etiqueta del hero "Vinos exclusivos de Viviendo Vino": la guía de voz (PRODUCT.md) pide evitar "exclusivo"; se usó por decisión del equipo (23 oct). Confirmar.
+- [x] Marquesina revisada (26 oct): se quitó "Sin compra mínima". La marquesina programable llega con el admin.
+- [x] Imagen del hero: se queda la actual de 1280 × 720 (26 oct).
+- [x] Etiqueta del hero "Vinos exclusivos de Viviendo Vino": confirmada por el equipo (26 oct).
 - [ ] Texto del aviso de edad revisado por el equipo legal; decidir si también se muestra en la lista de espera de www (hoy solo en la tienda).
 
 ## Marca

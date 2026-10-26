@@ -4,7 +4,7 @@ import { DarkBlock } from "@/app/_ui/DarkBlock";
 import { Icon } from "@/app/_ui/Icon";
 import { InstagramFeed } from "@/app/_ui/InstagramFeed";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
-import { IS_PREVIEW, RAFA_PHOTO } from "@/lib/about";
+import { RAFA_PHOTO } from "@/lib/about";
 import { getArticles, toSummary } from "@/lib/blog/content";
 import { TYPE_LABELS } from "@/lib/catalog/types";
 import { SOCIAL } from "@/lib/social";
@@ -102,18 +102,8 @@ export async function Descubre() {
       </DarkBlock>
 
       <section className={`${styles.section} ${styles.about}`} aria-labelledby="nosotros-title">
-        {RAFA_PHOTO ? (
-          // eslint-disable-next-line @next/next/no-img-element -- foto optimizada
-          <img src={RAFA_PHOTO.src} alt="Rafa Aguirre, fundador de Viviendo Vino" width={RAFA_PHOTO.width} height={RAFA_PHOTO.height} loading="lazy" className={styles.aboutPhoto} />
-        ) : (
-          IS_PREVIEW && (
-            <div className={styles.aboutPlaceholder} role="img" aria-label="Espacio para la foto de Rafa Aguirre (pendiente)">
-              <Icon name="camera" size={28} />
-              <span>Foto de Rafa · pendiente</span>
-              <small>Solo se ve en dev</small>
-            </div>
-          )
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element -- foto optimizada */}
+        <img src={RAFA_PHOTO.src} alt="Rafa Aguirre, fundador de Viviendo Vino" width={RAFA_PHOTO.width} height={RAFA_PHOTO.height} loading="lazy" className={styles.aboutPhoto} />
         <div className={styles.copy}>
           <NumberedLabel>Nosotros</NumberedLabel>
           <Heading id="nosotros-title">Conoce a quien está detrás de cada kit.</Heading>
