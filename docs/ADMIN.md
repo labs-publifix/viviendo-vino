@@ -23,6 +23,9 @@ producción (www) se hace después y solo con aprobación expresa.
 - **Catálogo** queda para los grupos, vinos y kits de cada aliado.
 - **El rol Aliado solo puede:** ver sus ventas y sus pedidos, y cambiar un vino suyo entre disponible y agotado.
   **No puede** cambiar precios, textos, fotos, grupos ni kits, ni ver nada de otro aliado.
+- **Sus ventas, en solo lectura (opción C):** por pedido, el total que pagó el cliente, la comisión de Viviendo
+  Vino y lo que le toca al aliado; además, las transferencias que ya se le hicieron y lo que falta por pagarle.
+  Llega con Pedidos y Finanzas.
 - **Todo lo que toca precios** (precio de cada vino, kits prearmados, comisión del aliado) **solo lo hace un
   administrador.** Se revisa en el servidor en cada acción, no solo ocultando botones.
 
@@ -42,9 +45,9 @@ celular el menú se abre de lado desde la barra superior.
 | Sección | Contenido | Roles |
 |---|---|---|
 | Inicio | Ventas del día y la semana, pedidos por preparar y atrasados, vinos agotados, por transferir, alertas | admin; aliado (su parte) |
-| Pedidos | Lista con búsqueda; detalle con kits, dirección, edad, regalo, factura, pago e historial; estados; guía; notas | todos (aliado y atención sin montos) |
+| Pedidos | Lista con búsqueda; detalle con kits, dirección, edad, regalo, factura, pago e historial; estados; guía; notas | todos (atención sin montos; aliado solo los suyos, con montos) |
 | Catálogo | Grupos, vinos (precio, foto, textos, disponible, activo) y kits prearmados de cada aliado | admin; aliado solo disponible/agotado de sus vinos |
-| Finanzas | Libro de liquidaciones, transferencias al aliado, exportación CSV | admin |
+| Finanzas | Libro de liquidaciones, transferencias al aliado, exportación CSV | admin; aliado solo lectura de lo suyo (ventas, comisión, lo que le toca, transferencias y saldo) |
 | Marquesina y anuncios | Mensajes de la barra superior de la tienda, programables (hora de CDMX) | admin |
 | Contenido | Tres frentes en pestañas: Quiz IA, Wine Scan y Blog y guías (uso y lo publicado) | admin |
 | Comunidad | Lista de espera, correos guardados del quiz, guías pedidas, consentimientos; exportar | admin |
