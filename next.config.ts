@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
   },
   // Imágenes del feed de Instagram (Behold). Hoy se sirven con <img srcset> directo; queda permitido por si se
   // usa next/image.
-  images: { remotePatterns: [{ protocol: "https", hostname: "hop.behold.pictures" }, { protocol: "https", hostname: "**.behold.pictures" }] },
+  images: { remotePatterns: [{ protocol: "https", hostname: "behold.pictures" }, { protocol: "https", hostname: "**.behold.pictures" }] },
   // El preview (dev.viviendovino.com y despliegues de Preview) nunca se indexa,
   // incluidos los archivos estáticos que no pasan por proxy.ts.
   async headers() {

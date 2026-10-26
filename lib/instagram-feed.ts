@@ -8,8 +8,10 @@ export type InstagramPost = {
   permalink: string;
   isVideo: boolean;
   alt: string;
-  /** small (400), medium (700) y large (1000), cuadradas. */
-  images: { small: string; medium: string; large: string };
+  /** Tamaños de Behold con su ancho real (conservan la proporción original: un reel llega vertical). */
+  images: { url: string; width: number }[];
+  /** Imagen por omisión del cuadro: el tamaño medio. */
+  src: string;
 };
 
 export const FEED_ALT_FALLBACK = "Publicación de @viviendovino en Instagram";
@@ -44,7 +46,8 @@ export function altFromCaption(caption: unknown, words = 10): string {
   return parts.length > words ? `${text}…` : text;
 }
 
-type RawSize = { mediaUrl?: unknown } | undefined;
+type RawSize = { mediaUrl?: unknown; width?: unknown } | undefined;
+const DEFAULT_WIDTH: Record<string, number> = { small: 400, medium: 700, large: 1000 };
 type RawPost = { id?: unknown; permalink?: unknown; mediaType?: unknown; prunedCaption?: unknown; sizes?: Record<string, RawSize> };
 
 /** Convierte el JSON de Behold en las publicaciones a mostrar, en el orden en que llegan. Ignora las inválidas. */
@@ -55,16 +58,18 @@ export function parseFeed(json: unknown): InstagramPost[] {
   for (const raw of posts as RawPost[]) {
     if (out.length >= MAX_POSTS) break;
     const s = raw?.sizes ?? {};
-    const small = s.small?.mediaUrl;
+    const images = (["small", "medium", "large"] as const)
+      .map((k) => ({ url: s[k]?.mediaUrl, width: typeof s[k]?.width === "number" && (s[k]!.width as number) > 0 ? (s[k]!.width as number) : DEFAULT_WIDTH[k] }))
+      .filter((i): i is { url: string; width: number } => isImage(i.url));
     const medium = s.medium?.mediaUrl;
-    const large = s.large?.mediaUrl;
     if (!isImage(medium) || !isPermalink(raw.permalink)) continue;
     out.push({
       id: typeof raw.id === "string" ? raw.id : String(raw.id ?? out.length),
       permalink: raw.permalink,
       isVideo: raw.mediaType === "VIDEO",
       alt: altFromCaption(raw.prunedCaption),
-      images: { small: isImage(small) ? small : medium, medium, large: isImage(large) ? large : medium },
+      images,
+      src: medium,
     });
   }
   return out;

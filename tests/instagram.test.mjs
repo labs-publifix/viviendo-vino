@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { FEED_ALT_FALLBACK, altFromCaption, parseFeed } from "../lib/instagram-feed.ts";
 
-const img = (n, s) => `https://hop.behold.pictures/abc/${n}-${s}.webp`;
+const img = (n, s) => `https://behold.pictures/abc/${n}-${s}.jpg?class=original`;
 const post = (n, extra = {}) => ({
   id: `p${n}`,
   timestamp: "2026-10-20T18:00:00+0000",
@@ -13,14 +13,24 @@ const post = (n, extra = {}) => ({
   thumbnailUrl: `https://scontent.cdninstagram.com/v/${n}.jpg?oe=firmado`,
   caption: "Un tinto para el fin de semana #vino #viviendovino",
   prunedCaption: "Un tinto para el fin de semana",
-  sizes: { small: { mediaUrl: img(n, "s") }, medium: { mediaUrl: img(n, "m") }, large: { mediaUrl: img(n, "l") }, full: { mediaUrl: img(n, "f") } },
+  sizes: {
+    small: { mediaUrl: img(n, "s"), width: 225, height: 400 },
+    medium: { mediaUrl: img(n, "m"), width: 394, height: 700 },
+    large: { mediaUrl: img(n, "l"), width: 562, height: 1000 },
+    full: { mediaUrl: img(n, "f"), width: 1080, height: 1920 },
+  },
   ...extra,
 });
 
 test("usa sizes (nunca el .mp4 ni los enlaces firmados) y respeta el orden", () => {
   const out = parseFeed({ username: "viviendovino", posts: [post(1), post(2, { mediaType: "IMAGE" }), post(3)] });
   assert.deepEqual(out.map((p) => p.id), ["p1", "p2", "p3"]);
-  assert.deepEqual(out[0].images, { small: img(1, "s"), medium: img(1, "m"), large: img(1, "l") });
+  assert.deepEqual(out[0].images, [
+    { url: img(1, "s"), width: 225 },
+    { url: img(1, "m"), width: 394 },
+    { url: img(1, "l"), width: 562 },
+  ]);
+  assert.equal(out[0].src, img(1, "m"));
   assert.equal(out[0].isVideo, true);
   assert.equal(out[1].isVideo, false);
   for (const p of out) assert.ok(!JSON.stringify(p).includes("cdninstagram"));

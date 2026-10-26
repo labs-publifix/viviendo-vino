@@ -1,11 +1,11 @@
-/* Cuadrícula de Instagram: 3 columnas en móvil, 6 en escritorio; mismo radio que los cuadros de espera. */
+/* Cuadrícula de Instagram: 3 columnas en móvil, 6 en escritorio, cuadros verticales 3:4 como en el perfil. */
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
 @media (min-width: 900px) { .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 
 .placeholder {
   display: grid;
   place-items: center;
-  aspect-ratio: 1;
+  aspect-ratio: 3 / 4;
   border: 1px dashed rgb(154 32 48 / 0.35);
   border-radius: 8px;
   background: var(--surface);
@@ -15,7 +15,7 @@
 .post {
   position: relative;
   display: block;
-  aspect-ratio: 1;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   border-radius: 8px;
   background: var(--surface);
