@@ -4,8 +4,9 @@ import { notFound } from "next/navigation";
 import { ButtonLink } from "@/app/_ui/Button";
 import { DarkBlock } from "@/app/_ui/DarkBlock";
 import { Icon } from "@/app/_ui/Icon";
+import { InstagramFeed } from "@/app/_ui/InstagramFeed";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
-import { IS_PREVIEW, RAFA_CRITERIA, RAFA_FACTS, RAFA_NOTE, RAFA_PHOTO, RAFA_QUOTE, RAFA_STORY } from "@/lib/about";
+import { RAFA_CRITERIA, RAFA_FACTS, RAFA_NOTE, RAFA_PHOTO, RAFA_QUOTE, RAFA_STORY } from "@/lib/about";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { SOCIAL } from "@/lib/social";
 import styles from "./nosotros.module.css";
@@ -125,7 +126,7 @@ export default function Nosotros() {
       <section className={`${styles.section} ${styles.community}`} aria-labelledby="comunidad-title">
         <div className={styles.communityHead}>
           <div className={styles.copy}>
-            <Heading id="comunidad-title">Somos más de 30 mil en Instagram</Heading>
+            <Heading id="comunidad-title">Somos casi 30 mil en Instagram</Heading>
             <p className={styles.lede}>
               El vino se disfruta más cuando se comparte. Síguenos, descubre nuevas etiquetas y cuéntanos qué estás tomando. ¡Brindemos juntos!
             </p>
@@ -135,17 +136,8 @@ export default function Nosotros() {
             <span className="vv-sr-only"> (se abre en otra pestaña)</span>
           </ButtonLink>
         </div>
-        {/* Espacio reservado del feed: se conecta con la API de Instagram en la fase de funcionalidades.
-            Solo en el preview: en producción no se muestran cuadros vacíos. */}
-        {IS_PREVIEW && (
-          <ul className={styles.feedGrid} aria-hidden="true">
-            {Array.from({ length: 6 }, (_, i) => (
-              <li key={i}>
-                <Icon name="instagram" size={20} />
-              </li>
-            ))}
-          </ul>
-        )}
+        {/* Últimas 6 publicaciones (Behold, INSTAGRAM_FEED_URL); si el feed falla, cuadros de espera. */}
+        <InstagramFeed />
       </section>
 
       {/* 6. Cierre: al constructor de kits (bloque oscuro, como el de la portada). */}

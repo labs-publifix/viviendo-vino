@@ -35,6 +35,7 @@ Las claves secretas (`RESEND_API_KEY`, `SUPABASE_SECRET_KEY`, `WAITLIST_TOKEN_SE
 | `WINE_SCAN_IP_SALT` | Sal del hash de la IP para ese tope (≥ 32 caracteres aleatorios, *Sensitive*). La IP nunca se guarda. El Quiz IA usa la misma sal. |
 | `QUIZ_MODEL` | Modelo de los textos del Quiz IA (por omisión `claude-sonnet-5-5`; por ejemplo `claude-haiku-5-5`). Se cambia sin tocar código. |
 | `QUIZ_ENABLED` | `false` pausa el Quiz IA con un mensaje amable sin llamar a la API. |
+| `INSTAGRAM_FEED_URL` | URL del feed JSON de Behold con las últimas 6 publicaciones de @viviendovino (/nosotros). Se lee cada hora; si falta o falla, se ven cuadros de espera. |
 | `QUIZ_RATE_LIMIT_PER_HOUR` | Tope de seguridad de quizzes por hora por IP (por omisión 20). |
 
 ## Ramas y entornos

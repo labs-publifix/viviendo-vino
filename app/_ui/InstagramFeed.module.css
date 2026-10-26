@@ -1,0 +1,57 @@
+/* Cuadrícula de Instagram: 3 columnas en móvil, 6 en escritorio; mismo radio que los cuadros de espera. */
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
+@media (min-width: 900px) { .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 1px dashed rgb(154 32 48 / 0.35);
+  border-radius: 8px;
+  background: var(--surface);
+  color: rgb(154 32 48 / 0.5);
+}
+
+.post {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--surface);
+}
+.post img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform var(--vv-dur) var(--vv-ease), filter var(--vv-dur) var(--vv-ease); }
+.post::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0 var(--vv-vino);
+  transition: box-shadow var(--vv-dur) var(--vv-ease);
+  pointer-events: none;
+}
+/* Solo con cursor: en pantallas táctiles el hover se queda pegado después de tocar. */
+@media (hover: hover) {
+  .post:hover img { transform: scale(1.03); filter: brightness(0.92); }
+  .post:hover::after { box-shadow: inset 0 0 0 2px var(--vv-vino); }
+}
+.post:focus-visible { outline: var(--focus); outline-offset: 2px; }
+
+/* Reel: play pequeño en la esquina, sobre un círculo negro tinto translúcido. */
+.play {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgb(10 2 6 / 0.55);
+  color: var(--vv-hueso);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post img, .post::after { transition: none; }
+  .post:hover img { transform: none; }
+}

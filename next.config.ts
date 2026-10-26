@@ -19,6 +19,9 @@ const nextConfig: NextConfig = {
     "/quiz/og/*": ["./node_modules/@fontsource/inter/files/inter-latin-*-normal.woff", "./node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff", "./public/brand/logo-fondo-oscuro.svg"],
     "/blog/*/opengraph-image*": ["./content/blog/**/*", "./node_modules/@fontsource/inter/files/inter-latin-*-normal.woff", "./public/img/rafa-avatar.png"],
   },
+  // Imágenes del feed de Instagram (Behold). Hoy se sirven con <img srcset> directo; queda permitido por si se
+  // usa next/image.
+  images: { remotePatterns: [{ protocol: "https", hostname: "hop.behold.pictures" }] },
   // El preview (dev.viviendovino.com y despliegues de Preview) nunca se indexa,
   // incluidos los archivos estáticos que no pasan por proxy.ts.
   async headers() {

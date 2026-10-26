@@ -86,16 +86,6 @@
 /* 5. Comunidad */
 .community { padding-bottom: var(--s-9); }
 .communityHead { display: flex; flex-direction: column; gap: var(--s-4); align-items: flex-start; }
-.feedGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
-.feedGrid li {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1;
-  border: 1px dashed rgb(154 32 48 / 0.35);
-  border-radius: 8px;
-  background: var(--surface);
-  color: rgb(154 32 48 / 0.5);
-}
 
 /* 6. Cierre (bloque oscuro, como el de la portada) */
 .closing { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-5); }
@@ -110,7 +100,6 @@
   .hero .photo { justify-self: end; }
   .bio { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s-8); align-items: start; }
   .communityHead { flex-direction: row; align-items: flex-end; justify-content: space-between; }
-  .feedGrid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .closing { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--s-8); }
   .closingActions { flex: none; }
 }
