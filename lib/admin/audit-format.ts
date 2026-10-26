@@ -20,6 +20,13 @@ export const ACCION_LABEL: Record<string, string> = {
   reenviar: "Reenvió el enlace a",
   quitar_acceso: "Quitó el acceso a",
   devolver_acceso: "Devolvió el acceso a",
+  pausar: "Pausó a",
+  reactivar: "Reactivó a",
+  disponible: "Marcó como disponible",
+  agotado: "Marcó como agotado",
+  ocultar: "Ocultó de la tienda",
+  mostrar: "Volvió a mostrar en la tienda",
+  foto: "Cambió la foto de",
   entrar: "Entró al panel",
   salir: "Salió del panel",
 };
@@ -30,6 +37,9 @@ export const ENTIDAD_LABEL: Record<string, string> = {
   admin_usuarios: "Equipo",
   cuenta: "Mi cuenta",
   sesion: "Acceso",
+  aliados: "Aliados",
+  productos: "Catálogo",
+  kits_prearmados: "Kits prearmados",
 };
 
 const CAMPO_LABEL: Record<string, string> = {
@@ -45,6 +55,36 @@ const CAMPO_LABEL: Record<string, string> = {
   rol: "Rol",
   aliado_id: "Aliado",
   filas: "Filas",
+  ciudad: "Ciudad",
+  estado: "Estado",
+  comision_bps: "Comisión",
+  plazo_preparacion_dias: "Días de preparación",
+  plazo_entrega_texto: "Texto de entrega",
+  razon_social: "Razón social",
+  rfc: "RFC",
+  contacto_nombre: "Contacto",
+  contacto_telefono: "Teléfono",
+  contacto_email: "Correo de contacto",
+  clabe: "CLABE",
+  notas: "Notas",
+  nombre_oficial: "Nombre",
+  productor: "Productor",
+  categoria_slug: "Categoría",
+  grupo_id: "Grupo",
+  tipo: "Tipo",
+  uva: "Uva",
+  region: "Región",
+  denominacion: "Denominación",
+  anada: "Añada",
+  volumen_ml: "Volumen (ml)",
+  grado_alcohol: "Alcohol (%)",
+  precio_centavos: "Precio por botella",
+  premio: "Premio",
+  descripcion: "Descripción",
+  descripcion_aliado: "Texto del aliado",
+  imagen_url: "Foto",
+  disponible: "Disponible",
+  items: "Botellas",
 };
 // Campos técnicos que no aportan al leer un cambio.
 const OCULTOS = new Set(["id", "updated_at", "created_at", "user_id", "iniciaAt", "terminaAt"]);
@@ -55,6 +95,8 @@ export function valor(campo: string, v: unknown): string {
   if (v === null || v === undefined || v === "") return "—";
   if (typeof v === "boolean") return v ? "Sí" : "No";
   if (campo === "rol" && typeof v === "string") return ROLES[v] ?? v;
+  if (campo === "precio_centavos" && typeof v === "number") return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(v / 100);
+  if (campo === "comision_bps" && typeof v === "number") return `${v / 100} %`;
   if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}T/.test(v)) return fechaCdmx(v);
   if (typeof v === "object") return JSON.stringify(v);
   return String(v);
@@ -92,6 +134,7 @@ export function resumen(row: { accion: string; entidad: string; entidad_id: stri
   // Acciones sobre la propia cuenta: la frase ya está completa ("cambió su contraseña").
   if (row.accion === "contrasena") return "";
   if (row.entidad === "cuenta") return row.accion === "editar" ? "sus datos" : "";
-  if (row.entidad === "admin_usuarios") return pick("nombre") ?? pick("email") ?? "una persona";
+  if (row.entidad === "admin_usuarios" || row.entidad === "aliados" || row.entidad === "kits_prearmados") return pick("nombre") ?? pick("email") ?? "";
+  if (row.entidad === "productos") return pick("nombre_oficial") ?? "un vino";
   return "";
 }

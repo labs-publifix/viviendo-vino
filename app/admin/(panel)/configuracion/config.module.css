@@ -109,3 +109,8 @@
 .roleCard span { display: flex; flex-direction: column; gap: 2px; }
 .roleCard strong { font-size: 15px; }
 .roleCard small { color: var(--muted); font-size: 13px; line-height: 1.4; }
+
+/* Bloques de un formulario largo (Aliados) */
+.group { display: flex; flex-direction: column; gap: 14px; margin: 0; padding: 16px 0 0; border: 0; border-top: 1px solid var(--line); }
+.group legend { float: left; width: 100%; margin-bottom: 10px; padding: 0; font-size: 15px; font-weight: 700; }
+.group legend + * { clear: both; }

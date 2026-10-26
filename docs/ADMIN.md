@@ -72,7 +72,8 @@ celular el menú se abre de lado desde la barra superior.
 ## Tablas nuevas
 
 `admin_usuarios`, `admin_sesiones`, `admin_intentos`, `auditoria` (lunes), `anuncios` (lunes 26, migración
-`20261028000000_anuncios.sql`; si la tabla no existe, la tienda usa los mensajes de siempre),
+`20261028000000_anuncios.sql`; si la tabla no existe, la tienda usa los mensajes de siempre), `aliados_datos` y la
+función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sql`),
 `pedidos`, `pedido_kits`, `pedido_botellas`, `pagos`, `eventos_webhook`, `liquidaciones`, `transferencias`,
 `envios`, `consentimientos` (viernes; se llenan con el checkout y Mercado Pago).
 
@@ -87,7 +88,8 @@ celular el menú se abre de lado desde la barra superior.
 | Contenido (Quiz IA, Wine Scan, blog) | Hecho | `/admin/contenido` |
 | Configuración (Mi cuenta y Equipo) | Hecho (27 oct) | `/admin/configuracion` |
 | Auditoría | Hecho (27 oct) | `/admin/auditoria` |
-| Catálogo | Pendiente | `/admin/catalogo` |
+| Catálogo (vinos, kits y grupos) | Hecho (27 oct) | `/admin/catalogo` |
+| Configuración → Aliados | Hecho (27 oct) | `/admin/configuracion/aliados` |
 | Inicio (tablero) | Pendiente | `/admin` |
 | Pedidos | Pendiente | `/admin/pedidos` |
 | Finanzas | Pendiente | `/admin/finanzas` |
@@ -99,11 +101,16 @@ celular el menú se abre de lado desde la barra superior.
   (invitar, editar nombre y rol, quitar o devolver acceso, reenviar enlace). Siempre queda al menos un admin.
 - [x] Auditoría: línea de tiempo por día con filtros por persona y sección, y el antes y después de cada cambio.
   Registra también la entrada y salida del panel.
-- [ ] Configuración → Aliados: alta y edición del aliado (nombre, ciudad, comisión, condiciones). Solo admin.
-- [ ] Catálogo: aliados, grupos, vinos (precio, foto al bucket `vinos`, textos, disponible/agotado, activo) y kits
-  prearmados; generalizar los grupos más allá de azul/rojo/verde/amarillo para aliados nuevos; mover a la base las
-  fotos de grupos y kits (`lib/catalog/media.ts`); `updateTag("catalogo")` al guardar. Rol aliado: solo
-  disponible/agotado de sus vinos.
+- [x] Configuración → Aliados: alta y edición (empresa, comisión, días de preparación, texto de entrega y datos
+  privados: razón social, RFC, contacto y CLABE validada) y pausa. El de Córdoba es In Vino Veritas. La comisión
+  ya no es legible con la llave pública.
+- [x] Catálogo: vinos (precio, foto al bucket `vinos` recortada a 880×1184, textos, disponible/agotado, mostrar u
+  ocultar), alta de vinos, kits prearmados (6 del mismo grupo, guardado en una transacción) y vista de grupos. Rol
+  aliado: solo disponible/agotado de sus vinos; el servidor rechaza cualquier otro cambio. Al guardar, la tienda
+  se actualiza y se regenera en segundo plano para que la primera visita ya vea el cambio.
+- [ ] Grupos editables y grupos de aliados nuevos: hoy los nombres y fotos de los 4 grupos (azul, rojo, verde,
+  amarillo) viven también en el código de la tienda (`GROUP_LABELS`, `lib/catalog/media.ts`). Un aliado nuevo
+  necesita sus grupos y que la tienda los muestre: es un cambio de front que se hace con aprobación.
 - [ ] Inicio: ventas del día y la semana, pedidos por preparar y atrasados, agotados, por transferir, alertas.
 - [ ] Pedidos y Finanzas: modelo de datos (pedidos, pagos, liquidaciones, transferencias, envíos,
   consentimientos), probado con pedidos de prueba; se llena de verdad con el checkout y Mercado Pago.
