@@ -54,3 +54,12 @@ test("alt: primeras 10 palabras de prunedCaption o el texto de respaldo", () => 
   assert.equal(altFromCaption(undefined), FEED_ALT_FALLBACK);
   assert.equal(parseFeed({ posts: [post(1, { prunedCaption: "" })] })[0].alt, FEED_ALT_FALLBACK);
 });
+
+test("acepta otros subdominios de Behold e Instagram, nunca el CDN firmado", async () => {
+  const otro = post(1, { permalink: "https://instagram.com/p/1/", sizes: { medium: { mediaUrl: "https://cdn2.behold.pictures/x/1.webp" } } });
+  const cdn = post(2, { sizes: { medium: { mediaUrl: "https://scontent.cdninstagram.com/v/2.jpg?oe=firmado" } } });
+  assert.deepEqual(parseFeed({ posts: [otro, cdn] }).map((p) => p.id), ["p1"]);
+  const { describeFeed } = await import("../lib/instagram-feed.ts");
+  assert.match(describeFeed({ posts: [cdn] }), /1 publicaciones; primera: sizes=\[medium\], medium=scontent.cdninstagram.com/);
+  assert.match(describeFeed({ data: [] }), /sin arreglo "posts" \(claves: data\)/);
+});

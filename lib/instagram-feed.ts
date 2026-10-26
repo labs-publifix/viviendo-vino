@@ -1,6 +1,6 @@
 // Lectura del feed de Instagram de Behold (JSON). Lógica pura, sin imports de Next, para usarla igual en el
 // servidor (lib/instagram.ts) y en las pruebas (tests/instagram.test.mjs).
-// Solo se aceptan imágenes de hop.behold.pictures (las de "sizes", estables) y enlaces de instagram.com.
+// Solo se aceptan imágenes de behold.pictures y sus subdominios (las de "sizes", estables) y enlaces de instagram.com.
 // Nunca se usan mediaUrl ni thumbnailUrl de nivel superior: en reels son .mp4 o enlaces firmados que caducan.
 
 export type InstagramPost = {
@@ -19,7 +19,7 @@ const isImage = (u: unknown): u is string => {
   if (typeof u !== "string") return false;
   try {
     const url = new URL(u);
-    return url.protocol === "https:" && url.hostname === "hop.behold.pictures";
+    return url.protocol === "https:" && (url.hostname === "behold.pictures" || url.hostname.endsWith(".behold.pictures"));
   } catch {
     return false;
   }
@@ -29,7 +29,7 @@ const isPermalink = (u: unknown): u is string => {
   if (typeof u !== "string") return false;
   try {
     const url = new URL(u);
-    return url.protocol === "https:" && (url.hostname === "www.instagram.com" || url.hostname === "instagram.com");
+    return url.protocol === "https:" && (url.hostname === "instagram.com" || url.hostname.endsWith(".instagram.com"));
   } catch {
     return false;
   }
@@ -68,4 +68,19 @@ export function parseFeed(json: unknown): InstagramPost[] {
     });
   }
   return out;
+}
+
+/** Resumen del JSON para el log cuando no sale ninguna publicación válida (sin textos ni datos de personas). */
+export function describeFeed(json: unknown): string {
+  const posts = (json as { posts?: unknown })?.posts;
+  if (!Array.isArray(posts)) return `sin arreglo "posts" (claves: ${Object.keys((json as object) ?? {}).join(", ") || "ninguna"})`;
+  const first = posts[0] as RawPost | undefined;
+  const host = (u: unknown) => {
+    try {
+      return new URL(String(u)).hostname;
+    } catch {
+      return String(u ?? "vacío").slice(0, 40);
+    }
+  };
+  return `${posts.length} publicaciones; primera: sizes=[${Object.keys(first?.sizes ?? {}).join(",")}], medium=${host(first?.sizes?.medium?.mediaUrl)}, permalink=${host(first?.permalink)}`;
 }
