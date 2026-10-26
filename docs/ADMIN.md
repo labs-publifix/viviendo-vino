@@ -50,8 +50,8 @@ celular el menú se abre de lado desde la barra superior.
 - Toda lectura y escritura del panel pasa por el servidor con la secret key; **cada server action vuelve a
   revisar la sesión y el rol** (no basta con ocultar botones).
 - Cada cambio queda en `auditoria` (antes y después).
-- Al guardar en Catálogo o en Marquesina y anuncios se invalida el caché de la tienda (`updateTag("catalogo")`), así el cambio
-  se ve al momento.
+- Al guardar se invalida el caché de la tienda (`updateTag("catalogo")` en Catálogo, `updateTag("anuncios")` en
+  Marquesina y anuncios), así el cambio se ve al momento.
 - Fotos nuevas: bucket público `vinos` de Supabase Storage. Las 19 actuales siguen en `public/img/vinos/`.
 - Supabase: desactivar el registro público (Authentication → Sign In / Providers → "Allow new users to sign up"
   apagado). Las altas solo las hace el servidor.
@@ -62,6 +62,49 @@ celular el menú se abre de lado desde la barra superior.
 `20261028000000_anuncios.sql`; si la tabla no existe, la tienda usa los mensajes de siempre),
 `pedidos`, `pedido_kits`, `pedido_botellas`, `pagos`, `eventos_webhook`, `liquidaciones`, `transferencias`,
 `envios`, `consentimientos` (viernes; se llenan con el checkout y Mercado Pago).
+
+## Estado (cierre del lunes 26 de octubre de 2026)
+
+| Sección | Estado | Ruta |
+|---|---|---|
+| Acceso, contraseñas, sesiones y roles | Hecho | `/admin/acceso`, `/admin/recuperar`, `/admin/contrasena` |
+| Estructura del panel (menú colapsable, celular) | Hecho | `/admin` |
+| Comunidad | Hecho | `/admin/comunidad` |
+| Marquesina y anuncios | Hecho | `/admin/anuncios` |
+| Contenido (Quiz IA, Wine Scan, blog) | Hecho | `/admin/contenido` |
+| Configuración | Pendiente | `/admin/configuracion` |
+| Auditoría (pantalla; el registro ya se guarda) | Pendiente | `/admin/auditoria` |
+| Catálogo | Pendiente | `/admin/catalogo` |
+| Inicio (tablero) | Pendiente | `/admin` |
+| Pedidos | Pendiente | `/admin/pedidos` |
+| Finanzas | Pendiente | `/admin/finanzas` |
+
+### Pendientes del admin
+
+**Por construir**
+- [ ] Configuración: equipo y roles (invitar, cambiar rol, desactivar), datos del aliado, Mi cuenta (cambiar
+  contraseña y activar el código en dos pasos opcional).
+- [ ] Auditoría: pantalla de consulta con filtros por persona y sección (los cambios ya se registran).
+- [ ] Catálogo: aliados, grupos, vinos (precio, foto al bucket `vinos`, textos, disponible/agotado, activo) y kits
+  prearmados; generalizar los grupos más allá de azul/rojo/verde/amarillo para aliados nuevos; mover a la base las
+  fotos de grupos y kits (`lib/catalog/media.ts`); `updateTag("catalogo")` al guardar. Rol aliado: solo
+  disponible/agotado de sus vinos.
+- [ ] Inicio: ventas del día y la semana, pedidos por preparar y atrasados, agotados, por transferir, alertas.
+- [ ] Pedidos y Finanzas: modelo de datos (pedidos, pagos, liquidaciones, transferencias, envíos,
+  consentimientos), probado con pedidos de prueba; se llena de verdad con el checkout y Mercado Pago.
+- [ ] Blog: lecturas y vistas por artículo (con GA4 o con un contador propio; decidir).
+
+**Para el equipo (Supabase)**
+- [x] Staging: `20261027000000_admin.sql` corrido; cuenta de José creada.
+- [ ] Staging: correr `20261028000000_anuncios.sql` (si aún no se corrió).
+- [ ] Staging: apagar "Allow new users to sign up" en Authentication.
+- [ ] Rafael: crear su contraseña desde "Es mi primera vez".
+
+**Paso a producción (solo con aprobación expresa)**
+- [ ] Cargar el catálogo en producción (una sola vez) y después no volver a correr `catalogo-completo.sql`.
+- [ ] Correr en producción las migraciones del admin (`20261027000000_admin.sql`, `20261028000000_anuncios.sql` y
+  las que sigan), apagar el registro público y habilitar `/admin` en www con la tienda aún cerrada.
+- [ ] Con eso, Comunidad muestra los correos reales de la lista de espera (hoy dev ve solo staging).
 
 ## Calendario
 

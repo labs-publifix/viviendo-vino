@@ -51,7 +51,8 @@ Las páginas `/envios`, `/preguntas-frecuentes`, `/terminos` y `/privacidad` lle
 - [ ] Confirmar con quien corresponda la leyenda de consumo responsable (hoy "Evita el exceso · Venta solo a mayores de 18 años").
 
 ## Portada
-- [x] Marquesina revisada (26 oct): se quitó "Sin compra mínima". La marquesina programable llega con el admin.
+- [x] Marquesina revisada (26 oct): se quitó "Sin compra mínima". Desde el 26 oct se edita y programa en /admin/anuncios.
+- [ ] Panel de administración: estado y pendientes en `docs/ADMIN.md` (sección "Estado").
 - [x] Imagen del hero: se queda la actual de 1280 × 720 (26 oct).
 - [x] Etiqueta del hero "Vinos exclusivos de Viviendo Vino": confirmada por el equipo (26 oct).
 - [ ] Texto del aviso de edad revisado por el equipo legal; decidir si también se muestra en la lista de espera de www (hoy solo en la tienda).
