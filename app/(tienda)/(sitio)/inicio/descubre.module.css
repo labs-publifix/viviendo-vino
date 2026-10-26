@@ -117,8 +117,8 @@
 .articles li > * { flex: 1; }
 
 @media (max-width: 899px) {
-  .aboutPhoto,
-  }
+  .aboutPhoto { max-width: none; aspect-ratio: 3 / 2; }
+}
 @media (min-width: 900px) {
   .teaser { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s-8); }
   .reverse .copy { order: 2; }
