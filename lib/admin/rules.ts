@@ -2,6 +2,8 @@
 
 export const PASSWORD_MIN = 10;
 export const ADMIN_COOKIE_NAME = "vv_admin";
+/** Preferencia de la barra lateral colapsada (no es sesión ni dato personal). */
+export const NAV_COOKIE = "vv_admin_nav";
 
 /** Problema de la contraseña nueva, o null si sirve. */
 export function passwordProblem(password: string, email: string): string | null {
@@ -33,17 +35,55 @@ export function needsAdminSession(pathname: string): boolean {
 
 export type Rol = "admin" | "aliado" | "atencion";
 
-/** Secciones del menú y quién las ve (docs/ADMIN.md). */
-export const SECCIONES: { href: string; label: string; roles: Rol[] }[] = [
-  { href: "/admin", label: "Inicio", roles: ["admin", "aliado", "atencion"] },
-  { href: "/admin/pedidos", label: "Pedidos", roles: ["admin", "aliado", "atencion"] },
-  { href: "/admin/catalogo", label: "Catálogo", roles: ["admin", "aliado"] },
-  { href: "/admin/finanzas", label: "Finanzas", roles: ["admin"] },
-  { href: "/admin/contenido", label: "Contenido", roles: ["admin"] },
-  { href: "/admin/comunidad", label: "Comunidad", roles: ["admin"] },
-  { href: "/admin/funciones", label: "Quiz IA y Wine Scan", roles: ["admin"] },
-  { href: "/admin/configuracion", label: "Configuración", roles: ["admin", "aliado", "atencion"] },
-  { href: "/admin/auditoria", label: "Auditoría", roles: ["admin"] },
+export type SeccionIcon = "home" | "orders" | "bottle" | "wallet" | "megaphone" | "layers" | "users" | "settings" | "history";
+export type Seccion = { href: string; label: string; icon: SeccionIcon; roles: Rol[] };
+
+/** Secciones del menú, agrupadas, y quién las ve (docs/ADMIN.md). */
+export const GRUPOS: { label: string; secciones: Seccion[] }[] = [
+  {
+    label: "Operación",
+    secciones: [
+      { href: "/admin", label: "Inicio", icon: "home", roles: ["admin", "aliado", "atencion"] },
+      { href: "/admin/pedidos", label: "Pedidos", icon: "orders", roles: ["admin", "aliado", "atencion"] },
+      { href: "/admin/catalogo", label: "Catálogo", icon: "bottle", roles: ["admin", "aliado"] },
+      { href: "/admin/finanzas", label: "Finanzas", icon: "wallet", roles: ["admin"] },
+    ],
+  },
+  {
+    label: "Sitio",
+    secciones: [
+      { href: "/admin/anuncios", label: "Marquesina y anuncios", icon: "megaphone", roles: ["admin"] },
+      { href: "/admin/contenido", label: "Contenido", icon: "layers", roles: ["admin"] },
+      { href: "/admin/comunidad", label: "Comunidad", icon: "users", roles: ["admin"] },
+    ],
+  },
+  {
+    label: "Sistema",
+    secciones: [
+      { href: "/admin/configuracion", label: "Configuración", icon: "settings", roles: ["admin", "aliado", "atencion"] },
+      { href: "/admin/auditoria", label: "Auditoría", icon: "history", roles: ["admin"] },
+    ],
+  },
 ];
+
+export const SECCIONES: Seccion[] = GRUPOS.flatMap((g) => g.secciones);
+
+/** Grupos del menú con solo las secciones que ese rol puede ver (los grupos vacíos no se muestran). */
+export function menuFor(rol: Rol) {
+  return GRUPOS.map((g) => ({ label: g.label, secciones: g.secciones.filter((s) => s.roles.includes(rol)) })).filter((g) => g.secciones.length > 0);
+}
+
+/** Contenido: los tres frentes que se administran ahí. */
+export const CONTENIDO_TABS = [
+  { href: "/admin/contenido/quiz", label: "Quiz IA" },
+  { href: "/admin/contenido/wine-scan", label: "Wine Scan" },
+  { href: "/admin/contenido/blog", label: "Blog y guías" },
+];
+
+/** Iniciales para el avatar del menú ("José Bermúdez" → "JB"). */
+export function initials(nombre: string): string {
+  const parts = nombre.trim().split(/\s+/).filter(Boolean);
+  return ((parts[0]?.[0] ?? "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase() || "?";
+}
 
 export const ROL_LABEL: Record<Rol, string> = { admin: "Administrador", aliado: "Aliado", atencion: "Atención" };

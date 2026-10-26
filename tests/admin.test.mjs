@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { decide } from "../lib/gate.ts";
-import { needsAdminSession, passwordProblem, safeAdminNext, SECCIONES } from "../lib/admin/rules.ts";
+import { initials, menuFor, needsAdminSession, passwordProblem, safeAdminNext, SECCIONES } from "../lib/admin/rules.ts";
 
 const ADMIN_ROUTES = ["/admin", "/admin/acceso", "/admin/recuperar", "/admin/contrasena", "/admin/pedidos", "/admin/catalogo"];
 
@@ -47,4 +47,17 @@ test("menú: el admin ve las 9 secciones; aliado y atención no ven finanzas ni 
     const hrefs = SECCIONES.filter((s) => s.roles.includes(rol)).map((s) => s.href);
     assert.ok(!hrefs.includes("/admin/finanzas") && !hrefs.includes("/admin/auditoria"), rol);
   }
+});
+
+test("menuFor: grupos sin secciones vacías; atención solo ve Operación y Sistema", () => {
+  assert.deepEqual(menuFor("admin").map((g) => g.label), ["Operación", "Sitio", "Sistema"]);
+  assert.deepEqual(menuFor("atencion").map((g) => g.label), ["Operación", "Sistema"]);
+  assert.deepEqual(menuFor("atencion").flatMap((g) => g.secciones.map((s) => s.label)), ["Inicio", "Pedidos", "Configuración"]);
+});
+
+test("initials: iniciales del avatar", () => {
+  assert.equal(initials("José Bermúdez"), "JB");
+  assert.equal(initials("Rafael Aguirre"), "RA");
+  assert.equal(initials("  Ana "), "A");
+  assert.equal(initials(""), "?");
 });

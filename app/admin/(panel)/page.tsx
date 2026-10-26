@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { requireAdmin } from "@/lib/admin/session";
 import { PageHead } from "./_ui/PageHead";
-import styles from "./_ui/panel.module.css";
+import { Soon } from "./_ui/Soon";
 
 export const metadata: Metadata = { title: "Inicio" };
 
@@ -9,11 +9,16 @@ export default async function Page() {
   await requireAdmin(["admin", "aliado", "atencion"]);
   return (
     <>
-      <PageHead title="Inicio" />
-      <div className={`${styles.card} ${styles.soon}`}>
-        <p className={styles.mono}>En construcción</p>
-        <p>El tablero con ventas, pedidos por preparar, vinos agotados y alertas llega el jueves 29.</p>
-      </div>
+      <PageHead title="Inicio" text="Cómo va la tienda hoy y qué necesita tu atención." />
+      <Soon
+        when="jueves 29"
+        items={[
+          "Ventas de hoy y de la semana",
+          "Pedidos por preparar y los que van atrasados",
+          "Vinos agotados",
+          "Lo pendiente por transferir al aliado",
+        ]}
+      />
     </>
   );
 }

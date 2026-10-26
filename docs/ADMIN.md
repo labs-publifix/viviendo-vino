@@ -11,7 +11,7 @@ producción (www) se hace después y solo con aprobación expresa.
 - **Código en dos pasos (TOTP) opcional** para cada persona, desde "Mi cuenta".
 - Stock por vino: **disponible / agotado** (sin cantidades en la primera versión).
 - Los **kits prearmados** se editan en Catálogo.
-- La **marquesina** pasa a editarse en Contenido, con programación.
+- La **marquesina** se edita en "Marquesina y anuncios", con programación. "Contenido" agrupa Quiz IA, Wine Scan y blog.
 - El admin trabaja sobre las tablas que ya existen (los 19 vinos no se recargan). Las migraciones solo agregan.
   Después de abrir el admin en producción, `supabase/seed/catalogo-completo.sql` **no se vuelve a correr**:
   reescribe precios y textos con los originales.
@@ -25,15 +25,19 @@ producción (www) se hace después y solo con aprobación expresa.
 
 ## Secciones (menú lateral)
 
+Agrupadas en Operación (Inicio, Pedidos, Catálogo, Finanzas), Sitio (Marquesina y anuncios, Contenido,
+Comunidad) y Sistema (Configuración, Auditoría). En escritorio la barra se colapsa a íconos y se recuerda; en el
+celular el menú se abre de lado desde la barra superior.
+
 | Sección | Contenido | Roles |
 |---|---|---|
 | Inicio | Ventas del día y la semana, pedidos por preparar y atrasados, vinos agotados, por transferir, alertas | admin; aliado (su parte) |
 | Pedidos | Lista con búsqueda; detalle con kits, dirección, edad, regalo, factura, pago e historial; estados; guía; notas | todos (aliado y atención sin montos) |
 | Catálogo | Aliados, sus grupos, sus vinos (precio, foto, textos, disponible, activo) y kits prearmados | admin; aliado solo disponible/agotado de sus vinos |
 | Finanzas | Libro de liquidaciones, transferencias al aliado, exportación CSV | admin |
-| Contenido | Marquesina programable (hora de CDMX) | admin |
+| Marquesina y anuncios | Mensajes de la barra superior de la tienda, programables (hora de CDMX) | admin |
+| Contenido | Tres frentes en pestañas: Quiz IA, Wine Scan y Blog y guías (uso y lo publicado) | admin |
 | Comunidad | Lista de espera, correos guardados del quiz, guías pedidas, consentimientos; exportar | admin |
-| Quiz IA y Wine Scan | Métricas que ya se guardan | admin |
 | Configuración | Equipo y roles, datos del aliado, Mi cuenta (contraseña y código en dos pasos) | admin; cada quien su cuenta |
 | Auditoría | Quién cambió qué, cuándo, valor anterior y nuevo | admin, solo lectura |
 
@@ -46,7 +50,7 @@ producción (www) se hace después y solo con aprobación expresa.
 - Toda lectura y escritura del panel pasa por el servidor con la secret key; **cada server action vuelve a
   revisar la sesión y el rol** (no basta con ocultar botones).
 - Cada cambio queda en `auditoria` (antes y después).
-- Al guardar en Catálogo o Contenido se invalida el caché de la tienda (`updateTag("catalogo")`), así el cambio
+- Al guardar en Catálogo o en Marquesina y anuncios se invalida el caché de la tienda (`updateTag("catalogo")`), así el cambio
   se ve al momento.
 - Fotos nuevas: bucket público `vinos` de Supabase Storage. Las 19 actuales siguen en `public/img/vinos/`.
 - Supabase: desactivar el registro público (Authentication → Sign In / Providers → "Allow new users to sign up"
@@ -63,8 +67,8 @@ producción (www) se hace después y solo con aprobación expresa.
 | Día | Entrega |
 |---|---|
 | Lun 26 – Mar 27 | Acceso (inicio de sesión, contraseñas, roles), estructura del panel y Catálogo completo |
-| Mié 28 | Configuración (equipo, roles, aliado, Mi cuenta con código en dos pasos), Contenido (marquesina) y Auditoría |
-| Jue 29 | Comunidad, Quiz IA y Wine Scan, Inicio |
+| Mié 28 | Configuración (equipo, roles, aliado, Mi cuenta con código en dos pasos), Marquesina y anuncios y Auditoría |
+| Jue 29 | Comunidad, Contenido (Quiz IA, Wine Scan y blog), Inicio |
 | Vie 30 | Pedidos y Finanzas con su modelo de datos, probados con pedidos de prueba en dev; revisión general |
 
 ## Paso a producción (después, con aprobación)

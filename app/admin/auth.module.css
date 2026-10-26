@@ -10,6 +10,11 @@
   border-radius: var(--r-card);
   background: var(--surface);
 }
+/* En el celular, sin marco: la pantalla entera es el formulario. */
+@media (max-width: 559px) {
+  .page { place-items: start center; padding-top: var(--s-7); }
+  .card { padding: 0; border: 0; background: none; }
+}
 .logo { display: block; width: 168px; height: auto; }
 .head { display: flex; flex-direction: column; gap: var(--s-2); }
 .label { margin: 0; font-family: var(--font-label); font-size: var(--t-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
