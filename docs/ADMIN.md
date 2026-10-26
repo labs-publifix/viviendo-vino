@@ -58,7 +58,8 @@ celular el menú se abre de lado desde la barra superior.
 
 ## Tablas nuevas
 
-`admin_usuarios`, `admin_sesiones`, `admin_intentos`, `auditoria` (lunes), `anuncios` (miércoles),
+`admin_usuarios`, `admin_sesiones`, `admin_intentos`, `auditoria` (lunes), `anuncios` (lunes 26, migración
+`20261028000000_anuncios.sql`; si la tabla no existe, la tienda usa los mensajes de siempre),
 `pedidos`, `pedido_kits`, `pedido_botellas`, `pagos`, `eventos_webhook`, `liquidaciones`, `transferencias`,
 `envios`, `consentimientos` (viernes; se llenan con el checkout y Mercado Pago).
 
