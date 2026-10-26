@@ -2,15 +2,19 @@ import { ArticleCard } from "@/app/_ui/ArticleCard";
 import { ButtonLink } from "@/app/_ui/Button";
 import { DarkBlock } from "@/app/_ui/DarkBlock";
 import { Icon } from "@/app/_ui/Icon";
+import { InstagramFeed } from "@/app/_ui/InstagramFeed";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { IS_PREVIEW, RAFA_PHOTO } from "@/lib/about";
 import { getArticles, toSummary } from "@/lib/blog/content";
 import { TYPE_LABELS } from "@/lib/catalog/types";
+import { SOCIAL } from "@/lib/social";
 import styles from "./descubre.module.css";
 
-// Secciones de la portada que llevan a Quiz IA, Wine Scan, Nosotros y Blog (oct 2026).
+// Secciones de la portada que llevan a Quiz IA, Wine Scan, Nosotros, Blog e Instagram (oct 2026).
 // 05 y 06 siguen el patrón de 01 a 04 (etiqueta numerada, título, texto, botón); Nosotros y Blog son
 // editoriales, sin número. Solo estructura y contenido: el quiz, el escáner y el blog llegan después.
+
+const INSTAGRAM = SOCIAL.find((s) => s.id === "instagram")!;
 
 // Botellas reales del catálogo para ilustrar la sugerencia del quiz (decorativo).
 const QUIZ_BOTTLES = [
@@ -124,7 +128,7 @@ export async function Descubre() {
         </div>
       </section>
 
-      <section className={`${styles.section} ${styles.blog}`} aria-labelledby="blog-title">
+      <section className={styles.section} aria-labelledby="blog-title">
         <div className={styles.blogHead}>
           <div className={styles.copy}>
             <NumberedLabel>Blog y guías</NumberedLabel>
@@ -149,6 +153,27 @@ export async function Descubre() {
             ))}
           </ul>
         )}
+      </section>
+
+      {/* Comunidad: las últimas 6 publicaciones de @viviendovino (mismo componente que /nosotros). Lleva el
+          espacio final antes del bloque oscuro del cierre. */}
+      <section className={`${styles.section} ${styles.instagram}`} aria-labelledby="instagram-title">
+        <div className={styles.blogHead}>
+          <div className={styles.copy}>
+            <NumberedLabel>Comunidad</NumberedLabel>
+            <Heading id="instagram-title">Somos casi 30 mil en Instagram</Heading>
+            <p className={styles.lede}>
+              El vino se disfruta más cuando se comparte. Síguenos, descubre nuevas etiquetas y cuéntanos qué estás tomando. ¡Brindemos juntos!
+            </p>
+          </div>
+          <div className={styles.actions}>
+            <ButtonLink href={INSTAGRAM.href} target="_blank" rel="noopener noreferrer" variant="secondary">
+              <Icon name="instagram" size={18} /> Ir a @viviendovino
+              <span className="vv-sr-only"> (se abre en otra pestaña)</span>
+            </ButtonLink>
+          </div>
+        </div>
+        <InstagramFeed />
       </section>
     </>
   );
