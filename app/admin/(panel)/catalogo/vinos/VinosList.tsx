@@ -9,6 +9,7 @@ import { Notice } from "@/app/_ui/Notice";
 import { pesos } from "@/lib/admin/catalogo-rules";
 import { cambiarDisponible } from "../actions";
 import styles from "../catalogo.module.css";
+import { Select } from "../../_ui/Select";
 
 type Vino = {
   id: string;
@@ -71,24 +72,10 @@ export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[];
         </label>
         <div className={styles.selects}>
           {grupos.length > 1 && (
-            <select value={grupo} onChange={(e) => setGrupo(e.target.value)} aria-label="Filtrar por grupo" className={styles.select}>
-              <option value="">Todos los grupos</option>
-              {grupos.map((g) => (
-                <option key={g.id} value={g.id}>
-                  {g.nombre}
-                </option>
-              ))}
-            </select>
+            <Select variant="filter" label="Filtrar por grupo" hideLabel value={grupo} onChange={setGrupo} options={[{ value: "", label: "Todos los grupos" }, ...grupos.map((g) => ({ value: g.id, label: g.nombre }))]} />
           )}
           {editable && aliados.length > 1 && (
-            <select value={aliado} onChange={(e) => setAliado(e.target.value)} aria-label="Filtrar por aliado" className={styles.select}>
-              <option value="">Todos los aliados</option>
-              {aliados.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.nombre}
-                </option>
-              ))}
-            </select>
+            <Select variant="filter" label="Filtrar por aliado" hideLabel value={aliado} onChange={setAliado} options={[{ value: "", label: "Todos los aliados" }, ...aliados.map((a) => ({ value: a.id, label: a.nombre }))]} />
           )}
           {editable && (
             <ButtonLink href="/admin/catalogo/vinos/nuevo" size="md">

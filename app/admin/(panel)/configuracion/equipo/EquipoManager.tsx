@@ -2,11 +2,12 @@
 
 import { useActionState, useState, useTransition } from "react";
 import { Button } from "@/app/_ui/Button";
-import { SelectField, TextField } from "@/app/_ui/Field";
+import { TextField } from "@/app/_ui/Field";
 import { Notice } from "@/app/_ui/Notice";
 import type { Rol } from "@/lib/admin/rules";
 import { cambiarAcceso, editarMiembro, invitar, reenviarEnlace, type ActionResult, type EquipoState } from "./actions";
 import styles from "../config.module.css";
+import { Select } from "../../_ui/Select";
 
 export type Miembro = {
   id: string;
@@ -247,16 +248,9 @@ function MiembroForm({
       {bloquearRol && <input type="hidden" name="rol" value={rol} />}
       {rol === "aliado" &&
         (aliados.length ? (
-          <SelectField name="aliado_id" label="Aliado" value={aliadoId} onChange={(ev) => setAliadoId(ev.target.value)} required error={e.aliado_id}>
-            <option value="">Elige un aliado</option>
-            {aliados.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.nombre}
-              </option>
-            ))}
-          </SelectField>
+          <Select name="aliado_id" label="Aliado" value={aliadoId} onChange={setAliadoId} placeholder="Elige un aliado" error={e.aliado_id} options={aliados.map((a) => ({ value: a.id, label: a.nombre }))} />
         ) : (
-          <Notice kind="aviso">Todavía no hay aliados dados de alta. Se agregan en Catálogo.</Notice>
+          <Notice kind="aviso">Todavía no hay aliados dados de alta. Se agregan en Configuración → Aliados.</Notice>
         ))}
       <div className={styles.actions}>
         <Button type="submit" loading={saving}>

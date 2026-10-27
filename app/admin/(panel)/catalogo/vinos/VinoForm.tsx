@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { Button } from "@/app/_ui/Button";
-import { Checkbox, SelectField, TextField } from "@/app/_ui/Field";
+import { Checkbox, TextField } from "@/app/_ui/Field";
 import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
 import { Price } from "@/app/_ui/Price";
@@ -12,6 +12,7 @@ import { centavosATexto, pesos, precioACentavos, TIPOS } from "@/lib/admin/catal
 import { discountPercent } from "@/lib/money";
 import { guardarVino, type VinoState } from "../actions";
 import styles from "../catalogo.module.css";
+import { Select } from "../../_ui/Select";
 
 export type VinoDatos = {
   id?: string;
@@ -108,13 +109,7 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
           <section className={styles.card}>
             <h3>Datos del vino</h3>
             {nuevo && aliados.length > 1 && (
-              <SelectField name="aliado_id" label="Aliado" value={v.aliadoId} onChange={(ev) => setV((o) => ({ ...o, aliadoId: ev.target.value, grupo_id: "" }))} error={e.aliado_id}>
-                {aliados.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.nombre}
-                  </option>
-                ))}
-              </SelectField>
+              <Select name="aliado_id" label="Aliado" value={v.aliadoId} onChange={(x) => setV((o) => ({ ...o, aliadoId: x, grupo_id: "" }))} error={e.aliado_id} options={aliados.map((a) => ({ value: a.id, label: a.nombre }))} />
             )}
             {nuevo && aliados.length <= 1 && <input type="hidden" name="aliado_id" value={v.aliadoId} />}
             {gruposAliado.length === 0 && (
@@ -123,37 +118,26 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
             <TextField name="nombre_oficial" label="Nombre (como en la etiqueta)" value={v.nombre_oficial} onChange={set("nombre_oficial")} required error={e.nombre_oficial} />
             <div className={styles.twoCols}>
               <TextField name="productor" label="Productor" value={v.productor} onChange={set("productor")} required error={e.productor} />
-              <SelectField name="tipo" label="Tipo" value={v.tipo} onChange={set("tipo")} error={e.tipo}>
-                <option value="">Elige</option>
-                {TIPOS.map((t) => (
-                  <option key={t} value={t}>
-                    {TIPO_LABEL[t]}
-                  </option>
-                ))}
-              </SelectField>
-              <SelectField name="categoria_slug" label="Categoría" value={v.categoria_slug} onChange={set("categoria_slug")} error={e.categoria_slug}>
-                <option value="">Elige</option>
-                {categorias.map((c) => (
-                  <option key={c.slug} value={c.slug}>
-                    {c.nombre}
-                  </option>
-                ))}
-              </SelectField>
-              <SelectField
+              <Select name="tipo" label="Tipo" value={v.tipo} onChange={(x) => setV((o) => ({ ...o, tipo: x }))} placeholder="Elige" error={e.tipo} options={TIPOS.map((t) => ({ value: t, label: TIPO_LABEL[t] }))} />
+              <Select
+                name="categoria_slug"
+                label="Categoría"
+                value={v.categoria_slug}
+                onChange={(x) => setV((o) => ({ ...o, categoria_slug: x }))}
+                placeholder="Elige"
+                error={e.categoria_slug}
+                options={categorias.map((c) => ({ value: c.slug, label: c.nombre }))}
+              />
+              <Select
                 name="grupo_id"
                 label="Grupo"
                 value={v.grupo_id}
-                onChange={set("grupo_id")}
+                onChange={(x) => setV((o) => ({ ...o, grupo_id: x }))}
+                placeholder="Elige"
                 error={e.grupo_id}
                 hint={vino.kits.length ? `Está en ${vino.kits.join(", ")}; para cambiarlo de grupo, quítalo antes del kit.` : "Solo se mezclan en un kit los vinos del mismo grupo."}
-              >
-                <option value="">Elige</option>
-                {gruposAliado.map((g) => (
-                  <option key={g.id} value={g.id}>
-                    {g.nombre}
-                  </option>
-                ))}
-              </SelectField>
+                options={gruposAliado.map((g) => ({ value: g.id, label: g.nombre }))}
+              />
               <TextField name="uva" label="Uva" optional value={v.uva} onChange={set("uva")} error={e.uva} />
               <TextField name="region" label="Región" optional value={v.region} onChange={set("region")} error={e.region} />
               <TextField name="denominacion" label="Denominación" optional value={v.denominacion} onChange={set("denominacion")} hint="DOC, DOCG, IGT…" error={e.denominacion} />

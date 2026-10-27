@@ -13,7 +13,6 @@
 .search:focus-within { border-color: var(--vv-negro); outline: var(--focus); outline-offset: 2px; }
 .search input { flex: 1; min-width: 0; height: 42px; border: 0; background: transparent; color: var(--fg); font: inherit; font-size: 16px; outline: none; }
 .selects { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.select { min-height: 44px; padding: 0 36px 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%230a0206' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 14px center; color: var(--fg); font: inherit; font-size: 15px; appearance: none; cursor: pointer; }
 .segments { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
 .segment { display: inline-flex; align-items: center; gap: 6px; flex: none; min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--fg); font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; }
 .segment span { color: var(--muted); font-variant-numeric: tabular-nums; }

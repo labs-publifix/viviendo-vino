@@ -1,10 +1,10 @@
 "use client";
 
 import { useDeferredValue, useMemo, useState } from "react";
-import { SelectField } from "@/app/_ui/Field";
 import { Icon } from "@/app/_ui/Icon";
 import type { Cambio } from "@/lib/admin/audit-format";
 import styles from "./auditoria.module.css";
+import { Select } from "../_ui/Select";
 
 export type Evento = {
   id: string;
@@ -70,22 +70,8 @@ export function AuditLog({ eventos, limite }: { eventos: Evento[]; limite: numbe
           <span className="vv-sr-only">Buscar en la auditoría</span>
           <input type="search" value={query} onChange={(e) => (setQuery(e.target.value), setMax(PAGE))} placeholder="Buscar un mensaje, una persona…" autoComplete="off" />
         </label>
-        <SelectField label="Persona" value={persona} onChange={(e) => (setPersona(e.target.value), setMax(PAGE))}>
-          <option value="">Todas</option>
-          {personas.map(([k, v]) => (
-            <option key={k} value={k}>
-              {v}
-            </option>
-          ))}
-        </SelectField>
-        <SelectField label="Sección" value={seccion} onChange={(e) => (setSeccion(e.target.value), setMax(PAGE))}>
-          <option value="">Todas</option>
-          {secciones.map(([k, v]) => (
-            <option key={k} value={k}>
-              {v}
-            </option>
-          ))}
-        </SelectField>
+        <Select label="Persona" value={persona} onChange={(v) => (setPersona(v), setMax(PAGE))} options={[{ value: "", label: "Todas" }, ...personas.map(([k, v]) => ({ value: k, label: v }))]} />
+        <Select label="Sección" value={seccion} onChange={(v) => (setSeccion(v), setMax(PAGE))} options={[{ value: "", label: "Todas" }, ...secciones.map(([k, v]) => ({ value: k, label: v }))]} />
       </div>
 
       <p className={styles.count} aria-live="polite">

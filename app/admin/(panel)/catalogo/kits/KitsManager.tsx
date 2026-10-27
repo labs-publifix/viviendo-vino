@@ -2,13 +2,14 @@
 
 import { useActionState, useMemo, useState } from "react";
 import { Button } from "@/app/_ui/Button";
-import { Checkbox, SelectField, TextField } from "@/app/_ui/Field";
+import { Checkbox, TextField } from "@/app/_ui/Field";
 import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
 import type { KitPanel } from "@/lib/admin/catalogo";
 import { KIT_BOTELLAS, pesos } from "@/lib/admin/catalogo-rules";
 import { guardarKit, type KitState } from "../actions";
 import styles from "../catalogo.module.css";
+import { Select } from "../../_ui/Select";
 
 type Vino = { id: string; nombre: string; grupoId: string; aliadoId: string; precioCentavos: number; activo: boolean; disponible: boolean };
 type Grupo = { id: string; nombre: string; aliadoId: string };
@@ -108,27 +109,19 @@ function KitForm({ kit, vinos, grupos, aliados, onDone, onCancel }: { kit?: KitP
       {kit && <input type="hidden" name="id" value={kit.id} />}
       <input type="hidden" name="items" value={JSON.stringify(items)} />
       {!kit && aliados.length > 1 && (
-        <SelectField name="aliado_id" label="Aliado" value={aliadoId} onChange={(ev) => (setAliadoId(ev.target.value), setGrupoId(""), setCant({}))}>
-          {aliados.map((a) => (
-            <option key={a.id} value={a.id}>
-              {a.nombre}
-            </option>
-          ))}
-        </SelectField>
+        <Select name="aliado_id" label="Aliado" value={aliadoId} onChange={(v) => (setAliadoId(v), setGrupoId(""), setCant({}))} options={aliados.map((a) => ({ value: a.id, label: a.nombre }))} />
       )}
       {!kit && aliados.length <= 1 && <input type="hidden" name="aliado_id" value={aliadoId} />}
       <div className={styles.twoCols}>
         <TextField name="nombre" label="Nombre del kit" value={nombre} onChange={(ev) => setNombre(ev.target.value)} required error={e.nombre} />
-        <SelectField label="Grupo" value={grupoId} onChange={(ev) => (setGrupoId(ev.target.value), setCant({}))} hint="Un kit lleva vinos de un solo grupo.">
-          <option value="">Elige el grupo</option>
-          {grupos
-            .filter((g) => g.aliadoId === aliadoId)
-            .map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.nombre}
-              </option>
-            ))}
-        </SelectField>
+        <Select
+          label="Grupo"
+          value={grupoId}
+          onChange={(v) => (setGrupoId(v), setCant({}))}
+          placeholder="Elige el grupo"
+          hint="Un kit lleva vinos de un solo grupo."
+          options={grupos.filter((g) => g.aliadoId === aliadoId).map((g) => ({ value: g.id, label: g.nombre }))}
+        />
       </div>
       <TextField name="descripcion" label="Descripción" optional value={descripcion} onChange={(ev) => setDescripcion(ev.target.value)} error={e.descripcion} />
 
