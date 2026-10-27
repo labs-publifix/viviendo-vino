@@ -176,16 +176,25 @@ export async function guardarKit(_prev: KitState, form: FormData): Promise<KitSt
   const resumen = limpias.map((l) => `${l.cantidad}× ${nombreDe.get(l.productoId)}`).join(", ");
   const itemsAntes = id ? ((await db.from("kits_prearmados_items").select("producto_id, cantidad").eq("kit_id", id)).data ?? []).map((x) => `${x.cantidad}× ${nombreDe.get(x.producto_id)}`).join(", ") : null;
 
+  // Foto (opcional): ya viene recortada a 880×660 desde el navegador; aquí se revisa tipo y peso.
+  const slug = antes?.slug ?? (await slugLibre("kits_prearmados", slugify(nombre)));
+  let imagen_url: string | undefined;
+  const foto = form.get("foto");
+  if (foto instanceof File && foto.size > 0) {
+    const r = await subirFoto(foto, `kit-${slug}`);
+    if (typeof r !== "string") return { errors: { foto: r.error } };
+    imagen_url = r;
+  }
+
   let kitId = id;
   if (id) {
-    const { error } = await db.from("kits_prearmados").update({ nombre, descripcion: descripcion || null, activo }).eq("id", id);
+    const { error } = await db.from("kits_prearmados").update({ nombre, descripcion: descripcion || null, activo, ...(imagen_url ? { imagen_url } : {}) }).eq("id", id);
     if (error) return { error: SAVE_ERROR };
   } else {
-    const slug = await slugLibre("kits_prearmados", slugify(nombre));
     const { data: max } = await db.from("kits_prearmados").select("orden").order("orden", { ascending: false }).limit(1);
     const { data, error } = await db
       .from("kits_prearmados")
-      .insert({ aliado_id: aliadoId, slug, nombre, descripcion: descripcion || null, activo, orden: ((max?.[0]?.orden as number | undefined) ?? 0) + 1 })
+      .insert({ aliado_id: aliadoId, slug, nombre, descripcion: descripcion || null, activo, orden: ((max?.[0]?.orden as number | undefined) ?? 0) + 1, ...(imagen_url ? { imagen_url } : {}) })
       .select("id")
       .single();
     if (error) return { error: SAVE_ERROR };
@@ -204,8 +213,31 @@ export async function guardarKit(_prev: KitState, form: FormData): Promise<KitSt
     "kits_prearmados",
     kitId,
     antes ? { nombre: antes.nombre, descripcion: antes.descripcion, activo: antes.activo, items: itemsAntes } : null,
-    { nombre, descripcion: descripcion || null, activo, items: resumen },
+    { nombre, descripcion: descripcion || null, activo, items: resumen, ...(imagen_url ? { imagen_url } : {}) },
   );
   done();
   return { ok: true, message: id ? "Kit guardado. Ya se ve en la tienda." : "Kit agregado. Ya se ve en la tienda." };
+}
+
+/**
+ * Elimina un kit prearmado (solo admin). Los pedidos guardan su propia copia de botellas y precios, así que
+ * borrar el kit no cambia ningún pedido ni las finanzas. Sus botellas se borran con él (on delete cascade).
+ */
+export async function eliminarKit(id: string): Promise<KitState> {
+  const user = await requireAdmin(["admin"]);
+  if (!UUID.test(id)) return { error: SAVE_ERROR };
+  const db = supabaseAdmin();
+  const { data: kit } = await db.from("kits_prearmados").select("id, nombre, descripcion, activo").eq("id", id).maybeSingle();
+  if (!kit) return { ok: true, message: "Ese kit ya no existe." };
+  const { data: vinos } = await db.from("productos").select("id, nombre_oficial");
+  const nombreDe = new Map((vinos ?? []).map((x) => [x.id as string, x.nombre_oficial as string]));
+  const items = ((await db.from("kits_prearmados_items").select("producto_id, cantidad").eq("kit_id", id)).data ?? []).map((x) => `${x.cantidad}× ${nombreDe.get(x.producto_id)}`).join(", ");
+  const { error } = await db.from("kits_prearmados").delete().eq("id", id);
+  if (error) {
+    console.error("admin/catalogo: no se eliminó el kit", error.code);
+    return { error: "No se pudo eliminar el kit. Intenta otra vez." };
+  }
+  await audit(user, "eliminar", "kits_prearmados", id, { nombre: kit.nombre, descripcion: kit.descripcion, activo: kit.activo, items }, null);
+  done();
+  return { ok: true, message: `Eliminaste el kit “${kit.nombre}”. Ya no aparece en la tienda.` };
 }

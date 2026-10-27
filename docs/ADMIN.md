@@ -138,6 +138,9 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
   ocultar), alta de vinos, kits prearmados (6 del mismo grupo, guardado en una transacción) y vista de grupos. Rol
   aliado: solo disponible/agotado de sus vinos; el servidor rechaza cualquier otro cambio. Al guardar, la tienda
   se actualiza y se regenera en segundo plano para que la primera visita ya vea el cambio.
+- [x] Kits prearmados: foto propia (subida y recortada a 880×660, `20261101000000_kits_foto.sql`) y eliminar con
+  confirmación (solo admin; los pedidos conservan su copia). La tienda usa la foto subida y, si no hay, la original
+  de `KIT_IMAGES` (aprobado el 27 oct: solo cambia de dónde sale la foto).
 - [ ] Grupos editables y grupos de aliados nuevos: hoy los nombres y fotos de los 4 grupos (azul, rojo, verde,
   amarillo) viven también en el código de la tienda (`GROUP_LABELS`, `lib/catalog/media.ts`). Un aliado nuevo
   necesita sus grupos y que la tienda los muestre: es un cambio de front que se hace con aprobación.

@@ -12,6 +12,7 @@ import { centavosATexto, pesos, precioACentavos, TIPOS } from "@/lib/admin/catal
 import { discountPercent } from "@/lib/money";
 import { guardarVino, type VinoState } from "../actions";
 import styles from "../catalogo.module.css";
+import { recortarFoto } from "../../_ui/foto";
 import { Select } from "../../_ui/Select";
 
 export type VinoDatos = {
@@ -44,23 +45,6 @@ const TIPO_LABEL: Record<string, string> = { blanco: "Blanco", rosado: "Rosado",
 // Mismo formato que las 19 fotos actuales de la tienda.
 const FOTO_W = 880;
 const FOTO_H = 1184;
-
-/** Recorta al centro a 880×1184 y la convierte a WebP (o JPG si el navegador no sabe WebP). */
-async function prepararFoto(file: File): Promise<File> {
-  const bmp = await createImageBitmap(file);
-  const canvas = document.createElement("canvas");
-  canvas.width = FOTO_W;
-  canvas.height = FOTO_H;
-  const ctx = canvas.getContext("2d")!;
-  const escala = Math.max(FOTO_W / bmp.width, FOTO_H / bmp.height);
-  const w = bmp.width * escala;
-  const h = bmp.height * escala;
-  ctx.drawImage(bmp, (FOTO_W - w) / 2, (FOTO_H - h) / 2, w, h);
-  const blob = await new Promise<Blob | null>((ok) => canvas.toBlob(ok, "image/webp", 0.86));
-  const final = blob && blob.type === "image/webp" ? blob : await new Promise<Blob | null>((ok) => canvas.toBlob(ok, "image/jpeg", 0.88));
-  if (!final) throw new Error("No se pudo preparar la foto.");
-  return new File([final], final.type === "image/webp" ? "foto.webp" : "foto.jpg", { type: final.type });
-}
 
 export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDatos; categorias: { slug: string; nombre: string }[]; grupos: Opcion[]; aliados: Opcion[] }) {
   const router = useRouter();
@@ -223,7 +207,7 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
                   if (!f) return;
                   setPreparando(true);
                   try {
-                    const lista = await prepararFoto(f);
+                    const lista = await recortarFoto(f, FOTO_W, FOTO_H);
                     setFoto(lista);
                     setPreview(URL.createObjectURL(lista));
                   } catch {

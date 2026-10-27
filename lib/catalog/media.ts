@@ -10,6 +10,7 @@ export const GROUP_IMAGES: Record<BottleGroup, { src: string; alt: string }> = {
   amarillo: { src: "/img/grupos/amarillo.webp", alt: "Prosecco Carlo V y Rosé 921 de Collevento, vinos de Bollicine" },
 };
 
+/** Fotos de los 3 kits originales; un kit con foto subida desde el panel usa esa (PresetKit.imageUrl). */
 export const KIT_IMAGES: Record<string, string> = {
   "blancos-frescos": "/img/kits/blancos-frescos.webp",
   "tintos-de-diario": "/img/kits/tintos-de-diario.webp",

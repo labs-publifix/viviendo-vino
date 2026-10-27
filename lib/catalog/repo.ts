@@ -28,6 +28,8 @@ export type PresetKit = {
   totalCents: number;
   /** Ahorro por las botellas con precio antes (0 si ninguna tiene). */
   savingsCents: number;
+  /** Foto subida desde el panel; null = la de siempre (KIT_IMAGES). */
+  imageUrl: string | null;
 };
 export type Catalog = { wines: Wine[]; groups: GroupInfo[]; categories: CategoryInfo[]; kits: PresetKit[]; kitSize: number };
 
@@ -64,7 +66,11 @@ export async function getCatalog(): Promise<Catalog> {
       .then((r) => (r.error?.code === "42703" ? db.from("productos").select(PRODUCT_COLUMNS).order("orden") : r)),
     db.from("grupos_botella").select("id, codigo, nombre, descripcion, solo_caja_completa, orden").order("orden"),
     db.from("categorias").select("slug, nombre, intro, orden").order("orden"),
-    db.from("kits_prearmados").select("id, slug, nombre, descripcion, orden").order("orden"),
+    db
+      .from("kits_prearmados")
+      .select("id, slug, nombre, descripcion, orden, imagen_url")
+      .order("orden")
+      .then((r) => (r.error?.code === "42703" ? db.from("kits_prearmados").select("id, slug, nombre, descripcion, orden").order("orden") : r)),
     db.from("kits_prearmados_items").select("kit_id, producto_id, cantidad"),
   ]);
 
@@ -140,6 +146,7 @@ export async function getCatalog(): Promise<Catalog> {
         items: lines.map((l) => ({ slug: l.wine.slug, name: l.wine.name, quantity: l.quantity, priceCents: l.wine.priceCents, compareAtCents: l.wine.compareAtCents ?? null })),
         totalCents: lines.reduce((s, l) => s + l.quantity * l.wine.priceCents, 0),
         savingsCents: kitSavingsCents(lines.map((l) => ({ quantity: l.quantity, priceCents: l.wine.priceCents, compareAtCents: l.wine.compareAtCents }))),
+        imageUrl: ((k as { imagen_url?: string | null }).imagen_url as string | null | undefined) ?? null,
       };
     })
     // Un kit con alguna etiqueta inactiva deja de sumar 6 y no se muestra.

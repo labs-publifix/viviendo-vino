@@ -1,4 +1,5 @@
 import "server-only";
+import { KIT_IMAGES } from "@/lib/catalog/media";
 import { GROUP_LABELS, type BottleGroup } from "@/lib/catalog/types";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { AdminUser } from "./session";
@@ -35,7 +36,18 @@ export type VinoPanel = {
   kits: string[];
 };
 export type GrupoPanel = { id: string; aliadoId: string; codigo: string; nombre: string; descripcion: string; soloCaja: boolean; orden: number };
-export type KitPanel = { id: string; aliadoId: string; slug: string; nombre: string; descripcion: string; activo: boolean; orden: number; items: { productoId: string; cantidad: number }[] };
+export type KitPanel = {
+  id: string;
+  aliadoId: string;
+  slug: string;
+  nombre: string;
+  descripcion: string;
+  activo: boolean;
+  orden: number;
+  /** Foto que ve la tienda: la subida desde el panel o, si no hay, la original del código. */
+  imagen: string | null;
+  items: { productoId: string; cantidad: number }[];
+};
 
 /** Nombre del grupo como lo ve la tienda (los cuatro de hoy usan su nombre editorial fijo). */
 export const nombreGrupo = (codigo: string, nombre: string) => GROUP_LABELS[codigo as BottleGroup] ?? nombre;
@@ -58,7 +70,7 @@ export async function getCatalogoPanel(user: AdminUser) {
     .select("id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, precio_antes_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo, orden")
     .order("orden");
   let qg = db.from("grupos_botella").select("id, aliado_id, codigo, nombre, descripcion, solo_caja_completa, orden").order("orden");
-  let qk = db.from("kits_prearmados").select("id, aliado_id, slug, nombre, descripcion, activo, orden").order("orden");
+  let qk = db.from("kits_prearmados").select("id, aliado_id, slug, nombre, descripcion, activo, orden, imagen_url").order("orden");
   let qa = db.from("aliados").select("id, nombre, activo").order("nombre");
   if (soloSuyos) {
     qp = qp.eq("aliado_id", user.aliadoId!);
@@ -125,6 +137,7 @@ export async function getCatalogoPanel(user: AdminUser) {
       descripcion: txt(x.descripcion),
       activo: x.activo,
       orden: x.orden,
+      imagen: (x.imagen_url as string | null) ?? KIT_IMAGES[x.slug as string] ?? null,
       items: items.filter((it) => it.kit_id === x.id).map((it) => ({ productoId: it.producto_id, cantidad: it.cantidad })),
     })) as KitPanel[],
     aliados: aliados.map((x) => ({ id: x.id as string, nombre: x.nombre as string })),
