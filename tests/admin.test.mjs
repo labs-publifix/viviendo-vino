@@ -16,6 +16,14 @@ test("producción cerrada: el panel existe en www; la tienda sigue oculta", () =
   }
 });
 
+test("producción cerrada: las fotos de los vinos solo con la cookie del panel", () => {
+  const env = { storeOpen: false, preview: false, vercelEnv: "production" };
+  const foto = "/img/vinos/chardonnay-vento-igt-2024.webp";
+  assert.deepEqual(decide({ pathname: foto, host: "www.viviendovino.com", env, hasPreviewAccess: false }), { action: "not-found" });
+  assert.deepEqual(decide({ pathname: foto, host: "www.viviendovino.com", env, hasPreviewAccess: false, hasAdminCookie: true }), { action: "next" });
+  assert.deepEqual(decide({ pathname: "/tienda", host: "www.viviendovino.com", env, hasPreviewAccess: false, hasAdminCookie: true }), { action: "not-found" });
+});
+
 test("dev.* con despliegue de producción: tampoco sirve el panel", () => {
   const env = { storeOpen: false, preview: false, vercelEnv: "production" };
   assert.deepEqual(decide({ pathname: "/admin", host: "dev.viviendovino.com", env, hasPreviewAccess: true }), { action: "not-found" });

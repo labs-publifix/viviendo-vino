@@ -19,7 +19,8 @@ export function proxy(request: NextRequest) {
   const inPreview = env.preview || isPreviewHost(host);
   const hasPreviewAccess = inPreview && verifyPreviewCookie(request.cookies.get(PREVIEW_COOKIE)?.value, process.env.PREVIEW_PASSWORD);
 
-  const decision = decide({ pathname, host, env, hasPreviewAccess });
+  const hasAdminCookie = request.cookies.has(ADMIN_COOKIE_NAME);
+  const decision = decide({ pathname, host, env, hasPreviewAccess, hasAdminCookie });
   let response: NextResponse;
   switch (decision.action) {
     case "not-found":
@@ -41,7 +42,7 @@ export function proxy(request: NextRequest) {
       response = NextResponse.redirect(new URL(decision.to, request.url), 308);
       break;
     default:
-      if (needsAdminSession(pathname) && !request.cookies.has(ADMIN_COOKIE_NAME)) {
+      if (needsAdminSession(pathname) && !hasAdminCookie) {
         const url = new URL("/admin/acceso", request.url);
         if (pathname !== "/admin") url.searchParams.set("next", pathname);
         response = NextResponse.redirect(url, 307);

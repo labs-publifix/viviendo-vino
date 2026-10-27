@@ -17,6 +17,8 @@ export type GateInput = {
   env: GateEnv;
   /** Cookie de acceso al preview ya verificada. */
   hasPreviewAccess: boolean;
+  /** Trae la cookie del panel (solo presencia; cada página del panel valida la sesión). */
+  hasAdminCookie?: boolean;
 };
 
 export type GateDecision =
@@ -57,6 +59,9 @@ export function isWaitlistPath(pathname: string): boolean {
   );
 }
 
+// Fotos de los vinos en public/: con la tienda cerrada solo las ve quien usa el panel.
+const ADMIN_ASSET_PREFIXES = ["/img/vinos/"];
+
 /** El panel /admin: abierto en www aunque la tienda siga cerrada; cada página exige su sesión. */
 export function isAdminPath(pathname: string): boolean {
   return pathname === "/admin" || pathname.startsWith("/admin/");
@@ -66,7 +71,7 @@ export function isPreviewHost(host: string): boolean {
   return host.toLowerCase().startsWith("dev.");
 }
 
-export function decide({ pathname, host, env, hasPreviewAccess }: GateInput): GateDecision {
+export function decide({ pathname, host, env, hasPreviewAccess, hasAdminCookie = false }: GateInput): GateDecision {
   const previewHost = isPreviewHost(host);
 
   // dev.viviendovino.com nunca sirve el despliegue de producción.
@@ -84,7 +89,9 @@ export function decide({ pathname, host, env, hasPreviewAccess }: GateInput): Ga
   }
 
   if (!env.storeOpen) {
-    return isWaitlistPath(pathname) || isAdminPath(pathname) ? { action: "next" } : { action: "not-found" };
+    if (isWaitlistPath(pathname) || isAdminPath(pathname)) return { action: "next" };
+    if (hasAdminCookie && ADMIN_ASSET_PREFIXES.some((p) => pathname.startsWith(p))) return { action: "next" };
+    return { action: "not-found" };
   }
 
   // Tienda abierta: la portada es la de la tienda; la ruta interna no se expone duplicada.
