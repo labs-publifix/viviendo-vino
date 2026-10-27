@@ -1,12 +1,13 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { Button } from "@/app/_ui/Button";
 import { TextField } from "@/app/_ui/Field";
 import { Notice } from "@/app/_ui/Notice";
 import { ACCION_LABEL, PAQUETERIAS, type AccionPedido } from "@/lib/admin/pedidos-rules";
 import { Select } from "../../_ui/Select";
-import { agregarNota, moverPedido, type PedidoState } from "../actions";
+import type { TipoCorreo } from "@/lib/email/tipos";
+import { agregarNota, moverPedido, reenviarCorreo, type PedidoState } from "../actions";
 import s from "../pedidos.module.css";
 
 // Siguiente paso del pedido. Avanzar es un botón; enviar pide paquetería y guía; cancelar pide el motivo y
@@ -95,5 +96,20 @@ export function NotaForm({ id }: { id: string }) {
         Guardar nota
       </Button>
     </form>
+  );
+}
+
+/** Reenviar al cliente un correo de su pedido (en el historial). Si falló, el botón se destaca. */
+export function Reenviar({ id, tipo, fallo }: { id: string; tipo: TipoCorreo; fallo: boolean }) {
+  const [pending, start] = useTransition();
+  const [r, setR] = useState<PedidoState | null>(null);
+  if (r?.ok) return <p className={s.evOk}>{r.message}</p>;
+  return (
+    <div className={s.resend}>
+      <button type="button" className={fallo ? s.danger : s.textBtn} disabled={pending} onClick={() => start(async () => setR(await reenviarCorreo(id, tipo)))}>
+        {pending ? "Reenviando…" : fallo ? "Reintentar envío" : "Reenviar al cliente"}
+      </button>
+      {r?.error && <p className={s.evErr}>{r.error}</p>}
+    </div>
   );
 }

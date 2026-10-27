@@ -86,3 +86,33 @@ test("formatMXNExacto: cuentas con centavos", async () => {
   assert.equal(formatMXNExacto(1216500), "$12,165.00");
   assert.equal(formatMXNExacto(-500), "-$5.00");
 });
+
+test("correos: reenviar solo admin o atención y solo si el pedido ya llegó a ese paso", async () => {
+  const { puedeReenviar } = await import("../lib/admin/pedidos-rules.ts");
+  assert.equal(puedeReenviar("pedido_confirmado", "pagado", "admin"), true);
+  assert.equal(puedeReenviar("pedido_confirmado", "entregado", "atencion"), true);
+  assert.equal(puedeReenviar("pedido_enviado", "preparando", "admin"), false);
+  assert.equal(puedeReenviar("pedido_enviado", "enviado", "admin"), true);
+  assert.equal(puedeReenviar("pedido_entregado", "enviado", "admin"), false);
+  assert.equal(puedeReenviar("pedido_confirmado", "cancelado", "admin"), false);
+  assert.equal(puedeReenviar("pedido_confirmado", "pagado", "aliado"), false);
+  assert.equal(puedeReenviar("pedido_equipo", "pagado", "admin"), false);
+});
+
+test("correos: el historial junta los avisos al equipo de un mismo momento", async () => {
+  const { lineaDeTiempo } = await import("../lib/admin/pedidos-rules.ts");
+  const t = (m) => new Date(Date.UTC(2026, 9, 27, 10, m)).toISOString();
+  const lineas = lineaDeTiempo(
+    [{ id: "e1", at: t(0), tipo: "creado", estado: "pagado", detalle: "", quien: "" }, { id: "e2", at: t(30), tipo: "estado", estado: "enviado", detalle: "", quien: "" }],
+    [
+      { id: "c1", at: t(1), tipo: "pedido_confirmado", para: "cliente", destinatario: "a@x.mx", ok: true, reenvio: false },
+      { id: "c2", at: t(1), tipo: "pedido_equipo", para: "equipo", destinatario: "j@x.mx", ok: true, reenvio: false },
+      { id: "c3", at: t(1), tipo: "pedido_equipo", para: "equipo", destinatario: "r@x.mx", ok: false, reenvio: false },
+      { id: "c4", at: t(31), tipo: "pedido_enviado", para: "cliente", destinatario: "a@x.mx", ok: false, reenvio: false },
+    ],
+  );
+  assert.deepEqual(lineas.map((l) => l.id), ["e1", "c1", "c2", "e2", "c4"]);
+  const equipo = lineas.find((l) => l.id === "c2");
+  assert.deepEqual([equipo.enviados, equipo.fallidos, equipo.destinatarios.length], [1, 1, 2]);
+  assert.equal(lineas.find((l) => l.id === "c4").fallidos, 1);
+});

@@ -90,6 +90,14 @@
 .timeline li:last-child { padding-bottom: 0; }
 .timeline li:last-child::after { display: none; }
 .timeline li[data-tipo="nota"]::before { background: var(--bg); border: 1px solid var(--muted); }
+.timeline li[data-tipo="correo"]::before { background: var(--bg); border: 1px solid var(--ok); }
+.timeline li[data-fallo]::before { background: var(--error); border-color: var(--error); }
+.timeline li[data-fallo] .evHead strong { color: var(--error); }
+.resend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 2px 0 0 -10px; }
+.resend .danger { margin-left: 10px; min-height: 36px; padding: 0 14px; }
+.resend .textBtn { min-height: 36px; font-size: 13px; }
+.evOk { margin: 4px 0 0; color: var(--ok); font-size: 13px; font-weight: 600; }
+.evErr { margin: 0; color: var(--error); font-size: 13px; }
 .evHead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px; margin: 0; font-size: 14px; }
 .evHead time { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
 .evText { margin: 2px 0 0; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }

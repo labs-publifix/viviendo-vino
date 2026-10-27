@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import { z } from "zod";
 import { getArticle } from "@/lib/blog/content";
 import { renderGuideEmail } from "@/lib/email/guide";
+import { registrarCorreo } from "@/lib/email/registro";
 import { EMAIL_ERROR } from "@/lib/messages";
 import { isRateLimited } from "@/lib/rate-limit";
 import { SITE_URL } from "@/lib/site";
@@ -93,7 +94,8 @@ export async function POST(request: Request) {
       pdfUrl: `${origin}${article.pdf}`,
       articleUrl: `${origin}/blog/${slug}`,
     });
-    const { error } = await new Resend(apiKey).emails.send({ from, to: email, subject, html, text });
+    const { data, error } = await new Resend(apiKey).emails.send({ from, to: email, subject, html, text });
+    await registrarCorreo({ tipo: "guia", para: "cliente", destinatario: email, asunto: subject, referencia: slug, resultado: error ? { error: error.name } : { id: data?.id ?? null } });
     if (error) throw new Error(`${error.name}: ${error.message}`);
   } catch (err) {
     // Sin el correo en los logs: solo el id de la solicitud.

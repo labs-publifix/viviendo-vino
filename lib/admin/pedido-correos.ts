@@ -1,10 +1,12 @@
 import "server-only";
 import { Resend } from "resend";
 import { CONTACTO, renderNuevoPedidoEquipo, renderPedidoConfirmado, renderPedidoEntregado, renderPedidoEnviado, type PedidoCorreo } from "@/lib/email/pedido";
+import { registrarCorreo, type TipoCorreo } from "@/lib/email/registro";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 // Envía los correos de un pedido. Se llama con after(): el panel responde de inmediato y el correo sale después.
-// Si algo falla se registra (sin correos ni datos personales en el log) y no deshace el cambio del pedido.
+// Cada envío (o su falla) queda en correos_enviados; en el log del servidor nunca va el correo de nadie.
+// Si algo falla no deshace el cambio del pedido: se puede reenviar desde su historial.
 
 export type CorreoPedido = "pagado" | "enviado" | "entregado";
 
@@ -44,31 +46,48 @@ async function equipo(aliadoId: string): Promise<string[]> {
   return [...new Set((data ?? []).filter((u) => u.rol === "admin" || u.rol === "atencion" || (u.rol === "aliado" && u.aliado_id === aliadoId)).map((u) => u.email as string))];
 }
 
+const RENDER = { pagado: renderPedidoConfirmado, enviado: renderPedidoEnviado, entregado: renderPedidoEntregado } as const;
+const TIPO: Record<CorreoPedido, TipoCorreo> = { pagado: "pedido_confirmado", enviado: "pedido_enviado", entregado: "pedido_entregado" };
+
+type Correo = { subject: string; html: string; text: string };
+
+async function mandar(p: { id: string; folio: string }, tipo: TipoCorreo, para: "cliente" | "equipo", to: string, correo: Correo, extra: { reenvio?: boolean; usuarioId?: string | null } = {}) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+  let resultado: { id?: string | null; error?: string | null };
+  if (!apiKey || !from) {
+    console.error("pedidos: faltan RESEND_API_KEY o EMAIL_FROM; no se mandó el correo", tipo);
+    resultado = { error: "sin_configuracion" };
+  } else {
+    try {
+      const { data, error } = await new Resend(apiKey).emails.send({ from, to, replyTo: CONTACTO, ...correo });
+      resultado = error ? { error: error.name } : { id: data?.id ?? null };
+    } catch (e) {
+      resultado = { error: e instanceof Error ? e.name : "error" };
+    }
+    if (resultado.error) console.error(`pedidos: no se mandó el correo (${tipo}, ${para}) de ${p.folio}`, resultado.error);
+  }
+  await registrarCorreo({ tipo, para, destinatario: to, asunto: correo.subject, pedidoId: p.id, resultado, ...extra });
+  return !resultado.error;
+}
+
 /**
  * Manda los correos que tocan según el paso: pagado (cliente + equipo), enviado y entregado (cliente).
  * `origen` es el sitio del panel para el enlace del aviso al equipo (www o dev).
  */
 export async function enviarCorreosPedido(id: string, paso: CorreoPedido, origen: string): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-  if (!apiKey || !from) {
-    console.error("pedidos: faltan RESEND_API_KEY o EMAIL_FROM; no se mandaron correos", paso);
-    return;
-  }
   const p = await leer(id);
   if (!p) return;
-  const resend = new Resend(apiKey);
-  const mandar = async (to: string, correo: { subject: string; html: string; text: string }, quien: string) => {
-    const { error } = await resend.emails.send({ from, to, replyTo: CONTACTO, ...correo });
-    if (error) console.error(`pedidos: no se mandó el correo (${paso}, ${quien}) de ${p.folio}`, error.name);
-  };
-
+  await mandar(p, TIPO[paso], "cliente", p.email, RENDER[paso](p));
   if (paso === "pagado") {
-    await mandar(p.email, renderPedidoConfirmado(p), "cliente");
-    const panel = `${origen}/admin/pedidos/${p.id}`;
-    const aviso = renderNuevoPedidoEquipo(p, panel);
-    for (const to of await equipo(p.aliadoId)) await mandar(to, aviso, "equipo");
+    const aviso = renderNuevoPedidoEquipo(p, `${origen}/admin/pedidos/${p.id}`);
+    for (const to of await equipo(p.aliadoId)) await mandar(p, "pedido_equipo", "equipo", to, aviso);
   }
-  if (paso === "enviado") await mandar(p.email, renderPedidoEnviado(p), "cliente");
-  if (paso === "entregado") await mandar(p.email, renderPedidoEntregado(p), "cliente");
+}
+
+/** Reenvía al cliente uno de sus correos (desde el historial del pedido). true si Resend lo aceptó. */
+export async function reenviarCorreoCliente(id: string, paso: CorreoPedido, usuarioId: string): Promise<boolean> {
+  const p = await leer(id);
+  if (!p) return false;
+  return mandar(p, TIPO[paso], "cliente", p.email, RENDER[paso](p), { reenvio: true, usuarioId });
 }

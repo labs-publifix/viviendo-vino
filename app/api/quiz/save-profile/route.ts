@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { z } from "zod";
 import { renderQuizProfileEmail } from "@/lib/email/quiz-profile";
+import { registrarCorreo } from "@/lib/email/registro";
 import { EMAIL_ERROR } from "@/lib/messages";
 import { getQuizCatalog } from "@/lib/quiz/catalog";
 import { perfilById } from "@/lib/quiz/config";
@@ -88,7 +89,8 @@ export async function POST(request: Request) {
       resultUrl: `${origin}/quiz/r/${session.id}?origen=correo`,
       pdfUrl,
     });
-    const { error } = await new Resend(apiKey).emails.send({ from, to: email, subject, html, text });
+    const { data, error } = await new Resend(apiKey).emails.send({ from, to: email, subject, html, text });
+    await registrarCorreo({ tipo: "quiz_perfil", para: "cliente", destinatario: email, asunto: subject, referencia: session.id, resultado: error ? { error: error.name } : { id: data?.id ?? null } });
     if (error) throw new Error(`${error.name}: ${error.message}`);
   } catch (err) {
     console.error("quiz: falló el envío", id, err instanceof Error ? err.message : err);

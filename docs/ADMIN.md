@@ -151,6 +151,11 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
   guía, sin enlace de rastreo porque no hay integración con paqueterías) y "Entregado"; al equipo (admin, atención y
   la gente del aliado) "Nuevo pedido por preparar", sin datos de contacto del cliente. Los pedidos de prueba se
   mandan a labs.publifix@gmail.com o raguirre@continentalmedia.com.mx y llevan "[Prueba]" en el asunto.
+- [x] Registro de correos (`20261102000000_correos.sql`): cada correo de pedido (cliente y equipo), del perfil del
+  quiz y de las guías del blog queda en `correos_enviados`. Se ve en el historial de cada pedido (con "Reenviar al
+  cliente" / "Reintentar envío" para admin y atención; el aliado no ve los correos) y en Sistema → Correos (admin).
+- [ ] Correos, más adelante: seguimiento de entrega (entregado, rebotó, abierto) con los avisos (webhooks) de Resend,
+  y sumar a la vista los correos de la lista de espera (hoy están en `waitlist_email_sends`).
 - [ ] Conectar el checkout y Mercado Pago a `crearPedido` (lib/admin/pedidos.ts): el pago aprobado pasa el pedido a
   "Por preparar". Al hacerlo, revisar quién absorbe la comisión de Mercado Pago (cambia `reparto`).
 - [ ] Finanzas: exportar a CSV para contabilidad.

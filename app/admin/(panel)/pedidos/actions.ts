@@ -5,10 +5,11 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { audit } from "@/lib/admin/audit";
 import { siteOrigin } from "@/lib/admin/invite";
-import { enviarCorreosPedido } from "@/lib/admin/pedido-correos";
+import { enviarCorreosPedido, reenviarCorreoCliente } from "@/lib/admin/pedido-correos";
 import { crearPedido } from "@/lib/admin/pedidos";
 import { clientePrueba, kitsPrueba } from "@/lib/admin/pedidos-prueba";
-import { ACCIONES, accionesPara, destino, ESTADO_LABEL, puedeVerPedido, validarAccion, validarNota, type AccionPedido, type EstadoPedido } from "@/lib/admin/pedidos-rules";
+import { ACCIONES, accionesPara, destino, ESTADO_LABEL, PASO_CORREO, puedeReenviar, puedeVerPedido, validarAccion, validarNota, type AccionPedido, type EstadoPedido } from "@/lib/admin/pedidos-rules";
+import { CORREO_LABEL, type TipoCorreo } from "@/lib/email/tipos";
 import { requireAdmin } from "@/lib/admin/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
@@ -93,4 +94,18 @@ export async function agregarNota(_prev: PedidoState, form: FormData): Promise<P
   await audit(user, "nota", "pedidos", id, null, { folio: p.folio });
   refresh();
   return { ok: true, message: "Nota agregada." };
+}
+
+/** Reenvía al cliente un correo de su pedido (admin o atención). Espera a Resend para decir si salió. */
+export async function reenviarCorreo(id: string, tipo: TipoCorreo): Promise<PedidoState> {
+  const user = await requireAdmin(["admin", "atencion"]);
+  if (!UUID.test(id) || !(tipo in CORREO_LABEL)) return { error: SAVE_ERROR };
+  const p = await leer(id);
+  if (!p || !puedeVerPedido(user, { aliadoId: p.aliado_id })) return { error: "No puedes cambiar ese pedido." };
+  const paso = PASO_CORREO[tipo];
+  if (!paso || !puedeReenviar(tipo, p.estado as EstadoPedido, user.rol)) return { error: "Ese correo no se puede reenviar en el estado actual del pedido." };
+  const ok = await reenviarCorreoCliente(id, paso, user.id);
+  await audit(user, "reenviar_correo", "pedidos", id, null, { folio: p.folio, correo: CORREO_LABEL[tipo], enviado: ok });
+  refresh();
+  return ok ? { ok: true, message: `Reenviamos “${CORREO_LABEL[tipo]}” al cliente.` } : { error: "No se pudo reenviar el correo. Intenta otra vez en un momento." };
 }

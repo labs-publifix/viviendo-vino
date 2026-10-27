@@ -5,15 +5,10 @@ import { Notice } from "@/app/_ui/Notice";
 import { Icon } from "@/app/_ui/Icon";
 import { fechaCdmx } from "@/lib/admin/comunidad-format";
 import { getPedido } from "@/lib/admin/pedidos";
-import {
-  accionesPara,
-  ESTADO_LABEL,
-  ESTADO_TONO,
-  type EstadoPedido,
-} from "@/lib/admin/pedidos-rules";
+import { accionesPara, ESTADO_LABEL, ESTADO_TONO, lineaDeTiempo, puedeReenviar, type EstadoPedido } from "@/lib/admin/pedidos-rules";
 import { requireAdmin } from "@/lib/admin/session";
 import { formatMXN, formatMXNExacto } from "@/lib/money";
-import { Acciones, NotaForm } from "./PedidoForms";
+import { Acciones, NotaForm, Reenviar } from "./PedidoForms";
 import s from "../pedidos.module.css";
 
 export const metadata: Metadata = { title: "Pedido" };
@@ -150,16 +145,34 @@ export default async function Page({
           >
             <h2 id="historial">Historial</h2>
             <ol className={s.timeline}>
-              {p.eventos.map((e) => {
-                const t = evento(e);
+              {lineaDeTiempo(p.eventos, p.correos).map((l) => {
+                if (l.kind === "correo") {
+                  const fallo = l.fallidos > 0;
+                  const equipo = l.para === "equipo";
+                  const total = l.enviados + l.fallidos;
+                  const titulo = equipo
+                    ? `Aviso de nuevo pedido ${fallo ? `enviado a ${l.enviados} de ${total}` : `enviado a ${total}`} ${total === 1 ? "persona" : "personas"} del equipo`
+                    : `${l.reenvio ? "Correo reenviado" : "Correo"} “${l.titulo}” ${fallo ? "no se pudo enviar" : "enviado"} al cliente`;
+                  return (
+                    <li key={`c${l.id}`} data-tipo="correo" data-fallo={fallo || undefined}>
+                      <p className={s.evHead}>
+                        <strong>{titulo}</strong>
+                        <time dateTime={l.at}>{fechaCdmx(l.at)}</time>
+                      </p>
+                      {l.destinatarios.length > 0 && <p className={s.evWho}>{l.destinatarios.join(", ")}</p>}
+                      {!equipo && puedeReenviar(l.tipo, p.estado, user.rol) && <Reenviar id={p.id} tipo={l.tipo} fallo={fallo} />}
+                    </li>
+                  );
+                }
+                const t = evento(l);
                 return (
-                  <li key={e.id} data-tipo={e.tipo}>
+                  <li key={l.id} data-tipo={l.tipo}>
                     <p className={s.evHead}>
                       <strong>{t.titulo}</strong>
-                      <time dateTime={e.at}>{fechaCdmx(e.at)}</time>
+                      <time dateTime={l.at}>{fechaCdmx(l.at)}</time>
                     </p>
                     {t.texto && <p className={s.evText}>{t.texto}</p>}
-                    {e.quien && <p className={s.evWho}>{e.quien}</p>}
+                    {l.quien && <p className={s.evWho}>{l.quien}</p>}
                   </li>
                 );
               })}

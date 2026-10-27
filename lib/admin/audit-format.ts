@@ -30,6 +30,7 @@ export const ACCION_LABEL: Record<string, string> = {
   foto: "Cambió la foto de",
   estado: "Cambió el estado de",
   nota: "Agregó una nota a",
+  reenviar_correo: "Reenvió un correo de",
   entrar: "Entró al panel",
   salir: "Salió del panel",
 };
@@ -92,6 +93,8 @@ const CAMPO_LABEL: Record<string, string> = {
   disponible: "Disponible",
   items: "Botellas",
   folio: "Pedido",
+  correo: "Correo",
+  enviado: "Salió",
   prueba: "De prueba",
   detalle: "Detalle",
   monto_centavos: "Monto",

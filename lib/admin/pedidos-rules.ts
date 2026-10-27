@@ -2,6 +2,7 @@
 // Quién puede mover un pedido y a dónde, cómo se reparte el dinero y cuánto se le debe a cada aliado.
 // El servidor revisa estas reglas en cada acción; ocultar un botón nunca es la única defensa.
 
+import { CORREO_LABEL, type TipoCorreo } from "../email/tipos.ts";
 import { precioACentavos } from "./catalogo-rules.ts";
 import type { Rol } from "./rules.ts";
 
@@ -171,4 +172,58 @@ export function validarTransferencia(input: TransferenciaInput, hoy: string): Re
   if (nota.length > 300) errors.nota = "Usa máximo 300 caracteres.";
   if (Object.keys(errors).length) return { ok: false, errors };
   return { ok: true, data: { monto_centavos: monto!, fecha, referencia: referencia || null, nota: nota || null } };
+}
+
+// ---------- Correos del pedido ----------
+
+/** Paso del pedido al que corresponde cada correo al cliente (el aviso al equipo no se reenvía). */
+export const PASO_CORREO: Partial<Record<TipoCorreo, "pagado" | "enviado" | "entregado">> = {
+  pedido_confirmado: "pagado",
+  pedido_enviado: "enviado",
+  pedido_entregado: "entregado",
+};
+
+/** Reenviar un correo al cliente: admin o atención, y solo si el pedido ya llegó a ese paso y no se canceló. */
+export function puedeReenviar(tipo: TipoCorreo, estado: EstadoPedido, rol: Rol): boolean {
+  if (rol !== "admin" && rol !== "atencion") return false;
+  const paso = PASO_CORREO[tipo];
+  if (!paso || estado === "cancelado") return false;
+  const orden: EstadoPedido[] = ["pagado", "preparando", "enviado", "entregado"];
+  return orden.indexOf(estado) >= orden.indexOf(paso);
+}
+
+export type EventoLinea = { id: string; at: string; tipo: string; estado: string | null; detalle: string; quien: string };
+export type CorreoLinea = { id: string; at: string; tipo: TipoCorreo; para: "cliente" | "equipo"; destinatario: string; ok: boolean; reenvio: boolean };
+export type LineaTiempo =
+  | ({ kind: "evento" } & EventoLinea)
+  | { kind: "correo"; id: string; at: string; tipo: TipoCorreo; para: "cliente" | "equipo"; titulo: string; destinatarios: string[]; enviados: number; fallidos: number; reenvio: boolean };
+
+/**
+ * Historial del pedido con sus correos, en orden. Los avisos al equipo de un mismo momento se juntan en una sola
+ * línea ("enviado a 3 personas del equipo"); cada correo al cliente va en la suya.
+ */
+export function lineaDeTiempo(eventos: EventoLinea[], correos: CorreoLinea[]): LineaTiempo[] {
+  const lineas: LineaTiempo[] = eventos.map((e) => ({ kind: "evento", ...e }));
+  for (const c of [...correos].sort((a, b) => Date.parse(a.at) - Date.parse(b.at))) {
+    const ultimo = lineas.findLast((l) => l.kind === "correo" && l.para === "equipo" && l.tipo === c.tipo);
+    if (c.para === "equipo" && ultimo && ultimo.kind === "correo" && Math.abs(Date.parse(c.at) - Date.parse(ultimo.at)) < 5 * 60_000) {
+      if (c.destinatario) ultimo.destinatarios.push(c.destinatario);
+      if (c.ok) ultimo.enviados++;
+      else ultimo.fallidos++;
+      continue;
+    }
+    lineas.push({
+      kind: "correo",
+      id: c.id,
+      at: c.at,
+      tipo: c.tipo,
+      para: c.para,
+      titulo: CORREO_LABEL[c.tipo],
+      destinatarios: c.destinatario ? [c.destinatario] : [],
+      enviados: c.ok ? 1 : 0,
+      fallidos: c.ok ? 0 : 1,
+      reenvio: c.reenvio,
+    });
+  }
+  return lineas.sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
 }

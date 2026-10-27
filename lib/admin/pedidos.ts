@@ -2,6 +2,7 @@ import "server-only";
 import { checkoutSchema, type CheckoutInput } from "@/lib/checkout/schema";
 import { type CartInput } from "@/lib/cart/validate";
 import { validateKit, type KitWine } from "@/lib/kit/rules";
+import type { TipoCorreo } from "@/lib/email/tipos";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { nombreGrupo } from "./catalogo";
 import { esVenta, puedeVerPedido, reparto, resumenFinanzas, veCorreoCliente, veDinero, type EstadoPedido } from "./pedidos-rules";
@@ -171,13 +172,17 @@ export async function getPedido(user: AdminUser, id: string) {
   const { data: p, error } = await db.from("pedidos").select("*").eq("id", id).maybeSingle();
   fallo(error, "el pedido");
   if (!p || !puedeVerPedido(user, { aliadoId: p.aliado_id })) return null;
-  const [kitsR, eventosR, pagosR, aliadoR] = await Promise.all([
+  const [kitsR, eventosR, pagosR, aliadoR, correosR] = await Promise.all([
     db.from("pedido_kits").select("id, posicion, grupo, total_centavos").eq("pedido_id", id).order("posicion"),
     db.from("pedido_eventos").select("id, created_at, tipo, estado, detalle, usuario_nombre").eq("pedido_id", id).order("created_at"),
     db.from("pagos").select("id, created_at, proveedor, referencia, estado, monto_centavos").eq("pedido_id", id).order("created_at"),
     db.from("aliados").select("nombre").eq("id", p.aliado_id).maybeSingle(),
+    db.from("correos_enviados").select("id, created_at, tipo, para, destinatario, estado, reenvio").eq("pedido_id", id).order("created_at"),
   ]);
   const kits = check(kitsR, "los kits del pedido");
+  // Si la tabla de correos aún no existe (falta su SQL), el pedido se ve igual, solo sin correos.
+  if (correosR.error) console.error("admin/pedidos: no se pudieron leer los correos", correosR.error.code);
+  const verCorreos = veCorreoCliente(user.rol);
   const items = kits.length ? check(await db.from("pedido_items").select("kit_id, slug, nombre, precio_centavos, cantidad").in("kit_id", kits.map((k) => k.id)), "las botellas del pedido") : [];
   const dinero = veDinero(user.rol);
   return {
@@ -223,6 +228,16 @@ export async function getPedido(user: AdminUser, id: string) {
       paraAliado: dinero ? (p.aliado_centavos as number) : null,
     },
     eventos: check(eventosR, "el historial").map((e) => ({ id: String(e.id), at: e.created_at as string, tipo: e.tipo as string, estado: (e.estado as string | null) ?? null, detalle: (e.detalle as string | null) ?? "", quien: (e.usuario_nombre as string | null) ?? "" })),
+    correos: (correosR.data ?? []).map((c) => ({
+      id: String(c.id),
+      at: c.created_at as string,
+      tipo: c.tipo as TipoCorreo,
+      para: c.para as "cliente" | "equipo",
+      // El aliado ve que salió, no a qué correo.
+      destinatario: verCorreos ? (c.destinatario as string) : "",
+      ok: c.estado === "enviado",
+      reenvio: c.reenvio as boolean,
+    })),
     pagos: check(pagosR, "los pagos").map((x) => ({ id: x.id as string, at: x.created_at as string, proveedor: x.proveedor as string, referencia: (x.referencia as string | null) ?? "", estado: x.estado as string, monto: x.monto_centavos as number })),
   };
 }
