@@ -2,7 +2,10 @@
 
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { audit } from "@/lib/admin/audit";
+import { siteOrigin } from "@/lib/admin/invite";
+import { enviarCorreosPedido } from "@/lib/admin/pedido-correos";
 import { crearPedido } from "@/lib/admin/pedidos";
 import { clientePrueba, kitsPrueba } from "@/lib/admin/pedidos-prueba";
 import { ACCIONES, accionesPara, destino, ESTADO_LABEL, puedeVerPedido, validarAccion, validarNota, type AccionPedido, type EstadoPedido } from "@/lib/admin/pedidos-rules";
@@ -27,6 +30,8 @@ export async function crearPedidoPrueba(): Promise<PedidoState> {
   const r = await crearPedido({ customer: clientePrueba(), kits, estado: "pagado", prueba: true, origen: "prueba", por: user });
   if (!r.ok) return { error: r.error };
   await audit(user, "crear", "pedidos", r.id, null, { folio: r.folio, prueba: true });
+  const origen = await siteOrigin();
+  after(() => enviarCorreosPedido(r.id, "pagado", origen));
   redirect(`/admin/pedidos/${r.id}?aviso=creado`);
 }
 
@@ -65,8 +70,14 @@ export async function moverPedido(_prev: PedidoState, form: FormData): Promise<P
   await db.from("pedido_eventos").insert({ pedido_id: id, tipo: "estado", estado: nuevo, detalle, usuario_id: user.id, usuario_nombre: user.nombre });
   if (nuevo === "pagado") await db.from("pagos").insert({ pedido_id: id, proveedor: "prueba", estado: "aprobado", monto_centavos: (await db.from("pedidos").select("total_centavos").eq("id", id).single()).data?.total_centavos ?? 0 });
   await audit(user, "estado", "pedidos", id, { folio: p.folio, estado }, { folio: p.folio, estado: nuevo, ...(detalle ? { detalle } : {}) });
+  // Correos: pagado (cliente y equipo), en camino y entregado (cliente). Salen después de responder.
+  const correo = nuevo === "pagado" || nuevo === "enviado" || nuevo === "entregado" ? nuevo : null;
+  if (correo) {
+    const origen = await siteOrigin();
+    after(() => enviarCorreosPedido(id, correo, origen));
+  }
   refresh();
-  return { ok: true, message: `Listo: el pedido quedó “${ESTADO_LABEL[nuevo]}”.` };
+  return { ok: true, message: `Listo: el pedido quedó “${ESTADO_LABEL[nuevo]}”.${correo ? " Le avisamos al cliente por correo." : ""}` };
 }
 
 export async function agregarNota(_prev: PedidoState, form: FormData): Promise<PedidoState> {

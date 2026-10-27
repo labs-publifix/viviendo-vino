@@ -147,6 +147,10 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
 - [ ] Inicio: ventas del día y la semana, pedidos por preparar y atrasados, agotados, por transferir, alertas.
 - [x] Pedidos y Finanzas sin cobro (`20261031000000_pedidos.sql`): pedidos con kits, botellas, precios y comisión
   copiados al crearlos; historial; pagos; transferencias. Probado con pedidos de prueba en dev.
+- [x] Correos de pedido (27 oct): al cliente "Recibimos tu pedido" (al quedar pagado), "Va en camino" (paquetería y
+  guía, sin enlace de rastreo porque no hay integración con paqueterías) y "Entregado"; al equipo (admin, atención y
+  la gente del aliado) "Nuevo pedido por preparar", sin datos de contacto del cliente. Los pedidos de prueba se
+  mandan a labs.publifix@gmail.com o raguirre@continentalmedia.com.mx y llevan "[Prueba]" en el asunto.
 - [ ] Conectar el checkout y Mercado Pago a `crearPedido` (lib/admin/pedidos.ts): el pago aprobado pasa el pedido a
   "Por preparar". Al hacerlo, revisar quién absorbe la comisión de Mercado Pago (cambia `reparto`).
 - [ ] Finanzas: exportar a CSV para contabilidad.

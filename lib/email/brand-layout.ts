@@ -20,7 +20,8 @@ export type BrandEmail = {
   highlight?: { label: string; value: string; sub?: string; note?: string };
   /** Párrafos del cuerpo, en texto plano (se escapan). */
   paragraphs: string[];
-  cta: { label: string; url: string };
+  /** Botón principal. Opcional: un aviso puede no tener acción (p. ej. "va en camino"). */
+  cta?: { label: string; url: string };
   /** Lista corta después de los párrafos (por ejemplo, las botellas de una caja). */
   items?: string[];
   /** Enlace de texto bajo el botón, para una segunda acción. */
@@ -149,6 +150,9 @@ ${
 `
     : ""
 }
+${
+  email.cta
+    ? `
         <!-- Botón -->
         <tr>
           <td align="center" class="px" style="padding:36px 40px 0 40px;">
@@ -161,6 +165,9 @@ ${
             </table>
           </td>
         </tr>
+`
+    : ""
+}
 ${
   email.secondary
     ? `
@@ -207,7 +214,7 @@ ${
     ...(h ? [[h.label + ":", h.value, h.sub ? `(${h.sub})` : ""].filter(Boolean).join(" "), ...(h.note ? [h.note] : []), ""] : []),
     ...email.paragraphs.flatMap((p) => [p, ""]),
     ...(email.items?.length ? [...email.items.map((i) => `- ${i}`), ""] : []),
-    `${email.cta.label}: ${email.cta.url}`,
+    ...(email.cta ? [`${email.cta.label}: ${email.cta.url}`] : []),
     ...(email.secondary ? [`${email.secondary.label}: ${email.secondary.url}`] : []),
     "",
     "--",

@@ -4,8 +4,8 @@ import type { CheckoutInput } from "@/lib/checkout/schema";
 import { KIT_SIZE } from "@/lib/kit/rules";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
-// Pedidos de prueba (solo fuera de producción): un cliente inventado con correo @example.com (dominio reservado,
-// nunca llega a nadie) y uno o dos kits armados al azar con vinos disponibles de un mismo grupo.
+// Pedidos de prueba (solo fuera de producción): un cliente inventado y uno o dos kits armados al azar con vinos
+// disponibles de un mismo grupo. Los correos al "cliente" llegan a una de las bandejas del equipo, para revisarlos.
 
 const NOMBRES = ["Ana López", "Carlos Méndez", "Lucía Herrera", "Diego Ramírez", "Sofía Castillo", "Mateo Aguilar", "Valeria Ruiz", "Andrés Torres"];
 const LUGARES: { calle: string; colonia: string; cp: string; ciudad: string; estado: CheckoutInput["state"] }[] = [
@@ -17,14 +17,15 @@ const LUGARES: { calle: string; colonia: string; cp: string; ciudad: string; est
 ];
 
 const azar = <T,>(xs: readonly T[]) => xs[Math.floor(Math.random() * xs.length)];
+/** Bandejas que reciben los correos de los pedidos de prueba (José y Rafael). */
+const CORREOS_PRUEBA = ["labs.publifix@gmail.com", "raguirre@continentalmedia.com.mx"];
 
 export function clientePrueba(): CheckoutInput {
   const nombre = azar(NOMBRES);
   const lugar = azar(LUGARES);
-  const n = Math.floor(1000 + Math.random() * 9000);
   return {
     name: `${nombre} (prueba)`,
-    email: `cliente.prueba${n}@example.com`,
+    email: azar(CORREOS_PRUEBA),
     phone: `55${Math.floor(10000000 + Math.random() * 89999999)}`,
     street: lugar.calle,
     neighborhood: lugar.colonia,
