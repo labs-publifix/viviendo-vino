@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getQuizMetricas, periodoDe, PERIODOS } from "@/lib/admin/metricas";
+import { getQuizMetricas, paginaDe, periodoDe, PERIODOS } from "@/lib/admin/metricas";
 import { requireAdmin } from "@/lib/admin/session";
 import { BarList, DailyColumns, Funnel, PeriodPicker, Recientes } from "../../_ui/charts";
 import c from "../../_ui/charts.module.css";
@@ -9,8 +9,9 @@ export const metadata: Metadata = { title: "Quiz IA · Contenido" };
 
 export default async function Page({ searchParams }: PageProps<"/admin/contenido/quiz">) {
   await requireAdmin(["admin"]);
-  const periodo = periodoDe((await searchParams).periodo);
-  const m = await getQuizMetricas(periodo);
+  const sp = await searchParams;
+  const periodo = periodoDe(sp.periodo);
+  const m = await getQuizMetricas(periodo, paginaDe(sp.pagina));
   const n = (v: number) => v.toLocaleString("es-MX");
   return (
     <>
@@ -38,7 +39,15 @@ export default async function Page({ searchParams }: PageProps<"/admin/contenido
       </dl>
       <div className={c.grid}>
         <div className={c.wide}>
-          <Recientes title="Últimos quizzes" items={m.recientes} ahora={m.ahora} empty="Todavía nadie ha terminado el quiz." />
+          <Recientes
+            title="Últimos quizzes"
+            items={m.recientes}
+            ahora={m.ahora}
+            pag={m.historial}
+            unidad={["quiz", "quizzes"]}
+            href={(pg) => `/admin/contenido/quiz?periodo=${periodo}${pg > 1 ? `&pagina=${pg}` : ""}#historial`}
+            empty="Todavía nadie ha terminado el quiz."
+          />
         </div>
         <div className={c.wide}>
           <DailyColumns title="Resultados por día" days={m.porDia} unit={["resultado", "resultados"]} />

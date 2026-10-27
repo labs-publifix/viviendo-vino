@@ -1,6 +1,6 @@
 /* Gráficas del panel. Ciruela para las barras (dato), texto siempre en tinta, cuadrícula mínima. */
 
-.panel { display: flex; flex-direction: column; gap: 16px; min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+.panel { scroll-margin-top: 16px; display: flex; flex-direction: column; gap: 16px; min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
 .panelHead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
 .panelHead h2 { margin: 0; font-size: 1rem; font-weight: 700; line-height: 1.3; }
 .panelHead p { margin: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
@@ -35,6 +35,17 @@
 .marks { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
 @media (min-width: 760px) { .marks { justify-content: flex-end; } }
 .marks li { padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+
+.pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; }
+.pager > a,
+.pager > span[aria-disabled] { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; color: var(--fg); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.pager > a:hover { border-color: var(--vv-negro); }
+.pager > span[aria-disabled] { color: var(--muted); font-weight: 500; opacity: 0.55; }
+.pagerNow { color: var(--muted); font-variant-numeric: tabular-nums; text-align: center; }
+.pagerNow a { color: var(--fg); font-weight: 600; }
+@media (max-width: 599px) {
+  .pagerNow { order: -1; flex-basis: 100%; text-align: left; }
+}
 
 /* Columnas por día */
 .columns { display: grid; align-items: end; gap: 2px; height: 140px; padding-bottom: 1px; border-bottom: 1px solid var(--line); }

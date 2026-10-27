@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getScanMetricas, periodoDe, PERIODOS } from "@/lib/admin/metricas";
+import { getScanMetricas, paginaDe, periodoDe, PERIODOS } from "@/lib/admin/metricas";
 import { requireAdmin } from "@/lib/admin/session";
 import { BarList, DailyColumns, PeriodPicker, Recientes } from "../../_ui/charts";
 import c from "../../_ui/charts.module.css";
@@ -9,8 +9,9 @@ export const metadata: Metadata = { title: "Wine Scan · Contenido" };
 
 export default async function Page({ searchParams }: PageProps<"/admin/contenido/wine-scan">) {
   await requireAdmin(["admin"]);
-  const periodo = periodoDe((await searchParams).periodo);
-  const m = await getScanMetricas(periodo);
+  const sp = await searchParams;
+  const periodo = periodoDe(sp.periodo);
+  const m = await getScanMetricas(periodo, paginaDe(sp.pagina));
   const n = (v: number) => v.toLocaleString("es-MX");
   const opiniones = m.resumen.meSirvio + m.resumen.noMeSirvio;
   return (
@@ -39,7 +40,15 @@ export default async function Page({ searchParams }: PageProps<"/admin/contenido
       </dl>
       <div className={c.grid}>
         <div className={c.wide}>
-          <Recientes title="Últimos escaneos" items={m.recientes} ahora={m.ahora} empty="Todavía nadie ha escaneado una etiqueta." />
+          <Recientes
+            title="Últimos escaneos"
+            items={m.recientes}
+            ahora={m.ahora}
+            pag={m.historial}
+            unidad={["escaneo", "escaneos"]}
+            href={(pg) => `/admin/contenido/wine-scan?periodo=${periodo}${pg > 1 ? `&pagina=${pg}` : ""}#historial`}
+            empty="Todavía nadie ha escaneado una etiqueta."
+          />
         </div>
         <div className={c.wide}>
           <DailyColumns title="Escaneos por día" days={m.porDia} unit={["escaneo", "escaneos"]} />

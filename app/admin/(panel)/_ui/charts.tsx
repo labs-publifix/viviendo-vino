@@ -55,11 +55,17 @@ export function hace(iso: string, ahora = Date.now()): string {
 }
 
 type Reciente = { id: string; at: string; titulo: string; detalle: string; marcas: string[]; tono?: "ok" | "aviso" };
+type Pag = { pagina: number; paginas: number; total: number; desde: number; hasta: number };
 
-/** Lo más reciente, en orden cronológico inverso: cuándo, qué salió y qué hizo la persona después. */
-export function Recientes({ title, items, empty, ahora }: { title: string; items: Reciente[]; empty: string; ahora: number }) {
+/**
+ * Historial, de lo más nuevo a lo más viejo: cuándo, qué salió y qué hizo la persona después. Paginado con
+ * enlaces (?pagina=N, sin datos personales en la URL); al cambiar de página vuelve al inicio del panel.
+ */
+export function Recientes({ title, items, empty, ahora, pag, href, unidad }: { title: string; items: Reciente[]; empty: string; ahora: number; pag: Pag; href: (pagina: number) => string; unidad: [string, string] }) {
+  const total = `${n(pag.total)} ${pag.total === 1 ? unidad[0] : unidad[1]}`;
+  const note = pag.total === 0 ? undefined : pag.pagina === 1 && items[0] ? `Último: ${hace(items[0].at, ahora)} · ${total}` : `${n(pag.desde)}–${n(pag.hasta)} de ${total}`;
   return (
-    <Panel title={title} note={items[0] ? `Último: ${hace(items[0].at, ahora)}` : undefined}>
+    <Panel title={pag.pagina === 1 ? title : `${title} · página ${n(pag.pagina)}`} note={note} id="historial">
       {items.length === 0 ? (
         <p className={styles.empty}>{empty}</p>
       ) : (
@@ -84,6 +90,37 @@ export function Recientes({ title, items, empty, ahora }: { title: string; items
             </li>
           ))}
         </ol>
+      )}
+      {pag.paginas > 1 && (
+        <nav className={styles.pager} aria-label={`Páginas de ${title.toLowerCase()}`}>
+          {pag.pagina > 1 ? (
+            <Link href={href(pag.pagina - 1)} rel="prev">
+              <span aria-hidden="true">←</span> Más recientes
+            </Link>
+          ) : (
+            <span aria-disabled="true">
+              <span aria-hidden="true">←</span> Más recientes
+            </span>
+          )}
+          <span className={styles.pagerNow} aria-current="page">
+            Página {n(pag.pagina)} de {n(pag.paginas)}
+            {pag.pagina > 2 && (
+              <>
+                {" · "}
+                <Link href={href(1)}>Ir a la primera</Link>
+              </>
+            )}
+          </span>
+          {pag.pagina < pag.paginas ? (
+            <Link href={href(pag.pagina + 1)} rel="next">
+              Más antiguos <span aria-hidden="true">→</span>
+            </Link>
+          ) : (
+            <span aria-disabled="true">
+              Más antiguos <span aria-hidden="true">→</span>
+            </span>
+          )}
+        </nav>
       )}
     </Panel>
   );
@@ -166,9 +203,9 @@ export function DailyColumns({ title, days, unit }: { title: string; days: { dia
   );
 }
 
-export function Panel({ title, note, children }: { title: string; note?: ReactNode; children: ReactNode }) {
+export function Panel({ title, note, children, id }: { title: string; note?: ReactNode; children: ReactNode; id?: string }) {
   return (
-    <section className={styles.panel}>
+    <section className={styles.panel} id={id}>
       <header className={styles.panelHead}>
         <h2>{title}</h2>
         {note && <p>{note}</p>}

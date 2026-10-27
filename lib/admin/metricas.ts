@@ -15,9 +15,31 @@ export type Periodo = (typeof PERIODOS)[number]["value"];
 export const periodoDe = (v: unknown): Periodo => (PERIODOS.some((p) => p.value === v) ? (v as Periodo) : "30");
 
 const MAX = 50000;
-const RECIENTES = 10;
-/** Los más nuevos primero (la consulta ya los pide así; esto lo garantiza). */
-const masNuevos = <T extends { created_at: string }>(rows: T[]) => [...rows].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)).slice(0, RECIENTES);
+export const POR_PAGINA = 10;
+
+/** Página del historial que viene en la URL (?pagina=2). Cualquier cosa rara es la 1. */
+export const paginaDe = (v: unknown): number => {
+  const n = Number(Array.isArray(v) ? v[0] : v);
+  return Number.isInteger(n) && n >= 1 && n <= 100000 ? n : 1;
+};
+
+export type Paginacion = { pagina: number; paginas: number; total: number; desde: number; hasta: number };
+
+/**
+ * Una página del historial, de lo más nuevo a lo más viejo. Cuenta primero (sin traer filas) para no pedir una
+ * página que ya no existe; la base solo devuelve los 10 renglones de la página, sin importar cuántos haya.
+ */
+async function historial<T>(tabla: "quiz_sessions" | "wine_scans", columnas: string, pedida: number): Promise<{ rows: T[]; pag: Paginacion }> {
+  const db = supabaseAdmin();
+  const c = await db.from(tabla).select("id", { count: "exact", head: true });
+  if (c.error) check({ data: null, error: c.error }, "el historial");
+  const total = c.count ?? 0;
+  const paginas = Math.max(1, Math.ceil(total / POR_PAGINA));
+  const pagina = Math.min(pedida, paginas);
+  const from = (pagina - 1) * POR_PAGINA;
+  const rows = total === 0 ? [] : check(await db.from(tabla).select(columnas).order("created_at", { ascending: false }).range(from, from + POR_PAGINA - 1), "el historial");
+  return { rows: rows as T[], pag: { pagina, paginas, total, desde: total ? from + 1 : 0, hasta: from + rows.length } };
+}
 
 /** Un renglón de "Lo más reciente": fecha, qué salió y qué hizo la persona después. */
 export type Reciente = { id: string; at: string; titulo: string; detalle: string; marcas: string[]; tono?: "ok" | "aviso" };
@@ -68,7 +90,10 @@ function check<T>(r: { data: T[] | null; error: { code?: string } | null }, what
   return r.data ?? [];
 }
 
-export async function getQuizMetricas(p: Periodo) {
+type QuizReciente = { id: string; created_at: string; perfil: string; ocasion: string; presupuesto: string; agrego_carrito: boolean; correo_guardado: boolean; compartido: number | null; repeticion: boolean };
+type ScanReciente = { id: string; created_at: string; accion: string; vino_detectado: string | null; confianza: string | null; slug_recomendado: string | null; feedback: number | null };
+
+export async function getQuizMetricas(p: Periodo, pagina = 1) {
   const db = supabaseAdmin();
   const since = desde(p);
   let qs = db
@@ -80,14 +105,8 @@ export async function getQuizMetricas(p: Periodo) {
     qs = qs.gte("created_at", since);
     qe = qe.gte("created_at", since);
   }
-  const qr = db
-    .from("quiz_sessions")
-    .select("id, created_at, perfil, ocasion, presupuesto, prearmado, agrego_carrito, correo_guardado, compartido, repeticion")
-    .order("created_at", { ascending: false })
-    .limit(RECIENTES);
-  const [sesiones, eventos, ultimos] = await Promise.all([qs, qe, qr]).then(
-    ([s, e, r]) => [check(s, "las sesiones del quiz"), check(e, "los eventos del quiz"), check(r, "los últimos quizzes")] as const,
-  );
+  const qr = historial<QuizReciente>("quiz_sessions", "id, created_at, perfil, ocasion, presupuesto, agrego_carrito, correo_guardado, compartido, repeticion", pagina);
+  const [sesiones, eventos, ultimos] = await Promise.all([qs, qe, qr]).then(([s, e, r]) => [check(s, "las sesiones del quiz"), check(e, "los eventos del quiz"), r] as const);
   const perfilNombre = Object.fromEntries(PERFILES.map((x) => [x.id, x.nombre]));
   const ocasionTxt = opciones("ocasion");
   const presupuestoTxt = opciones("presupuesto");
@@ -144,9 +163,10 @@ export async function getQuizMetricas(p: Periodo) {
       sesiones.map((s) => s.perfil),
       perfilNombre,
     ),
-    // Los últimos, sin importar el periodo: dicen si el quiz se está usando hoy.
+    // Historial completo (sin importar el periodo), paginado: dice si el quiz se está usando hoy.
     ahora: Date.now(),
-    recientes: masNuevos(ultimos).map(
+    historial: ultimos.pag,
+    recientes: ultimos.rows.map(
       (r): Reciente => ({
         id: r.id,
         at: r.created_at,
@@ -184,19 +204,14 @@ export async function getQuizMetricas(p: Periodo) {
 const ACCIONES: Record<string, string> = { ok: "Guía completa", pedir_otra_foto: "Pidió otra foto", no_es_vino: "No era vino" };
 const CONFIANZA: Record<string, string> = { alta: "Alta", media: "Media", baja: "Baja" };
 
-export async function getScanMetricas(p: Periodo) {
+export async function getScanMetricas(p: Periodo, pagina = 1) {
   const since = desde(p);
   const db = supabaseAdmin();
   let q = db.from("wine_scans").select("created_at, accion, vino_detectado, confianza, grupo, slug_recomendado, feedback, latencia_ms").limit(MAX);
   if (since) q = q.gte("created_at", since);
-  const qr = db
-    .from("wine_scans")
-    .select("id, created_at, accion, vino_detectado, confianza, slug_recomendado, feedback")
-    .order("created_at", { ascending: false })
-    .limit(RECIENTES);
-  const [scansR, ultimosR] = await Promise.all([q, qr]);
+  const [scansR, hist] = await Promise.all([q, historial<ScanReciente>("wine_scans", "id, created_at, accion, vino_detectado, confianza, slug_recomendado, feedback", pagina)]);
   const scans = check(scansR, "los escaneos");
-  const ultimos = masNuevos(check(ultimosR, "los últimos escaneos"));
+  const ultimos = hist.rows;
   const slugs = [...new Set(ultimos.map((u) => u.slug_recomendado).filter((x): x is string => Boolean(x)))];
   const nombres = new Map<string, string>();
   if (slugs.length) {
@@ -253,6 +268,7 @@ export async function getScanMetricas(p: Periodo) {
     ),
     tecnico: { latenciaMedia: latencias.length ? Math.round(latencias.reduce((a, b) => a + b, 0) / latencias.length) : null, errores },
     ahora: Date.now(),
+    historial: hist.pag,
     recientes: ultimos.map((u): Reciente => {
       const error = String(u.accion).startsWith("error:");
       const ok = u.accion === "ok";
