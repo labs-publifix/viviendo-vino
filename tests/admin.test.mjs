@@ -6,11 +6,19 @@ import { initials, menuFor, needsAdminSession, passwordProblem, safeAdminNext, S
 
 const ADMIN_ROUTES = ["/admin", "/admin/acceso", "/admin/recuperar", "/admin/contrasena", "/admin/pedidos", "/admin/catalogo"];
 
-test("producción cerrada: el panel no existe (hasta aprobar su paso a www)", () => {
+test("producción cerrada: el panel existe en www; la tienda sigue oculta", () => {
   const env = { storeOpen: false, preview: false, vercelEnv: "production" };
   for (const pathname of ADMIN_ROUTES) {
+    assert.deepEqual(decide({ pathname, host: "www.viviendovino.com", env, hasPreviewAccess: false }), { action: "next" }, pathname);
+  }
+  for (const pathname of ["/administrar", "/admin-x", "/adminx/a", "/inicio", "/tienda", "/carrito"]) {
     assert.deepEqual(decide({ pathname, host: "www.viviendovino.com", env, hasPreviewAccess: false }), { action: "not-found" }, pathname);
   }
+});
+
+test("dev.* con despliegue de producción: tampoco sirve el panel", () => {
+  const env = { storeOpen: false, preview: false, vercelEnv: "production" };
+  assert.deepEqual(decide({ pathname: "/admin", host: "dev.viviendovino.com", env, hasPreviewAccess: true }), { action: "not-found" });
 });
 
 test("preview: el panel pide primero la contraseña del preview", () => {

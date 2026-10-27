@@ -155,4 +155,5 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
 
 1. Cargar el catálogo en producción (una sola vez).
 2. Correr las migraciones del admin.
-3. Habilitar solo `/admin` y `/api/admin` en www con su inicio de sesión; la tienda sigue cerrada.
+3. Habilitar solo `/admin` en www con su inicio de sesión; la tienda sigue cerrada (`isAdminPath` en `lib/gate.ts`,
+   ya en el código: con la tienda cerrada en producción pasan la lista de espera y `/admin`, nada más).

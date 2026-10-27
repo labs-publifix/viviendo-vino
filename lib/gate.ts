@@ -1,7 +1,8 @@
 // Interruptor de apertura y acceso al preview. Lógica pura (sin imports de Next) para poder probarla.
 //
-// Producción con STORE_OPEN != "true": solo existe la lista de espera. Todo lo que no esté en la
-// lista blanca de abajo responde 404, así que cualquier ruta nueva de la tienda queda oculta por defecto.
+// Producción con STORE_OPEN != "true": solo existen la lista de espera y el panel /admin (con su propio
+// inicio de sesión). Todo lo que no esté en la lista blanca de abajo responde 404, así que cualquier ruta
+// nueva de la tienda queda oculta por defecto.
 // Preview (NEXT_PUBLIC_PREVIEW = "true" o host dev.*): todo pide contraseña salvo la pantalla de acceso.
 
 export type GateEnv = {
@@ -56,6 +57,11 @@ export function isWaitlistPath(pathname: string): boolean {
   );
 }
 
+/** El panel /admin: abierto en www aunque la tienda siga cerrada; cada página exige su sesión. */
+export function isAdminPath(pathname: string): boolean {
+  return pathname === "/admin" || pathname.startsWith("/admin/");
+}
+
 export function isPreviewHost(host: string): boolean {
   return host.toLowerCase().startsWith("dev.");
 }
@@ -78,7 +84,7 @@ export function decide({ pathname, host, env, hasPreviewAccess }: GateInput): Ga
   }
 
   if (!env.storeOpen) {
-    return isWaitlistPath(pathname) ? { action: "next" } : { action: "not-found" };
+    return isWaitlistPath(pathname) || isAdminPath(pathname) ? { action: "next" } : { action: "not-found" };
   }
 
   // Tienda abierta: la portada es la de la tienda; la ruta interna no se expone duplicada.
