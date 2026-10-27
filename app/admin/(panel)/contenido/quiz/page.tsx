@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getQuizMetricas, periodoDe, PERIODOS } from "@/lib/admin/metricas";
 import { requireAdmin } from "@/lib/admin/session";
-import { BarList, DailyColumns, Funnel, PeriodPicker } from "../../_ui/charts";
+import { BarList, DailyColumns, Funnel, PeriodPicker, Recientes } from "../../_ui/charts";
 import c from "../../_ui/charts.module.css";
 import styles from "../../_ui/panel.module.css";
 
@@ -38,9 +38,12 @@ export default async function Page({ searchParams }: PageProps<"/admin/contenido
       </dl>
       <div className={c.grid}>
         <div className={c.wide}>
+          <Recientes title="Últimos quizzes" items={m.recientes} ahora={m.ahora} empty="Todavía nadie ha terminado el quiz." />
+        </div>
+        <div className={c.wide}>
           <DailyColumns title="Resultados por día" days={m.porDia} unit={["resultado", "resultados"]} />
         </div>
-        <Funnel title="Del inicio al carrito" steps={m.embudo} note="% respecto a quienes empezaron" />
+        <Funnel title="Del inicio al carrito" steps={m.embudo} note="Personas distintas · % respecto a quienes empezaron" />
         <BarList title="Hasta qué pregunta llegan" items={m.preguntas} total={m.resumen.empezaron} />
         <BarList title="Perfiles que más salen" items={m.perfiles} />
         <BarList title="Para qué es la caja" items={m.ocasiones} />

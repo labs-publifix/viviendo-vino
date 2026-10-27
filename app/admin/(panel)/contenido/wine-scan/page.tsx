@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getScanMetricas, periodoDe, PERIODOS } from "@/lib/admin/metricas";
 import { requireAdmin } from "@/lib/admin/session";
-import { BarList, DailyColumns, PeriodPicker } from "../../_ui/charts";
+import { BarList, DailyColumns, PeriodPicker, Recientes } from "../../_ui/charts";
 import c from "../../_ui/charts.module.css";
 import styles from "../../_ui/panel.module.css";
 
@@ -38,6 +38,9 @@ export default async function Page({ searchParams }: PageProps<"/admin/contenido
         </div>
       </dl>
       <div className={c.grid}>
+        <div className={c.wide}>
+          <Recientes title="Últimos escaneos" items={m.recientes} ahora={m.ahora} empty="Todavía nadie ha escaneado una etiqueta." />
+        </div>
         <div className={c.wide}>
           <DailyColumns title="Escaneos por día" days={m.porDia} unit={["escaneo", "escaneos"]} />
         </div>
