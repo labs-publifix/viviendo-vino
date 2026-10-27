@@ -17,7 +17,15 @@ export type Column = {
   /** En el celular la fila-tarjeta usa esta columna como título. */
   primary?: boolean;
 };
-type Filter = { key: string; label: string; options: { value: string; label: string }[]; /** Por omisión "Todas". */ all?: string };
+type Filter = {
+  key: string;
+  label: string;
+  options: { value: string; label: string }[];
+  /** Por omisión "Todas". */
+  all?: string;
+  /** Opción elegida al abrir (p. ej. desde un enlace del Inicio). */
+  initial?: string;
+};
 
 const PAGE = 100;
 
@@ -39,7 +47,7 @@ export function DataTable({
   empty: string;
 }) {
   const [query, setQuery] = useState("");
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(filter?.initial ?? "");
   const [limit, setLimit] = useState(PAGE);
   const q = useDeferredValue(query.trim().toLowerCase());
 

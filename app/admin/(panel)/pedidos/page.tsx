@@ -14,8 +14,11 @@ export const metadata: Metadata = { title: "Pedidos" };
 // En qué etapa va cada pedido, para el filtro de la lista.
 const ETAPA: Record<string, string> = { pendiente_pago: "pendiente", pagado: "preparar", preparando: "preparar", enviado: "camino", entregado: "entregado", cancelado: "cancelado" };
 
-export default async function Page() {
+const ETAPAS = ["preparar", "camino", "entregado", "cancelado", "pendiente"];
+
+export default async function Page({ searchParams }: PageProps<"/admin/pedidos">) {
   const user = await requireAdmin(["admin", "aliado", "atencion"]);
+  const etapa = (await searchParams).etapa;
   const pedidos = await getPedidos(user);
   const cuenta = (etapa: string) => pedidos.filter((p) => ETAPA[p.estado] === etapa).length;
   const n = (v: number) => v.toLocaleString("es-MX");
@@ -78,6 +81,7 @@ export default async function Page() {
           key: "etapa",
           label: "Etapa del pedido",
           all: "Todos",
+          initial: typeof etapa === "string" && ETAPAS.includes(etapa) ? etapa : undefined,
           options: [
             { value: "preparar", label: "Por preparar" },
             { value: "camino", label: "En camino" },

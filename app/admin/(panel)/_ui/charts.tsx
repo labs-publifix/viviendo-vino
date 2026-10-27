@@ -155,10 +155,21 @@ export function Funnel({ title, steps, note }: { title: string; steps: Barra[]; 
 }
 
 /** Columnas por día. El valor de cada día aparece al pasar el cursor o enfocar; la tabla oculta los lista todos. */
-export function DailyColumns({ title, days, unit }: { title: string; days: { dia: string; label: string; value: number }[]; unit: [string, string] }) {
+export function DailyColumns({
+  title,
+  days,
+  unit,
+  formato,
+}: {
+  title: string;
+  days: { dia: string; label: string; value: number }[];
+  unit: [string, string];
+  /** Cómo escribir cada valor (p. ej. pesos); por omisión, "3 pedidos". */
+  formato?: (v: number) => string;
+}) {
   const max = Math.max(0, ...days.map((d) => d.value));
   const total = days.reduce((a, b) => a + b.value, 0);
-  const u = (v: number) => `${n(v)} ${v === 1 ? unit[0] : unit[1]}`;
+  const u = formato ?? ((v: number) => `${n(v)} ${v === 1 ? unit[0] : unit[1]}`);
   const ticks = days.length > 14 ? [0, Math.floor(days.length / 2), days.length - 1] : days.map((_, i) => i);
   return (
     <Panel title={title} note={`${u(total)} en el periodo`}>
@@ -192,7 +203,7 @@ export function DailyColumns({ title, days, unit }: { title: string; days: { dia
               {days.map((d) => (
                 <tr key={d.dia}>
                   <td>{d.label}</td>
-                  <td>{d.value}</td>
+                  <td>{u(d.value)}</td>
                 </tr>
               ))}
             </tbody>

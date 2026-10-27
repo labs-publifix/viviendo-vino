@@ -120,7 +120,7 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
 | Auditoría | Hecho (27 oct) | `/admin/auditoria` |
 | Catálogo (vinos, kits y grupos) | Hecho (27 oct) | `/admin/catalogo` |
 | Configuración → Aliados | Hecho (27 oct) | `/admin/configuracion/aliados` |
-| Inicio (tablero) | Pendiente | `/admin` |
+| Inicio (tablero) | Hecho (27 oct) | `/admin` |
 | Pedidos | Hecho sin cobro (27 oct): pedidos de prueba en dev | `/admin/pedidos` |
 | Finanzas | Hecho sin cobro (27 oct) | `/admin/finanzas` |
 
@@ -144,7 +144,11 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
 - [ ] Grupos editables y grupos de aliados nuevos: hoy los nombres y fotos de los 4 grupos (azul, rojo, verde,
   amarillo) viven también en el código de la tienda (`GROUP_LABELS`, `lib/catalog/media.ts`). Un aliado nuevo
   necesita sus grupos y que la tienda los muestre: es un cambio de front que se hace con aprobación.
-- [ ] Inicio: ventas del día y la semana, pedidos por preparar y atrasados, agotados, por transferir, alertas.
+- [x] Inicio (`20261103000000_inicio.sql`): la base calcula todo el tablero en una llamada (`admin_inicio`), así que
+  no se vuelve lento al acumular datos. Lo que necesita atención (por preparar, atrasados según el plazo del aliado,
+  en camino, entregados hoy, agotados, correos que no salieron) con enlaces filtrados; ventas de hoy, 7 días y mes
+  con la serie de 30 días; saldo por aliado; comunidad y contenido de la semana. Atención sin montos; el aliado
+  solo lo suyo; comunidad solo admin.
 - [x] Pedidos y Finanzas sin cobro (`20261031000000_pedidos.sql`): pedidos con kits, botellas, precios y comisión
   copiados al crearlos; historial; pagos; transferencias. Probado con pedidos de prueba en dev.
 - [x] Correos de pedido (27 oct): al cliente "Recibimos tu pedido" (al quedar pagado), "Va en camino" (paquetería y
