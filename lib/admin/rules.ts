@@ -46,7 +46,7 @@ export const GRUPOS: { label: string; secciones: Seccion[] }[] = [
       { href: "/admin", label: "Inicio", icon: "home", roles: ["admin", "aliado", "atencion"] },
       { href: "/admin/pedidos", label: "Pedidos", icon: "orders", roles: ["admin", "aliado", "atencion"] },
       { href: "/admin/catalogo", label: "Catálogo", icon: "bottle", roles: ["admin", "aliado"] },
-      { href: "/admin/finanzas", label: "Finanzas", icon: "wallet", roles: ["admin"] },
+      { href: "/admin/finanzas", label: "Finanzas", icon: "wallet", roles: ["admin", "aliado"] },
     ],
   },
   {
@@ -91,7 +91,7 @@ export const ROL_LABEL: Record<Rol, string> = { admin: "Administrador", aliado: 
 export const ROL_DESC: Record<Rol, string> = {
   admin: "Ve y cambia todo el panel.",
   atencion: "Ve los pedidos (sin montos) para dar seguimiento y atender clientes.",
-  aliado: "Ve los pedidos de su tienda y marca sus vinos como disponibles o agotados.",
+  aliado: "Ve sus pedidos y sus ventas, y marca sus vinos como disponibles o agotados.",
 };
 
 type Miembro = { id: string; rol: Rol; activo: boolean };

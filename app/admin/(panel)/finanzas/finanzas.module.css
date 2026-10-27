@@ -1,0 +1,37 @@
+/* Finanzas: resumen del aliado, transferencias y ventas por pedido. */
+
+.page { display: flex; flex-direction: column; gap: 16px; }
+.page > dl { margin-bottom: 0; }
+.muted { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.negativo { color: var(--error); }
+
+.facts { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: -4px 0 0; padding: 0; list-style: none; font-size: 14px; }
+.facts li { display: flex; gap: 6px; }
+.facts span { color: var(--muted); }
+.facts strong { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.card { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+.cardHead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.cardHead h2 { margin: 0; font-size: 1rem; font-weight: 700; line-height: 1.3; }
+
+.form { display: flex; flex-direction: column; gap: 16px; padding: 16px; border: 1px solid var(--vv-negro); border-radius: 14px; }
+.twoCols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+@media (min-width: 640px) { .twoCols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+
+.transfers { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.transfers li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 12px 0; border-top: 1px solid var(--line); }
+.transfers li:first-child { border-top: 0; padding-top: 0; }
+.tMain { display: flex; flex-direction: column; gap: 2px; min-width: 0; font-size: 14px; }
+.tMain strong { font-size: 16px; font-variant-numeric: tabular-nums; }
+.tMain span { color: var(--muted); }
+.tNote { overflow-wrap: anywhere; }
+
+.confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 14px; }
+.textBtn,
+.danger { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; border: 0; border-radius: 10px; background: transparent; color: var(--fg); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: background-color 150ms ease-out; }
+.textBtn:hover:not(:disabled) { background: rgb(10 2 6 / 0.06); }
+.textDanger { color: var(--error); }
+.danger { padding: 0 14px; border: 1px solid var(--error); border-radius: 999px; color: var(--error); }
+.danger:hover:not(:disabled) { background: rgb(195 58 44 / 0.08); }
+:is(.textBtn, .danger):disabled { opacity: 0.4; cursor: default; }

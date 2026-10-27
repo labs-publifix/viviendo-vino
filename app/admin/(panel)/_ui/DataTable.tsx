@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import { Icon } from "@/app/_ui/Icon";
 import styles from "./table.module.css";
@@ -16,7 +17,7 @@ export type Column = {
   /** En el celular la fila-tarjeta usa esta columna como título. */
   primary?: boolean;
 };
-type Filter = { key: string; label: string; options: { value: string; label: string }[] };
+type Filter = { key: string; label: string; options: { value: string; label: string }[]; /** Por omisión "Todas". */ all?: string };
 
 const PAGE = 100;
 
@@ -89,7 +90,7 @@ export function DataTable({
         </label>
         {filter && (
           <div className={styles.segments} role="group" aria-label={filter.label}>
-            {[{ value: "", label: "Todas" }, ...filter.options].map((o) => {
+            {[{ value: "", label: filter.all ?? "Todas" }, ...filter.options].map((o) => {
               const n = o.value ? (counts.get(o.value) ?? 0) : rows.length;
               return (
                 <button
@@ -178,6 +179,14 @@ function render(c: Column, r: Row) {
   }
   if (c.kind === "link") {
     const href = r[`${c.key}Href`];
+    // Rutas del panel ("/admin/…") se abren en la misma pestaña; enlaces externos, en otra.
+    if (typeof href === "string" && href.startsWith("/admin/")) {
+      return (
+        <Link href={href} className={styles.link}>
+          {v}
+        </Link>
+      );
+    }
     return typeof href === "string" && href ? (
       <a href={href} target="_blank" rel="noopener noreferrer" className={styles.link}>
         {v}

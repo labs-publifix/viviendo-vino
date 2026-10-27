@@ -29,6 +29,22 @@ producción (www) se hace después y solo con aprobación expresa.
 - **Todo lo que toca precios** (precio de cada vino, kits prearmados, comisión del aliado) **solo lo hace un
   administrador.** Se revisa en el servidor en cada acción, no solo ocultando botones.
 
+## Pedidos y Finanzas (27 de octubre de 2026)
+
+- **Estados:** Pago pendiente → Por preparar (pagado) → Preparando → En camino (con paquetería y guía) → Entregado.
+  Cancelar pide motivo, solo lo hace un admin y nunca después de enviado. El pago lo confirma Mercado Pago; a mano
+  solo se marca pagado un pedido de prueba.
+- **Quién hace qué:** admin, atención y el aliado dueño mueven el pedido (preparar, enviar, entregar) y dejan notas.
+  Atención no ve montos de comisión. El aliado no ve el correo del cliente (sí nombre, teléfono y dirección).
+- **El pedido conserva lo que se cobró:** precios, nombres de vinos y comisión se copian al crearlo. El servidor los
+  toma de la base en ese momento (sin caché), nunca del navegador.
+- **Comisión:** sobre el total cobrado (envío incluido), redondeada al centavo; el aliado recibe el resto
+  (`reparto` en `lib/admin/pedidos-rules.ts`).
+- **Saldo del aliado:** lo suyo de pedidos **entregados** menos lo transferido. Lo de pedidos pagados que aún no se
+  entregan aparece aparte como "En camino". Las transferencias las registra un admin.
+- **Pedidos de prueba:** botón solo en dev (nunca en producción), con cliente inventado `@example.com` y la etiqueta
+  "prueba" en todos lados.
+
 ## Precio antes y descuento (decidido el 27 de octubre de 2026)
 
 - Cada vino tiene **precio final** (`precio_centavos`, lo único que se cobra; el servidor siempre recalcula con la
@@ -105,8 +121,8 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
 | Catálogo (vinos, kits y grupos) | Hecho (27 oct) | `/admin/catalogo` |
 | Configuración → Aliados | Hecho (27 oct) | `/admin/configuracion/aliados` |
 | Inicio (tablero) | Pendiente | `/admin` |
-| Pedidos | Pendiente | `/admin/pedidos` |
-| Finanzas | Pendiente | `/admin/finanzas` |
+| Pedidos | Hecho sin cobro (27 oct): pedidos de prueba en dev | `/admin/pedidos` |
+| Finanzas | Hecho sin cobro (27 oct) | `/admin/finanzas` |
 
 ### Pendientes del admin
 
@@ -126,8 +142,11 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
   amarillo) viven también en el código de la tienda (`GROUP_LABELS`, `lib/catalog/media.ts`). Un aliado nuevo
   necesita sus grupos y que la tienda los muestre: es un cambio de front que se hace con aprobación.
 - [ ] Inicio: ventas del día y la semana, pedidos por preparar y atrasados, agotados, por transferir, alertas.
-- [ ] Pedidos y Finanzas: modelo de datos (pedidos, pagos, liquidaciones, transferencias, envíos,
-  consentimientos), probado con pedidos de prueba; se llena de verdad con el checkout y Mercado Pago.
+- [x] Pedidos y Finanzas sin cobro (`20261031000000_pedidos.sql`): pedidos con kits, botellas, precios y comisión
+  copiados al crearlos; historial; pagos; transferencias. Probado con pedidos de prueba en dev.
+- [ ] Conectar el checkout y Mercado Pago a `crearPedido` (lib/admin/pedidos.ts): el pago aprobado pasa el pedido a
+  "Por preparar". Al hacerlo, revisar quién absorbe la comisión de Mercado Pago (cambia `reparto`).
+- [ ] Finanzas: exportar a CSV para contabilidad.
 - [ ] Blog: lecturas y vistas por artículo (con GA4 o con un contador propio; decidir).
 - [ ] Contenido a escala: hoy las gráficas del Quiz y Wine Scan leen las filas del periodo (tope de 50,000). Cerca de
   ~20,000 al mes, pasar los totales a vistas o funciones SQL (requiere migración). El historial ya está paginado.

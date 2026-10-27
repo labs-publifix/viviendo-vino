@@ -7,6 +7,13 @@ export function formatMXN(cents: number): string {
   return `$${MXN.format(Math.round(cents / 100))}`;
 }
 
+const MXN_CENTAVOS = new Intl.NumberFormat("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+/** Con centavos, para cuentas (comisiones, transferencias): 71750 → "$717.50"; -500 → "-$5.00". */
+export function formatMXNExacto(cents: number): string {
+  return `${cents < 0 ? "-" : ""}$${MXN_CENTAVOS.format(Math.abs(cents) / 100)}`;
+}
+
 export function pesosToCents(pesos: number): number {
   return Math.round(pesos * 100);
 }

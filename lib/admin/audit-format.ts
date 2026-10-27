@@ -2,6 +2,7 @@
 // Puro, para usarlo igual en el servidor y en las pruebas.
 
 import { fechaCdmx } from "./comunidad-format.ts";
+import { ESTADO_LABEL, type EstadoPedido } from "./pedidos-rules.ts";
 
 export const ACCION_LABEL: Record<string, string> = {
   crear: "Creó",
@@ -27,6 +28,8 @@ export const ACCION_LABEL: Record<string, string> = {
   ocultar: "Ocultó de la tienda",
   mostrar: "Volvió a mostrar en la tienda",
   foto: "Cambió la foto de",
+  estado: "Cambió el estado de",
+  nota: "Agregó una nota a",
   entrar: "Entró al panel",
   salir: "Salió del panel",
 };
@@ -40,6 +43,8 @@ export const ENTIDAD_LABEL: Record<string, string> = {
   aliados: "Aliados",
   productos: "Catálogo",
   kits_prearmados: "Kits prearmados",
+  pedidos: "Pedidos",
+  transferencias: "Finanzas",
 };
 
 const CAMPO_LABEL: Record<string, string> = {
@@ -86,6 +91,14 @@ const CAMPO_LABEL: Record<string, string> = {
   imagen_url: "Foto",
   disponible: "Disponible",
   items: "Botellas",
+  folio: "Pedido",
+  prueba: "De prueba",
+  detalle: "Detalle",
+  monto_centavos: "Monto",
+  fecha: "Fecha",
+  referencia: "Referencia",
+  nota: "Nota",
+  aliado: "Aliado",
 };
 // Campos técnicos que no aportan al leer un cambio.
 const OCULTOS = new Set(["id", "updated_at", "created_at", "user_id", "iniciaAt", "terminaAt"]);
@@ -96,7 +109,8 @@ export function valor(campo: string, v: unknown): string {
   if (v === null || v === undefined || v === "") return "—";
   if (typeof v === "boolean") return v ? "Sí" : "No";
   if (campo === "rol" && typeof v === "string") return ROLES[v] ?? v;
-  if ((campo === "precio_centavos" || campo === "precio_antes_centavos") && typeof v === "number") return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(v / 100);
+  if (campo === "estado" && typeof v === "string" && v in ESTADO_LABEL) return ESTADO_LABEL[v as EstadoPedido];
+  if ((campo === "precio_centavos" || campo === "precio_antes_centavos" || campo === "monto_centavos") && typeof v === "number") return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(v / 100);
   if (campo === "comision_bps" && typeof v === "number") return `${v / 100} %`;
   if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}T/.test(v)) return fechaCdmx(v);
   if (typeof v === "object") return JSON.stringify(v);
@@ -137,5 +151,7 @@ export function resumen(row: { accion: string; entidad: string; entidad_id: stri
   if (row.entidad === "cuenta") return row.accion === "editar" ? "sus datos" : "";
   if (row.entidad === "admin_usuarios" || row.entidad === "aliados" || row.entidad === "kits_prearmados") return pick("nombre") ?? pick("email") ?? "";
   if (row.entidad === "productos") return pick("nombre_oficial") ?? "un vino";
+  if (row.entidad === "pedidos") return pick("folio") ?? "un pedido";
+  if (row.entidad === "transferencias") return `una transferencia${pick("aliado") ? ` a ${pick("aliado")}` : ""}`;
   return "";
 }

@@ -57,12 +57,12 @@ test("passwordProblem: largo, correo y contraseñas predecibles", () => {
   assert.equal(passwordProblem("rafael aguirre 2026", ""), null);
 });
 
-test("menú: el admin ve las 9 secciones; aliado y atención no ven finanzas ni auditoría", () => {
+test("menú: el admin ve las 9 secciones; el aliado ve sus finanzas; atención no ve dinero ni auditoría", () => {
   assert.equal(SECCIONES.filter((s) => s.roles.includes("admin")).length, 9);
-  for (const rol of ["aliado", "atencion"]) {
-    const hrefs = SECCIONES.filter((s) => s.roles.includes(rol)).map((s) => s.href);
-    assert.ok(!hrefs.includes("/admin/finanzas") && !hrefs.includes("/admin/auditoria"), rol);
-  }
+  const de = (rol) => SECCIONES.filter((s) => s.roles.includes(rol)).map((s) => s.href);
+  assert.deepEqual(de("aliado"), ["/admin", "/admin/pedidos", "/admin/catalogo", "/admin/finanzas", "/admin/configuracion"]);
+  assert.ok(!de("atencion").includes("/admin/finanzas") && !de("atencion").includes("/admin/auditoria"));
+  assert.ok(!de("aliado").includes("/admin/auditoria"));
 });
 
 test("menuFor: grupos sin secciones vacías; atención solo ve Operación y Sistema", () => {
