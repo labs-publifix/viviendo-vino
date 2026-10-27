@@ -129,6 +129,8 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
 - [ ] Pedidos y Finanzas: modelo de datos (pedidos, pagos, liquidaciones, transferencias, envíos,
   consentimientos), probado con pedidos de prueba; se llena de verdad con el checkout y Mercado Pago.
 - [ ] Blog: lecturas y vistas por artículo (con GA4 o con un contador propio; decidir).
+- [ ] Contenido a escala: hoy las gráficas del Quiz y Wine Scan leen las filas del periodo (tope de 50,000). Cerca de
+  ~20,000 al mes, pasar los totales a vistas o funciones SQL (requiere migración). El historial ya está paginado.
 
 **Para el equipo (Supabase)**
 - [x] Staging: `20261027000000_admin.sql` corrido; cuenta de José creada.
