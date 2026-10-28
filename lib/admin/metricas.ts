@@ -1,5 +1,6 @@
 import "server-only";
-import { PERFILES, PREGUNTAS } from "@/lib/quiz/config";
+import { getCatalog, kitMinimo } from "@/lib/catalog/repo";
+import { PERFILES, PREGUNTAS, preguntasActuales } from "@/lib/quiz/config";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 // Métricas de Contenido (/admin/contenido): Quiz IA y Wine Scan, con lo que ya se guarda (sin datos personales).
@@ -79,7 +80,7 @@ function contar(values: (string | null | undefined)[], labels: Record<string, st
   return [...m.entries()].map(([key, value]) => ({ key, label: labels[key] ?? key, value })).sort((a, b) => b.value - a.value);
 }
 
-const opciones = (id: string) => Object.fromEntries((PREGUNTAS.preguntas.find((q) => q.id === id)?.opciones ?? []).map((o) => [o.id, o.texto]));
+const opciones = (id: string, preguntas = PREGUNTAS) => Object.fromEntries((preguntas.preguntas.find((q) => q.id === id)?.opciones ?? []).map((o) => [o.id, o.texto]));
 const pct = (a: number, b: number) => (b > 0 ? Math.round((100 * a) / b) : 0);
 
 function check<T>(r: { data: T[] | null; error: { code?: string } | null }, what: string): T[] {
@@ -109,7 +110,9 @@ export async function getQuizMetricas(p: Periodo, pagina = 1) {
   const [sesiones, eventos, ultimos] = await Promise.all([qs, qe, qr]).then(([s, e, r]) => [check(s, "las sesiones del quiz"), check(e, "los eventos del quiz"), r] as const);
   const perfilNombre = Object.fromEntries(PERFILES.map((x) => [x.id, x.nombre]));
   const ocasionTxt = opciones("ocasion");
-  const presupuestoTxt = opciones("presupuesto");
+  // Rangos con los precios de hoy (los ids no cambian; los montos sí, con el kit más barato).
+  const preguntasHoy = preguntasActuales(await getCatalog().then(kitMinimo, () => null));
+  const presupuestoTxt = opciones("presupuesto", preguntasHoy);
 
   // Personas distintas por paso (session_id anónimo del navegador; sin él, cada evento cuenta como una).
   const distintas = (filter: (e: (typeof eventos)[number]) => boolean) => {
@@ -186,7 +189,7 @@ export async function getQuizMetricas(p: Periodo, pagina = 1) {
     ),
     presupuestos: contar(
       sesiones.map((s) => s.presupuesto),
-      opciones("presupuesto"),
+      presupuestoTxt,
     ),
     porDia: porDia(
       sesiones.map((s) => s.created_at),

@@ -29,7 +29,7 @@ export default async function Page({ searchParams }: PageProps<"/admin/finanzas"
     <>
       <PageHead
         title="Finanzas"
-        text={esAliado ? "Tus ventas, la comisión de Viviendo Vino, lo que te toca y lo que ya te transferimos." : "Ventas, comisiones y transferencias a cada aliado."}
+        text={esAliado ? "Tus ventas a tus precios acordados, lo que ya te transferimos y lo que falta por recibir." : "Ventas, lo de cada aliado a sus precios acordados, el margen de Viviendo Vino y las transferencias."}
       />
       {!f.aliado ? (
         <p className={s.muted}>No hay aliados todavía.</p>
@@ -45,40 +45,73 @@ export default async function Page({ searchParams }: PageProps<"/admin/finanzas"
             </nav>
           )}
 
-          <dl className={styles.stats}>
-            <div>
-              <dt>
-                Vendido · {r.ventas.toLocaleString("es-MX")} {r.ventas === 1 ? "pedido" : "pedidos"}
-              </dt>
-              <dd>{formatMXN(r.vendido)}</dd>
-            </div>
-            <div>
-              <dt>Comisión Viviendo Vino · {f.aliado.comisionBps / 100} %</dt>
-              <dd>{formatMXN(r.comision)}</dd>
-            </div>
-            <div>
-              <dt>{esAliado ? "Para ti" : `Para ${f.aliado.nombre}`}</dt>
-              <dd>{formatMXN(r.paraAliado)}</dd>
-            </div>
-            <div>
-              <dt>{esAliado ? "Por recibir · de pedidos entregados" : "Por transferir · de pedidos entregados"}</dt>
-              <dd className={r.saldo < 0 ? s.negativo : undefined}>{formatMXN(r.saldo)}</dd>
-            </div>
-          </dl>
+          {esAliado ? (
+            <dl className={styles.stats}>
+              <div>
+                <dt>
+                  Tus ventas · {r.ventas.toLocaleString("es-MX")} {r.ventas === 1 ? "pedido" : "pedidos"}
+                </dt>
+                <dd>{formatMXN(r.paraAliado)}</dd>
+              </div>
+              <div>
+                <dt>Entregado (ya se te debe)</dt>
+                <dd>{formatMXN(r.ganado)}</dd>
+              </div>
+              <div>
+                <dt>Transferido</dt>
+                <dd>{formatMXN(r.transferido)}</dd>
+              </div>
+              <div>
+                <dt>Por recibir · de pedidos entregados</dt>
+                <dd className={r.saldo < 0 ? s.negativo : undefined}>{formatMXN(r.saldo)}</dd>
+              </div>
+            </dl>
+          ) : (
+            <dl className={styles.stats}>
+              <div>
+                <dt>
+                  Vendido · {r.ventas.toLocaleString("es-MX")} {r.ventas === 1 ? "pedido" : "pedidos"}
+                </dt>
+                <dd>{formatMXN(r.vendido)}</dd>
+              </div>
+              <div>
+                <dt>Para {f.aliado.nombre} · precios acordados</dt>
+                <dd>{formatMXN(r.paraAliado)}</dd>
+              </div>
+              <div>
+                <dt>Margen neto · {formatMXN(r.margen)} − Mercado Pago {formatMXN(r.mp)}</dt>
+                <dd>{formatMXN(r.margenNeto)}</dd>
+              </div>
+              <div>
+                <dt>Por transferir · de pedidos entregados</dt>
+                <dd className={r.saldo < 0 ? s.negativo : undefined}>{formatMXN(r.saldo)}</dd>
+              </div>
+            </dl>
+          )}
 
           <ul className={s.facts}>
-            <li>
-              <span>Entregado (ya se {esAliado ? "te" : "le"} debe)</span>
-              <strong>{formatMXN(r.ganado)}</strong>
-            </li>
-            <li>
-              <span>Transferido</span>
-              <strong>{formatMXN(r.transferido)}</strong>
-            </li>
+            {!esAliado && (
+              <li>
+                <span>Entregado (ya se le debe)</span>
+                <strong>{formatMXN(r.ganado)}</strong>
+              </li>
+            )}
+            {!esAliado && (
+              <li>
+                <span>Transferido</span>
+                <strong>{formatMXN(r.transferido)}</strong>
+              </li>
+            )}
             <li>
               <span>En camino (se suma al entregarse)</span>
               <strong>{formatMXN(r.enCamino)}</strong>
             </li>
+            {!esAliado && (
+              <li>
+                <span>Mercado Pago</span>
+                <strong>estimado hasta conectar el cobro</strong>
+              </li>
+            )}
           </ul>
           {r.saldo < 0 && <p className={s.muted}>El saldo es negativo: se transfirió más de lo entregado hasta hoy (un adelanto).</p>}
           {pruebas > 0 && (
@@ -102,14 +135,25 @@ export default async function Page({ searchParams }: PageProps<"/admin/finanzas"
               <p className={s.muted}>Pedidos pagados; los cancelados y sin pago no cuentan.</p>
             </div>
             <DataTable
-              columns={[
-                { key: "folio", label: "Pedido", kind: "link", primary: true },
-                { key: "fecha", label: "Fecha", kind: "fecha" },
-                { key: "estadoLabel", label: "Estado", kind: "estado" },
-                { key: "total", label: "Total", kind: "num" },
-                { key: "comision", label: "Comisión", kind: "num" },
-                { key: "aliado", label: esAliado ? "Para ti" : "Para el aliado", kind: "num" },
-              ]}
+              columns={
+                esAliado
+                  ? [
+                      { key: "folio", label: "Pedido", kind: "link", primary: true },
+                      { key: "fecha", label: "Fecha", kind: "fecha" },
+                      { key: "estadoLabel", label: "Estado", kind: "estado" },
+                      { key: "kits", label: "Kits", kind: "num" },
+                      { key: "aliado", label: "Para ti", kind: "num" },
+                    ]
+                  : [
+                      { key: "folio", label: "Pedido", kind: "link", primary: true },
+                      { key: "fecha", label: "Fecha", kind: "fecha" },
+                      { key: "estadoLabel", label: "Estado", kind: "estado" },
+                      { key: "total", label: "Cobrado", kind: "num" },
+                      { key: "aliado", label: "Para el aliado", kind: "num" },
+                      { key: "margen", label: "Margen", kind: "num" },
+                      { key: "neto", label: "Neto (− MP)", kind: "num" },
+                    ]
+              }
               rows={f.ventas.map((v) => ({
                 id: v.id,
                 folio: v.prueba ? `${v.folio} · prueba` : v.folio,
@@ -118,9 +162,11 @@ export default async function Page({ searchParams }: PageProps<"/admin/finanzas"
                 estadoLabel: ESTADO_LABEL[v.estado],
                 tono: ESTADO_TONO[v.estado],
                 etapa: v.estado === "entregado" ? "entregado" : "camino",
+                kits: v.kits,
                 total: formatMXN(v.total),
-                comision: formatMXN(v.comision),
                 aliado: formatMXN(v.aliado),
+                margen: formatMXN(v.margen),
+                neto: formatMXN(v.margen - v.mp),
               }))}
               searchKeys={["folio"]}
               searchLabel="Buscar por número de pedido"

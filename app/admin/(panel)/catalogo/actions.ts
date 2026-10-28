@@ -3,6 +3,7 @@
 import { refresh, updateTag } from "next/cache";
 import { audit } from "@/lib/admin/audit";
 import { puedeCambiarDisponible, slugify, validarKit, validarVino, type KitLinea, type VinoInput } from "@/lib/admin/catalogo-rules";
+import { MARGEN_MINIMO_BPS } from "@/lib/admin/pedidos-rules";
 import { PAGINAS_CATALOGO, refrescarTienda } from "@/lib/admin/refrescar-tienda";
 import { requireAdmin } from "@/lib/admin/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -11,14 +12,14 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 // administrador (requireAdmin(["admin"]) en cada acción). El rol Aliado solo cambia sus vinos entre disponible
 // y agotado (cambiarDisponible revisa que el vino sea suyo). Cada cambio refresca la tienda y queda auditado.
 
-export type VinoState = { ok?: boolean; message?: string; error?: string; errors?: Record<string, string>; id?: string };
+export type VinoState = { ok?: boolean; message?: string; error?: string; errors?: Record<string, string>; id?: string; margenBajo?: boolean };
 export type KitState = { ok?: boolean; message?: string; error?: string; errors?: Record<string, string> };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const SAVE_ERROR = "No se pudo guardar. Intenta otra vez.";
 const FOTO_MAX = 1.5 * 1024 * 1024;
 const VINO_COLS =
-  "id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, precio_antes_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo";
+  "id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, precio_antes_centavos, precio_aliado_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo";
 
 function done(paginas: string[] = []) {
   updateTag("catalogo");
@@ -76,7 +77,7 @@ export async function cambiarDisponible(id: string, disponible: boolean): Promis
 
 // ---------- Vino (solo admin) ----------
 
-const CAMPOS_VINO = ["nombre_oficial", "productor", "categoria_slug", "grupo_id", "tipo", "uva", "region", "denominacion", "anada", "volumen_ml", "grado_alcohol", "precio", "precio_antes", "premio", "descripcion", "descripcion_aliado"] as const;
+const CAMPOS_VINO = ["nombre_oficial", "productor", "categoria_slug", "grupo_id", "tipo", "uva", "region", "denominacion", "anada", "volumen_ml", "grado_alcohol", "precio", "precio_antes", "precio_aliado", "premio", "descripcion", "descripcion_aliado"] as const;
 
 export async function guardarVino(_prev: VinoState, form: FormData): Promise<VinoState> {
   const user = await requireAdmin(["admin"]);
@@ -89,10 +90,20 @@ export async function guardarVino(_prev: VinoState, form: FormData): Promise<Vin
   const aliadoId = antes?.aliado_id ?? String(form.get("aliado_id") ?? "");
   if (!UUID.test(aliadoId)) return { errors: { aliado_id: "Elige el aliado." } };
 
-  const [cats, grupos] = await Promise.all([db.from("categorias").select("slug"), db.from("grupos_botella").select("id").eq("aliado_id", aliadoId)]);
+  const [cats, grupos, conf] = await Promise.all([
+    db.from("categorias").select("slug"),
+    db.from("grupos_botella").select("id").eq("aliado_id", aliadoId),
+    db.from("configuracion_comercial").select("margen_minimo_bps").eq("aliado_id", aliadoId).maybeSingle(),
+  ]);
   const input = Object.fromEntries(CAMPOS_VINO.map((k) => [k, String(form.get(k) ?? "")])) as VinoInput;
-  const v = validarVino(input, { categorias: (cats.data ?? []).map((c) => c.slug), grupos: (grupos.data ?? []).map((g) => g.id) });
-  if (!v.ok) return { errors: v.errors };
+  const margenMinimoBps = (conf.data?.margen_minimo_bps as number | undefined) ?? MARGEN_MINIMO_BPS;
+  const v = validarVino(input, {
+    categorias: (cats.data ?? []).map((c) => c.slug),
+    grupos: (grupos.data ?? []).map((g) => g.id),
+    margenMinimoBps,
+    confirmarMargen: form.get("confirmar_margen") === "on",
+  });
+  if (!v.ok) return { errors: v.errors, margenBajo: v.margenBajo };
   const activo = form.get("activo") === "on";
 
   // Un vino que está en un kit prearmado no cambia de grupo (el kit quedaría mezclado).
@@ -118,7 +129,7 @@ export async function guardarVino(_prev: VinoState, form: FormData): Promise<Vin
       console.error("admin/catalogo: no se guardó el vino", error.code);
       return { error: SAVE_ERROR };
     }
-    await audit(user, "editar", "productos", id, antes, { ...antes, ...fila });
+    await audit(user, "editar", "productos", id, antes, { ...antes, ...fila, ...(v.margenBajo ? { margen_bajo_confirmado: true } : {}) });
   } else {
     const { data: max } = await db.from("productos").select("orden").order("orden", { ascending: false }).limit(1);
     const orden = ((max?.[0]?.orden as number | undefined) ?? 0) + 1;
@@ -132,7 +143,7 @@ export async function guardarVino(_prev: VinoState, form: FormData): Promise<Vin
       return { error: SAVE_ERROR };
     }
     nuevoId = data.id;
-    await audit(user, "crear", "productos", data.id, null, { ...fila, slug });
+    await audit(user, "crear", "productos", data.id, null, { ...fila, slug, ...(v.margenBajo ? { margen_bajo_confirmado: true } : {}) });
   }
   done([`/vinos/${slug}`]);
   return { ok: true, id: nuevoId, message: id ? "Cambios guardados. Ya se ven en la tienda." : "Vino agregado. Ya se ve en la tienda." };

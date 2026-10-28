@@ -12,7 +12,7 @@ export type AliadoRow = {
   nombre: string;
   ciudad: string;
   estado: string;
-  comision: string;
+  margen_minimo: string;
   activo: boolean;
   vinos: number;
   personas: number;
@@ -27,7 +27,7 @@ export type AliadoRow = {
   notas: string;
 };
 type Campos = Omit<AliadoRow, "id" | "activo" | "vinos" | "personas">;
-const VACIO: Campos = { nombre: "", ciudad: "", estado: "", comision: "10", plazo_dias: "", plazo_texto: "", razon_social: "", rfc: "", contacto_nombre: "", contacto_telefono: "", contacto_email: "", clabe: "", notas: "" };
+const VACIO: Campos = { nombre: "", ciudad: "", estado: "", margen_minimo: "15", plazo_dias: "", plazo_texto: "", razon_social: "", rfc: "", contacto_nombre: "", contacto_telefono: "", contacto_email: "", clabe: "", notas: "" };
 
 export function AliadosManager({ aliados }: { aliados: AliadoRow[] }) {
   const [nuevo, setNuevo] = useState(false);
@@ -71,7 +71,7 @@ export function AliadosManager({ aliados }: { aliados: AliadoRow[] }) {
                     <span className={styles.dot} aria-hidden="true" />
                     {a.activo ? "Activo" : "En pausa"}
                   </span>
-                  <span>Comisión {a.comision} %</span>
+                  <span>Margen mínimo {a.margen_minimo} %</span>
                   <span>
                     {a.vinos} {a.vinos === 1 ? "vino" : "vinos"} en la tienda
                   </span>
@@ -153,11 +153,17 @@ function AliadoForm({ aliado, onDone, onCancel }: { aliado?: AliadoRow; onDone: 
       <fieldset className={styles.group}>
         <legend>Condiciones</legend>
         <div className={styles.twoCols}>
-          <TextField label="Comisión de Viviendo Vino (%)" inputMode="decimal" required hint="Sobre el neto de cada venta. Un cambio aplica a las ventas nuevas." {...f("comision")} />
+          <TextField
+            label="Margen mínimo de Viviendo Vino (%)"
+            inputMode="decimal"
+            required
+            hint="Sobre el precio final de cada botella. El aliado recibe íntegro su precio acordado; de este margen sale la comisión de Mercado Pago. Recomendado: 15."
+            {...f("margen_minimo")}
+          />
           <TextField label="Días para preparar un pedido" optional inputMode="numeric" {...f("plazo_dias")} />
         </div>
         <TextField label="Texto de entrega" optional hint="Por ejemplo: “Sale en 2 días hábiles desde Córdoba, Veracruz”." {...f("plazo_texto")} />
-        <p className={styles.hint}>El envío va incluido en el precio y los kits son de 6 botellas, igual para todos los aliados.</p>
+        <p className={styles.hint}>Los precios acordados de cada vino (netos, con IVA y envío incluido) se capturan en Catálogo. Los kits son de 6 botellas, igual para todos los aliados.</p>
       </fieldset>
 
       <fieldset className={styles.group}>

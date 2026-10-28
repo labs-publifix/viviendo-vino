@@ -11,7 +11,7 @@ export default async function Page() {
   return (
     <KitsManager
       kits={kits}
-      vinos={vinos.map((v) => ({ id: v.id, nombre: v.nombre, grupoId: v.grupoId, aliadoId: v.aliadoId, precioCentavos: v.precioCentavos, activo: v.activo, disponible: v.disponible }))}
+      vinos={vinos.map((v) => ({ id: v.id, nombre: v.nombre, grupoId: v.grupoId, aliadoId: v.aliadoId, precioCentavos: v.precioCentavos ?? 0, activo: v.activo, disponible: v.disponible }))}
       grupos={grupos.map((g) => ({ id: g.id, nombre: g.nombre, aliadoId: g.aliadoId }))}
       aliados={aliados}
     />

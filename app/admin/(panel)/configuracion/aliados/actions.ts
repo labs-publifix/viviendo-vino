@@ -7,21 +7,22 @@ import { PAGINAS_CATALOGO, refrescarTienda } from "@/lib/admin/refrescar-tienda"
 import { requireAdmin } from "@/lib/admin/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
-// Configuración → Aliados (solo admin): alta y edición del aliado (empresa, comisión, condiciones y datos
-// privados) y pausa. La comisión es dinero: solo un administrador la cambia, y queda en la auditoría.
+// Configuración → Aliados (solo admin): alta y edición del aliado (empresa, margen mínimo, condiciones y datos
+// privados) y pausa. Modelo broker: el aliado no paga comisión; Viviendo Vino fija un margen mínimo sobre los
+// precios acordados. Es dinero: solo un administrador lo cambia, y queda en la auditoría.
 
 export type AliadoState = { ok?: boolean; message?: string; error?: string; errors?: Record<string, string> };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const CAMPOS = ["nombre", "ciudad", "estado", "comision", "plazo_dias", "plazo_texto", "razon_social", "rfc", "contacto_nombre", "contacto_telefono", "contacto_email", "clabe", "notas"] as const;
+const CAMPOS = ["nombre", "ciudad", "estado", "margen_minimo", "plazo_dias", "plazo_texto", "razon_social", "rfc", "contacto_nombre", "contacto_telefono", "contacto_email", "clabe", "notas"] as const;
 /** En la auditoría la CLABE se guarda enmascarada. */
 const enmascarar = (o: Record<string, unknown>) => ({ ...o, clabe: typeof o.clabe === "string" && o.clabe ? `•••• ${o.clabe.slice(-4)}` : o.clabe ?? null });
 
 async function leer(id: string) {
   const db = supabaseAdmin();
   const [a, c, d] = await Promise.all([
-    db.from("aliados").select("id, slug, nombre, ciudad, estado, comision_bps, activo").eq("id", id).maybeSingle(),
-    db.from("configuracion_comercial").select("plazo_preparacion_dias, plazo_entrega_texto").eq("aliado_id", id).maybeSingle(),
+    db.from("aliados").select("id, slug, nombre, ciudad, estado, activo").eq("id", id).maybeSingle(),
+    db.from("configuracion_comercial").select("plazo_preparacion_dias, plazo_entrega_texto, margen_minimo_bps").eq("aliado_id", id).maybeSingle(),
     db.from("aliados_datos").select("razon_social, rfc, contacto_nombre, contacto_telefono, contacto_email, clabe, notas").eq("aliado_id", id).maybeSingle(),
   ]);
   return a.data ? { ...a.data, ...(c.data ?? {}), ...(d.data ?? {}) } : null;
@@ -34,7 +35,7 @@ export async function guardarAliado(_prev: AliadoState, form: FormData): Promise
   const input = Object.fromEntries(CAMPOS.map((k) => [k, String(form.get(k) ?? "")])) as AliadoInput;
   const v = validarAliado(input);
   if (!v.ok) return { errors: v.errors };
-  const { privados, plazo_preparacion_dias, plazo_entrega_texto, ...empresa } = v.data;
+  const { privados, plazo_preparacion_dias, plazo_entrega_texto, margen_minimo_bps, ...empresa } = v.data;
   const db = supabaseAdmin();
   const ahora = new Date().toISOString();
 
@@ -44,11 +45,11 @@ export async function guardarAliado(_prev: AliadoState, form: FormData): Promise
       if (!antes) return { error: "Ese aliado ya no existe. Recarga la página." };
       const r1 = await db.from("aliados").update(empresa).eq("id", id);
       if (r1.error) throw new Error(r1.error.code);
-      const r2 = await db.from("configuracion_comercial").upsert({ aliado_id: id, plazo_preparacion_dias, plazo_entrega_texto, updated_at: ahora });
+      const r2 = await db.from("configuracion_comercial").upsert({ aliado_id: id, plazo_preparacion_dias, plazo_entrega_texto, margen_minimo_bps, updated_at: ahora });
       if (r2.error) throw new Error(r2.error.code);
       const r3 = await db.from("aliados_datos").upsert({ aliado_id: id, ...privados, updated_at: ahora });
       if (r3.error) throw new Error(r3.error.code);
-      await audit(user, "editar", "aliados", id, enmascarar(antes), enmascarar({ ...empresa, plazo_preparacion_dias, plazo_entrega_texto, ...privados }));
+      await audit(user, "editar", "aliados", id, enmascarar(antes), enmascarar({ ...empresa, plazo_preparacion_dias, plazo_entrega_texto, margen_minimo_bps, ...privados }));
     } else {
       // Slug interno único a partir del nombre (no se muestra en la tienda).
       const base = slugify(empresa.nombre) || "aliado";
@@ -58,11 +59,11 @@ export async function guardarAliado(_prev: AliadoState, form: FormData): Promise
       for (let n = 2; usados.has(slug); n++) slug = `${base}-${n}`;
       const { data, error } = await db.from("aliados").insert({ ...empresa, slug, activo: true }).select("id").single();
       if (error) throw new Error(error.code);
-      const r2 = await db.from("configuracion_comercial").insert({ aliado_id: data.id, plazo_preparacion_dias, plazo_entrega_texto });
+      const r2 = await db.from("configuracion_comercial").insert({ aliado_id: data.id, plazo_preparacion_dias, plazo_entrega_texto, margen_minimo_bps });
       if (r2.error) throw new Error(r2.error.code);
       const r3 = await db.from("aliados_datos").insert({ aliado_id: data.id, ...privados });
       if (r3.error) throw new Error(r3.error.code);
-      await audit(user, "crear", "aliados", data.id, null, enmascarar({ ...empresa, plazo_preparacion_dias, plazo_entrega_texto, ...privados }));
+      await audit(user, "crear", "aliados", data.id, null, enmascarar({ ...empresa, plazo_preparacion_dias, plazo_entrega_texto, margen_minimo_bps, ...privados }));
     }
   } catch (e) {
     console.error("admin/aliados: no se guardó", (e as Error).message);

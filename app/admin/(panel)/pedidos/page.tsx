@@ -31,7 +31,7 @@ export default async function Page({ searchParams }: PageProps<"/admin/pedidos">
     { key: "ciudad", label: "Destino" },
     ...(variosAliados ? [{ key: "aliado", label: "Aliado" }] : []),
     { key: "kits", label: "Kits", kind: "num" as const },
-    { key: "total", label: "Total", kind: "num" as const },
+    { key: "total", label: user.rol === "aliado" ? "Para ti" : "Total", kind: "num" as const },
     { key: "estadoLabel", label: "Estado", kind: "estado" as const },
   ];
 
@@ -70,7 +70,7 @@ export default async function Page({ searchParams }: PageProps<"/admin/pedidos">
           ciudad: p.ciudad,
           aliado: p.aliado,
           kits: p.kits,
-          total: formatMXN(p.total),
+          total: formatMXN((user.rol === "aliado" ? p.paraAliado : p.total) ?? 0),
           estadoLabel: ESTADO_LABEL[p.estado],
           tono: ESTADO_TONO[p.estado],
           etapa: ETAPA[p.estado],

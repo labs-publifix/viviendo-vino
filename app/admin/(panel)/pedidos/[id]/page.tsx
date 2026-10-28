@@ -37,7 +37,7 @@ export default async function Page({
   if (!p) notFound();
   const aviso = (await searchParams).aviso;
   const acciones = accionesPara(p.estado, user.rol, p.prueba);
-  const bps = p.importes.comisionBps;
+  const imp = p.importes;
   const botellas = p.kits.reduce(
     (a, k) => a + k.items.reduce((b, i) => b + i.cantidad, 0),
     0,
@@ -98,7 +98,10 @@ export default async function Page({
                       <span className={s.qty}>{it.cantidad} ×</span>
                       <span className={s.name}>{it.nombre}</span>
                       <span className={s.price}>
-                        {formatMXN(it.precio * it.cantidad)}
+                        {formatMXN((it.precio ?? it.precioAliado ?? 0) * it.cantidad)}
+                        {it.precio !== null && it.precioAliado !== null && (
+                          <small className={s.costo}>acordado {formatMXN(it.precioAliado * it.cantidad)}</small>
+                        )}
                       </span>
                     </li>
                   ))}
@@ -106,36 +109,54 @@ export default async function Page({
               </div>
             ))}
             <dl className={s.totals}>
-              <div>
-                <dt>Subtotal</dt>
-                <dd>{formatMXNExacto(p.importes.subtotal)}</dd>
-              </div>
-              <div>
-                <dt>Envío</dt>
-                <dd>
-                  {p.importes.envio
-                    ? formatMXNExacto(p.importes.envio)
-                    : "Incluido"}
-                </dd>
-              </div>
-              <div className={s.total}>
-                <dt>Total cobrado</dt>
-                <dd>{formatMXNExacto(p.importes.total)}</dd>
-              </div>
-              {bps !== null &&
-                p.importes.comision !== null &&
-                p.importes.paraAliado !== null && (
-                  <>
-                    <div className={s.split}>
-                      <dt>Comisión Viviendo Vino ({bps / 100} %)</dt>
-                      <dd>{formatMXNExacto(p.importes.comision)}</dd>
-                    </div>
-                    <div className={s.split}>
-                      <dt>Para el aliado</dt>
-                      <dd>{formatMXNExacto(p.importes.paraAliado)}</dd>
-                    </div>
-                  </>
-                )}
+              {imp.total !== null ? (
+                <>
+                  <div>
+                    <dt>Subtotal</dt>
+                    <dd>{formatMXNExacto(imp.subtotal ?? 0)}</dd>
+                  </div>
+                  <div>
+                    <dt>Envío</dt>
+                    <dd>{imp.envio ? formatMXNExacto(imp.envio) : "Incluido"}</dd>
+                  </div>
+                  <div className={s.total}>
+                    <dt>Total cobrado</dt>
+                    <dd>{formatMXNExacto(imp.total)}</dd>
+                  </div>
+                </>
+              ) : (
+                imp.paraAliado !== null && (
+                  // Rol Aliado: solo lo suyo, a sus precios acordados.
+                  <div className={s.total}>
+                    <dt>Para ti (precios acordados)</dt>
+                    <dd>{formatMXNExacto(imp.paraAliado)}</dd>
+                  </div>
+                )
+              )}
+              {imp.margen !== null && imp.paraAliado !== null && (
+                <>
+                  <div className={s.split}>
+                    <dt>Para el aliado (precios acordados)</dt>
+                    <dd>{formatMXNExacto(imp.paraAliado)}</dd>
+                  </div>
+                  <div className={s.split}>
+                    <dt>{imp.modelo === "broker" ? "Margen de Viviendo Vino" : `Comisión Viviendo Vino (${(imp.comisionBps ?? 0) / 100} %)`}</dt>
+                    <dd>{formatMXNExacto(imp.margen)}</dd>
+                  </div>
+                  {imp.modelo === "broker" && imp.mp !== null && (
+                    <>
+                      <div className={s.split}>
+                        <dt>Mercado Pago{imp.mpReal ? "" : " (estimado)"}</dt>
+                        <dd>−{formatMXNExacto(imp.mp)}</dd>
+                      </div>
+                      <div className={`${s.split} ${s.neto}`}>
+                        <dt>Margen neto</dt>
+                        <dd>{formatMXNExacto(imp.margen - imp.mp)}</dd>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
             </dl>
           </section>
 

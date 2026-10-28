@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/app/_ui/ArticleCard";
 import { ButtonLink } from "@/app/_ui/Button";
@@ -95,7 +96,17 @@ function structuredData(a: Awaited<ReturnType<typeof load>>) {
   return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+// Dentro de <Suspense>: al renovarse la marquesina (caché del marco) la página se regenera sin conocer el slug,
+// y leer params fuera de un límite de Suspense hacía que respondiera 500.
+export default function Page({ params }: { params: Promise<{ slug: string }> }) {
+  return (
+    <Suspense>
+      <ArticlePage params={params} />
+    </Suspense>
+  );
+}
+
+async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const a = await load(params);
   const { wines } = await getCatalog();
   const featuredWines = a.vinos.map((slug) => wines.find((w) => w.slug === slug)).filter((w) => w !== undefined);

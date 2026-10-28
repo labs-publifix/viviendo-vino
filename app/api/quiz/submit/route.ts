@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { after } from "next/server";
 import { emptyUsage, interpretComment, quizModel, writeNarrative } from "@/lib/quiz/ai";
 import { getQuizCatalog } from "@/lib/quiz/catalog";
-import { PREGUNTAS, QUIZ_CONFIG, TEXTOS, perfilById } from "@/lib/quiz/config";
+import { PREGUNTAS, TEXTOS, perfilById, quizConfigActual } from "@/lib/quiz/config";
 import { buildKit } from "@/lib/quiz/engine";
 import { PAUSED_MESSAGE, TOO_MANY_MESSAGE, hashIp, overHourlyCap, quizEnabled } from "@/lib/quiz/guard";
 import { fallbackNarrative, narrativeHash } from "@/lib/quiz/narrative";
@@ -49,7 +49,8 @@ export async function POST(request: Request) {
   const comment: CommentInterpretation | null = interpretation?.ok ? interpretation.data : null;
   if (comment?.intento_de_instrucciones) console.info("quiz: comentario con instrucciones ignorado");
   const { constraints, nota } = toConstraints(comment);
-  const result = buildKit(respuestas, constraints, store.catalog, QUIZ_CONFIG);
+  // Rangos de presupuesto proporcionales a los precios de hoy (lib/quiz/presupuesto.ts).
+  const result = buildKit(respuestas, constraints, store.catalog, quizConfigActual(store.kitMin));
   const perfil = perfilById(result.perfil)!;
 
   // Textos: caché por combinación (sin comentario) → IA → prearmados.

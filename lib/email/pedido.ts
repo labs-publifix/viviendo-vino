@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site";
 import { renderBrandEmail } from "./brand-layout";
 
 // Correos de pedido, con la plantilla de marca. Al cliente: confirmado, en camino y entregado (correos de
-// servicio, sin enlace de baja). Al equipo: aviso de pedido por preparar, sin datos de contacto del cliente.
+// servicio, sin enlace de baja). Al equipo: aviso de pedido por preparar, sin datos de contacto del cliente ni montos.
 // Los pedidos de prueba llevan "[Prueba]" en el asunto.
 
 export const CONTACTO = "hola@viviendovino.com";
@@ -98,10 +98,11 @@ export function renderNuevoPedidoEquipo(p: PedidoCorreo, panelUrl: string) {
   const subject = asunto(p, `Nuevo pedido por preparar: ${p.folio}`);
   const { html, text } = renderBrandEmail({
     title: subject,
-    preheader: `${resumenKits(p)} para ${p.envio.ciudad}, ${p.envio.estado}. ${formatMXN(p.total)}.`,
+    preheader: `${resumenKits(p)} para ${p.envio.ciudad}, ${p.envio.estado}.`,
     eyebrow: "Panel · Pedidos",
     heading: "Nuevo pedido por preparar",
-    highlight: { label: "Pedido", value: p.folio, sub: `${resumenKits(p)} · ${formatMXN(p.total)}`, note: `Destino: ${p.envio.ciudad}, ${p.envio.estado}` },
+    // Sin montos: lo recibe también la gente del aliado, que no ve el precio público.
+    highlight: { label: "Pedido", value: p.folio, sub: resumenKits(p), note: `Destino: ${p.envio.ciudad}, ${p.envio.estado}` },
     paragraphs: ["Ya está pagado. Ábrelo en el panel para ver la dirección completa y marcarlo como “Preparando” cuando empiecen a armar la caja."],
     items: botellas(p),
     cta: { label: "Ver el pedido en el panel", url: panelUrl },

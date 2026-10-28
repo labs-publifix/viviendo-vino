@@ -21,11 +21,16 @@ type Answers = Record<string, string | string[]>;
 type Phase = "pasos" | "cargando" | "resultado" | "error";
 type Outcome = { resultado: QuizResult; compartible: boolean };
 
-const ALL = PREGUNTAS.preguntas as PreguntaUI[];
+const BASE = PREGUNTAS.preguntas as PreguntaUI[];
 const REPEAT_IDS = ["ocasion", "presupuesto"];
 const NETWORK_ERROR = "No hubo conexión. Revisa tu internet e intenta de nuevo.";
 
-export function Quiz() {
+/** `presupuesto`: las opciones de presupuesto con los montos de hoy (las calcula el servidor con el catálogo). */
+export function Quiz({ presupuesto }: { presupuesto?: { id: string; texto: string }[] }) {
+  const ALL = useMemo(
+    () => (presupuesto?.length ? BASE.map((q) => (q.id === "presupuesto" ? { ...q, opciones: q.opciones.map((o) => ({ ...o, texto: presupuesto.find((p) => p.id === o.id)?.texto ?? o.texto })) } : q)) : BASE),
+    [presupuesto],
+  );
   const hydrated = useHydrated();
   const saved = useMemo<SavedProfile | null>(() => (hydrated ? loadProfile() : null), [hydrated]);
   const [mode, setMode] = useState<"completo" | "repetir">("completo");

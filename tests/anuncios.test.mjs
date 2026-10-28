@@ -51,3 +51,10 @@ test("respaldo: los 4 mensajes de siempre y Cómo funciona", () => {
   assert.equal(ANUNCIOS_RESPALDO.length, 5);
   assert.ok(!ANUNCIOS_RESPALDO.some((x) => /compra mínima/i.test(x.texto)));
 });
+
+test("conPrecios: {desde} toma el precio real; sin precio, se quita la frase", async () => {
+  const { conPrecios } = await import("../lib/anuncios.ts");
+  const lista = [{ texto: "Arma tu kit desde {desde}", enlace: null }, { texto: "Envío incluido", enlace: null }];
+  assert.deepEqual(conPrecios(lista, 204000).map((a) => a.texto), ["Arma tu kit desde $2,040", "Envío incluido"]);
+  assert.deepEqual(conPrecios(lista, null).map((a) => a.texto), ["Arma tu kit", "Envío incluido"]);
+});

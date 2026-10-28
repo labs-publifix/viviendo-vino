@@ -381,3 +381,18 @@ test("al ajustar al presupuesto, el reto sigue siendo un vino distinto a los de 
   assert.equal(retos.length, 1);
   assert.equal(retos[0].cantidad, 1);
 });
+
+test("presupuesto: rangos proporcionales al kit más barato; a $1,800 son los aprobados", async () => {
+  const { conPresupuesto } = await import("../lib/quiz/presupuesto.ts");
+  const { readFileSync: leer } = await import("node:fs");
+  const cfg = JSON.parse(leer(new URL("../quiz/config/preguntas.json", import.meta.url), "utf8"));
+  const ops = (kitMin) => conPresupuesto(cfg, kitMin).preguntas.find((q) => q.id === "presupuesto").opciones.map((o) => [o.id, o.texto, o.min_centavos, o.max_centavos]);
+  assert.deepEqual(ops(null), [
+    ["hasta-2100", "Hasta $2,100", 0, 210000],
+    ["2100-2800", "De $2,100 a $2,800", 210000, 280000],
+    ["2800-4000", "De $2,800 a $4,000", 280000, 400000],
+    ["sin-tope", "Sin tope", 280000, null],
+  ]);
+  // Si el kit más barato sube a $2,040, los rangos se mueven en la misma proporción.
+  assert.deepEqual(ops(204000).map((o) => o[1]), ["Hasta $2,400", "De $2,400 a $3,200", "De $3,200 a $4,500", "Sin tope"]);
+});

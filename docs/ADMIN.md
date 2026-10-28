@@ -19,15 +19,35 @@ producción (www) se hace después y solo con aprobación expresa.
 ## Aliados y permisos (decidido el 27 de octubre de 2026)
 
 - **Alta del aliado en Configuración → Aliados** (pestaña junto a Equipo, solo admin): nombre, ciudad y estado,
-  comisión y condiciones comerciales. Después, en Configuración → Equipo se invita a su gente con el rol Aliado.
+  margen mínimo y condiciones comerciales. Después, en Configuración → Equipo se invita a su gente con el rol Aliado.
 - **Catálogo** queda para los grupos, vinos y kits de cada aliado.
 - **El rol Aliado solo puede:** ver sus ventas y sus pedidos, y cambiar un vino suyo entre disponible y agotado.
   **No puede** cambiar precios, textos, fotos, grupos ni kits, ni ver nada de otro aliado.
-- **Sus ventas, en solo lectura (opción C):** por pedido, el total que pagó el cliente, la comisión de Viviendo
-  Vino y lo que le toca al aliado; además, las transferencias que ya se le hicieron y lo que falta por pagarle.
+- **Sus ventas, en solo lectura:** por pedido, lo que le toca a sus precios acordados (modelo broker: nunca ve el
+  precio público ni el margen de Viviendo Vino); además, las transferencias que ya se le hicieron y lo que falta por pagarle.
   Llega con Pedidos y Finanzas.
-- **Todo lo que toca precios** (precio de cada vino, kits prearmados, comisión del aliado) **solo lo hace un
+- **Todo lo que toca precios** (precio acordado y precio público de cada vino, kits prearmados, margen mínimo) **solo lo hace un
   administrador.** Se revisa en el servidor en cada acción, no solo ocultando botones.
+
+## Modelo broker (decidido el 28 de octubre de 2026)
+
+- **Precio acordado por botella** (`productos.precio_aliado_centavos`): neto, con IVA y con envío incluido. El
+  aliado **siempre lo recibe íntegro**, también si Mercado Pago cobra comisión o si un pedido se cancela.
+- **Precio público:** lo fija Viviendo Vino (p. ej. lista $400 − 15 % = $340). El margen es precio público −
+  acordado y es de Viviendo Vino. La base no deja guardar un precio público menor al acordado.
+- **Mercado Pago lo absorbe Viviendo Vino**, incluidas las cancelaciones. Mientras no hay cobro real se estima con
+  3.49 % + $4 más IVA (`comisionMPEstimada`); al conectar Mercado Pago se guarda la comisión real en
+  `pagos.comision_proveedor_centavos`.
+- **Margen mínimo:** 15 % por defecto, editable por aliado en Configuración → Aliados. Con el precio debajo del
+  mínimo, el panel lo avisa, propone el precio mínimo y solo deja guardar con una confirmación que queda en la
+  Auditoría. Con 15 %, después de Mercado Pago (~4 % + $4.64) quedan ~10 % netos por botella.
+- **Quién ve qué:** el admin ve precio público, acordado, margen, Mercado Pago y margen neto; el aliado solo su
+  precio acordado y lo que le toca; atención, el total cobrado sin margen ni acordado.
+- **Pedidos:** `modelo = 'broker'`; `comision_centavos` guarda el margen bruto, `comision_mp_centavos` la comisión
+  de Mercado Pago estimada y `pedido_items.precio_aliado_centavos` el acordado de cada botella.
+- **Textos con precio:** la marquesina usa la marca `{desde}` (precio del kit más barato del momento) y los rangos de
+  presupuesto del quiz se calculan con los precios de hoy; así no quedan precios viejos al cambiar el catálogo.
+- **Pendiente de confirmar:** facturación (en principio factura el aliado).
 
 ## Pedidos y Finanzas (27 de octubre de 2026)
 
@@ -35,11 +55,11 @@ producción (www) se hace después y solo con aprobación expresa.
   Cancelar pide motivo, solo lo hace un admin y nunca después de enviado. El pago lo confirma Mercado Pago; a mano
   solo se marca pagado un pedido de prueba.
 - **Quién hace qué:** admin, atención y el aliado dueño mueven el pedido (preparar, enviar, entregar) y dejan notas.
-  Atención no ve montos de comisión. El aliado no ve el correo del cliente (sí nombre, teléfono y dirección).
-- **El pedido conserva lo que se cobró:** precios, nombres de vinos y comisión se copian al crearlo. El servidor los
+  Atención ve el total cobrado, pero no el margen ni los precios acordados. El aliado no ve el correo del cliente (sí nombre, teléfono y dirección).
+- **El pedido conserva lo que se cobró:** precios públicos y acordados, nombres de vinos y margen se copian al crearlo. El servidor los
   toma de la base en ese momento (sin caché), nunca del navegador.
-- **Comisión:** sobre el total cobrado (envío incluido), redondeada al centavo; el aliado recibe el resto
-  (`reparto` en `lib/admin/pedidos-rules.ts`).
+- **Reparto (modelo broker, ver abajo):** el aliado recibe Σ precio acordado × botellas; el margen bruto de
+  Viviendo Vino es el total cobrado menos eso (`repartoBroker` en `lib/admin/pedidos-rules.ts`).
 - **Saldo del aliado:** lo suyo de pedidos **entregados** menos lo transferido. Lo de pedidos pagados que aún no se
   entregan aparece aparte como "En camino". Las transferencias las registra un admin.
 - **Pedidos de prueba:** botón solo en dev (nunca en producción), con cliente inventado `@example.com` y la etiqueta
@@ -131,7 +151,7 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
   (invitar, editar nombre y rol, quitar o devolver acceso, reenviar enlace). Siempre queda al menos un admin.
 - [x] Auditoría: línea de tiempo por día con filtros por persona y sección, y el antes y después de cada cambio.
   Registra también la entrada y salida del panel.
-- [x] Configuración → Aliados: alta y edición (empresa, comisión, días de preparación, texto de entrega y datos
+- [x] Configuración → Aliados: alta y edición (empresa, margen mínimo, días de preparación, texto de entrega y datos
   privados: razón social, RFC, contacto y CLABE validada) y pausa. El de Córdoba es In Vino Veritas. La comisión
   ya no es legible con la llave pública.
 - [x] Catálogo: vinos (precio, foto al bucket `vinos` recortada a 880×1184, textos, disponible/agotado, mostrar u
@@ -160,8 +180,12 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
   cliente" / "Reintentar envío" para admin y atención; el aliado no ve los correos) y en Sistema → Correos (admin).
 - [ ] Correos, más adelante: seguimiento de entrega (entregado, rebotó, abierto) con los avisos (webhooks) de Resend,
   y sumar a la vista los correos de la lista de espera (hoy están en `waitlist_email_sends`).
+- [x] Modelo broker (`20261104000000_broker.sql`): precio acordado por vino con calculadora de descuento y margen en
+  vivo, margen mínimo por aliado, pedidos con margen y Mercado Pago estimado, vista de cada rol en Pedidos, Finanzas
+  e Inicio, marquesina y rangos del quiz con precios del momento.
 - [ ] Conectar el checkout y Mercado Pago a `crearPedido` (lib/admin/pedidos.ts): el pago aprobado pasa el pedido a
-  "Por preparar". Al hacerlo, revisar quién absorbe la comisión de Mercado Pago (cambia `reparto`).
+  "Por preparar" y se guarda la comisión real de Mercado Pago (la absorbe Viviendo Vino).
+- [ ] Facturación: confirmar si factura el aliado.
 - [ ] Finanzas: exportar a CSV para contabilidad.
 - [ ] Blog: lecturas y vistas por artículo (con GA4 o con un contador propio; decidir).
 - [ ] Contenido a escala: hoy las gráficas del Quiz y Wine Scan leen las filas del periodo (tope de 50,000). Cerca de

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { BottlePlaceholder } from "@/app/_ui/BottlePlaceholder";
 import { ButtonLink } from "@/app/_ui/Button";
@@ -44,7 +45,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function FichaVino({ params }: { params: Promise<{ slug: string }> }) {
+// Dentro de <Suspense>: al renovarse la marquesina o el catálogo la página se regenera sin conocer el slug,
+// y leer params fuera de un límite de Suspense hacía que respondiera 500.
+export default function Page({ params }: { params: Promise<{ slug: string }> }) {
+  return (
+    <Suspense>
+      <FichaVino params={params} />
+    </Suspense>
+  );
+}
+
+async function FichaVino({ params }: { params: Promise<{ slug: string }> }) {
   const { catalog, wine } = await load(params);
   const group = catalog.groups.find((g) => g.code === wine.group);
   const sameGroup = catalog.wines.filter((w) => w.group === wine.group && w.slug !== wine.slug);

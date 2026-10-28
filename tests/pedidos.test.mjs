@@ -1,7 +1,7 @@
 // Reglas de Pedidos y Finanzas del panel: `npm test`.
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { accionesPara, destino, puedeVerPedido, reparto, resumenFinanzas, validarAccion, validarNota, validarTransferencia, veCorreoCliente, veDinero } from "../lib/admin/pedidos-rules.ts";
+import { accionesPara, comisionMPEstimada, destino, margenBotella, precioMinimo, puedeVerPedido, repartoBroker, resumenFinanzas, validarAccion, validarNota, validarTransferencia, veCorreoCliente, veMargen, veParteAliado, veTotalCobrado } from "../lib/admin/pedidos-rules.ts";
 
 test("acciones: el pago no se marca a mano salvo en un pedido de prueba, y solo un admin", () => {
   assert.deepEqual(accionesPara("pendiente_pago", "admin", false), ["cancelar"]);
@@ -29,29 +29,43 @@ test("ver pedidos: el aliado solo los suyos; atención no ve dinero; el aliado n
   assert.equal(puedeVerPedido({ rol: "aliado", aliadoId: "a" }, { aliadoId: "b" }), false);
   assert.equal(puedeVerPedido({ rol: "aliado", aliadoId: null }, { aliadoId: "a" }), false);
   assert.equal(puedeVerPedido({ rol: "atencion", aliadoId: null }, { aliadoId: "a" }), true);
-  assert.equal(veDinero("atencion"), false);
-  assert.equal(veDinero("aliado"), true);
+  assert.deepEqual(["admin", "atencion", "aliado"].map(veMargen), [true, false, false]);
+  assert.deepEqual(["admin", "atencion", "aliado"].map(veTotalCobrado), [true, true, false]);
+  assert.deepEqual(["admin", "atencion", "aliado"].map(veParteAliado), [true, false, true]);
   assert.equal(veCorreoCliente("aliado"), false);
 });
 
-test("reparto: comisión redondeada al centavo y el resto para el aliado", () => {
-  assert.deepEqual(reparto(180000, 1000), { comision: 18000, aliado: 162000 });
-  assert.deepEqual(reparto(199999, 1250), { comision: 25000, aliado: 174999 });
-  assert.deepEqual(reparto(0, 1000), { comision: 0, aliado: 0 });
+test("broker: margen por botella, precio mínimo y reparto del pedido", () => {
+  // El ejemplo de Rafa: acordado 300, final 340 → 40 de margen (11.76 %).
+  assert.deepEqual(margenBotella(34000, 30000), { centavos: 4000, bps: 1176 });
+  // Con 15 % de margen mínimo, el final más bajo para un acordado de 300 es 353.
+  assert.equal(precioMinimo(30000, 1500), 35300);
+  assert.equal(precioMinimo(30000, 0), 30000);
+  // Mercado Pago estimado: 3.49 % + $4, más IVA.
+  assert.equal(comisionMPEstimada(200000), Math.round((200000 * 0.0349 + 400) * 1.16));
+  assert.equal(comisionMPEstimada(0), 0);
+  const r = repartoBroker([
+    { precio: 34000, acordado: 30000, cantidad: 4 },
+    { precio: 40000, acordado: 35000, cantidad: 2 },
+  ]);
+  assert.deepEqual([r.total, r.aliado, r.margen], [216000, 190000, 26000]);
+  assert.equal(r.mp, comisionMPEstimada(216000));
 });
 
 test("finanzas: solo ventas pagadas; lo ganado es lo entregado y el saldo descuenta lo transferido", () => {
   const ventas = [
-    { estado: "entregado", total: 100000, comision: 10000, aliado: 90000 },
-    { estado: "entregado", total: 200000, comision: 20000, aliado: 180000 },
-    { estado: "enviado", total: 100000, comision: 10000, aliado: 90000 },
-    { estado: "cancelado", total: 500000, comision: 50000, aliado: 450000 },
-    { estado: "pendiente_pago", total: 500000, comision: 50000, aliado: 450000 },
+    { estado: "entregado", total: 100000, margen: 10000, aliado: 90000, mp: 4000 },
+    { estado: "entregado", total: 200000, margen: 20000, aliado: 180000, mp: 8000 },
+    { estado: "enviado", total: 100000, margen: 10000, aliado: 90000, mp: 4000 },
+    { estado: "cancelado", total: 500000, margen: 50000, aliado: 450000, mp: 20000 },
+    { estado: "pendiente_pago", total: 500000, margen: 50000, aliado: 450000, mp: 20000 },
   ];
   const r = resumenFinanzas(ventas, [{ monto: 100000 }]);
   assert.equal(r.ventas, 3);
   assert.equal(r.vendido, 400000);
-  assert.equal(r.comision, 40000);
+  assert.equal(r.margen, 40000);
+  assert.equal(r.mp, 16000);
+  assert.equal(r.margenNeto, 24000);
   assert.equal(r.paraAliado, 360000);
   assert.equal(r.ganado, 270000);
   assert.equal(r.enCamino, 90000);

@@ -95,7 +95,10 @@ function Pendientes({ d, user }: { d: Inicio; user: AdminUser }) {
 function Ventas({ d, user }: { d: Inicio; user: AdminUser }) {
   const v = d.ventas;
   const conMontos = user.rol !== "atencion";
-  const dias = d.serie.map((x) => ({ dia: x.dia, label: fechaCorta(x.dia), value: conMontos ? x.total / 100 : x.n }));
+  const esAliado = user.rol === "aliado";
+  // El aliado ve sus ventas a sus precios acordados (nunca el precio público); admin, lo cobrado.
+  const monto = (m: { total: number; aliado: number }) => (esAliado ? m.aliado : m.total);
+  const dias = d.serie.map((x) => ({ dia: x.dia, label: fechaCorta(x.dia), value: conMontos ? monto(x) / 100 : x.n }));
   const pedidos = (m: { n: number }) => plural(m.n, "pedido", "pedidos");
   return (
     <section className={s.section} aria-labelledby="ventas">
@@ -109,19 +112,19 @@ function Ventas({ d, user }: { d: Inicio; user: AdminUser }) {
             <>
               <div>
                 <dt>Hoy · {pedidos(v.hoy)}</dt>
-                <dd>{formatMXN(v.hoy.total)}</dd>
+                <dd>{formatMXN(monto(v.hoy))}</dd>
               </div>
               <div>
                 <dt>Últimos 7 días · {pedidos(v.semana)}</dt>
-                <dd>{formatMXN(v.semana.total)}</dd>
+                <dd>{formatMXN(monto(v.semana))}</dd>
               </div>
               <div>
                 <dt>Este mes · {pedidos(v.mes)}</dt>
-                <dd>{formatMXN(v.mes.total)}</dd>
+                <dd>{formatMXN(monto(v.mes))}</dd>
               </div>
               <div>
-                <dt>{user.rol === "aliado" ? "Para ti este mes" : "Comisión del mes"}</dt>
-                <dd>{formatMXN(user.rol === "aliado" ? v.mes.aliado : (v.mes.comision ?? 0))}</dd>
+                <dt>{esAliado ? "Por recibir (entregados)" : "Margen neto del mes"}</dt>
+                <dd>{formatMXN(esAliado ? (d.aliados[0]?.por_transferir ?? 0) : (v.mes.comision ?? 0) - (v.mes.mp ?? 0))}</dd>
               </div>
             </>
           ) : (
@@ -146,7 +149,7 @@ function Ventas({ d, user }: { d: Inicio; user: AdminUser }) {
           )}
         </dl>
         <DailyColumns
-          title={conMontos ? "Ventas por día · últimos 30 días" : "Pedidos pagados por día · últimos 30 días"}
+          title={!conMontos ? "Pedidos pagados por día · últimos 30 días" : esAliado ? "Tus ventas por día · últimos 30 días" : "Ventas por día · últimos 30 días"}
           days={dias}
           unit={["pedido", "pedidos"]}
           formato={conMontos ? (x) => formatMXN(Math.round(x * 100)) : undefined}

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { storeEnabled } from "@/lib/catalog/enabled";
+import { getCatalog, kitMinimo } from "@/lib/catalog/repo";
+import { preguntasActuales } from "@/lib/quiz/config";
 import { SITE_URL } from "@/lib/site";
 import { Quiz } from "./Quiz";
 import styles from "./quiz.module.css";
@@ -15,11 +17,14 @@ export const metadata: Metadata = {
   openGraph: { title: "¿Qué perfil de vino eres? · Viviendo Vino", description: "Ocho preguntas sobre café, limonada y ocasiones. Al final, tu caja de 6 vinos.", locale: "es_MX" },
 };
 
-export default function QuizPage() {
+export default async function QuizPage() {
   if (!storeEnabled()) notFound();
+  // Rangos de presupuesto proporcionales a los precios de hoy (si el catálogo no responde, los de base).
+  const kitMin = await getCatalog().then(kitMinimo, () => null);
+  const presupuesto = preguntasActuales(kitMin).preguntas.find((q) => q.id === "presupuesto")?.opciones ?? [];
   return (
     <div className={styles.page}>
-      <Quiz />
+      <Quiz presupuesto={presupuesto.map((o) => ({ id: o.id, texto: o.texto }))} />
     </div>
   );
 }

@@ -75,12 +75,13 @@ type Resultado<T> = { ok: true; data: T } | { ok: false; errors: Errores };
 
 // ---------- Aliado ----------
 
-export type AliadoInput = Record<"nombre" | "ciudad" | "estado" | "comision" | "plazo_dias" | "plazo_texto" | "razon_social" | "rfc" | "contacto_nombre" | "contacto_telefono" | "contacto_email" | "clabe" | "notas", string>;
+export type AliadoInput = Record<"nombre" | "ciudad" | "estado" | "margen_minimo" | "plazo_dias" | "plazo_texto" | "razon_social" | "rfc" | "contacto_nombre" | "contacto_telefono" | "contacto_email" | "clabe" | "notas", string>;
 export type AliadoLimpio = {
   nombre: string;
   ciudad: string | null;
   estado: string | null;
-  comision_bps: number;
+  /** Margen mínimo de Viviendo Vino sobre el precio final (va en configuracion_comercial). */
+  margen_minimo_bps: number;
   plazo_preparacion_dias: number | null;
   plazo_entrega_texto: string | null;
   privados: { razon_social: string | null; rfc: string | null; contacto_nombre: string | null; contacto_telefono: string | null; contacto_email: string | null; clabe: string | null; notas: string | null };
@@ -90,8 +91,8 @@ export function validarAliado(i: AliadoInput): Resultado<AliadoLimpio> {
   const e: Errores = {};
   const nombre = limpiar(i.nombre);
   if (nombre.length < 2 || nombre.length > 120) e.nombre = "Escribe el nombre de la empresa.";
-  const comision = comisionABps(i.comision);
-  if (comision === null) e.comision = "Escribe la comisión en %, por ejemplo 10.";
+  const margen = comisionABps(i.margen_minimo);
+  if (margen === null || margen > 9000) e.margen_minimo = "Escribe el margen mínimo en %, por ejemplo 15.";
   const dias = limpiar(i.plazo_dias);
   const plazo = dias ? Number(dias) : null;
   if (dias && (!Number.isInteger(plazo) || plazo! < 0 || plazo! > 60)) e.plazo_dias = "Escribe los días como número entero (0 a 60).";
@@ -115,7 +116,7 @@ export function validarAliado(i: AliadoInput): Resultado<AliadoLimpio> {
       nombre,
       ciudad: o(limpiar(i.ciudad).slice(0, 80)),
       estado: o(limpiar(i.estado).slice(0, 80)),
-      comision_bps: comision!,
+      margen_minimo_bps: margen!,
       plazo_preparacion_dias: plazo,
       plazo_entrega_texto: o(plazoTexto),
       privados: {
@@ -134,7 +135,7 @@ export function validarAliado(i: AliadoInput): Resultado<AliadoLimpio> {
 // ---------- Vino ----------
 
 export type VinoInput = Record<
-  "nombre_oficial" | "productor" | "categoria_slug" | "grupo_id" | "tipo" | "uva" | "region" | "denominacion" | "anada" | "volumen_ml" | "grado_alcohol" | "precio" | "precio_antes" | "premio" | "descripcion" | "descripcion_aliado",
+  "nombre_oficial" | "productor" | "categoria_slug" | "grupo_id" | "tipo" | "uva" | "region" | "denominacion" | "anada" | "volumen_ml" | "grado_alcohol" | "precio" | "precio_antes" | "premio" | "descripcion" | "descripcion_aliado" | "precio_aliado",
   string
 >;
 export type VinoLimpio = {
@@ -152,12 +153,21 @@ export type VinoLimpio = {
   precio_centavos: number;
   /** Precio "antes" (tachado en la tienda). null = sin descuento. */
   precio_antes_centavos: number | null;
+  /** Precio acordado con el aliado (neto, con IVA y envío). Privado: la tienda no lo ve. */
+  precio_aliado_centavos: number;
   premio: string | null;
   descripcion: string;
   descripcion_aliado: string | null;
 };
 
-export function validarVino(i: VinoInput, opciones: { categorias: string[]; grupos: string[] }): Resultado<VinoLimpio> {
+/**
+ * Valida un vino. Precios (modelo broker): el final nunca por debajo del acordado con el aliado; si el margen queda
+ * por debajo del mínimo, solo pasa con `confirmarMargen` (lo confirma un admin y queda en la auditoría).
+ */
+export function validarVino(
+  i: VinoInput,
+  opciones: { categorias: string[]; grupos: string[]; margenMinimoBps: number; confirmarMargen?: boolean },
+): Resultado<VinoLimpio> & { margenBajo?: boolean } {
   const e: Errores = {};
   const nombre = limpiar(i.nombre_oficial);
   if (nombre.length < 3 || nombre.length > 120) e.nombre_oficial = "Escribe el nombre del vino (como en la etiqueta).";
@@ -180,14 +190,24 @@ export function validarVino(i: VinoInput, opciones: { categorias: string[]; grup
   const antes = antesTxt ? precioACentavos(antesTxt) : null;
   if (antesTxt && antes === null) e.precio_antes = "Escribe el precio antes en pesos, por ejemplo 380, o déjalo vacío.";
   else if (antes !== null && precio !== null && antes <= precio) e.precio_antes = "El precio antes tiene que ser mayor que el precio final; si no hay descuento, déjalo vacío.";
+  const acordado = precioACentavos(String(i.precio_aliado ?? ""));
+  let margenBajo = false;
+  if (acordado === null) e.precio_aliado = "Escribe el precio acordado con el aliado, por ejemplo 300.";
+  else if (precio !== null && precio < acordado) e.precio = `El precio final no puede ser menor que el acordado con el aliado (${centavosATexto(acordado)}).`;
+  else if (precio !== null) {
+    const margen = precio - acordado;
+    margenBajo = Math.round((margen * 10000) / precio) < opciones.margenMinimoBps;
+    if (margenBajo && !opciones.confirmarMargen) e.precio = `El margen queda por debajo del mínimo (${opciones.margenMinimoBps / 100} %). Súbelo o confirma que así lo quieres.`;
+  }
   const descripcion = String(i.descripcion ?? "").trim();
   if (descripcion.length < 20 || descripcion.length > 600) e.descripcion = "Escribe la descripción para la tienda (de 20 a 600 caracteres).";
   const descAliado = String(i.descripcion_aliado ?? "").trim();
   if (descAliado.length > 1000) e.descripcion_aliado = "Usa máximo 1,000 caracteres.";
-  if (Object.keys(e).length) return { ok: false, errors: e };
+  if (Object.keys(e).length) return { ok: false, errors: e, margenBajo };
   const o = (v: string) => v || null;
   return {
     ok: true,
+    margenBajo,
     data: {
       nombre_oficial: nombre,
       productor,
@@ -202,6 +222,7 @@ export function validarVino(i: VinoInput, opciones: { categorias: string[]; grup
       grado_alcohol: grado,
       precio_centavos: precio!,
       precio_antes_centavos: antes,
+      precio_aliado_centavos: acordado!,
       premio: o(limpiar(i.premio).slice(0, 160)),
       descripcion,
       descripcion_aliado: o(descAliado),

@@ -2,6 +2,7 @@ import "server-only";
 import { KIT_IMAGES } from "@/lib/catalog/media";
 import { GROUP_LABELS, type BottleGroup } from "@/lib/catalog/types";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { MARGEN_MINIMO_BPS } from "./pedidos-rules";
 import type { AdminUser } from "./session";
 
 // Catálogo en el panel: lee con la secret key todo lo que la tienda no ve (vinos ocultos, texto del aliado).
@@ -25,8 +26,13 @@ export type VinoPanel = {
   anada: string;
   volumen: string;
   grado: string;
-  precioCentavos: number;
+  /** Precio final en la tienda. Para el rol Aliado es null: no ve el precio público. */
+  precioCentavos: number | null;
   precioAntesCentavos: number | null;
+  /** Precio acordado con el aliado (lo que recibe por botella). */
+  precioAliadoCentavos: number | null;
+  /** Margen mínimo de Viviendo Vino para el aliado de este vino (solo admin). */
+  margenMinimoBps: number | null;
   premio: string;
   descripcion: string;
   descripcionAliado: string;
@@ -67,7 +73,7 @@ export async function getCatalogoPanel(user: AdminUser) {
 
   let qp = db
     .from("productos")
-    .select("id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, precio_antes_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo, orden")
+    .select("id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, precio_antes_centavos, precio_aliado_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo, orden")
     .order("orden");
   let qg = db.from("grupos_botella").select("id, aliado_id, codigo, nombre, descripcion, solo_caja_completa, orden").order("orden");
   let qk = db.from("kits_prearmados").select("id, aliado_id, slug, nombre, descripcion, activo, orden, imagen_url").order("orden");
@@ -78,7 +84,16 @@ export async function getCatalogoPanel(user: AdminUser) {
     qk = qk.eq("aliado_id", user.aliadoId!);
     qa = qa.eq("id", user.aliadoId!);
   }
-  const [p, g, c, k, i, a] = await Promise.all([qp, qg, db.from("categorias").select("slug, nombre, orden").order("orden"), qk, db.from("kits_prearmados_items").select("kit_id, producto_id, cantidad"), qa]);
+  const [p, g, c, k, i, a, cc] = await Promise.all([
+    qp,
+    qg,
+    db.from("categorias").select("slug, nombre, orden").order("orden"),
+    qk,
+    db.from("kits_prearmados_items").select("kit_id, producto_id, cantidad"),
+    qa,
+    db.from("configuracion_comercial").select("aliado_id, margen_minimo_bps"),
+  ]);
+  const margenDe = new Map((cc.data ?? []).map((x) => [x.aliado_id as string, x.margen_minimo_bps as number]));
   const productos = check(p, "los vinos");
   const grupos = check(g, "los grupos");
   const categorias = check(c, "las categorías");
@@ -114,8 +129,10 @@ export async function getCatalogoPanel(user: AdminUser) {
       anada: txt(x.anada),
       volumen: txt(x.volumen_ml),
       grado: txt(x.grado_alcohol),
-      precioCentavos: x.precio_centavos,
-      precioAntesCentavos: x.precio_antes_centavos ?? null,
+      precioCentavos: soloSuyos ? null : x.precio_centavos,
+      precioAntesCentavos: soloSuyos ? null : (x.precio_antes_centavos ?? null),
+      precioAliadoCentavos: x.precio_aliado_centavos ?? null,
+      margenMinimoBps: soloSuyos ? null : (margenDe.get(x.aliado_id) ?? MARGEN_MINIMO_BPS),
       premio: txt(x.premio),
       descripcion: x.descripcion,
       descripcionAliado: soloSuyos ? "" : txt(x.descripcion_aliado),
@@ -140,6 +157,6 @@ export async function getCatalogoPanel(user: AdminUser) {
       imagen: (x.imagen_url as string | null) ?? KIT_IMAGES[x.slug as string] ?? null,
       items: items.filter((it) => it.kit_id === x.id).map((it) => ({ productoId: it.producto_id, cantidad: it.cantidad })),
     })) as KitPanel[],
-    aliados: aliados.map((x) => ({ id: x.id as string, nombre: x.nombre as string })),
+    aliados: aliados.map((x) => ({ id: x.id as string, nombre: x.nombre as string, margenMinimoBps: soloSuyos ? null : (margenDe.get(x.id as string) ?? MARGEN_MINIMO_BPS) })),
   };
 }

@@ -72,29 +72,66 @@ export function puedeVerPedido(user: { rol: Rol; aliadoId: string | null }, pedi
   return user.rol === "admin" || user.rol === "atencion";
 }
 
-/** La comisión y lo que le toca al aliado los ven admin y el aliado (opción C); atención no. */
-export const veDinero = (rol: Rol) => rol === "admin" || rol === "aliado";
+/** Margen de Viviendo Vino y comisión de Mercado Pago: solo admin. */
+export const veMargen = (rol: Rol) => rol === "admin";
+/** Lo que se le cobró al cliente: admin y atención. El aliado no ve el precio público. */
+export const veTotalCobrado = (rol: Rol) => rol === "admin" || rol === "atencion";
+/** Lo que le toca al aliado (sus precios acordados): admin y el aliado. */
+export const veParteAliado = (rol: Rol) => rol === "admin" || rol === "aliado";
 /** El aliado prepara y envía: necesita nombre, teléfono y dirección, no el correo del cliente. */
 export const veCorreoCliente = (rol: Rol) => rol === "admin" || rol === "atencion";
 
 // ---------- Dinero ----------
 
+// Modelo broker (28 oct 2026): el aliado acuerda un precio por botella (neto, con IVA y envío incluido) y siempre
+// recibe ese monto íntegro. Viviendo Vino fija el precio público; su margen es la diferencia y de ahí paga la comisión
+// de Mercado Pago (también si un pedido pagado se cancela). Descuentos y promociones salen de su margen.
+
+/** Margen mínimo de Viviendo Vino sobre el precio final si el aliado no tiene otro: 15 %. */
+export const MARGEN_MINIMO_BPS = 1500;
+
 /**
- * Reparto de una venta. La comisión de Viviendo Vino se calcula sobre el total cobrado (envío incluido, que
- * hoy va dentro del precio) y se redondea al centavo; el aliado recibe el resto. Si se decide otra base
- * (por ejemplo, descontar la comisión de Mercado Pago), solo cambia esta función.
+ * Tarifa de Mercado Pago para estimar su comisión antes de cobrar: % + cargo fijo por cobro, más IVA. Es una
+ * estimación (revisar con la tarifa real de la cuenta); con el cobro conectado se guarda la comisión real.
  */
-export function reparto(totalCentavos: number, comisionBps: number): { comision: number; aliado: number } {
-  const comision = Math.round((totalCentavos * comisionBps) / 10000);
-  return { comision, aliado: totalCentavos - comision };
+export const TARIFA_MP = { porcentajeBps: 349, fijoCentavos: 400, ivaBps: 1600 } as const;
+
+/** Comisión estimada de Mercado Pago por un cobro, con IVA, redondeada al centavo. */
+export function comisionMPEstimada(totalCentavos: number): number {
+  if (totalCentavos <= 0) return 0;
+  const base = (totalCentavos * TARIFA_MP.porcentajeBps) / 10000 + TARIFA_MP.fijoCentavos;
+  return Math.round(base * (1 + TARIFA_MP.ivaBps / 10000));
 }
 
-export type VentaFin = { estado: string; total: number; comision: number; aliado: number };
-export type TransferenciaFin = { monto: number };
+/** Margen de una botella: pesos y % sobre el precio final. */
+export function margenBotella(finalCentavos: number, acordadoCentavos: number): { centavos: number; bps: number } {
+  const centavos = finalCentavos - acordadoCentavos;
+  return { centavos, bps: finalCentavos > 0 ? Math.round((centavos * 10000) / finalCentavos) : 0 };
+}
+
+/** Precio final más bajo que cumple el margen mínimo, redondeado hacia arriba al peso. */
+export function precioMinimo(acordadoCentavos: number, margenMinimoBps: number): number {
+  const exacto = acordadoCentavos / (1 - margenMinimoBps / 10000);
+  return Math.ceil(exacto / 100) * 100;
+}
+
+/** Reparto de un pedido: lo del aliado (suma de precios acordados), el margen bruto y la comisión estimada de MP. */
+export function repartoBroker(lineas: { precio: number; acordado: number; cantidad: number }[]): { total: number; aliado: number; margen: number; mp: number } {
+  const total = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
+  const aliado = lineas.reduce((s, l) => s + l.acordado * l.cantidad, 0);
+  return { total, aliado, margen: total - aliado, mp: comisionMPEstimada(total) };
+}
+
+export type VentaFin = { estado: string; total: number; margen: number; aliado: number; mp: number };
 export type ResumenFinanzas = {
   ventas: number;
   vendido: number;
-  comision: number;
+  /** Margen bruto de Viviendo Vino (total − lo del aliado). */
+  margen: number;
+  /** Comisión de Mercado Pago (estimada hasta conectar el cobro). */
+  mp: number;
+  /** Margen bruto − comisión de MP. */
+  margenNeto: number;
   paraAliado: number;
   /** Lo del aliado en pedidos ya entregados: lo que ya se le debe. */
   ganado: number;
@@ -105,6 +142,8 @@ export type ResumenFinanzas = {
   saldo: number;
 };
 
+export type TransferenciaFin = { monto: number };
+
 /** Resumen de un aliado: solo cuentan las ventas (pagadas y no canceladas). */
 export function resumenFinanzas(ventas: VentaFin[], transferencias: TransferenciaFin[]): ResumenFinanzas {
   const v = ventas.filter((x) => esVenta(x.estado));
@@ -114,7 +153,9 @@ export function resumenFinanzas(ventas: VentaFin[], transferencias: Transferenci
   return {
     ventas: v.length,
     vendido: sum(v.map((x) => x.total)),
-    comision: sum(v.map((x) => x.comision)),
+    margen: sum(v.map((x) => x.margen)),
+    mp: sum(v.map((x) => x.mp)),
+    margenNeto: sum(v.map((x) => x.margen - x.mp)),
     paraAliado: sum(v.map((x) => x.aliado)),
     ganado,
     enCamino: sum(v.filter((x) => x.estado !== "entregado").map((x) => x.aliado)),

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { bpsATexto } from "@/lib/admin/catalogo-rules";
+import { MARGEN_MINIMO_BPS } from "@/lib/admin/pedidos-rules";
 import { requireAdmin } from "@/lib/admin/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { AliadosManager, type AliadoRow } from "./AliadosManager";
@@ -9,8 +10,8 @@ export const metadata: Metadata = { title: "Aliados · Configuración" };
 async function getAliados(): Promise<AliadoRow[]> {
   const db = supabaseAdmin();
   const [aliados, conf, datos, productos, personas] = await Promise.all([
-    db.from("aliados").select("id, nombre, ciudad, estado, comision_bps, activo, created_at").order("created_at"),
-    db.from("configuracion_comercial").select("aliado_id, plazo_preparacion_dias, plazo_entrega_texto"),
+    db.from("aliados").select("id, nombre, ciudad, estado, activo, created_at").order("created_at"),
+    db.from("configuracion_comercial").select("aliado_id, plazo_preparacion_dias, plazo_entrega_texto, margen_minimo_bps"),
     db.from("aliados_datos").select("aliado_id, razon_social, rfc, contacto_nombre, contacto_telefono, contacto_email, clabe, notas"),
     db.from("productos").select("aliado_id, activo"),
     db.from("admin_usuarios").select("aliado_id, activo").eq("rol", "aliado"),
@@ -26,7 +27,7 @@ async function getAliados(): Promise<AliadoRow[]> {
       nombre: a.nombre,
       ciudad: a.ciudad ?? "",
       estado: a.estado ?? "",
-      comision: bpsATexto(a.comision_bps),
+      margen_minimo: bpsATexto(cc?.margen_minimo_bps ?? MARGEN_MINIMO_BPS),
       activo: a.activo,
       vinos: (productos.data ?? []).filter((p) => p.aliado_id === a.id && p.activo).length,
       personas: (personas.data ?? []).filter((p) => p.aliado_id === a.id && p.activo).length,

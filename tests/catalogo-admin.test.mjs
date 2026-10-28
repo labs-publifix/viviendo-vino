@@ -38,21 +38,21 @@ test("slugify y CLABE", () => {
   assert.equal(clabeValida("12345"), false);
 });
 
-const aliadoBase = { nombre: "In Vino Veritas", ciudad: "Córdoba", estado: "Veracruz", comision: "10", plazo_dias: "2", plazo_texto: "", razon_social: "", rfc: "", contacto_nombre: "", contacto_telefono: "", contacto_email: "", clabe: "", notas: "" };
+const aliadoBase = { nombre: "In Vino Veritas", ciudad: "Córdoba", estado: "Veracruz", margen_minimo: "15", plazo_dias: "2", plazo_texto: "", razon_social: "", rfc: "", contacto_nombre: "", contacto_telefono: "", contacto_email: "", clabe: "", notas: "" };
 
 test("validarAliado", () => {
   const ok = validarAliado(aliadoBase);
   assert.equal(ok.ok, true);
-  assert.equal(ok.data.comision_bps, 1000);
+  assert.equal(ok.data.margen_minimo_bps, 1500);
   assert.equal(ok.data.plazo_preparacion_dias, 2);
   assert.equal(ok.data.privados.rfc, null);
-  const bad = validarAliado({ ...aliadoBase, nombre: "", comision: "x", rfc: "ABC", clabe: "002010077777777772", contacto_email: "no" });
-  assert.deepEqual(Object.keys(bad.errors).sort(), ["clabe", "comision", "contacto_email", "nombre", "rfc"]);
+  const bad = validarAliado({ ...aliadoBase, nombre: "", margen_minimo: "x", rfc: "ABC", clabe: "002010077777777772", contacto_email: "no" });
+  assert.deepEqual(Object.keys(bad.errors).sort(), ["clabe", "contacto_email", "margen_minimo", "nombre", "rfc"]);
   assert.equal(validarAliado({ ...aliadoBase, rfc: "ivv-010203-ab1" }).data.privados.rfc, "IVV010203AB1");
 });
 
-const vinoBase = { nombre_oficial: "Soave DOC 2024", productor: "Levorato", categoria_slug: "blancos-rosado", grupo_id: "g1", tipo: "blanco", uva: "Garganega", region: "Véneto", denominacion: "DOC", anada: "2024", volumen_ml: "750", grado_alcohol: "12", precio: "450", precio_antes: "", premio: "", descripcion: "Blanco del Véneto, fresco y floral, para la mesa de todos los días.", descripcion_aliado: "" };
-const opciones = { categorias: ["blancos-rosado", "tintos"], grupos: ["g1"] };
+const vinoBase = { nombre_oficial: "Soave DOC 2024", productor: "Levorato", categoria_slug: "blancos-rosado", grupo_id: "g1", tipo: "blanco", uva: "Garganega", region: "Véneto", denominacion: "DOC", anada: "2024", volumen_ml: "750", grado_alcohol: "12", precio: "450", precio_antes: "", precio_aliado: "300", premio: "", descripcion: "Blanco del Véneto, fresco y floral, para la mesa de todos los días.", descripcion_aliado: "" };
+const opciones = { categorias: ["blancos-rosado", "tintos"], grupos: ["g1"], margenMinimoBps: 1500 };
 
 test("validarVino", () => {
   const ok = validarVino(vinoBase, opciones);
@@ -90,11 +90,11 @@ test("precio antes: descuento calculado y casos sin descuento", () => {
 });
 
 test("validarVino: precio antes opcional y mayor que el final", () => {
-  const ok = validarVino({ ...vinoBase, precio: "300", precio_antes: "380" }, opciones);
-  assert.equal(ok.data.precio_antes_centavos, 38000);
+  const ok = validarVino({ ...vinoBase, precio: "400", precio_antes: "480" }, opciones);
+  assert.equal(ok.data.precio_antes_centavos, 48000);
   assert.equal(validarVino(vinoBase, opciones).data.precio_antes_centavos, null);
-  assert.match(validarVino({ ...vinoBase, precio: "300", precio_antes: "300" }, opciones).errors.precio_antes, /mayor/);
-  assert.match(validarVino({ ...vinoBase, precio: "300", precio_antes: "abc" }, opciones).errors.precio_antes, /vacío/);
+  assert.match(validarVino({ ...vinoBase, precio: "400", precio_antes: "400" }, opciones).errors.precio_antes, /mayor/);
+  assert.match(validarVino({ ...vinoBase, precio: "400", precio_antes: "abc" }, opciones).errors.precio_antes, /vacío/);
 });
 
 import { kitSavingsCents } from "../lib/money.ts";
@@ -103,4 +103,20 @@ test("ahorro de un kit: suma por botella con precio antes", () => {
   assert.equal(kitSavingsCents([{ quantity: 3, priceCents: 30000, compareAtCents: 38000 }, { quantity: 3, priceCents: 31000, compareAtCents: null }]), 24000);
   assert.equal(kitSavingsCents([{ quantity: 6, priceCents: 30000 }]), 0);
   assert.equal(kitSavingsCents([{ quantity: 2, priceCents: 30000, compareAtCents: 29000 }]), 0);
+});
+
+test("validarVino (broker): precio acordado obligatorio, final nunca menor y margen mínimo con confirmación", () => {
+  assert.match(validarVino({ ...vinoBase, precio_aliado: "" }, opciones).errors.precio_aliado, /acordado/);
+  assert.match(validarVino({ ...vinoBase, precio: "290", precio_aliado: "300" }, opciones).errors.precio, /no puede ser menor/);
+  // 340 sobre 300 = 11.8 % < 15 %: pide confirmar; con confirmación pasa y avisa que es bajo.
+  const bajo = validarVino({ ...vinoBase, precio: "340", precio_aliado: "300" }, opciones);
+  assert.equal(bajo.ok, false);
+  assert.match(bajo.errors.precio, /mínimo/);
+  const confirmado = validarVino({ ...vinoBase, precio: "340", precio_aliado: "300" }, { ...opciones, confirmarMargen: true });
+  assert.equal(confirmado.ok, true);
+  assert.equal(confirmado.margenBajo, true);
+  assert.equal(confirmado.data.precio_aliado_centavos, 30000);
+  const sano = validarVino({ ...vinoBase, precio: "353", precio_aliado: "300" }, opciones);
+  assert.equal(sano.ok, true);
+  assert.equal(sano.margenBajo, false);
 });

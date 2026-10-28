@@ -20,11 +20,31 @@ export const MAX_ANUNCIOS = 12;
 /** Los mensajes que había fijos en el código (26 oct 2026). Respaldo si la base no responde. */
 export const ANUNCIOS_RESPALDO: AnuncioPublico[] = [
   { texto: "Kits de 6 botellas con envío incluido", enlace: null },
-  { texto: "Arma tu kit desde $1,800", enlace: null },
+  { texto: "Arma tu kit desde {desde}", enlace: null },
   { texto: "Vino italiano de Véneto, Piamonte, Abruzzo y Puglia", enlace: null },
   { texto: "Repite las botellas que quieras", enlace: null },
   { texto: "Cómo funciona", enlace: "/#como-funciona" },
 ];
+
+// ---------- Precios en los mensajes ----------
+
+/** Marca que la tienda cambia por el precio del kit más barato del momento ("Arma tu kit desde {desde}"). */
+export const MARCA_DESDE = "{desde}";
+const pesosMx = new Intl.NumberFormat("es-MX", { maximumFractionDigits: 0 });
+
+/**
+ * Pone el precio real en los mensajes que llevan {desde}, para que nunca queden con un precio viejo. Si no se
+ * conoce el precio (catálogo sin datos), quita la frase "desde {desde}" y deja el resto del mensaje.
+ */
+export function conPrecios(lista: AnuncioPublico[], desdeCentavos: number | null): AnuncioPublico[] {
+  return lista.map((a) => {
+    if (!a.texto.includes(MARCA_DESDE)) return a;
+    const texto = desdeCentavos
+      ? a.texto.replaceAll(MARCA_DESDE, `$${pesosMx.format(Math.round(desdeCentavos / 100))}`)
+      : a.texto.replace(/\s*desde\s*\{desde\}/gi, "").replaceAll(MARCA_DESDE, "").trim();
+    return { ...a, texto };
+  });
+}
 
 export type Estado = "visible" | "programado" | "terminado" | "apagado";
 

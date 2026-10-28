@@ -5,7 +5,7 @@ import { validateKit, type KitWine } from "@/lib/kit/rules";
 import type { TipoCorreo } from "@/lib/email/tipos";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { nombreGrupo } from "./catalogo";
-import { esVenta, puedeVerPedido, reparto, resumenFinanzas, veCorreoCliente, veDinero, type EstadoPedido } from "./pedidos-rules";
+import { comisionMPEstimada, esVenta, puedeVerPedido, repartoBroker, resumenFinanzas, veCorreoCliente, veMargen, veParteAliado, veTotalCobrado, type EstadoPedido } from "./pedidos-rules";
 import type { AdminUser } from "./session";
 
 // Pedidos y Finanzas. Crear un pedido: el servidor vuelve a validar al cliente y cada kit y toma precios,
@@ -47,7 +47,7 @@ export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
   // Precios del momento, directo de la base.
   const slugs = [...new Set(input.kits.flatMap((k) => k.items.map((i) => i.slug)))];
   const productos = check(
-    await db.from("productos").select("id, slug, nombre_oficial, precio_centavos, disponible, activo, aliado_id, grupo_id").in("slug", slugs),
+    await db.from("productos").select("id, slug, nombre_oficial, precio_centavos, precio_aliado_centavos, disponible, activo, aliado_id, grupo_id").in("slug", slugs),
     "los vinos",
   );
   const grupos = check(await db.from("grupos_botella").select("id, codigo, nombre").in("id", [...new Set(productos.map((p) => p.grupo_id))]), "los grupos");
@@ -64,21 +64,31 @@ export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
     kits.push({
       grupo: grupoNombre.get(v.group) ?? "Kit",
       total_centavos: v.totalCents,
-      items: v.lines.map((l) => ({ producto_id: porSlug.get(l.slug)!.id, slug: l.slug, nombre: l.name, precio_centavos: l.priceCents, cantidad: l.quantity })),
+      items: v.lines.map((l) => ({
+        producto_id: porSlug.get(l.slug)!.id,
+        slug: l.slug,
+        nombre: l.name,
+        precio_centavos: l.priceCents,
+        precio_aliado_centavos: porSlug.get(l.slug)!.precio_aliado_centavos as number | null,
+        cantidad: l.quantity,
+      })),
     });
   }
   // Por ahora cada pedido es de un solo aliado (cada aliado prepara y envía lo suyo).
   const aliados = new Set(slugs.map((s) => porSlug.get(s)!.aliado_id as string));
   if (aliados.size !== 1) return { ok: false, error: "Por ahora un pedido solo puede llevar vinos de un aliado." };
   const aliadoId = [...aliados][0];
-  const { data: aliado, error: aliadoError } = await db.from("aliados").select("comision_bps, activo").eq("id", aliadoId).maybeSingle();
+  const { data: aliado, error: aliadoError } = await db.from("aliados").select("activo").eq("id", aliadoId).maybeSingle();
   fallo(aliadoError, "el aliado");
   if (!aliado?.activo) return { ok: false, error: "Ese aliado está en pausa." };
 
-  const subtotal = kits.reduce((s, k) => s + k.total_centavos, 0);
-  const envio = 0; // Envío incluido en el precio (Fundamentos).
+  // Modelo broker: sin precio acordado no se puede saber cuánto le toca al aliado, así que no se vende.
+  const lineas = kits.flatMap((k) => k.items);
+  if (lineas.some((l) => l.precio_aliado_centavos === null)) return { ok: false, error: "Un vino del pedido no tiene precio acordado con el aliado." };
+  const r = repartoBroker(lineas.map((l) => ({ precio: l.precio_centavos, acordado: l.precio_aliado_centavos!, cantidad: l.cantidad })));
+  const envio = 0; // Envío incluido en el precio (lo cubre el aliado dentro del precio acordado).
+  const subtotal = r.total;
   const total = subtotal + envio;
-  const { comision, aliado: paraAliado } = reparto(total, aliado.comision_bps);
 
   const pedido = {
     aliado_id: aliadoId,
@@ -100,9 +110,12 @@ export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
     subtotal_centavos: subtotal,
     envio_centavos: envio,
     total_centavos: total,
-    comision_bps: aliado.comision_bps,
-    comision_centavos: comision,
-    aliado_centavos: paraAliado,
+    modelo: "broker",
+    comision_bps: null,
+    // En el modelo broker comision_centavos guarda el margen bruto de Viviendo Vino.
+    comision_centavos: r.margen,
+    aliado_centavos: r.aliado,
+    comision_mp_centavos: r.mp,
   };
   const evento = { detalle: input.prueba ? "Pedido de prueba creado desde el panel" : "Pedido creado en la tienda", usuario_id: input.por?.id ?? "", usuario_nombre: input.por?.nombre ?? null };
   const { data, error } = await db.rpc("crear_pedido", { p_pedido: pedido, p_kits: kits, p_evento: evento });
@@ -128,8 +141,11 @@ export type PedidoFila = {
   email: string;
   ciudad: string;
   kits: number;
-  total: number;
-  comision: number | null;
+  /** Lo cobrado al cliente: admin y atención (el aliado no ve el precio público). */
+  total: number | null;
+  /** Margen bruto de Viviendo Vino: solo admin. */
+  margen: number | null;
+  /** Lo del aliado (precios acordados): admin y el aliado. */
   paraAliado: number | null;
 };
 
@@ -144,7 +160,6 @@ export async function getPedidos(user: AdminUser): Promise<PedidoFila[]> {
   if (user.rol === "aliado") q = q.eq("aliado_id", user.aliadoId!);
   const [rows, aliados] = await Promise.all([q, db.from("aliados").select("id, nombre")]);
   const nombres = new Map(check(aliados, "los aliados").map((a) => [a.id as string, a.nombre as string]));
-  const dinero = veDinero(user.rol);
   const correo = veCorreoCliente(user.rol);
   return check(rows, "los pedidos").map((p) => ({
     id: p.id,
@@ -158,9 +173,9 @@ export async function getPedidos(user: AdminUser): Promise<PedidoFila[]> {
     email: correo ? p.cliente_email : "",
     ciudad: [p.ciudad, p.estado_mx].filter(Boolean).join(", "),
     kits: p.kits,
-    total: p.total_centavos,
-    comision: dinero ? p.comision_centavos : null,
-    paraAliado: dinero ? p.aliado_centavos : null,
+    total: veTotalCobrado(user.rol) ? p.total_centavos : null,
+    margen: veMargen(user.rol) ? p.comision_centavos : null,
+    paraAliado: veParteAliado(user.rol) ? p.aliado_centavos : null,
   }));
 }
 
@@ -175,7 +190,7 @@ export async function getPedido(user: AdminUser, id: string) {
   const [kitsR, eventosR, pagosR, aliadoR, correosR] = await Promise.all([
     db.from("pedido_kits").select("id, posicion, grupo, total_centavos").eq("pedido_id", id).order("posicion"),
     db.from("pedido_eventos").select("id, created_at, tipo, estado, detalle, usuario_nombre").eq("pedido_id", id).order("created_at"),
-    db.from("pagos").select("id, created_at, proveedor, referencia, estado, monto_centavos").eq("pedido_id", id).order("created_at"),
+    db.from("pagos").select("id, created_at, proveedor, referencia, estado, monto_centavos, comision_proveedor_centavos").eq("pedido_id", id).order("created_at"),
     db.from("aliados").select("nombre").eq("id", p.aliado_id).maybeSingle(),
     db.from("correos_enviados").select("id, created_at, tipo, para, destinatario, estado, reenvio").eq("pedido_id", id).order("created_at"),
   ]);
@@ -183,8 +198,13 @@ export async function getPedido(user: AdminUser, id: string) {
   // Si la tabla de correos aún no existe (falta su SQL), el pedido se ve igual, solo sin correos.
   if (correosR.error) console.error("admin/pedidos: no se pudieron leer los correos", correosR.error.code);
   const verCorreos = veCorreoCliente(user.rol);
-  const items = kits.length ? check(await db.from("pedido_items").select("kit_id, slug, nombre, precio_centavos, cantidad").in("kit_id", kits.map((k) => k.id)), "las botellas del pedido") : [];
-  const dinero = veDinero(user.rol);
+  const items = kits.length ? check(await db.from("pedido_items").select("kit_id, slug, nombre, precio_centavos, precio_aliado_centavos, cantidad").in("kit_id", kits.map((k) => k.id)), "las botellas del pedido") : [];
+  const cobrado = veTotalCobrado(user.rol);
+  const margen = veMargen(user.rol);
+  const parte = veParteAliado(user.rol);
+  const broker = p.modelo === "broker";
+  // Comisión de Mercado Pago: la real del pago aprobado si ya se conoce; si no, la estimada al crear el pedido.
+  const pagoReal = check(pagosR, "los pagos").find((x) => x.estado === "aprobado" && x.comision_proveedor_centavos !== null && x.proveedor === "mercadopago");
   return {
     id: p.id as string,
     folio: p.folio as string,
@@ -216,16 +236,29 @@ export async function getPedido(user: AdminUser, id: string) {
     kits: kits.map((k) => ({
       id: k.id as string,
       grupo: k.grupo as string,
-      total: k.total_centavos as number,
-      items: items.filter((i) => i.kit_id === k.id).map((i) => ({ slug: i.slug as string, nombre: i.nombre as string, precio: i.precio_centavos as number, cantidad: i.cantidad as number })),
+      // Lo que ve cada rol por kit: el precio cobrado o, para el aliado, la suma de sus precios acordados.
+      total: cobrado ? (k.total_centavos as number) : items.filter((i) => i.kit_id === k.id).reduce((s, i) => s + ((i.precio_aliado_centavos as number | null) ?? 0) * (i.cantidad as number), 0),
+      items: items
+        .filter((i) => i.kit_id === k.id)
+        .map((i) => ({
+          slug: i.slug as string,
+          nombre: i.nombre as string,
+          precio: cobrado ? (i.precio_centavos as number) : null,
+          precioAliado: parte ? ((i.precio_aliado_centavos as number | null) ?? null) : null,
+          cantidad: i.cantidad as number,
+        })),
     })),
     importes: {
-      subtotal: p.subtotal_centavos as number,
+      /** "broker": margen sobre precios acordados; "comision": pedidos anteriores con la comisión de 10 %. */
+      modelo: (broker ? "broker" : "comision") as "broker" | "comision",
+      subtotal: cobrado ? (p.subtotal_centavos as number) : null,
       envio: p.envio_centavos as number,
-      total: p.total_centavos as number,
-      comisionBps: dinero ? (p.comision_bps as number) : null,
-      comision: dinero ? (p.comision_centavos as number) : null,
-      paraAliado: dinero ? (p.aliado_centavos as number) : null,
+      total: cobrado ? (p.total_centavos as number) : null,
+      comisionBps: margen && !broker ? ((p.comision_bps as number | null) ?? null) : null,
+      margen: margen ? (p.comision_centavos as number) : null,
+      mp: margen ? ((pagoReal?.comision_proveedor_centavos as number | undefined) ?? (p.comision_mp_centavos as number | null) ?? null) : null,
+      mpReal: Boolean(pagoReal),
+      paraAliado: parte ? (p.aliado_centavos as number) : null,
     },
     eventos: check(eventosR, "el historial").map((e) => ({ id: String(e.id), at: e.created_at as string, tipo: e.tipo as string, estado: (e.estado as string | null) ?? null, detalle: (e.detalle as string | null) ?? "", quien: (e.usuario_nombre as string | null) ?? "" })),
     correos: (correosR.data ?? []).map((c) => ({
@@ -238,7 +271,7 @@ export async function getPedido(user: AdminUser, id: string) {
       ok: c.estado === "enviado",
       reenvio: c.reenvio as boolean,
     })),
-    pagos: check(pagosR, "los pagos").map((x) => ({ id: x.id as string, at: x.created_at as string, proveedor: x.proveedor as string, referencia: (x.referencia as string | null) ?? "", estado: x.estado as string, monto: x.monto_centavos as number })),
+    pagos: cobrado ? check(pagosR, "los pagos").map((x) => ({ id: x.id as string, at: x.created_at as string, proveedor: x.proveedor as string, referencia: (x.referencia as string | null) ?? "", estado: x.estado as string, monto: x.monto_centavos as number })) : [],
   };
 }
 
@@ -249,7 +282,7 @@ export type TransferenciaFila = { id: string; fecha: string; monto: number; refe
 /** Finanzas de un aliado. El rol Aliado siempre recibe las suyas, aunque pida otro. */
 export async function getFinanzas(user: AdminUser, aliadoPedido: string | null) {
   const db = supabaseAdmin();
-  const aliados = check(await db.from("aliados").select("id, nombre, comision_bps, activo").order("nombre"), "los aliados");
+  const aliados = check(await db.from("aliados").select("id, nombre, activo").order("nombre"), "los aliados");
   const visibles = user.rol === "aliado" ? aliados.filter((a) => a.id === user.aliadoId) : aliados;
   const aliado = visibles.find((a) => a.id === aliadoPedido) ?? visibles[0] ?? null;
   if (!aliado) return { aliados: [], aliado: null, resumen: resumenFinanzas([], []), ventas: [], transferencias: [] };
@@ -257,7 +290,7 @@ export async function getFinanzas(user: AdminUser, aliadoPedido: string | null) 
   const [pedidosR, transR] = await Promise.all([
     db
       .from("pedidos")
-      .select("id, folio, created_at, estado, prueba, total_centavos, comision_centavos, aliado_centavos, entregado_at")
+      .select("id, folio, created_at, estado, prueba, kits, total_centavos, comision_centavos, comision_mp_centavos, aliado_centavos, entregado_at")
       .eq("aliado_id", aliado.id)
       .order("created_at", { ascending: false })
       .limit(MAX_LISTA),
@@ -272,10 +305,14 @@ export async function getFinanzas(user: AdminUser, aliadoPedido: string | null) 
       entregado: (p.entregado_at as string | null) ?? null,
       estado: p.estado as EstadoPedido,
       prueba: p.prueba as boolean,
+      kits: p.kits as number,
       total: p.total_centavos as number,
-      comision: p.comision_centavos as number,
+      margen: p.comision_centavos as number,
+      // Pedidos anteriores al modelo broker no guardaron la estimación: se calcula igual.
+      mp: (p.comision_mp_centavos as number | null) ?? comisionMPEstimada(p.total_centavos as number),
       aliado: p.aliado_centavos as number,
     }));
+  const esAliado = user.rol === "aliado";
   const transferencias: TransferenciaFila[] = check(transR, "las transferencias").map((t) => ({
     id: t.id,
     fecha: String(t.fecha).slice(0, 10), // AAAA-MM-DD
@@ -286,9 +323,10 @@ export async function getFinanzas(user: AdminUser, aliadoPedido: string | null) 
   }));
   return {
     aliados: visibles.map((a) => ({ id: a.id as string, nombre: a.nombre as string })),
-    aliado: { id: aliado.id as string, nombre: aliado.nombre as string, comisionBps: aliado.comision_bps as number },
+    aliado: { id: aliado.id as string, nombre: aliado.nombre as string },
     resumen: resumenFinanzas(ventas, transferencias.map((t) => ({ monto: t.monto }))),
-    ventas,
+    // El aliado no recibe el precio público ni el margen: solo lo suyo.
+    ventas: esAliado ? ventas.map((v) => ({ ...v, total: 0, margen: 0, mp: 0 })) : ventas,
     transferencias,
   };
 }

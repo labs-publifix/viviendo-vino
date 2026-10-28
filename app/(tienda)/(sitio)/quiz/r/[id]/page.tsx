@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { getQuizCatalog } from "@/lib/quiz/catalog";
 import { buildResult } from "@/lib/quiz/result";
@@ -44,7 +45,17 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default async function SharedResult({ params }: { params: Promise<{ id: string }> }) {
+// Dentro de <Suspense>: al renovarse la marquesina (caché del marco) la página se regenera sin conocer el id,
+// y leer params fuera de un límite de Suspense hacía que respondiera 500.
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
+  return (
+    <Suspense>
+      <SharedResult params={params} />
+    </Suspense>
+  );
+}
+
+async function SharedResult({ params }: { params: Promise<{ id: string }> }) {
   const result = await load((await params).id);
   if (!result) notFound();
   return (

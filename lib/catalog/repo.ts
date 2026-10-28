@@ -52,6 +52,12 @@ function must<T>(res: { data: T | null; error: { message: string } | null }, wha
   return res.data;
 }
 
+/** Precio del kit de 6 más barato que se puede armar hoy (null si el catálogo está vacío). */
+export function kitMinimo(catalog: Pick<Catalog, "groups">): number | null {
+  const precios = catalog.groups.map((g) => g.kitMinCents).filter((c) => c > 0);
+  return precios.length ? Math.min(...precios) : null;
+}
+
 export async function getCatalog(): Promise<Catalog> {
   "use cache";
   cacheLife("minutes");

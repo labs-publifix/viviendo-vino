@@ -32,6 +32,7 @@ export default async function Page({ params }: PageProps<"/admin/catalogo/vinos/
         grado_alcohol: w.grado,
         precioCentavos: w.precioCentavos,
         precioAntesCentavos: w.precioAntesCentavos,
+        precioAliadoCentavos: w.precioAliadoCentavos,
         premio: w.premio,
         descripcion: w.descripcion,
         descripcion_aliado: w.descripcionAliado,

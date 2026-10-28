@@ -104,11 +104,12 @@
       "tipo": "unica",
       "titulo": "¿Cuánto quieres invertir en la caja?",
       "ayuda": "Es el total de las 6 botellas, con envío incluido.",
+      "base_centavos": 180000,
       "opciones": [
-        { "id": "hasta-2100", "texto": "Hasta $2,100", "min_centavos": 0, "max_centavos": 210000 },
-        { "id": "2100-2800", "texto": "De $2,100 a $2,800", "min_centavos": 210000, "max_centavos": 280000 },
-        { "id": "2800-4000", "texto": "De $2,800 a $4,000", "min_centavos": 280000, "max_centavos": 400000 },
-        { "id": "sin-tope", "texto": "Sin tope", "min_centavos": 280000, "max_centavos": null }
+        { "id": "hasta-2100", "texto": "Hasta {max}", "min_centavos": 0, "max_centavos": 210000, "factor_max": 1.1666667 },
+        { "id": "2100-2800", "texto": "De {min} a {max}", "min_centavos": 210000, "max_centavos": 280000, "factor_min": 1.1666667, "factor_max": 1.5555556 },
+        { "id": "2800-4000", "texto": "De {min} a {max}", "min_centavos": 280000, "max_centavos": 400000, "factor_min": 1.5555556, "factor_max": 2.2222222 },
+        { "id": "sin-tope", "texto": "Sin tope", "min_centavos": 280000, "max_centavos": null, "factor_min": 1.5555556 }
       ]
     }
   ]

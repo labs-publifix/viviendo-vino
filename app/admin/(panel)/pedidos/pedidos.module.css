@@ -56,6 +56,9 @@
 .total dt,
 .total dd { color: var(--fg); font-weight: 700; }
 .split { font-size: 13px; }
+.neto dt,
+.neto dd { color: var(--fg); font-weight: 600; }
+.costo { display: block; color: var(--muted); font-size: 12px; text-align: right; }
 
 /* Envío y cliente */
 .address { display: flex; flex-direction: column; gap: 2px; font-size: 15px; font-style: normal; line-height: 1.45; }

@@ -155,3 +155,14 @@ p.kitItems { display: block; color: var(--fg); }
 .stepper button { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--fg); cursor: pointer; }
 .stepper button:disabled { opacity: 0.35; cursor: default; }
 .stepper output { min-width: 1.5rem; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Precio (modelo broker): margen en vivo bajo el precio final. */
+.inline { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; }
+.inline > :first-child { flex: 1 1 10rem; }
+.margin { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); font-size: 14px; }
+.margin p { display: flex; justify-content: space-between; gap: 12px; margin: 0; font-variant-numeric: tabular-nums; }
+.margin p > span:first-child { color: var(--muted); }
+.margin p > :last-child:not(:first-child) { white-space: nowrap; text-align: right; }
+.margin[data-bajo] { border-color: var(--aviso); }
+.margin .marginWarn { display: block; color: var(--fg); font-size: 13px; line-height: 1.45; }
+.linkBtn { padding: 0; border: 0; background: none; color: var(--vv-vino); font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }

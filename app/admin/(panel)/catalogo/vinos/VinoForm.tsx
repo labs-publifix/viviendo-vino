@@ -9,6 +9,7 @@ import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
 import { Price } from "@/app/_ui/Price";
 import { centavosATexto, pesos, precioACentavos, TIPOS } from "@/lib/admin/catalogo-rules";
+import { comisionMPEstimada, MARGEN_MINIMO_BPS, margenBotella, precioMinimo } from "@/lib/admin/pedidos-rules";
 import { discountPercent } from "@/lib/money";
 import { guardarVino, type VinoState } from "../actions";
 import styles from "../catalogo.module.css";
@@ -32,6 +33,8 @@ export type VinoDatos = {
   grado_alcohol: string;
   precioCentavos: number | null;
   precioAntesCentavos: number | null;
+  /** Precio acordado con el aliado (neto, con IVA y envío). */
+  precioAliadoCentavos: number | null;
   premio: string;
   descripcion: string;
   descripcion_aliado: string;
@@ -39,7 +42,7 @@ export type VinoDatos = {
   activo: boolean;
   kits: string[];
 };
-type Opcion = { id: string; nombre: string; aliadoId?: string };
+type Opcion = { id: string; nombre: string; aliadoId?: string; margenMinimoBps?: number | null };
 
 const TIPO_LABEL: Record<string, string> = { blanco: "Blanco", rosado: "Rosado", tinto: "Tinto", espumoso: "Espumoso" };
 // Mismo formato que las 19 fotos actuales de la tienda.
@@ -53,7 +56,10 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
     ...vino,
     precio: vino.precioCentavos ? centavosATexto(vino.precioCentavos) : "",
     precio_antes: vino.precioAntesCentavos ? centavosATexto(vino.precioAntesCentavos) : "",
+    precio_aliado: vino.precioAliadoCentavos ? centavosATexto(vino.precioAliadoCentavos) : "",
   });
+  const [descPct, setDescPct] = useState("");
+  const [confirmarMargen, setConfirmarMargen] = useState(false);
   const [foto, setFoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(vino.imagen);
   const [fotoError, setFotoError] = useState<string | null>(null);
@@ -73,6 +79,13 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
   const precioNuevo = precioACentavos(v.precio);
   const precioAntes = v.precio_antes.trim() ? precioACentavos(v.precio_antes) : null;
   const descuento = precioNuevo ? discountPercent(precioAntes, precioNuevo) : null;
+  const acordado = precioACentavos(v.precio_aliado);
+  const margenMinimoBps = aliados.find((a) => a.id === v.aliadoId)?.margenMinimoBps ?? MARGEN_MINIMO_BPS;
+  const margen = precioNuevo && acordado ? margenBotella(precioNuevo, acordado) : null;
+  const minimo = acordado ? precioMinimo(acordado, margenMinimoBps) : null;
+  // Mercado Pago por botella, estimado sobre un kit de 6 de este vino.
+  const mpBotella = precioNuevo ? Math.round(comisionMPEstimada(precioNuevo * 6) / 6) : 0;
+  const margenBajo = margen !== null && margen.bps < margenMinimoBps;
   const cambioPrecio = !nuevo && vino.precioCentavos !== null && precioNuevo !== null && precioNuevo !== vino.precioCentavos;
 
   return (
@@ -152,17 +165,75 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
         <aside className={styles.formSide}>
           <section className={styles.card}>
             <h3>Precio</h3>
-            <TextField name="precio" label="Precio final por botella (MXN)" inputMode="decimal" value={v.precio} onChange={set("precio")} required error={e.precio} hint="Lo que paga el cliente, con envío incluido." />
+            <TextField
+              name="precio_aliado"
+              label="Precio acordado con el aliado (MXN)"
+              inputMode="decimal"
+              value={v.precio_aliado}
+              onChange={set("precio_aliado")}
+              required
+              error={e.precio_aliado}
+              hint="Neto por botella, con IVA y envío incluido. El aliado lo recibe íntegro. No se muestra en la tienda."
+            />
             <TextField
               name="precio_antes"
-              label="Precio antes (MXN)"
+              label="Precio de lista, tachado (MXN)"
               optional
               inputMode="decimal"
               value={v.precio_antes}
               onChange={set("precio_antes")}
               error={e.precio_antes}
-              hint="Si lo llenas, la tienda lo muestra tachado junto al final, con el % de descuento. Déjalo vacío si no hay descuento."
+              hint="Si lo llenas, la tienda lo muestra tachado con el % de descuento. Déjalo vacío si no hay descuento."
             />
+            {precioAntes && (
+              <div className={styles.inline}>
+                <TextField label="Descuento sobre la lista (%)" inputMode="decimal" value={descPct} onChange={(ev) => setDescPct(ev.target.value)} optional />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={!Number(descPct) || Number(descPct) <= 0 || Number(descPct) >= 90}
+                  onClick={() => setV((o) => ({ ...o, precio: centavosATexto(Math.round((precioAntes * (1 - Number(descPct) / 100)) / 100) * 100) }))}
+                >
+                  Calcular precio final
+                </Button>
+              </div>
+            )}
+            <TextField name="precio" label="Precio final por botella (MXN)" inputMode="decimal" value={v.precio} onChange={set("precio")} required error={e.precio} hint="Lo que paga el cliente, con envío incluido." />
+            {margen && (
+              <div className={styles.margin} data-bajo={margenBajo || undefined}>
+                <p>
+                  <span>Margen de Viviendo Vino</span>
+                  <strong>
+                    {pesos(margen.centavos)} · {(margen.bps / 100).toFixed(1)} %
+                  </strong>
+                </p>
+                <p>
+                  <span>Mercado Pago (estimado, por botella)</span>
+                  <span>−{pesos(mpBotella)}</span>
+                </p>
+                <p>
+                  <span>Margen neto estimado</span>
+                  <strong>{pesos(margen.centavos - mpBotella)}</strong>
+                </p>
+                {margenBajo && minimo && (
+                  <p className={styles.marginWarn}>
+                    Queda por debajo del margen mínimo ({margenMinimoBps / 100} %). El precio final mínimo es {pesos(minimo)}.{" "}
+                    <button type="button" className={styles.linkBtn} onClick={() => setV((o) => ({ ...o, precio: centavosATexto(minimo) }))}>
+                      Usar {pesos(minimo)}
+                    </button>
+                  </p>
+                )}
+              </div>
+            )}
+            {margenBajo && (
+              <Checkbox
+                name="confirmar_margen"
+                label="Confirmo este precio con margen bajo"
+                hint="Queda registrado en la Auditoría."
+                checked={confirmarMargen}
+                onChange={(ev) => setConfirmarMargen(ev.target.checked)}
+              />
+            )}
             {precioNuevo && (
               <div className={styles.preview}>
                 <span>Así se ve en la tienda</span>
@@ -174,11 +245,6 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
               <p className={styles.small}>
                 Kit de 6 de este vino: <strong>{pesos(precioNuevo * 6)}</strong>
               </p>
-            )}
-            {cambioPrecio && (
-              <Notice kind="aviso">
-                Antes {pesos(vino.precioCentavos!)}. {vino.kits.length ? `También cambia el total de ${vino.kits.join(", ")}.` : ""} Las personas que ya tienen este vino en su carrito verán el precio nuevo.
-              </Notice>
             )}
             {cambioPrecio && (
               <Notice kind="aviso">

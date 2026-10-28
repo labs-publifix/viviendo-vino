@@ -19,7 +19,7 @@ export default async function Page() {
       <ul className={styles.groups}>
         {grupos.map((g) => {
           const suyos = vinos.filter((v) => v.grupoId === g.id && v.activo);
-          const precios = suyos.map((v) => v.precioCentavos);
+          const precios = suyos.map((v) => v.precioCentavos).filter((x): x is number => x !== null);
           return (
             <li key={g.id} className={styles.card}>
               <div className={styles.kitHead}>

@@ -5,6 +5,7 @@ import perfilesJson from "@/quiz/config/perfiles.json";
 import preguntasJson from "@/quiz/config/preguntas.json";
 import textosJson from "@/quiz/config/textos.json";
 import type { Ejes, Familia, PerfilConfig, PreguntasConfig, QuizConfig } from "./engine";
+import { conPresupuesto } from "./presupuesto";
 
 export type OpcionUI = {
   id: string;
@@ -25,10 +26,14 @@ export type PreguntaUI = {
 };
 export type Perfil = PerfilConfig & { frase: string; frase_regalo: string; descripcion: string; guia: string };
 
-export const PREGUNTAS = preguntasJson as unknown as PreguntasConfig & {
+export type PreguntasQuiz = PreguntasConfig & {
   comentario: { titulo: string; titulo_regalo: string; ayuda: string; max: number };
   preguntas: (PreguntasConfig["preguntas"][number] & PreguntaUI)[];
 };
+/** Preguntas con el presupuesto a la base ($1,800). Para los rangos del catálogo de hoy, `preguntasActuales`. */
+export const PREGUNTAS = conPresupuesto(preguntasJson as unknown as PreguntasQuiz, null);
+/** Preguntas con los rangos de presupuesto proporcionales al kit más barato del catálogo. */
+export const preguntasActuales = (kitMinCentavos: number | null) => conPresupuesto(preguntasJson as unknown as PreguntasQuiz, kitMinCentavos);
 export const PERFILES = perfilesJson.perfiles as unknown as Perfil[];
 export const TEXTOS = textosJson as unknown as {
   carga: string[];
@@ -41,6 +46,8 @@ export const TEXTOS = textosJson as unknown as {
   vinos: Record<string, { motivo: string; reto: string }>;
 };
 export const QUIZ_CONFIG: QuizConfig = { preguntas: PREGUNTAS, perfiles: PERFILES };
+/** Configuración del motor con los rangos de presupuesto del catálogo de hoy. */
+export const quizConfigActual = (kitMinCentavos: number | null): QuizConfig => ({ preguntas: preguntasActuales(kitMinCentavos), perfiles: PERFILES });
 
 export const perfilById = (id: string) => PERFILES.find((p) => p.id === id);
 export const PERFIL_IDS = PERFILES.map((p) => p.id);

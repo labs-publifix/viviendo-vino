@@ -64,6 +64,9 @@ const CAMPO_LABEL: Record<string, string> = {
   ciudad: "Ciudad",
   estado: "Estado",
   comision_bps: "Comisión",
+  margen_minimo_bps: "Margen mínimo",
+  precio_aliado_centavos: "Precio acordado con el aliado",
+  margen_bajo_confirmado: "Confirmó margen bajo",
   plazo_preparacion_dias: "Días de preparación",
   plazo_entrega_texto: "Texto de entrega",
   razon_social: "Razón social",
@@ -113,8 +116,8 @@ export function valor(campo: string, v: unknown): string {
   if (typeof v === "boolean") return v ? "Sí" : "No";
   if (campo === "rol" && typeof v === "string") return ROLES[v] ?? v;
   if (campo === "estado" && typeof v === "string" && v in ESTADO_LABEL) return ESTADO_LABEL[v as EstadoPedido];
-  if ((campo === "precio_centavos" || campo === "precio_antes_centavos" || campo === "monto_centavos") && typeof v === "number") return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(v / 100);
-  if (campo === "comision_bps" && typeof v === "number") return `${v / 100} %`;
+  if ((campo === "precio_centavos" || campo === "precio_antes_centavos" || campo === "precio_aliado_centavos" || campo === "monto_centavos") && typeof v === "number") return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(v / 100);
+  if ((campo === "comision_bps" || campo === "margen_minimo_bps") && typeof v === "number") return `${v / 100} %`;
   if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}T/.test(v)) return fechaCdmx(v);
   if (typeof v === "object") return JSON.stringify(v);
   return String(v);

@@ -20,8 +20,10 @@ type Vino = {
   grupo: string;
   aliadoId: string;
   aliado: string;
-  precioCentavos: number;
+  /** null para el rol Aliado: no ve el precio público. */
+  precioCentavos: number | null;
   precioAntesCentavos: number | null;
+  precioAliadoCentavos: number | null;
   imagen: string | null;
   disponible: boolean;
   activo: boolean;
@@ -136,16 +138,28 @@ export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[];
                   {!v.activo && <span className={styles.hidden}> · Oculto en la tienda</span>}
                 </p>
               </div>
-              <p className={styles.price}>
-                {v.precioAntesCentavos && v.precioAntesCentavos > v.precioCentavos && (
-                  <s className={styles.priceBefore}>
-                    <span className="vv-sr-only">Antes </span>
-                    {pesos(v.precioAntesCentavos)}
-                  </s>
-                )}
-                {pesos(v.precioCentavos)}
-                <span>por botella</span>
-              </p>
+              {v.precioCentavos === null ? (
+                // Rol Aliado: solo su precio acordado.
+                <p className={styles.price}>
+                  {v.precioAliadoCentavos !== null ? pesos(v.precioAliadoCentavos) : "—"}
+                  <span>tu precio por botella</span>
+                </p>
+              ) : (
+                <p className={styles.price}>
+                  {v.precioAntesCentavos && v.precioAntesCentavos > v.precioCentavos && (
+                    <s className={styles.priceBefore}>
+                      <span className="vv-sr-only">Antes </span>
+                      {pesos(v.precioAntesCentavos)}
+                    </s>
+                  )}
+                  {pesos(v.precioCentavos)}
+                  <span>
+                    {v.precioAliadoCentavos !== null
+                      ? `acordado ${pesos(v.precioAliadoCentavos)} · margen ${Math.round(((v.precioCentavos - v.precioAliadoCentavos) * 100) / v.precioCentavos)} %`
+                      : "por botella · sin precio acordado"}
+                  </span>
+                </p>
+              )}
               <button type="button" role="switch" aria-checked={v.disponible} className={styles.switch} disabled={pending} onClick={() => toggle(v)}>
                 <span className={styles.track} aria-hidden="true">
                   <span className={styles.thumbSwitch} />

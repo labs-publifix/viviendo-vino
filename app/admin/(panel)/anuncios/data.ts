@@ -1,5 +1,6 @@
 import "server-only";
-import { estado, fechaCorta, isoACdmx, visibles } from "@/lib/anuncios";
+import { conPrecios, estado, fechaCorta, isoACdmx, visibles } from "@/lib/anuncios";
+import { getCatalog, kitMinimo } from "@/lib/catalog/repo";
 import { ANUNCIO_COLUMNS, toAnuncio } from "@/lib/anuncios-repo";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Item } from "./AnunciosManager";
@@ -25,5 +26,7 @@ export async function getAnunciosPanel() {
             : null;
     return { ...a, estado: e, detalle, inicioLocal: isoACdmx(a.iniciaAt), finLocal: isoACdmx(a.terminaAt) };
   });
-  return { items, preview: visibles(list, now) };
+  // La vista previa muestra {desde} ya con el precio real, igual que la tienda.
+  const desde = await getCatalog().then(kitMinimo, () => null);
+  return { items, preview: conPrecios(visibles(list, now), desde), desde };
 }

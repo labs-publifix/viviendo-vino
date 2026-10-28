@@ -14,7 +14,7 @@ export type Item = Anuncio & { estado: Estado; detalle: string | null; inicioLoc
 
 const ESTADO_LABEL: Record<Estado, string> = { visible: "Visible", programado: "Programado", terminado: "Terminó", apagado: "Apagado" };
 
-export function AnunciosManager({ items, preview, max }: { items: Item[]; preview: AnuncioPublico[]; max: number }) {
+export function AnunciosManager({ items, preview, max, desde }: { items: Item[]; preview: AnuncioPublico[]; max: number; desde: number | null }) {
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const [confirming, setConfirming] = useState<string | null>(null);
@@ -78,7 +78,7 @@ export function AnunciosManager({ items, preview, max }: { items: Item[]; previe
 
         {adding && (
           <div className={styles.newCard}>
-            <AnuncioForm onDone={() => setAdding(false)} />
+            <AnuncioForm desde={desde} onDone={() => setAdding(false)} />
           </div>
         )}
 
@@ -94,7 +94,7 @@ export function AnunciosManager({ items, preview, max }: { items: Item[]; previe
               if (editing === a.id) {
                 return (
                   <li key={a.id} className={`${styles.row} ${styles.rowEditing}`}>
-                    <AnuncioForm item={a} onDone={() => setEditing(null)} />
+                    <AnuncioForm item={a} desde={desde} onDone={() => setEditing(null)} />
                   </li>
                 );
               }
@@ -202,7 +202,8 @@ export function AnunciosManager({ items, preview, max }: { items: Item[]; previe
   );
 }
 
-function AnuncioForm({ item, onDone }: { item?: Item; onDone: () => void }) {
+function AnuncioForm({ item, desde, onDone }: { item?: Item; desde: number | null; onDone: () => void }) {
+  const desdeTexto = desde ? `$${Math.round(desde / 100).toLocaleString("es-MX")}` : null;
   const [state, action, saving] = useActionState<FormState, FormData>(async (prev, form) => {
     const r = await saveAnuncio(prev, form);
     if (r.ok) onDone();
@@ -230,7 +231,7 @@ function AnuncioForm({ item, onDone }: { item?: Item; onDone: () => void }) {
         required
         autoFocus
         error={e.texto}
-        hint={`${texto.length} de ${TEXTO_MAX} caracteres. Corto y directo: la barra corre.`}
+        hint={`${texto.length} de ${TEXTO_MAX} caracteres. Corto y directo: la barra corre. Escribe {desde} y la tienda pone el precio del kit más barato al momento${desdeTexto ? ` (hoy ${desdeTexto})` : ""}.`}
       />
       <TextField
         name="enlace"

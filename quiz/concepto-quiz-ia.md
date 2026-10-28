@@ -148,7 +148,9 @@ Métricas: inicio → finalización, abandono por pregunta, resultado → agrega
 ## 12. Decisiones
 **Tomadas:**
 - Los espumosos de la lista 4 se combinan libremente (por ejemplo 3 de Prosecco y 3 de Rosé Extra Dry).
-- Rangos de presupuesto aprobados: hasta $2,100 · $2,100–$2,800 · $2,800–$4,000 · sin tope.
+- Rangos de presupuesto aprobados: hasta $2,100 · $2,100–$2,800 · $2,800–$4,000 · sin tope (con el kit más barato
+  en $1,800). Desde el 28 oct 2026 son proporcionales al kit más barato del catálogo (lib/quiz/presupuesto.ts): si
+  los precios suben, los rangos suben en la misma proporción. Los ids no cambian.
 - El comentario libre entra en el lanzamiento.
 - El correo se pide después del resultado, nunca antes.
 
