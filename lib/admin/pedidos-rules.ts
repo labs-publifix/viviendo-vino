@@ -87,8 +87,8 @@ export const veCorreoCliente = (rol: Rol) => rol === "admin" || rol === "atencio
 // recibe ese monto íntegro. Viviendo Vino fija el precio público; su margen es la diferencia y de ahí paga la comisión
 // de Mercado Pago (también si un pedido pagado se cancela). Descuentos y promociones salen de su margen.
 
-/** Margen mínimo de Viviendo Vino sobre el precio final si el aliado no tiene otro: 15 %. */
-export const MARGEN_MINIMO_BPS = 1500;
+/** Margen mínimo de Viviendo Vino sobre el precio final si el aliado no tiene otro: 20 %. */
+export const MARGEN_MINIMO_BPS = 2000;
 
 /**
  * Tarifa de Mercado Pago para estimar su comisión antes de cobrar: % + cargo fijo por cobro, más IVA. Es una

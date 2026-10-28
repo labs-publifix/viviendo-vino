@@ -1,7 +1,7 @@
 // Reglas de Pedidos y Finanzas del panel: `npm test`.
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { accionesPara, comisionMPEstimada, destino, margenBotella, precioMinimo, puedeVerPedido, repartoBroker, resumenFinanzas, validarAccion, validarNota, validarTransferencia, veCorreoCliente, veMargen, veParteAliado, veTotalCobrado } from "../lib/admin/pedidos-rules.ts";
+import { accionesPara, comisionMPEstimada, destino, MARGEN_MINIMO_BPS, margenBotella, precioMinimo, puedeVerPedido, repartoBroker, resumenFinanzas, validarAccion, validarNota, validarTransferencia, veCorreoCliente, veMargen, veParteAliado, veTotalCobrado } from "../lib/admin/pedidos-rules.ts";
 
 test("acciones: el pago no se marca a mano salvo en un pedido de prueba, y solo un admin", () => {
   assert.deepEqual(accionesPara("pendiente_pago", "admin", false), ["cancelar"]);
@@ -40,6 +40,9 @@ test("broker: margen por botella, precio mínimo y reparto del pedido", () => {
   assert.deepEqual(margenBotella(34000, 30000), { centavos: 4000, bps: 1176 });
   // Con 15 % de margen mínimo, el final más bajo para un acordado de 300 es 353.
   assert.equal(precioMinimo(30000, 1500), 35300);
+  // Con el mínimo por defecto (20 %): 300 / 0.8 = 375.
+  assert.equal(MARGEN_MINIMO_BPS, 2000);
+  assert.equal(precioMinimo(30000, MARGEN_MINIMO_BPS), 37500);
   assert.equal(precioMinimo(30000, 0), 30000);
   // Mercado Pago estimado: 3.49 % + $4, más IVA.
   assert.equal(comisionMPEstimada(200000), Math.round((200000 * 0.0349 + 400) * 1.16));

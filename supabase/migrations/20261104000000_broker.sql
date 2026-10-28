@@ -19,8 +19,8 @@ end $$;
 --     kit más barato del momento (así no queda viejo al ajustar precios).
 update public.anuncios set texto = replace(texto, '$1,800', '{desde}') where texto like '%$1,800%';
 
--- 2. Margen mínimo de Viviendo Vino por aliado (sobre el precio final). 1500 = 15 %.
-alter table public.configuracion_comercial add column if not exists margen_minimo_bps integer not null default 1500;
+-- 2. Margen mínimo de Viviendo Vino por aliado (sobre el precio final). 2000 = 20 %.
+alter table public.configuracion_comercial add column if not exists margen_minimo_bps integer not null default 2000;
 do $$
 begin
   if not exists (select 1 from pg_constraint where conname = 'configuracion_comercial_margen_valido') then

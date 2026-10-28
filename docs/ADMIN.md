@@ -38,9 +38,9 @@ producción (www) se hace después y solo con aprobación expresa.
 - **Mercado Pago lo absorbe Viviendo Vino**, incluidas las cancelaciones. Mientras no hay cobro real se estima con
   3.49 % + $4 más IVA (`comisionMPEstimada`); al conectar Mercado Pago se guarda la comisión real en
   `pagos.comision_proveedor_centavos`.
-- **Margen mínimo:** 15 % por defecto, editable por aliado en Configuración → Aliados. Con el precio debajo del
+- **Margen mínimo:** 20 % por defecto (subido de 15 % el 28 oct), editable por aliado en Configuración → Aliados. Con el precio debajo del
   mínimo, el panel lo avisa, propone el precio mínimo y solo deja guardar con una confirmación que queda en la
-  Auditoría. Con 15 %, después de Mercado Pago (~4 % + $4.64) quedan ~10 % netos por botella.
+  Auditoría. Con 20 %, después de Mercado Pago (~4 % + $4.64) quedan ~15 % netos por botella.
 - **Quién ve qué:** el admin ve precio público, acordado, margen, Mercado Pago y margen neto; el aliado solo su
   precio acordado y lo que le toca; atención, el total cobrado sin margen ni acordado.
 - **Pedidos:** `modelo = 'broker'`; `comision_centavos` guarda el margen bruto, `comision_mp_centavos` la comisión
