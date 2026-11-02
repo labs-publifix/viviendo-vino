@@ -25,8 +25,8 @@ export function Footer() {
           <nav aria-label="Descubrir">
             <p className={styles.colTitle}>Descubrir</p>
             <ul className={styles.links}>
-              <li><Link href="/quiz">Quiz IA</Link></li>
               <li><Link href="/wine-scan">Wine Scan</Link></li>
+              <li><Link href="/quiz">Quiz IA</Link></li>
               <li><Link href="/blog">Blog</Link></li>
               <li><Link href="/nosotros">Nosotros</Link></li>
             </ul>

@@ -10,7 +10,8 @@ import { TYPE_LABELS } from "@/lib/catalog/types";
 import { SOCIAL } from "@/lib/social";
 import styles from "./descubre.module.css";
 
-// Secciones de la portada que llevan a Quiz IA, Wine Scan, Nosotros, Blog e Instagram (oct 2026).
+// Secciones de la portada que llevan a Wine Scan, Quiz IA, Nosotros, Blog e Instagram (oct 2026; Wine Scan va
+// primero desde el 2 nov).
 // 05 y 06 siguen el patrón de 01 a 04 (etiqueta numerada, título, texto, botón); Nosotros y Blog son
 // editoriales, sin número. Solo estructura y contenido: el quiz, el escáner y el blog llegan después.
 
@@ -30,9 +31,45 @@ export async function Descubre() {
   const recientes = (await getArticles()).slice(0, 3).map(toSummary);
   return (
     <>
-      <section className={`${styles.section} ${styles.teaser} ${styles.beforeDark}`} aria-labelledby="quiz-title">
+      {/* 05 Wine Scan en bloque oscuro, primero: es la función que más queremos destacar (2 nov 2026). Alterna
+          claro y oscuro a mitad de la portada (Manual §6, bloques puntuales). */}
+      <div className={styles.darkGap}>
+        <DarkBlock aria-labelledby="scan-title">
+          <div className={`${styles.teaser} ${styles.reverse} ${styles.onDark}`}>
+            <div className={styles.copy}>
+              <NumberedLabel n={5} tone="dark">
+                Wine Scan
+              </NumberedLabel>
+              <Heading id="scan-title">Toma una foto de la etiqueta y descubre tu vino</Heading>
+              <p className={styles.lede}>
+                Obtén al instante la ficha técnica y la guía de maridaje de cualquier vino. Solo escanea la etiqueta o sube una foto de ella y sabrás cómo servirlo y qué comer con él.
+              </p>
+              <p className={styles.detail}>
+                <Icon name="camera" size={16} /> Desde tu celular.
+              </p>
+              <div className={styles.actions}>
+                <ButtonLink href="/wine-scan" tone="dark">
+                  Escanear una etiqueta
+                </ButtonLink>
+              </div>
+            </div>
+
+            {/* Ilustración del escáner: una botella real dentro del visor de la cámara. Decorativa. */}
+            <div className={styles.visual} aria-hidden="true">
+              <div className={styles.scanFrame}>
+                {/* eslint-disable-next-line @next/next/no-img-element -- foto ya optimizada */}
+                <img src="/img/vinos/valpolicella-ripasso-classico-superiore-doc-2020.webp" alt="" width={880} height={1184} loading="lazy" decoding="async" />
+                <span className={styles.scanCorners} />
+                <span className={styles.scanLine} />
+              </div>
+            </div>
+          </div>
+        </DarkBlock>
+      </div>
+
+      <section className={`${styles.section} ${styles.teaser}`} aria-labelledby="quiz-title">
         <div className={styles.copy}>
-          <NumberedLabel n={5}>Quiz IA</NumberedLabel>
+          <NumberedLabel n={6}>Quiz IA</NumberedLabel>
           <Heading id="quiz-title">¿No sabes cuál elegir? Te ayudamos.</Heading>
           <p className={styles.lede}>Contesta unas preguntas y te sugerimos un kit de 6 botellas, según lo que te gusta.</p>
           <p className={styles.detail}>
@@ -67,39 +104,6 @@ export async function Descubre() {
           </div>
         </div>
       </section>
-
-      {/* 06 en bloque oscuro: alterna claro y oscuro a mitad de la portada (Manual §6, bloques puntuales). */}
-      <DarkBlock aria-labelledby="scan-title">
-        <div className={`${styles.teaser} ${styles.reverse} ${styles.onDark}`}>
-          <div className={styles.copy}>
-            <NumberedLabel n={6} tone="dark">
-              Wine Scan
-            </NumberedLabel>
-            <Heading id="scan-title">Toma una foto de la etiqueta y descubre tu vino</Heading>
-            <p className={styles.lede}>
-              Obtén al instante la ficha técnica y la guía de maridaje de cualquier vino. Solo escanea la etiqueta o sube una foto de ella y sabrás cómo servirlo y qué comer con él.
-            </p>
-            <p className={styles.detail}>
-              <Icon name="camera" size={16} /> Desde tu celular.
-            </p>
-            <div className={styles.actions}>
-              <ButtonLink href="/wine-scan" tone="dark">
-                Escanear una etiqueta
-              </ButtonLink>
-            </div>
-          </div>
-
-          {/* Ilustración del escáner: una botella real dentro del visor de la cámara. Decorativa. */}
-          <div className={styles.visual} aria-hidden="true">
-            <div className={styles.scanFrame}>
-              {/* eslint-disable-next-line @next/next/no-img-element -- foto ya optimizada */}
-              <img src="/img/vinos/valpolicella-ripasso-classico-superiore-doc-2020.webp" alt="" width={880} height={1184} loading="lazy" decoding="async" />
-              <span className={styles.scanCorners} />
-              <span className={styles.scanLine} />
-            </div>
-          </div>
-        </div>
-      </DarkBlock>
 
       <section className={`${styles.section} ${styles.about}`} aria-labelledby="nosotros-title">
         {/* eslint-disable-next-line @next/next/no-img-element -- foto optimizada */}

@@ -18,8 +18,8 @@ const NAV = [
 
 // "Descubrir": desplegable en escritorio, sección expandible en el menú móvil.
 const DISCOVER = [
-  { href: "/quiz", label: "Quiz IA" },
   { href: "/wine-scan", label: "Wine Scan" },
+  { href: "/quiz", label: "Quiz IA" },
   { href: "/blog", label: "Blog" },
 ];
 

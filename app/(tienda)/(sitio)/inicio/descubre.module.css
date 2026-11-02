@@ -24,9 +24,9 @@
 .visual { min-width: 0; }
 
 /* La sección antes de un bloque oscuro cierra con el mismo aire que abre. */
-.beforeDark { padding-bottom: var(--s-9); }
+.darkGap { margin-top: var(--s-9); } /* el aire entre la sección anterior y el bloque oscuro de 05 */
 
-/* 06 sobre el bloque oscuro: texto hueso, secundarios en hueso atenuado, detalles en carmín. */
+/* 05 sobre el bloque oscuro: texto hueso, secundarios en hueso atenuado, detalles en carmín. */
 .onDark .lede { color: rgb(243 236 228 / 0.8); }
 .onDark .detail { color: rgb(243 236 228 / 0.75); }
 .onDark .detail svg { color: var(--vv-carmin); }

@@ -182,7 +182,7 @@ export default async function TiendaInicio() {
         </section>
       )}
 
-      {/* 05 Quiz IA, 06 Wine Scan, Nosotros, Blog e Instagram (el espacio final antes del cierre va en Instagram). */}
+      {/* 05 Wine Scan, 06 Quiz IA, Nosotros, Blog e Instagram (el espacio final antes del cierre va en Instagram). */}
       <Descubre />
 
       <DarkBlock aria-labelledby="cierre-title">
