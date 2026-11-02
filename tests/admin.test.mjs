@@ -57,12 +57,14 @@ test("passwordProblem: largo, correo y contraseñas predecibles", () => {
   assert.equal(passwordProblem("rafael aguirre 2026", ""), null);
 });
 
-test("menú: el admin ve las 10 secciones; el aliado ve sus finanzas; atención no ve dinero ni auditoría", () => {
-  assert.equal(SECCIONES.filter((s) => s.roles.includes("admin")).length, 10);
+test("menú: el admin ve las 11 secciones; el aliado ve sus finanzas; atención no ve dinero ni auditoría", () => {
+  assert.equal(SECCIONES.filter((s) => s.roles.includes("admin")).length, 11);
   const de = (rol) => SECCIONES.filter((s) => s.roles.includes(rol)).map((s) => s.href);
   assert.deepEqual(de("aliado"), ["/admin", "/admin/pedidos", "/admin/catalogo", "/admin/finanzas", "/admin/configuracion"]);
   assert.ok(!de("atencion").includes("/admin/finanzas") && !de("atencion").includes("/admin/auditoria"));
   assert.ok(!de("aliado").includes("/admin/auditoria"));
+  // Códigos de descuento: solo admin (salen del margen de Viviendo Vino; al aliado no le cambian nada).
+  assert.ok(!de("aliado").includes("/admin/codigos") && !de("atencion").includes("/admin/codigos"));
 });
 
 test("menuFor: grupos sin secciones vacías; atención ve Operación (con Catálogo para consultar el inventario) y Sistema", () => {

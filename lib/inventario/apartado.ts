@@ -3,6 +3,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { crearPedido, datosCliente, leerCambios, type CambioInventario } from "@/lib/admin/pedidos";
 import type { CartInput } from "@/lib/cart/validate";
 import type { CheckoutInput } from "@/lib/checkout/schema";
+import { normalizarCodigo, textoMotivo, type MotivoCodigo } from "@/lib/descuentos/rules";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { APARTADO_MINUTOS, huellaCarrito, leerFaltantes, MAX_RENOVACIONES, type Faltante } from "./rules";
 
@@ -11,7 +12,7 @@ import { APARTADO_MINUTOS, huellaCarrito, leerFaltantes, MAX_RENOVACIONES, type 
 // (sha-256) de esa llave, así nadie más puede renovar, soltar ni pagar ese apartado.
 // - Mismo carrito y apartado vigente: se actualizan los datos del cliente y el tiempo sigue corriendo.
 // - Mismo carrito y apartado vencido: se renueva (hasta 3 veces seguidas) si las botellas siguen libres.
-// - Carrito distinto: se suelta el apartado anterior y se aparta de nuevo.
+// - Carrito distinto (o con otro código de descuento): se suelta el apartado anterior y se aparta de nuevo.
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const TOKEN = /^[A-Za-z0-9_-]{32}$/;
@@ -30,20 +31,24 @@ export type Apartado = {
   renovaciones: number;
   maxRenovaciones: number;
   limite: boolean;
+  /** Código aplicado (o null), descuento y total a pagar, ya calculados por el servidor. */
+  codigo: string | null;
+  descuento: number;
+  total: number;
 };
-export type ApartarResultado = { ok: true; apartado: Apartado } | { ok: false; error: string; faltantes?: Faltante[] };
+export type ApartarResultado = { ok: true; apartado: Apartado } | { ok: false; error: string; faltantes?: Faltante[]; codigo?: MotivoCodigo };
 
 export const previoValido = (x: unknown): x is Previo =>
   !!x && typeof x === "object" && UUID.test(String((x as Previo).id)) && TOKEN.test(String((x as Previo).token));
 
-type Fila = { id: string; folio: string; estado: string; reserva_token_hash: string | null; reserva_expira_at: string | null; reserva_renovaciones: number; total_centavos: number; prueba: boolean; cliente_email: string };
+type Fila = { id: string; folio: string; estado: string; reserva_token_hash: string | null; reserva_expira_at: string | null; reserva_renovaciones: number; total_centavos: number; descuento_centavos: number; codigo: string | null; prueba: boolean; cliente_email: string };
 
 /** El pedido del apartado, solo si la llave coincide. */
 export async function leerApartado(previo: Previo): Promise<Fila | null> {
   if (!previoValido(previo)) return null;
   const { data } = await supabaseAdmin()
     .from("pedidos")
-    .select("id, folio, estado, reserva_token_hash, reserva_expira_at, reserva_renovaciones, total_centavos, prueba, cliente_email")
+    .select("id, folio, estado, reserva_token_hash, reserva_expira_at, reserva_renovaciones, total_centavos, descuento_centavos, codigo, prueba, cliente_email")
     .eq("id", previo.id)
     .maybeSingle();
   return data && data.reserva_token_hash === hashToken(previo.token) ? (data as Fila) : null;
@@ -64,14 +69,18 @@ const info = (p: Fila, extra: Partial<Apartado> = {}): Apartado => ({
   renovaciones: p.reserva_renovaciones,
   maxRenovaciones: MAX_RENOVACIONES,
   limite: false,
+  codigo: p.codigo ?? null,
+  descuento: Number(p.descuento_centavos ?? 0),
+  total: Number(p.total_centavos),
   ...extra,
 });
 
-export async function apartar(input: { customer: CheckoutInput; kits: CartInput["kits"]; previo: Previo | null }): Promise<ApartarResultado> {
+export async function apartar(input: { customer: CheckoutInput; kits: CartInput["kits"]; previo: Previo | null; codigo?: string | null }): Promise<ApartarResultado> {
   const db = supabaseAdmin();
+  const codigo = input.codigo ? normalizarCodigo(input.codigo) : null;
   const p = input.previo ? await leerApartado(input.previo) : null;
   if (p && p.estado === "pendiente_pago") {
-    if ((await huellaPedido(p.id)) === huellaCarrito(input.kits)) {
+    if ((await huellaPedido(p.id)) === huellaCarrito(input.kits) && (p.codigo ?? null) === codigo) {
       // Mismo carrito: los datos del cliente pueden haber cambiado (dirección, teléfono).
       await db.from("pedidos").update({ ...datosCliente(input.customer), updated_at: new Date().toISOString() }).eq("id", p.id);
       if (p.reserva_expira_at && Date.parse(p.reserva_expira_at) > Date.now()) return { ok: true, apartado: info(p) };
@@ -79,6 +88,10 @@ export async function apartar(input: { customer: CheckoutInput; kits: CartInput[
       if (!error && Array.isArray(data) && data[0]) return { ok: true, apartado: info(p, { expiraAt: data[0].reserva_expira_at, renovaciones: Number(data[0].renovaciones) }) };
       if (error?.message === "sin_existencias") return { ok: false, error: "Ya no hay suficientes botellas de un vino de tu carrito.", faltantes: leerFaltantes(error.details) };
       if (error?.message === "limite_renovaciones") return { ok: true, apartado: info(p, { expiraAt: null, limite: true }) };
+      if (error?.message === "codigo_invalido") {
+        const motivo = String(error.details ?? "no_existe") as MotivoCodigo;
+        return { ok: false, error: `${textoMotivo(motivo)} Quítalo para continuar.`, codigo: motivo };
+      }
       if (error && error.message !== "apartado_invalido") {
         console.error("checkout: no se pudo renovar el apartado", error.code);
         return { ok: false, error: "No pudimos apartar tus botellas. Intenta de nuevo." };
@@ -88,9 +101,12 @@ export async function apartar(input: { customer: CheckoutInput; kits: CartInput[
     }
   }
   const token = nuevoToken();
-  const r = await crearPedido({ customer: input.customer, kits: input.kits, estado: "pendiente_pago", prueba: false, origen: "tienda", reserva: { minutos: APARTADO_MINUTOS, tokenHash: hashToken(token) } });
+  const r = await crearPedido({ customer: input.customer, kits: input.kits, estado: "pendiente_pago", prueba: false, origen: "tienda", reserva: { minutos: APARTADO_MINUTOS, tokenHash: hashToken(token) }, codigo });
   if (!r.ok) return r;
-  return { ok: true, apartado: { id: r.id, token, folio: r.folio, expiraAt: r.expiraAt, renovaciones: 0, maxRenovaciones: MAX_RENOVACIONES, limite: false } };
+  return {
+    ok: true,
+    apartado: { id: r.id, token, folio: r.folio, expiraAt: r.expiraAt, renovaciones: 0, maxRenovaciones: MAX_RENOVACIONES, limite: false, codigo: r.codigo, descuento: r.descuento, total: r.total },
+  };
 }
 
 /** Botellas por vino que este apartado tiene vigentes (vacío si no es válido o ya venció). */

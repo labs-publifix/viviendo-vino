@@ -35,7 +35,7 @@ export function needsAdminSession(pathname: string): boolean {
 
 export type Rol = "admin" | "aliado" | "atencion";
 
-export type SeccionIcon = "home" | "orders" | "bottle" | "wallet" | "megaphone" | "layers" | "users" | "settings" | "history" | "mail";
+export type SeccionIcon = "home" | "orders" | "bottle" | "wallet" | "megaphone" | "tag" | "layers" | "users" | "settings" | "history" | "mail";
 export type Seccion = { href: string; label: string; icon: SeccionIcon; roles: Rol[] };
 
 /** Secciones del menú, agrupadas, y quién las ve (docs/ADMIN.md). */
@@ -53,6 +53,7 @@ export const GRUPOS: { label: string; secciones: Seccion[] }[] = [
     label: "Sitio",
     secciones: [
       { href: "/admin/anuncios", label: "Marquesina y anuncios", icon: "megaphone", roles: ["admin"] },
+      { href: "/admin/codigos", label: "Códigos de descuento", icon: "tag", roles: ["admin"] },
       { href: "/admin/contenido", label: "Contenido", icon: "layers", roles: ["admin"] },
       { href: "/admin/comunidad", label: "Comunidad", icon: "users", roles: ["admin"] },
     ],

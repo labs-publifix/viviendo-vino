@@ -89,3 +89,15 @@
 .listo h2 { margin: 0; font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; }
 .listo p { margin: 0; color: var(--muted); line-height: 1.5; }
 .folio { color: var(--fg); font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* Código de descuento */
+.codigo { display: flex; flex-direction: column; gap: var(--s-2); padding-top: var(--s-3); border-top: 1px solid var(--line); }
+.codigoFila { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--s-2); align-items: end; }
+.codigoFila > :first-child input { text-transform: uppercase; }
+.codigoAbrir { align-self: flex-start; padding-left: 0; }
+.codigoOk { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; font-size: var(--t-small); color: var(--ok); }
+.codigoOk strong { color: var(--fg); letter-spacing: 0.02em; }
+.codigoOk .linkBtn { min-height: 32px; margin-left: auto; color: var(--fg); }
+.codigoTexto { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.descuento { color: var(--ok); }
+.codigoError { margin: 0; color: var(--error); font-size: 13px; line-height: 1.45; }

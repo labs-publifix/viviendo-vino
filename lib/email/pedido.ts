@@ -15,6 +15,9 @@ export type PedidoCorreo = {
   prueba: boolean;
   cliente: string;
   total: number;
+  /** Descuento por código de campaña (0 si no usó). */
+  descuento: number;
+  codigo: string | null;
   kits: { grupo: string; items: { cantidad: number; nombre: string }[] }[];
   envio: { calle: string; colonia: string; codigoPostal: string; ciudad: string; estado: string; recibe: string };
   paqueteria: string;
@@ -40,7 +43,12 @@ export function renderPedidoConfirmado(p: PedidoCorreo) {
     preheader: `Tu pago quedó confirmado. ${resumenKits(p)}, envío incluido.`,
     eyebrow: "Pedido confirmado",
     heading: nombre ? `Gracias, ${nombre}` : "Gracias por tu pedido",
-    highlight: { label: "Tu pedido", value: p.folio, sub: `Total ${formatMXN(p.total)}`, note: "Envío incluido" },
+    highlight: {
+      label: "Tu pedido",
+      value: p.folio,
+      sub: `Total ${formatMXN(p.total)}`,
+      note: p.descuento > 0 && p.codigo ? `Envío incluido · ahorraste ${formatMXN(p.descuento)} con ${p.codigo}` : "Envío incluido",
+    },
     paragraphs: [
       "Tu pago quedó confirmado y ya estamos preparando tu caja.",
       `La enviamos a ${p.envio.recibe ? `${p.envio.recibe}, ` : ""}${p.envio.calle}, ${p.envio.colonia}, CP ${p.envio.codigoPostal}, ${p.envio.ciudad}, ${p.envio.estado}.`,

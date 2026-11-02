@@ -47,6 +47,7 @@ export const ENTIDAD_LABEL: Record<string, string> = {
   kits_prearmados: "Kits prearmados",
   pedidos: "Pedidos",
   transferencias: "Finanzas",
+  codigos_descuento: "Códigos de descuento",
 };
 
 const CAMPO_LABEL: Record<string, string> = {

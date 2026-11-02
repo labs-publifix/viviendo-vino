@@ -118,11 +118,15 @@ export function precioMinimo(acordadoCentavos: number, margenMinimoBps: number):
   return Math.ceil(exacto / 100) * 100;
 }
 
-/** Reparto de un pedido: lo del aliado (suma de precios acordados), el margen bruto y la comisión estimada de MP. */
-export function repartoBroker(lineas: { precio: number; acordado: number; cantidad: number }[]): { total: number; aliado: number; margen: number; mp: number } {
-  const total = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
+/**
+ * Reparto de un pedido: lo del aliado (suma de precios acordados), el margen bruto y la comisión estimada de MP.
+ * `descuento` (código de campaña) sale del margen: el aliado recibe lo mismo.
+ */
+export function repartoBroker(lineas: { precio: number; acordado: number; cantidad: number }[], descuento = 0): { subtotal: number; descuento: number; total: number; aliado: number; margen: number; mp: number } {
+  const subtotal = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
+  const total = subtotal - descuento;
   const aliado = lineas.reduce((s, l) => s + l.acordado * l.cantidad, 0);
-  return { total, aliado, margen: total - aliado, mp: comisionMPEstimada(total) };
+  return { subtotal, descuento, total, aliado, margen: total - aliado, mp: comisionMPEstimada(total) };
 }
 
 export type VentaFin = { estado: string; total: number; margen: number; aliado: number; mp: number };

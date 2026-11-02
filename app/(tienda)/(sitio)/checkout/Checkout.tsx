@@ -9,14 +9,17 @@ import { Notice } from "@/app/_ui/Notice";
 import { Price } from "@/app/_ui/Price";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { borrarApartado, guardarApartado, leerApartado } from "@/lib/cart/apartado";
+import { borrarCodigo, guardarCodigo, leerCodigo } from "@/lib/cart/codigo";
 import { cart, useCart } from "@/lib/cart/store";
 import { useCartValidation } from "@/lib/cart/useCartValidation";
 import { MIN_AGE, todayInMexico } from "@/lib/checkout/age";
 import { MX_STATES, checkoutSchema, fieldErrors, type CheckoutField, type FieldErrors } from "@/lib/checkout/schema";
 import { APARTADO_MINUTOS, huellaCarrito, textoFaltante, type Faltante } from "@/lib/inventario/rules";
 import { KIT_SIZE } from "@/lib/kit/rules";
+import { formatMXN } from "@/lib/money";
 import { useHydrated } from "@/lib/use-hydrated";
 import { Apartado, type ApartadoVista } from "./Apartado";
+import { CodigoDescuento, type CodigoAplicado } from "./CodigoDescuento";
 import styles from "./checkout.module.css";
 
 // Checkout en dos pasos. 1) Datos de contacto, envío y mayoría de edad. 2) "Continuar al pago": el servidor revisa
@@ -70,6 +73,10 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
   const [vencido, setVencido] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const huella = huellaCarrito(kits);
+  // Código de descuento: el campo solo existe si hay campañas activas; el descuento lo calcula el servidor.
+  const [codigosActivos, setCodigosActivos] = useState(false);
+  const [aplicado, setAplicado] = useState<CodigoAplicado | null>(null);
+  const [codigoError, setCodigoError] = useState<string | null>(null);
 
   const ready = validation.status === "done";
   const cartOk = ready && validation.kits.length === kits.length && validation.kits.every((k) => k.ok) && validation.stockIssues.length === 0;
@@ -104,6 +111,60 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
 
   const onVencio = useCallback(() => setVencido(true), []);
 
+  /** Pide al servidor la vista previa del código con este carrito. true si aplica. */
+  async function probarCodigo(codigo: string): Promise<boolean> {
+    try {
+      const email = formRef.current ? String(new FormData(formRef.current).get("email") ?? "") : "";
+      const guardado = leerApartado();
+      const res = await fetch("/api/checkout/codigo", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ codigo, kits: kits.map((k) => ({ id: k.id, items: k.items })), email: email || undefined, previo: guardado ? { id: guardado.id, token: guardado.token } : undefined }),
+      });
+      const body = await res.json().catch(() => null);
+      if (body?.ok) {
+        setAplicado({ codigo: body.codigo, textoPublico: body.textoPublico, descuento: body.descuento });
+        setCodigoError(null);
+        guardarCodigo(body.codigo);
+        return true;
+      }
+      setAplicado(null);
+      setCodigoError(body?.error ?? "No pudimos revisar el código. Intenta de nuevo.");
+      return false;
+    } catch {
+      setCodigoError("No pudimos revisar el código. Intenta de nuevo.");
+      return false;
+    }
+  }
+
+  function quitarCodigo() {
+    setAplicado(null);
+    setCodigoError(null);
+    borrarCodigo();
+  }
+
+  // ¿Hay campañas? Si llegó con un enlace de campaña (?codigo=) o ya aplicó uno, se revisa con el carrito de hoy
+  // (el descuento cambia con el carrito).
+  const revisado = useRef<string | null>(null);
+  useEffect(() => {
+    if (!hydrated || kits.length === 0 || revisado.current === huella) return;
+    revisado.current = huella;
+    let vivo = true;
+    fetch("/api/checkout/codigo")
+      .then((r) => r.json())
+      .then(async (x) => {
+        if (!vivo) return;
+        setCodigosActivos(x?.activos === true);
+        const pendiente = aplicado?.codigo ?? leerCodigo();
+        if (x?.activos && pendiente && !(await probarCodigo(pendiente))) borrarCodigo();
+      })
+      .catch(() => {});
+    return () => {
+      vivo = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- al abrir el checkout y cuando cambia el carrito
+  }, [hydrated, huella]);
+
   function focusFirst(errs: FieldErrors) {
     const first = ORDER.find((k) => errs[k]);
     if (first) formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
@@ -118,7 +179,7 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
       const res = await fetch("/api/checkout/apartar", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ customer: data, kits: kits.map((k) => ({ id: k.id, items: k.items })), previo: guardado ? { id: guardado.id, token: guardado.token } : undefined }),
+        body: JSON.stringify({ customer: data, kits: kits.map((k) => ({ id: k.id, items: k.items })), previo: guardado ? { id: guardado.id, token: guardado.token } : undefined, codigo: aplicado?.codigo ?? null }),
       });
       const body = await res.json().catch(() => null);
       if (!res.ok || !body) throw new Error(body?.error ?? "No pudimos revisar tus datos. Intenta de nuevo.");
@@ -129,10 +190,19 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
         return;
       }
       if (!body.ok) {
+        // Un código que dejó de aplicar (se agotó, ya lo usó…) se quita: puede seguir sin él.
+        if (body.codigoError) {
+          setAplicado(null);
+          borrarCodigo();
+          setCodigoError(body.cartError);
+          setResult({ kind: "error", text: `${body.cartError} Quitamos el código; puedes continuar sin él.` });
+          return;
+        }
         setResult({ kind: "error", text: body.cartError ?? body.error ?? "Tu carrito necesita un cambio antes de pagar.", faltantes: body.faltantes });
         return;
       }
       const a = body.apartado;
+      if (a.codigo) setAplicado((x) => ({ codigo: a.codigo, textoPublico: x?.textoPublico ?? "", descuento: a.descuento }));
       guardarApartado({ id: a.id, token: a.token ?? guardado?.token ?? "", huella });
       setApartado(vista(a, body.serverNow));
       setVencido(false);
@@ -174,6 +244,7 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
         return;
       }
       borrarApartado();
+      borrarCodigo();
       cart.clear();
       setFolio(body.folio);
       setPaso("listo");
@@ -444,7 +515,17 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
             </ul>
           )}
 
+          {(codigosActivos || aplicado) && ready && (
+            <CodigoDescuento aplicado={aplicado} error={codigoError} editable={paso === "datos"} onAplicar={probarCodigo} onQuitar={quitarCodigo} />
+          )}
+
           <dl className={styles.rows}>
+            {aplicado && (
+              <div>
+                <dt>Descuento ({aplicado.codigo})</dt>
+                <dd className={styles.descuento}>−{formatMXN(aplicado.descuento)}</dd>
+              </div>
+            )}
             <div>
               <dt>Envío</dt>
               <dd className={styles.included}>Incluido</dd>
@@ -452,7 +533,7 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
           </dl>
           <div className={styles.total}>
             <span>Total</span>
-            {ready ? <Price cents={validation.totalCents} size="lg" /> : <span className={styles.muted}>—</span>}
+            {ready ? <Price cents={validation.totalCents - (aplicado?.descuento ?? 0)} size="lg" /> : <span className={styles.muted}>—</span>}
           </div>
 
           {ready && validation.stockIssues.length > 0 && (

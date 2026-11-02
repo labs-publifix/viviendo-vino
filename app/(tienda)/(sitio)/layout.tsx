@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { AgeGate, AGE_GATE_SCRIPT } from "@/app/_ui/AgeGate";
 import { AnnouncementBar } from "@/app/_ui/AnnouncementBar";
+import { CodigoCampana } from "@/app/_ui/CodigoCampana";
 import { Footer } from "@/app/_ui/Footer";
 import { Header } from "@/app/_ui/Header";
 import { getAnunciosTienda } from "@/lib/anuncios-repo";
@@ -17,6 +18,7 @@ export default function SitioLayout({ children }: { children: ReactNode }) {
       {/* Antes del aviso: si ya confirmó su edad, el aviso no llega a pintarse. */}
       <script dangerouslySetInnerHTML={{ __html: AGE_GATE_SCRIPT }} />
       <AgeGate />
+      <CodigoCampana />
       <a href="#contenido" className="vv-skip">
         Saltar al contenido
       </a>

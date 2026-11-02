@@ -116,6 +116,12 @@ export default async function Page({
                     <dt>Subtotal</dt>
                     <dd>{formatMXNExacto(imp.subtotal ?? 0)}</dd>
                   </div>
+                  {imp.descuento > 0 && (
+                    <div>
+                      <dt>Descuento{imp.codigo ? ` (${imp.codigo})` : ""}</dt>
+                      <dd>−{formatMXNExacto(imp.descuento)}</dd>
+                    </div>
+                  )}
                   <div>
                     <dt>Envío</dt>
                     <dd>{imp.envio ? formatMXNExacto(imp.envio) : "Incluido"}</dd>

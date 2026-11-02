@@ -14,7 +14,7 @@ async function leer(id: string): Promise<(PedidoCorreo & { aliadoId: string; ema
   const db = supabaseAdmin();
   const { data: p } = await db
     .from("pedidos")
-    .select("id, folio, prueba, aliado_id, cliente_nombre, cliente_email, total_centavos, calle, colonia, codigo_postal, ciudad, estado_mx, recibe, paqueteria, guia")
+    .select("id, folio, prueba, aliado_id, cliente_nombre, cliente_email, total_centavos, descuento_centavos, codigo, calle, colonia, codigo_postal, ciudad, estado_mx, recibe, paqueteria, guia")
     .eq("id", id)
     .maybeSingle();
   if (!p) return null;
@@ -32,6 +32,8 @@ async function leer(id: string): Promise<(PedidoCorreo & { aliadoId: string; ema
     email: p.cliente_email,
     cliente: p.cliente_nombre,
     total: p.total_centavos,
+    descuento: Number(p.descuento_centavos ?? 0),
+    codigo: (p.codigo as string | null) ?? null,
     kits: kits.map((k) => ({ grupo: k.grupo, items: items.filter((i) => i.kit_id === k.id).map((i) => ({ cantidad: i.cantidad, nombre: i.nombre })) })),
     envio: { calle: p.calle, colonia: p.colonia, codigoPostal: p.codigo_postal, ciudad: p.ciudad, estado: p.estado_mx, recibe: p.recibe ?? "" },
     paqueteria: p.paqueteria ?? "",

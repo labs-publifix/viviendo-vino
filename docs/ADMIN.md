@@ -71,6 +71,23 @@ producción (www) se hace después y solo con aprobación expresa.
 - **Pago:** al lanzar, solo tarjeta de crédito o débito, con el formulario de Mercado Pago dentro del sitio (Brick).
   Mientras no se conecta, en dev hay un "Simular pago aprobado (prueba)" que hace lo mismo que el pago real.
 
+## Códigos de descuento (decidido el 2 de noviembre de 2026)
+
+- **Solo admin** (Sitio → Códigos de descuento). Tipo y valor libres: porcentaje (con tope opcional en pesos) o monto
+  fijo por pedido. Reglas: vigencia (hora de CDMX), usos totales, usos por cliente (por correo; 1 por defecto),
+  compra mínima en kits y solo primera compra. Pausar o reactivar al momento. Un código ya usado no cambia tipo,
+  valor ni tope (se duplica).
+- **Sale del margen de Viviendo Vino:** el aliado recibe lo mismo. Piso: el total nunca baja de "acordado + comisión
+  de Mercado Pago"; si el código pide más, se recorta (en pesos cerrados). Se aplica encima del precio tachado.
+  El panel muestra el efecto en el margen con los kits prearmados.
+- **Un código por pedido.** El servidor calcula todo; el navegador solo manda el texto. Límite de intentos y mensajes
+  que no revelan si un código existe. Los usos se cuentan como el inventario (apartados mientras dura el pago,
+  definitivos al pagar) y la base revisa todo con el código bloqueado (`crear_pedido`, `_codigo_motivo`).
+- **Checkout:** el campo "¿Tienes un código de descuento?" solo aparece si hay al menos un código activo. Enlaces de
+  campaña: `viviendovino.com/?codigo=VERANO10` (o cualquier página de la tienda) lo deja listo en el checkout.
+- **Dónde se ve:** resumen del checkout, correo "Recibimos tu pedido" ("ahorraste $X con CÓDIGO"), detalle del pedido
+  (admin y atención), Finanzas (columna Descuento) y resultados por código (usos, descontado, ventas, margen neto).
+
 ## Pedidos y Finanzas (27 de octubre de 2026)
 
 - **Estados:** Pago pendiente → Por preparar (pagado) → Preparando → En camino (con paquetería y guía) → Entregado.
@@ -209,6 +226,7 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
   avisos de pocas/agotado, apartado de 30 minutos con cuenta regresiva y renovación, descuento al pagar y devolución
   al cancelar, armador y carrito limitados a las existencias. 10 botellas por etiqueta de inicio: confirmar los
   números reales con el aliado antes del 19 de noviembre.
+- [x] Códigos de descuento (`20261106000000_descuentos.sql`): ver arriba.
 - [ ] Mercado Pago con Card Payment Brick (solo tarjeta): en el paso de pago del checkout, cobrar y llamar
   `pagarApartado` (lib/inventario/apartado.ts) con proveedor "mercadopago" y la comisión real; quitar el pago de prueba
   en producción (ya está bloqueado ahí).

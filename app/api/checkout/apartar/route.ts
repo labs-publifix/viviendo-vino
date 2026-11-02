@@ -10,7 +10,7 @@ import { isRateLimited } from "@/lib/rate-limit";
 // pedido "Pago pendiente"). Con `previo` (id y llave del apartado anterior) lo conserva, lo renueva o lo suelta.
 // Solo existe con la tienda abierta o en el preview (proxy.ts). No registra datos personales en los logs.
 
-const bodySchema = z.object({ customer: z.unknown(), kits: cartSchema.shape.kits, previo: z.unknown().optional() });
+const bodySchema = z.object({ customer: z.unknown(), kits: cartSchema.shape.kits, previo: z.unknown().optional(), codigo: z.string().max(40).nullish() });
 
 export async function POST(request: Request) {
   if (isRateLimited(`apartar:${ipDe(request)}`)) {
@@ -26,8 +26,8 @@ export async function POST(request: Request) {
     if (!customer.success) return Response.json({ ok: false, fieldErrors: fieldErrors(customer.error), cart }, { headers: NO_STORE });
     if (!cart.ok || cart.kits.length === 0) return Response.json({ ok: false, cart, cartError: "Tu carrito necesita un cambio antes de pagar." }, { headers: NO_STORE });
 
-    const r = await apartar({ customer: customer.data, kits: parsed.data.kits, previo: previoValido(parsed.data.previo) ? parsed.data.previo : null });
-    if (!r.ok) return Response.json({ ok: false, cart, cartError: r.error, faltantes: r.faltantes ?? [] }, { headers: NO_STORE });
+    const r = await apartar({ customer: customer.data, kits: parsed.data.kits, previo: previoValido(parsed.data.previo) ? parsed.data.previo : null, codigo: parsed.data.codigo || null });
+    if (!r.ok) return Response.json({ ok: false, cart, cartError: r.error, faltantes: r.faltantes ?? [], codigoError: r.codigo ?? null }, { headers: NO_STORE });
     // Lo apartado deja de estar disponible para los demás: la tienda se actualiza en la siguiente visita.
     revalidateTag("catalogo", "max");
     return Response.json({ ok: true, cart, apartado: r.apartado, serverNow: new Date().toISOString() }, { headers: NO_STORE });

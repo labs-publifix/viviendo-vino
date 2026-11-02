@@ -1,6 +1,7 @@
 import "server-only";
 import { checkoutSchema, type CheckoutInput } from "@/lib/checkout/schema";
 import { type CartInput } from "@/lib/cart/validate";
+import { aplicarDescuento, normalizarCodigo, textoMotivo, type MotivoCodigo } from "@/lib/descuentos/rules";
 import { leerFaltantes, type Faltante } from "@/lib/inventario/rules";
 import { validateKit, type KitWine } from "@/lib/kit/rules";
 import type { TipoCorreo } from "@/lib/email/tipos";
@@ -37,12 +38,14 @@ export type CrearPedido = {
   por?: Pick<AdminUser, "id" | "nombre"> | null;
   /** Pedido de la tienda: aparta las botellas estos minutos; tokenHash es la llave del navegador que lo pidió. */
   reserva?: { minutos: number; tokenHash: string } | null;
+  /** Código de descuento que escribió el cliente (la base revisa vigencia y usos al crear el pedido). */
+  codigo?: string | null;
 };
 /** cambios: existencias antes y después de cada vino (solo si el pedido nació pagado), para los avisos de umbral. */
 export type CambioInventario = { productoId: string; antes: number; despues: number };
 export type CrearResultado =
-  | { ok: true; id: string; folio: string; expiraAt: string | null; cambios: CambioInventario[] }
-  | { ok: false; error: string; faltantes?: Faltante[] };
+  | { ok: true; id: string; folio: string; expiraAt: string | null; cambios: CambioInventario[]; descuento: number; total: number; codigo: string | null }
+  | { ok: false; error: string; faltantes?: Faltante[]; codigo?: MotivoCodigo };
 
 /** [{producto_id, antes, despues}] de la base → CambioInventario[]. */
 export function leerCambios(x: unknown): CambioInventario[] {
@@ -116,10 +119,26 @@ export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
   // Modelo broker: sin precio acordado no se puede saber cuánto le toca al aliado, así que no se vende.
   const lineas = kits.flatMap((k) => k.items);
   if (lineas.some((l) => l.precio_aliado_centavos === null)) return { ok: false, error: "Un vino del pedido no tiene precio acordado con el aliado." };
-  const r = repartoBroker(lineas.map((l) => ({ precio: l.precio_centavos, acordado: l.precio_aliado_centavos!, cantidad: l.cantidad })));
+  const lineasBroker = lineas.map((l) => ({ precio: l.precio_centavos, acordado: l.precio_aliado_centavos!, cantidad: l.cantidad }));
+  const base = repartoBroker(lineasBroker);
+
+  // Código de descuento: sale del margen de Viviendo Vino y nunca baja de "acordado + comisión de MP".
+  let codigo: { id: string; codigo: string } | null = null;
+  let descuento = 0;
+  if (input.codigo) {
+    const texto = normalizarCodigo(input.codigo);
+    const { data: c, error: ce } = await db.from("codigos_descuento").select("id, codigo, tipo, valor, tope_centavos, min_kits").eq("codigo", texto).maybeSingle();
+    fallo(ce, "el código de descuento");
+    if (!c) return { ok: false, error: textoMotivo("no_existe"), codigo: "no_existe" };
+    if (c.min_kits && input.kits.length < c.min_kits) return { ok: false, error: textoMotivo("min_kits", { minKits: c.min_kits }), codigo: "min_kits" };
+    descuento = aplicarDescuento({ tipo: c.tipo, valor: c.valor, topeCentavos: c.tope_centavos }, base.subtotal, base.aliado).descuento;
+    if (descuento <= 0) return { ok: false, error: textoMotivo("sin_margen"), codigo: "sin_margen" };
+    codigo = { id: c.id, codigo: c.codigo };
+  }
+  const r = repartoBroker(lineasBroker, descuento);
   const envio = 0; // Envío incluido en el precio (lo cubre el aliado dentro del precio acordado).
-  const subtotal = r.total;
-  const total = subtotal + envio;
+  const subtotal = r.subtotal;
+  const total = r.total + envio;
 
   const pedido = {
     aliado_id: aliadoId,
@@ -136,12 +155,19 @@ export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
     comision_centavos: r.margen,
     aliado_centavos: r.aliado,
     comision_mp_centavos: r.mp,
+    codigo_id: codigo?.id ?? null,
+    codigo: codigo?.codigo ?? null,
+    descuento_centavos: descuento,
     reserva_minutos: input.reserva?.minutos ?? null,
     reserva_token_hash: input.reserva?.tokenHash ?? null,
   };
   const evento = { detalle: input.prueba ? "Pedido de prueba creado desde el panel" : "Pedido creado en la tienda", usuario_id: input.por?.id ?? "", usuario_nombre: input.por?.nombre ?? null };
   const { data, error } = await db.rpc("crear_pedido", { p_pedido: pedido, p_kits: kits, p_evento: evento });
   const row = Array.isArray(data) ? data[0] : null;
+  if (error?.message === "codigo_invalido") {
+    const motivo = String(error.details ?? "no_existe") as MotivoCodigo;
+    return { ok: false, error: textoMotivo(motivo), codigo: motivo };
+  }
   if (error?.message === "sin_existencias") {
     const faltantes = leerFaltantes(error.details);
     return { ok: false, error: "Ya no hay suficientes botellas de un vino de tu carrito.", faltantes };
@@ -150,7 +176,7 @@ export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
     console.error("admin/pedidos: no se pudo crear el pedido", error?.code);
     return { ok: false, error: "No se pudo crear el pedido. Intenta otra vez." };
   }
-  return { ok: true, id: row.pedido_id, folio: row.pedido_folio, expiraAt: row.reserva_expira_at ?? null, cambios: leerCambios(row.cambios) };
+  return { ok: true, id: row.pedido_id, folio: row.pedido_folio, expiraAt: row.reserva_expira_at ?? null, cambios: leerCambios(row.cambios), descuento, total, codigo: codigo?.codigo ?? null };
 }
 
 // ---------- Leer ----------
@@ -278,6 +304,9 @@ export async function getPedido(user: AdminUser, id: string) {
       /** "broker": margen sobre precios acordados; "comision": pedidos anteriores con la comisión de 10 %. */
       modelo: (broker ? "broker" : "comision") as "broker" | "comision",
       subtotal: cobrado ? (p.subtotal_centavos as number) : null,
+      /** Descuento por código (sale del margen de Viviendo Vino): admin y atención, como el total. */
+      descuento: cobrado ? Number(p.descuento_centavos ?? 0) : 0,
+      codigo: cobrado ? ((p.codigo as string | null) ?? null) : null,
       envio: p.envio_centavos as number,
       total: cobrado ? (p.total_centavos as number) : null,
       comisionBps: margen && !broker ? ((p.comision_bps as number | null) ?? null) : null,
@@ -316,7 +345,7 @@ export async function getFinanzas(user: AdminUser, aliadoPedido: string | null) 
   const [pedidosR, transR] = await Promise.all([
     db
       .from("pedidos")
-      .select("id, folio, created_at, estado, prueba, kits, total_centavos, comision_centavos, comision_mp_centavos, aliado_centavos, entregado_at")
+      .select("id, folio, created_at, estado, prueba, kits, total_centavos, descuento_centavos, comision_centavos, comision_mp_centavos, aliado_centavos, entregado_at")
       .eq("aliado_id", aliado.id)
       .order("created_at", { ascending: false })
       .limit(MAX_LISTA),
@@ -333,6 +362,7 @@ export async function getFinanzas(user: AdminUser, aliadoPedido: string | null) 
       prueba: p.prueba as boolean,
       kits: p.kits as number,
       total: p.total_centavos as number,
+      descuento: Number(p.descuento_centavos ?? 0),
       margen: p.comision_centavos as number,
       // Pedidos anteriores al modelo broker no guardaron la estimación: se calcula igual.
       mp: (p.comision_mp_centavos as number | null) ?? comisionMPEstimada(p.total_centavos as number),
@@ -352,7 +382,7 @@ export async function getFinanzas(user: AdminUser, aliadoPedido: string | null) 
     aliado: { id: aliado.id as string, nombre: aliado.nombre as string },
     resumen: resumenFinanzas(ventas, transferencias.map((t) => ({ monto: t.monto }))),
     // El aliado no recibe el precio público ni el margen: solo lo suyo.
-    ventas: esAliado ? ventas.map((v) => ({ ...v, total: 0, margen: 0, mp: 0 })) : ventas,
+    ventas: esAliado ? ventas.map((v) => ({ ...v, total: 0, descuento: 0, margen: 0, mp: 0 })) : ventas,
     transferencias,
   };
 }
