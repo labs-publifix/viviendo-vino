@@ -145,6 +145,10 @@ export const cart = {
     save({ ...s, kits: [...s.kits, { ...kit, id: newId() }] });
     return true;
   },
+  /** Vacía el carrito (después de un pago aprobado). */
+  clear() {
+    save(EMPTY);
+  },
   /** Carga un kit del carrito en el armador para editarlo. */
   editKit(id: string): boolean {
     const s = getSnapshot();

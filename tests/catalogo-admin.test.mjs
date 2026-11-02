@@ -2,19 +2,14 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
-  bpsATexto, camposEditables, centavosATexto, clabeValida, comisionABps, pesos, precioACentavos, puedeCambiarDisponible,
+  bpsATexto, camposEditables, centavosATexto, clabeValida, comisionABps, pesos, precioACentavos,
   slugify, validarAliado, validarKit, validarVino,
 } from "../lib/admin/catalogo-rules.ts";
 
 test("permisos: solo admin toca precios; el aliado solo disponible/agotado de sus vinos", () => {
   assert.equal(camposEditables("admin"), "todo");
-  assert.equal(camposEditables("aliado"), "disponible");
+  assert.equal(camposEditables("aliado"), "inventario");
   assert.equal(camposEditables("atencion"), "nada");
-  assert.equal(puedeCambiarDisponible({ rol: "aliado", aliadoId: "a1" }, { aliadoId: "a1" }), true);
-  assert.equal(puedeCambiarDisponible({ rol: "aliado", aliadoId: "a1" }, { aliadoId: "a2" }), false);
-  assert.equal(puedeCambiarDisponible({ rol: "aliado", aliadoId: null }, { aliadoId: "a1" }), false);
-  assert.equal(puedeCambiarDisponible({ rol: "atencion", aliadoId: null }, { aliadoId: "a1" }), false);
-  assert.equal(puedeCambiarDisponible({ rol: "admin", aliadoId: null }, { aliadoId: "a1" }), true);
 });
 
 test("dinero: precios y comisión", () => {

@@ -1,6 +1,7 @@
 import "server-only";
 import { checkoutSchema, type CheckoutInput } from "@/lib/checkout/schema";
 import { type CartInput } from "@/lib/cart/validate";
+import { leerFaltantes, type Faltante } from "@/lib/inventario/rules";
 import { validateKit, type KitWine } from "@/lib/kit/rules";
 import type { TipoCorreo } from "@/lib/email/tipos";
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -34,8 +35,37 @@ export type CrearPedido = {
   prueba: boolean;
   origen?: string | null;
   por?: Pick<AdminUser, "id" | "nombre"> | null;
+  /** Pedido de la tienda: aparta las botellas estos minutos; tokenHash es la llave del navegador que lo pidió. */
+  reserva?: { minutos: number; tokenHash: string } | null;
 };
-export type CrearResultado = { ok: true; id: string; folio: string } | { ok: false; error: string };
+/** cambios: existencias antes y después de cada vino (solo si el pedido nació pagado), para los avisos de umbral. */
+export type CambioInventario = { productoId: string; antes: number; despues: number };
+export type CrearResultado =
+  | { ok: true; id: string; folio: string; expiraAt: string | null; cambios: CambioInventario[] }
+  | { ok: false; error: string; faltantes?: Faltante[] };
+
+/** [{producto_id, antes, despues}] de la base → CambioInventario[]. */
+export function leerCambios(x: unknown): CambioInventario[] {
+  return Array.isArray(x) ? x.map((c) => ({ productoId: String(c.producto_id), antes: Number(c.antes), despues: Number(c.despues) })) : [];
+}
+
+/** Columnas del cliente y su envío a partir de los datos ya validados del checkout. */
+export function datosCliente(c: CheckoutInput) {
+  return {
+    cliente_nombre: c.name,
+    cliente_email: c.email,
+    cliente_telefono: c.phone,
+    calle: c.street,
+    colonia: c.neighborhood,
+    codigo_postal: c.postalCode,
+    ciudad: c.city,
+    estado_mx: c.state,
+    referencias: c.references,
+    recibe: c.receiver,
+    factura: c.invoice,
+    promos: c.promos,
+  };
+}
 
 export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
   const cliente = checkoutSchema.safeParse(input.customer);
@@ -54,7 +84,8 @@ export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
   const grupoNombre = new Map(grupos.map((g) => [g.id as string, nombreGrupo(g.codigo, g.nombre)]));
   const porSlug = new Map(productos.map((p) => [p.slug as string, p]));
   const wines = new Map<string, KitWine>(
-    productos.map((p) => [p.slug, { slug: p.slug, name: p.nombre_oficial, group: p.grupo_id, priceCents: p.precio_centavos, available: p.disponible && p.activo }]),
+    // Las existencias las revisa la base al crear el pedido (con los vinos bloqueados); aquí solo lo activo.
+    productos.map((p) => [p.slug, { slug: p.slug, name: p.nombre_oficial, group: p.grupo_id, priceCents: p.precio_centavos, available: p.activo }]),
   );
 
   const kits = [];
@@ -94,18 +125,7 @@ export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
     aliado_id: aliadoId,
     estado: input.estado,
     prueba: input.prueba,
-    cliente_nombre: c.name,
-    cliente_email: c.email,
-    cliente_telefono: c.phone,
-    calle: c.street,
-    colonia: c.neighborhood,
-    codigo_postal: c.postalCode,
-    ciudad: c.city,
-    estado_mx: c.state,
-    referencias: c.references,
-    recibe: c.receiver,
-    factura: c.invoice,
-    promos: c.promos,
+    ...datosCliente(c),
     origen: input.origen ?? null,
     subtotal_centavos: subtotal,
     envio_centavos: envio,
@@ -116,15 +136,21 @@ export async function crearPedido(input: CrearPedido): Promise<CrearResultado> {
     comision_centavos: r.margen,
     aliado_centavos: r.aliado,
     comision_mp_centavos: r.mp,
+    reserva_minutos: input.reserva?.minutos ?? null,
+    reserva_token_hash: input.reserva?.tokenHash ?? null,
   };
   const evento = { detalle: input.prueba ? "Pedido de prueba creado desde el panel" : "Pedido creado en la tienda", usuario_id: input.por?.id ?? "", usuario_nombre: input.por?.nombre ?? null };
   const { data, error } = await db.rpc("crear_pedido", { p_pedido: pedido, p_kits: kits, p_evento: evento });
   const row = Array.isArray(data) ? data[0] : null;
+  if (error?.message === "sin_existencias") {
+    const faltantes = leerFaltantes(error.details);
+    return { ok: false, error: "Ya no hay suficientes botellas de un vino de tu carrito.", faltantes };
+  }
   if (error || !row) {
     console.error("admin/pedidos: no se pudo crear el pedido", error?.code);
     return { ok: false, error: "No se pudo crear el pedido. Intenta otra vez." };
   }
-  return { ok: true, id: row.pedido_id, folio: row.pedido_folio };
+  return { ok: true, id: row.pedido_id, folio: row.pedido_folio, expiraAt: row.reserva_expira_at ?? null, cambios: leerCambios(row.cambios) };
 }
 
 // ---------- Leer ----------

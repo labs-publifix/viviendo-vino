@@ -2,15 +2,15 @@
 
 import { refresh, updateTag } from "next/cache";
 import { audit } from "@/lib/admin/audit";
-import { puedeCambiarDisponible, slugify, validarKit, validarVino, type KitLinea, type VinoInput } from "@/lib/admin/catalogo-rules";
+import { slugify, validarKit, validarVino, type KitLinea, type VinoInput } from "@/lib/admin/catalogo-rules";
 import { MARGEN_MINIMO_BPS } from "@/lib/admin/pedidos-rules";
 import { PAGINAS_CATALOGO, refrescarTienda } from "@/lib/admin/refrescar-tienda";
 import { requireAdmin } from "@/lib/admin/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 // Catálogo. Regla de oro (docs/ADMIN.md): todo lo que toca precios, textos, fotos o kits solo lo hace un
-// administrador (requireAdmin(["admin"]) en cada acción). El rol Aliado solo cambia sus vinos entre disponible
-// y agotado (cambiarDisponible revisa que el vino sea suyo). Cada cambio refresca la tienda y queda auditado.
+// administrador (requireAdmin(["admin"]) en cada acción). El rol Aliado solo lleva el inventario de sus vinos
+// (inventario-actions.ts). Cada cambio refresca la tienda y queda auditado.
 
 export type VinoState = { ok?: boolean; message?: string; error?: string; errors?: Record<string, string>; id?: string; margenBajo?: boolean };
 export type KitState = { ok?: boolean; message?: string; error?: string; errors?: Record<string, string> };
@@ -56,23 +56,6 @@ async function subirFoto(file: File, slug: string): Promise<string | { error: st
     return { error: "No se pudo subir la foto. Intenta otra vez." };
   }
   return storage.getPublicUrl(path).data.publicUrl;
-}
-
-// ---------- Disponible / agotado (admin y aliado, solo lo suyo) ----------
-
-export async function cambiarDisponible(id: string, disponible: boolean): Promise<{ ok?: boolean; error?: string }> {
-  const user = await requireAdmin(["admin", "aliado"]);
-  if (!UUID.test(id)) return { error: SAVE_ERROR };
-  const db = supabaseAdmin();
-  const { data: vino } = await db.from("productos").select("id, aliado_id, slug, nombre_oficial, disponible").eq("id", id).maybeSingle();
-  if (!vino || !puedeCambiarDisponible(user, { aliadoId: vino.aliado_id })) return { error: "No puedes cambiar ese vino." };
-  if (vino.disponible === disponible) return { ok: true };
-  // Solo esta columna: así, aunque llegue algo más en la petición, nada más cambia.
-  const { error } = await db.from("productos").update({ disponible }).eq("id", id);
-  if (error) return { error: SAVE_ERROR };
-  await audit(user, disponible ? "disponible" : "agotado", "productos", id, { nombre_oficial: vino.nombre_oficial, disponible: vino.disponible }, { nombre_oficial: vino.nombre_oficial, disponible });
-  done([`/vinos/${vino.slug}`]);
-  return { ok: true };
 }
 
 // ---------- Vino (solo admin) ----------
@@ -135,7 +118,7 @@ export async function guardarVino(_prev: VinoState, form: FormData): Promise<Vin
     const orden = ((max?.[0]?.orden as number | undefined) ?? 0) + 1;
     const { data, error } = await db
       .from("productos")
-      .insert({ ...fila, aliado_id: aliadoId, slug, orden, disponible: true, modo_venta: "kit" })
+      .insert({ ...fila, aliado_id: aliadoId, slug, orden, modo_venta: "kit" })
       .select("id")
       .single();
     if (error) {

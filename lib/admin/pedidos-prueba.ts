@@ -18,7 +18,7 @@ const LUGARES: { calle: string; colonia: string; cp: string; ciudad: string; est
 
 const azar = <T,>(xs: readonly T[]) => xs[Math.floor(Math.random() * xs.length)];
 /** Bandejas que reciben los correos de los pedidos de prueba (José y Rafael). */
-const CORREOS_PRUEBA = ["labs.publifix@gmail.com", "raguirre@continentalmedia.com.mx"];
+export const CORREOS_PRUEBA = ["labs.publifix@gmail.com", "raguirre@continentalmedia.com.mx"];
 
 export function clientePrueba(): CheckoutInput {
   const nombre = azar(NOMBRES);
@@ -42,21 +42,28 @@ export function clientePrueba(): CheckoutInput {
   };
 }
 
-/** Uno o dos kits de 6 botellas disponibles de un mismo grupo del mismo aliado. null si no hay con qué armar. */
+/**
+ * Uno o dos kits de 6 botellas de un mismo grupo del mismo aliado, sin pasar de las existencias de cada vino.
+ * null si ningún grupo tiene 6 botellas para armar.
+ */
 export async function kitsPrueba(): Promise<CartInput["kits"] | null> {
-  const { data, error } = await supabaseAdmin().from("productos").select("slug, grupo_id, aliado_id").eq("activo", true).eq("disponible", true);
+  const { data, error } = await supabaseAdmin().from("productos").select("slug, grupo_id, existencias").eq("activo", true).gt("existencias", 0);
   if (error || !data?.length) return null;
+  const quedan = new Map(data.map((p) => [p.slug as string, Number(p.existencias)]));
   const grupos = new Map<string, string[]>();
   for (const p of data) grupos.set(p.grupo_id, [...(grupos.get(p.grupo_id) ?? []), p.slug]);
-  const grupoKeys = [...grupos.keys()];
+  const conKit = [...grupos.keys()].filter((g) => grupos.get(g)!.reduce((n, s) => n + quedan.get(s)!, 0) >= KIT_SIZE);
+  if (!conKit.length) return null;
+  const grupo = azar(conKit);
   const kits: CartInput["kits"] = [];
   const cuantos = Math.random() < 0.3 ? 2 : 1;
-  const grupo = azar(grupoKeys);
   for (let k = 0; k < cuantos; k++) {
-    const vinos = grupos.get(grupo)!;
+    const vinos = grupos.get(grupo)!.filter((s) => quedan.get(s)! > 0);
+    if (vinos.reduce((n, s) => n + quedan.get(s)!, 0) < KIT_SIZE) break;
     const cuenta = new Map<string, number>();
     for (let i = 0; i < KIT_SIZE; i++) {
-      const s = azar(vinos);
+      const s = azar(vinos.filter((v) => quedan.get(v)! > 0));
+      quedan.set(s, quedan.get(s)! - 1);
       cuenta.set(s, (cuenta.get(s) ?? 0) + 1);
     }
     kits.push({ items: [...cuenta.entries()].map(([slug, quantity]) => ({ slug, quantity })) });

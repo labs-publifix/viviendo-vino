@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useDeferredValue, useMemo, useState, useTransition } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import { BottlePlaceholder } from "@/app/_ui/BottlePlaceholder";
 import { ButtonLink } from "@/app/_ui/Button";
 import { Icon } from "@/app/_ui/Icon";
-import { Notice } from "@/app/_ui/Notice";
 import { pesos } from "@/lib/admin/catalogo-rules";
-import { cambiarDisponible } from "../actions";
+import { estadoInventario } from "@/lib/inventario/rules";
 import styles from "../catalogo.module.css";
+import { Existencias } from "./Existencias";
 import { Select } from "../../_ui/Select";
 
 type Vino = {
@@ -25,21 +25,33 @@ type Vino = {
   precioAntesCentavos: number | null;
   precioAliadoCentavos: number | null;
   imagen: string | null;
-  disponible: boolean;
+  existencias: number;
+  apartadas: number;
   activo: boolean;
   tipo: string;
 };
-type Filtro = "" | "disponibles" | "agotados" | "ocultos";
+type Filtro = "" | "con" | "pocas" | "agotados" | "ocultos";
 
-export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[]; grupos: { id: string; nombre: string }[]; aliados: { id: string; nombre: string }[]; editable: boolean }) {
+/**
+ * Lista de vinos. `editable`: admin (precios, textos, fotos). `inventario`: puede mover existencias (admin y el
+ * aliado con sus vinos); atención solo las consulta.
+ */
+export function VinosList({ vinos, grupos, aliados, editable, inventario, filtroInicial = "" }: { vinos: Vino[]; grupos: { id: string; nombre: string }[]; aliados: { id: string; nombre: string }[]; editable: boolean; inventario: boolean; filtroInicial?: string }) {
   const [query, setQuery] = useState("");
-  const [filtro, setFiltro] = useState<Filtro>("");
+  const [filtro, setFiltro] = useState<Filtro>((["con", "pocas", "agotados", "ocultos"] as string[]).includes(filtroInicial) ? (filtroInicial as Filtro) : "");
   const [grupo, setGrupo] = useState("");
   const [aliado, setAliado] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [pending, start] = useTransition();
-  const [busy, setBusy] = useState<string | null>(null);
+  // Existencias que cambiaron en esta pantalla (para que los filtros y cuentas sigan al momento).
+  const [vivas, setVivas] = useState<Record<string, number>>({});
   const q = useDeferredValue(query.trim().toLowerCase());
+  const stock = (v: Vino) => vivas[v.id] ?? v.existencias;
+  const cumple = (v: Vino, f: Filtro) => {
+    if (f === "ocultos") return !v.activo;
+    if (f === "") return true;
+    if (!v.activo) return false;
+    const e = estadoInventario(stock(v));
+    return f === "con" ? e !== "agotado" : f === "pocas" ? e === "pocas" : e === "agotado";
+  };
 
   const shown = useMemo(
     () =>
@@ -48,21 +60,12 @@ export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[];
           (!q || `${v.nombre} ${v.productor}`.toLowerCase().includes(q)) &&
           (!grupo || v.grupoId === grupo) &&
           (!aliado || v.aliadoId === aliado) &&
-          (filtro === "" || (filtro === "disponibles" && v.activo && v.disponible) || (filtro === "agotados" && v.activo && !v.disponible) || (filtro === "ocultos" && !v.activo)),
+          cumple(v, filtro),
       ),
-    [vinos, q, grupo, aliado, filtro],
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- cumple depende de vivas
+    [vinos, q, grupo, aliado, filtro, vivas],
   );
-  const cuenta = (f: Filtro) => vinos.filter((v) => (f === "disponibles" ? v.activo && v.disponible : f === "agotados" ? v.activo && !v.disponible : !v.activo)).length;
-
-  const toggle = (v: Vino) => {
-    setError(null);
-    setBusy(v.id);
-    start(async () => {
-      const r = await cambiarDisponible(v.id, !v.disponible);
-      if (r.error) setError(r.error);
-      setBusy(null);
-    });
-  };
+  const cuenta = (f: Filtro) => vinos.filter((v) => cumple(v, f)).length;
 
   return (
     <div className={styles.wrap}>
@@ -90,7 +93,8 @@ export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[];
         {(
           [
             ["", "Todos", vinos.length],
-            ["disponibles", "Disponibles", cuenta("disponibles")],
+            ["con", "Con existencias", cuenta("con")],
+            ["pocas", "Pocas (3 o menos)", cuenta("pocas")],
             ["agotados", "Agotados", cuenta("agotados")],
             ...(editable ? [["ocultos", "Ocultos", cuenta("ocultos")]] : []),
           ] as [Filtro, string, number][]
@@ -100,10 +104,12 @@ export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[];
           </button>
         ))}
       </div>
-      {error && <Notice kind="error">{error}</Notice>}
       {!editable && (
         <p className={styles.lock}>
-          <Icon name="info" size={16} /> Los precios, textos y fotos los cambia Viviendo Vino. Si algo no está bien, escríbenos.
+          <Icon name="info" size={16} />
+          {inventario
+            ? " Lleva aquí las botellas que tienes de cada vino: con − y + se guarda solo. Los precios, textos y fotos los cambia Viviendo Vino."
+            : " Consulta cuántas botellas hay de cada vino. Las cambian el administrador y el aliado."}
         </p>
       )}
 
@@ -115,7 +121,7 @@ export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[];
       ) : (
         <ul className={styles.list}>
           {shown.map((v) => (
-            <li key={v.id} className={`${styles.row} ${v.activo ? "" : styles.rowMuted}`} aria-busy={(pending && busy === v.id) || undefined}>
+            <li key={v.id} className={`${styles.row} ${v.activo ? "" : styles.rowMuted}`}>
               <span className={styles.thumb} aria-hidden="true">
                 {v.imagen ? (
                   // eslint-disable-next-line @next/next/no-img-element -- miniatura del catálogo
@@ -125,13 +131,9 @@ export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[];
                 )}
               </span>
               <div className={styles.body}>
-                {editable ? (
-                  <Link href={`/admin/catalogo/vinos/${v.id}`} className={styles.name}>
-                    {v.nombre}
-                  </Link>
-                ) : (
-                  <p className={styles.name}>{v.nombre}</p>
-                )}
+                <Link href={`/admin/catalogo/vinos/${v.id}`} className={styles.name}>
+                  {v.nombre}
+                </Link>
                 <p className={styles.meta}>
                   {v.productor} · {v.grupo}
                   {editable && aliados.length > 1 ? ` · ${v.aliado}` : ""}
@@ -156,22 +158,24 @@ export function VinosList({ vinos, grupos, aliados, editable }: { vinos: Vino[];
                   <span>
                     {v.precioAliadoCentavos !== null
                       ? `acordado ${pesos(v.precioAliadoCentavos)} · margen ${Math.round(((v.precioCentavos - v.precioAliadoCentavos) * 100) / v.precioCentavos)} %`
-                      : "por botella · sin precio acordado"}
+                      : editable
+                        ? "por botella · sin precio acordado"
+                        : "por botella"}
                   </span>
                 </p>
               )}
-              <button type="button" role="switch" aria-checked={v.disponible} className={styles.switch} disabled={pending} onClick={() => toggle(v)}>
-                <span className={styles.track} aria-hidden="true">
-                  <span className={styles.thumbSwitch} />
-                </span>
-                <span className={styles.switchLabel}>{v.disponible ? "Disponible" : "Agotado"}</span>
-                <span className="vv-sr-only">: {v.nombre}</span>
-              </button>
-              {editable && (
-                <Link href={`/admin/catalogo/vinos/${v.id}`} className={styles.edit}>
-                  Editar<span className="vv-sr-only"> {v.nombre}</span>
-                </Link>
-              )}
+              <Existencias
+                id={v.id}
+                nombre={v.nombre}
+                existencias={v.existencias}
+                apartadas={v.apartadas}
+                editable={inventario}
+                onCambio={(n) => setVivas((x) => ({ ...x, [v.id]: n }))}
+              />
+              <Link href={`/admin/catalogo/vinos/${v.id}`} className={styles.edit}>
+                {editable ? "Editar" : "Ver"}
+                <span className="vv-sr-only"> {v.nombre}</span>
+              </Link>
             </li>
           ))}
         </ul>

@@ -1,6 +1,6 @@
 // Reglas del Catálogo y de los Aliados en el panel. Puras (sin Next) para usarlas igual en el servidor y en
 // las pruebas. Regla de oro (docs/ADMIN.md): todo lo que toca precios solo lo hace un administrador; el rol
-// Aliado solo cambia sus vinos entre disponible y agotado.
+// Aliado solo lleva el inventario de sus vinos (lib/inventario/rules.ts).
 
 import type { Rol } from "./rules.ts";
 
@@ -9,16 +9,10 @@ export type Tipo = (typeof TIPOS)[number];
 export const KIT_BOTELLAS = 6;
 
 /** Lo que cada rol puede cambiar de un vino. */
-export function camposEditables(rol: Rol): "todo" | "disponible" | "nada" {
+export function camposEditables(rol: Rol): "todo" | "inventario" | "nada" {
   if (rol === "admin") return "todo";
-  if (rol === "aliado") return "disponible";
+  if (rol === "aliado") return "inventario";
   return "nada";
-}
-
-/** ¿Esta persona puede marcar este vino como disponible o agotado? Admin: todos; aliado: solo los suyos. */
-export function puedeCambiarDisponible(user: { rol: Rol; aliadoId: string | null }, vino: { aliadoId: string }): boolean {
-  if (user.rol === "admin") return true;
-  return user.rol === "aliado" && !!user.aliadoId && user.aliadoId === vino.aliadoId;
 }
 
 // ---------- Dinero ----------

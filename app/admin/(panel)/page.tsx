@@ -52,7 +52,8 @@ function Accion({ valor, label, nota, href, alerta }: { valor: number; label: st
 
 function Pendientes({ d, user }: { d: Inicio; user: AdminUser }) {
   const p = d.pedidos;
-  const conCatalogo = user.rol !== "atencion";
+  // Inventario: todos lo ven (atención solo consulta).
+  const conCatalogo = true;
   const conCorreos = user.rol === "admin" && Boolean(d.comunidad);
   return (
     <section className={s.section} aria-labelledby="hoy">
@@ -60,12 +61,13 @@ function Pendientes({ d, user }: { d: Inicio; user: AdminUser }) {
         <h2 id="hoy">Lo que necesita atención</h2>
         <Link href="/admin/pedidos">Ver todos los pedidos</Link>
       </div>
-      <ul className={s.actions} data-n={4 + Number(conCatalogo) + Number(conCorreos)}>
+      <ul className={s.actions} data-n={4 + 2 * Number(conCatalogo) + Number(conCorreos)}>
         <Accion valor={p.por_preparar} label="Por preparar" nota="Pagados, sin enviar" href="/admin/pedidos?etapa=preparar" />
         <Accion valor={p.atrasados} label="Atrasados" nota="Pasaron su plazo de preparación" href="/admin/pedidos?etapa=preparar" alerta />
         <Accion valor={p.en_camino} label="En camino" nota="Enviados, sin confirmar entrega" href="/admin/pedidos?etapa=camino" />
         <Accion valor={p.entregados_hoy} label="Entregados hoy" nota="Confirmados hoy" href="/admin/pedidos?etapa=entregado" />
-        {conCatalogo && <Accion valor={d.catalogo.agotados} label="Vinos agotados" nota={`De ${plural(d.catalogo.vinos, "vino", "vinos")} en la tienda`} href="/admin/catalogo/vinos" alerta />}
+        {conCatalogo && <Accion valor={d.catalogo.agotados} label="Vinos agotados" nota={`De ${plural(d.catalogo.vinos, "vino", "vinos")} en la tienda`} href="/admin/catalogo/vinos?estado=agotados" alerta />}
+        {conCatalogo && <Accion valor={d.catalogo.pocas} label="Pocas existencias" nota="3 botellas o menos" href="/admin/catalogo/vinos?estado=pocas" alerta />}
         {conCorreos && d.comunidad && (
           <Accion valor={d.comunidad.correos_fallidos_semana} label="Correos que no salieron" nota="Últimos 7 días" href="/admin/correos" alerta />
         )}

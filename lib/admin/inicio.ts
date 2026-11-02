@@ -3,7 +3,7 @@ import { LAUNCH_AT_MS } from "@/lib/launch";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { AdminUser } from "./session";
 
-// Inicio del panel: una sola llamada a admin_inicio (20261103000000_inicio.sql, actualizada en 20261104000000_broker.sql), que devuelve las cifras ya
+// Inicio del panel: una sola llamada a admin_inicio (20261103000000_inicio.sql, actualizada en _broker e _inventario), que devuelve las cifras ya
 // calculadas en la base. El aliado solo recibe lo suyo; qué partes ve cada rol lo decide la página.
 
 type Monto = { n: number; total: number; aliado: number; comision?: number; mp?: number };
@@ -14,7 +14,7 @@ export type Inicio = {
   ventas: { hoy: Monto; semana: Monto; mes: Monto };
   serie: { dia: string; n: number; total: number; aliado: number }[];
   aliados: { id: string; nombre: string; por_transferir: number; en_camino: number; ultima_transferencia: string | null }[];
-  catalogo: { agotados: number; ocultos: number; vinos: number };
+  catalogo: { agotados: number; pocas: number; ocultos: number; vinos: number };
   comunidad: {
     lista_total: number;
     lista_semana: number;
@@ -53,7 +53,7 @@ export async function getInicio(user: AdminUser): Promise<InicioResultado> {
       ventas: Object.fromEntries(Object.entries(d.ventas).map(([k, m]) => [k, Object.fromEntries(Object.entries(m).map(([kk, vv]) => [kk, num(vv)]))])) as Inicio["ventas"],
       serie: d.serie.map((s) => ({ dia: String(s.dia).slice(0, 10), n: num(s.n), total: num(s.total), aliado: num(s.aliado) })),
       aliados: d.aliados.map((a) => ({ ...a, por_transferir: num(a.por_transferir), en_camino: num(a.en_camino), ultima_transferencia: a.ultima_transferencia ? String(a.ultima_transferencia).slice(0, 10) : null })),
-      catalogo: { agotados: num(d.catalogo.agotados), ocultos: num(d.catalogo.ocultos), vinos: num(d.catalogo.vinos) },
+      catalogo: { agotados: num(d.catalogo.agotados), pocas: num(d.catalogo.pocas), ocultos: num(d.catalogo.ocultos), vinos: num(d.catalogo.vinos) },
       comunidad: d.comunidad ? (Object.fromEntries(Object.entries(d.comunidad).map(([k, v]) => [k, num(v)])) as Inicio["comunidad"]) : null,
     },
   };

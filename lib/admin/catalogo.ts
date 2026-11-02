@@ -38,6 +38,10 @@ export type VinoPanel = {
   descripcionAliado: string;
   imagen: string | null;
   disponible: boolean;
+  /** Botellas en bodega (la verdad del inventario). */
+  existencias: number;
+  /** Botellas apartadas en pagos en curso (siguen en bodega, pero no se pueden vender a nadie más). */
+  apartadas: number;
   activo: boolean;
   kits: string[];
 };
@@ -69,11 +73,13 @@ function check<T>(r: { data: T[] | null; error: { code?: string } | null }, what
 export async function getCatalogoPanel(user: AdminUser) {
   const db = supabaseAdmin();
   const soloSuyos = user.rol === "aliado";
+  // Atención consulta el inventario: ve el precio público, no el acordado con el aliado.
+  const veAcordado = user.rol !== "atencion";
   if (soloSuyos && !user.aliadoId) return { vinos: [], grupos: [], categorias: [], kits: [], aliados: [] };
 
   let qp = db
     .from("productos")
-    .select("id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, precio_antes_centavos, precio_aliado_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, activo, orden")
+    .select("id, aliado_id, slug, nombre_oficial, productor, categoria_slug, grupo_id, tipo, uva, region, denominacion, anada, volumen_ml, grado_alcohol, precio_centavos, precio_antes_centavos, precio_aliado_centavos, premio, descripcion, descripcion_aliado, imagen_url, disponible, existencias, activo, orden")
     .order("orden");
   let qg = db.from("grupos_botella").select("id, aliado_id, codigo, nombre, descripcion, solo_caja_completa, orden").order("orden");
   let qk = db.from("kits_prearmados").select("id, aliado_id, slug, nombre, descripcion, activo, orden, imagen_url").order("orden");
@@ -84,7 +90,7 @@ export async function getCatalogoPanel(user: AdminUser) {
     qk = qk.eq("aliado_id", user.aliadoId!);
     qa = qa.eq("id", user.aliadoId!);
   }
-  const [p, g, c, k, i, a, cc] = await Promise.all([
+  const [p, g, c, k, i, a, cc, ap] = await Promise.all([
     qp,
     qg,
     db.from("categorias").select("slug, nombre, orden").order("orden"),
@@ -92,7 +98,10 @@ export async function getCatalogoPanel(user: AdminUser) {
     db.from("kits_prearmados_items").select("kit_id, producto_id, cantidad"),
     qa,
     db.from("configuracion_comercial").select("aliado_id, margen_minimo_bps"),
+    db.rpc("admin_apartados"),
   ]);
+  if (ap.error) console.error("admin/catalogo: no se pudieron leer los apartados", ap.error.code);
+  const apartadas = new Map(((ap.data ?? []) as { producto_id: string; apartadas: number }[]).map((x) => [x.producto_id, Number(x.apartadas)]));
   const margenDe = new Map((cc.data ?? []).map((x) => [x.aliado_id as string, x.margen_minimo_bps as number]));
   const productos = check(p, "los vinos");
   const grupos = check(g, "los grupos");
@@ -131,13 +140,15 @@ export async function getCatalogoPanel(user: AdminUser) {
       grado: txt(x.grado_alcohol),
       precioCentavos: soloSuyos ? null : x.precio_centavos,
       precioAntesCentavos: soloSuyos ? null : (x.precio_antes_centavos ?? null),
-      precioAliadoCentavos: x.precio_aliado_centavos ?? null,
+      precioAliadoCentavos: veAcordado ? (x.precio_aliado_centavos ?? null) : null,
       margenMinimoBps: soloSuyos ? null : (margenDe.get(x.aliado_id) ?? MARGEN_MINIMO_BPS),
       premio: txt(x.premio),
       descripcion: x.descripcion,
-      descripcionAliado: soloSuyos ? "" : txt(x.descripcion_aliado),
+      descripcionAliado: soloSuyos || !veAcordado ? "" : txt(x.descripcion_aliado),
       imagen: x.imagen_url ?? null,
       disponible: x.disponible,
+      existencias: Number(x.existencias ?? 0),
+      apartadas: apartadas.get(x.id) ?? 0,
       activo: x.activo,
       kits: kitsDe.get(x.id) ?? [],
     };
@@ -159,4 +170,30 @@ export async function getCatalogoPanel(user: AdminUser) {
     })) as KitPanel[],
     aliados: aliados.map((x) => ({ id: x.id as string, nombre: x.nombre as string, margenMinimoBps: soloSuyos ? null : (margenDe.get(x.id as string) ?? MARGEN_MINIMO_BPS) })),
   };
+}
+
+export type Movimiento = { id: string; at: string; cambio: number; existencias: number; motivo: string; quien: string; nota: string; pedidoId: string | null };
+
+/** Últimos movimientos de inventario de un vino (más recientes primero). */
+export async function getMovimientos(productoId: string, limite = 15): Promise<Movimiento[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("inventario_movimientos")
+    .select("id, created_at, cambio, existencias, motivo, usuario_nombre, nota, pedido_id")
+    .eq("producto_id", productoId)
+    .order("id", { ascending: false })
+    .limit(limite);
+  if (error) {
+    console.error("admin/catalogo: no se pudo leer el historial de inventario", error.code);
+    return [];
+  }
+  return (data ?? []).map((m) => ({
+    id: String(m.id),
+    at: m.created_at as string,
+    cambio: Number(m.cambio),
+    existencias: Number(m.existencias),
+    motivo: m.motivo as string,
+    quien: (m.usuario_nombre as string | null) ?? "",
+    nota: (m.nota as string | null) ?? "",
+    pedidoId: (m.pedido_id as string | null) ?? null,
+  }));
 }

@@ -30,6 +30,8 @@ export type Wine = {
   description: string;
   imageUrl: string | null;
   available: boolean;
+  /** Botellas que se pueden vender hoy (existencias − apartados, con tope de 60). null = sin dato (base sin el SQL del inventario). */
+  stock?: number | null;
 };
 
 // Nombres editoriales de los grupos (22 oct 2026). Los códigos (azul, rojo…) son internos y no se muestran.

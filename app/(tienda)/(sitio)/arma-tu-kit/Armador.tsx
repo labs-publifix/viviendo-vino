@@ -16,12 +16,14 @@ import {
   KIT_SIZE,
   addBottle,
   bottleCount,
+  bottlesBySlug,
   canAdd,
   fullCaseOptions,
   kitGroup,
   kitTotalCents,
   quantityOf,
   removeBottle,
+  stockMessage,
   validateKit,
   type KitItem,
 } from "@/lib/kit/rules";
@@ -29,7 +31,8 @@ import { formatMXN, kitSavingsCents } from "@/lib/money";
 import styles from "./armador.module.css";
 
 // Armador de kits (Fundamentos C-03 a C-07): la primera botella fija el grupo, los demás vinos se atenúan
-// con "No cabe en este kit", repetición libre y avance "n de 6". El servidor revalida al agregar al carrito.
+// con "No cabe en este kit", repetición libre y avance "n de 6". Nunca deja pedir más botellas de las que hay
+// (contando los demás kits del carrito). El servidor revalida al agregar al carrito.
 
 type Message = { kind: "info" | "ok" | "aviso" | "error"; text: string } | null;
 type Filter = BottleGroup | "todos";
@@ -49,6 +52,10 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
   const total = kitTotalCents(items, bySlug);
   const savings = kitSavingsCents(items.flatMap((i) => { const w = bySlug.get(i.slug); return w ? [{ quantity: i.quantity, priceCents: w.priceCents, compareAtCents: w.compareAtCents }] : []; }));
   const editing = draft.editing && kits.some((k) => k.id === draft.editing) ? draft.editing : null;
+  // Botellas que ya ocupan los demás kits del carrito (el que se edita no cuenta: está en el armador).
+  const elsewhere = useMemo(() => bottlesBySlug(kits.filter((k) => k.id !== editing).map((k) => k.items)), [kits, editing]);
+  // Cabe(n) estas botellas con lo que ya hay en el carrito.
+  const alcanza = (next: KitItem[]) => next.every((i) => { const w = bySlug.get(i.slug); return typeof w?.stock !== "number" || i.quantity + (elsewhere.get(i.slug) ?? 0) <= w.stock; });
 
   // Enlaces desde el catálogo, la ficha, la portada y el quiz: ?vino=, ?kit=, ?grupo=, ?editar=, ?vinos=. Se aplican una vez
   // y se limpian de la dirección para que recargar no repita la acción.
@@ -78,6 +85,11 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
       const available = preset.items.every((i) => bySlug.get(i.slug)?.available);
       if (!available) return setMessage({ kind: "aviso", text: `Una botella de “${preset.name}” está agotada. Arma el tuyo con su grupo.` });
       const items = preset.items.map((i) => ({ slug: i.slug, quantity: i.quantity }));
+      const corto = items.find((i) => !alcanza([i]));
+      if (corto) {
+        const w = bySlug.get(corto.slug)!;
+        return setMessage({ kind: "aviso", text: `${stockMessage(w.name, Math.max(0, (w.stock ?? 0) - (elsewhere.get(w.slug) ?? 0)))} “${preset.name}” lleva ${corto.quantity}: arma el tuyo con su grupo.` });
+      }
       if (params.get("agregar") === "1") {
         // "Agregar este kit": va directo al carrito después de que el servidor lo revise.
         setFilter(preset.group);
@@ -117,7 +129,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
       if (!wine) return;
       setFilter(wine.group);
       const current = cart.getState().draft;
-      const check = canAdd(current.items, vino, bySlug);
+      const check = canAdd(current.items, vino, bySlug, elsewhere);
       if (check.ok) {
         cart.setDraft({ ...current, items: addBottle(current.items, vino, bySlug) });
         return setMessage({ kind: "ok", text: `Agregamos ${wine.name} a tu kit.` });
@@ -127,6 +139,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
       }
       if (check.reason === "full") return setMessage({ kind: "aviso", text: "Tu kit ya tiene 6 botellas. Quita una para agregar otra." });
       if (check.reason === "sold-out") return setMessage({ kind: "aviso", text: `${wine.name} está agotado por ahora.` });
+      if (check.reason === "no-stock") return setMessage({ kind: "aviso", text: `${stockMessage(wine.name, check.left)}${elsewhere.get(vino) ? " Contamos las de tus otros kits." : " Ya están en tu kit."}` });
       return;
     }
     if (grupo && groups.some((g) => g.code === grupo)) setFilter(grupo as BottleGroup);
@@ -169,7 +182,16 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
     cart.setDraft({ items: next, ...(editing ? { editing } : {}), ...(preset ? { preset } : {}) });
   }
 
-  const add = (slug: string) => update(addBottle(items, slug, bySlug));
+  // El + sigue activo al llegar al límite de existencias: al tocarlo explica cuántas quedan (un botón apagado no
+  // dice por qué).
+  const add = (slug: string) => {
+    const check = canAdd(items, slug, bySlug, elsewhere);
+    if (!check.ok && check.reason === "no-stock") {
+      const name = bySlug.get(slug)?.name ?? "este vino";
+      return setError(elsewhere.get(slug) ? `${stockMessage(name, check.left)} Contamos las de tus otros kits.` : stockMessage(name, check.left));
+    }
+    update(addBottle(items, slug, bySlug, elsewhere));
+  };
   const remove = (slug: string) => update(removeBottle(items, slug));
 
   function clear() {
@@ -297,6 +319,7 @@ export function Armador({ wines, groups, presets }: { wines: Wine[]; groups: Gro
                     wines={list}
                     disabled={otherGroup}
                     current={items}
+                    fits={alcanza}
                     onPick={(next) => update(next)}
                   />
                 )}
@@ -366,16 +389,19 @@ function FullCase({
   wines,
   disabled,
   current,
+  fits,
   onPick,
 }: {
   group: GroupInfo;
   wines: Wine[];
   disabled: boolean;
   current: KitItem[];
+  fits: (items: KitItem[]) => boolean;
   onPick: (items: KitItem[]) => void;
 }) {
   const available = wines.filter((w) => w.available);
-  const options = fullCaseOptions(available.map((w) => w.slug));
+  // Solo las combinaciones que alcanzan con las botellas que hay.
+  const options = fullCaseOptions(available.map((w) => w.slug)).filter(fits);
   const shortName = (slug: string) => available.find((w) => w.slug === slug)?.name.split(" ").slice(0, 2).join(" ") ?? slug;
   const same = (a: KitItem[]) =>
     a.length === current.length && a.every((i) => current.some((c) => c.slug === i.slug && c.quantity === i.quantity));

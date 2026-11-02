@@ -21,7 +21,7 @@ producción (www) se hace después y solo con aprobación expresa.
 - **Alta del aliado en Configuración → Aliados** (pestaña junto a Equipo, solo admin): nombre, ciudad y estado,
   margen mínimo y condiciones comerciales. Después, en Configuración → Equipo se invita a su gente con el rol Aliado.
 - **Catálogo** queda para los grupos, vinos y kits de cada aliado.
-- **El rol Aliado solo puede:** ver sus ventas y sus pedidos, y cambiar un vino suyo entre disponible y agotado.
+- **El rol Aliado solo puede:** ver sus ventas y sus pedidos, y llevar el inventario de sus vinos (− / + y fijar).
   **No puede** cambiar precios, textos, fotos, grupos ni kits, ni ver nada de otro aliado.
 - **Sus ventas, en solo lectura:** por pedido, lo que le toca a sus precios acordados (modelo broker: nunca ve el
   precio público ni el margen de Viviendo Vino); además, las transferencias que ya se le hicieron y lo que falta por pagarle.
@@ -48,6 +48,28 @@ producción (www) se hace después y solo con aprobación expresa.
 - **Textos con precio:** la marquesina usa la marca `{desde}` (precio del kit más barato del momento) y los rangos de
   presupuesto del quiz se calculan con los precios de hoy; así no quedan precios viejos al cambiar el catálogo.
 - **Pendiente de confirmar:** facturación (en principio factura el aliado).
+
+## Inventario y apartados (decidido el 2 de noviembre de 2026)
+
+- **Una sola fuente:** `productos.existencias`. Se quitó el interruptor "Agotado": un vino está agotado cuando no le
+  quedan botellas para vender (existencias − apartadas). `disponible` queda como espejo automático (trigger).
+- **Quién:** admin (todos) y aliado (los suyos) cambian existencias con − / + (clics seguidos = un movimiento) o
+  "Fijar en…" (conteo físico, merma, ajuste; no pisa un cambio de otra persona). Atención solo consulta.
+- **Historial:** `inventario_movimientos` (quién, cuándo, cuánto, motivo, pedido). Ajustes también en la Auditoría.
+- **Avisos:** al bajar a 3 o menos ("Pocas") y al llegar a 0, correo al admin y a la gente del aliado (una vez por cruce).
+  Inicio muestra "Vinos agotados" y "Pocas existencias".
+- **Apartado al pagar:** "Continuar al pago" crea el pedido "Pago pendiente" y aparta las botellas 30 minutos, con
+  cuenta regresiva en el checkout. Al vencer, el carrito sigue guardado y "Confirmar existencias y apartar de nuevo"
+  renueva el mismo pedido (hasta 3 veces). Si el pago llega con el apartado vencido pero las botellas siguen libres,
+  pasa. El navegador guarda solo id + llave del apartado (la base guarda el sha-256 de la llave).
+- **Pago aprobado** (`confirmar_pago`): descuenta. **Cancelado antes del envío** (`devolver_inventario`): regresan.
+  Los pagos que nunca llegaron pasan a "Venció sin pago" un día después y no aparecen en la lista de pedidos salvo
+  con "Ver pagos que vencieron".
+- **Tienda:** el armador no deja pasar de las existencias (contando todos los kits del carrito) y explica cuántas
+  quedan; el carrito y el checkout revisan existencias al abrirse ("Existencias confirmadas"). La tienda nunca ve el
+  número real: `tienda_disponibles()` devuelve hasta 60. No se muestra "Quedan N" en fichas ni tarjetas (decidido).
+- **Pago:** al lanzar, solo tarjeta de crédito o débito, con el formulario de Mercado Pago dentro del sitio (Brick).
+  Mientras no se conecta, en dev hay un "Simular pago aprobado (prueba)" que hace lo mismo que el pago real.
 
 ## Pedidos y Finanzas (27 de octubre de 2026)
 
@@ -183,8 +205,14 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
 - [x] Modelo broker (`20261104000000_broker.sql`): precio acordado por vino con calculadora de descuento y margen en
   vivo, margen mínimo por aliado, pedidos con margen y Mercado Pago estimado, vista de cada rol en Pedidos, Finanzas
   e Inicio, marquesina y rangos del quiz con precios del momento.
-- [ ] Conectar el checkout y Mercado Pago a `crearPedido` (lib/admin/pedidos.ts): el pago aprobado pasa el pedido a
-  "Por preparar" y se guarda la comisión real de Mercado Pago (la absorbe Viviendo Vino).
+- [x] Inventario (`20261105000000_inventario.sql`): existencias con − / + y fijar (admin y aliado), historial,
+  avisos de pocas/agotado, apartado de 30 minutos con cuenta regresiva y renovación, descuento al pagar y devolución
+  al cancelar, armador y carrito limitados a las existencias. 10 botellas por etiqueta de inicio: confirmar los
+  números reales con el aliado antes del 19 de noviembre.
+- [ ] Mercado Pago con Card Payment Brick (solo tarjeta): en el paso de pago del checkout, cobrar y llamar
+  `pagarApartado` (lib/inventario/apartado.ts) con proveedor "mercadopago" y la comisión real; quitar el pago de prueba
+  en producción (ya está bloqueado ahí).
+- [ ] Limpieza de datos: borrar o anonimizar los pedidos "Venció sin pago" después de N días (tienen datos del cliente).
 - [ ] Facturación: confirmar si factura el aliado.
 - [ ] Finanzas: exportar a CSV para contabilidad.
 - [ ] Blog: lecturas y vistas por artículo (con GA4 o con un contador propio; decidir).

@@ -23,6 +23,7 @@ function evento(e: { tipo: string; estado: string | null; detalle: string }) {
       texto: e.detalle,
     };
   if (e.tipo === "nota") return { titulo: "Nota", texto: e.detalle };
+  if (e.tipo === "inventario") return { titulo: "Inventario", texto: e.detalle };
   return { titulo: e.tipo, texto: e.detalle };
 }
 

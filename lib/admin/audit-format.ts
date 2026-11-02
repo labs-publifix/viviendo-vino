@@ -25,6 +25,7 @@ export const ACCION_LABEL: Record<string, string> = {
   reactivar: "Reactivó a",
   disponible: "Marcó como disponible",
   agotado: "Marcó como agotado",
+  inventario: "Cambió las existencias de",
   ocultar: "Ocultó de la tienda",
   mostrar: "Volvió a mostrar en la tienda",
   foto: "Cambió la foto de",
@@ -50,6 +51,8 @@ export const ENTIDAD_LABEL: Record<string, string> = {
 
 const CAMPO_LABEL: Record<string, string> = {
   texto: "Mensaje",
+  existencias: "Existencias",
+  motivo: "Motivo",
   enlace: "Enlace",
   inicia_at: "Desde",
   termina_at: "Hasta",

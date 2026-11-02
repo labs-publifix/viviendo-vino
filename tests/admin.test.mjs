@@ -65,10 +65,10 @@ test("menú: el admin ve las 10 secciones; el aliado ve sus finanzas; atención 
   assert.ok(!de("aliado").includes("/admin/auditoria"));
 });
 
-test("menuFor: grupos sin secciones vacías; atención solo ve Operación y Sistema", () => {
+test("menuFor: grupos sin secciones vacías; atención ve Operación (con Catálogo para consultar el inventario) y Sistema", () => {
   assert.deepEqual(menuFor("admin").map((g) => g.label), ["Operación", "Sitio", "Sistema"]);
   assert.deepEqual(menuFor("atencion").map((g) => g.label), ["Operación", "Sistema"]);
-  assert.deepEqual(menuFor("atencion").flatMap((g) => g.secciones.map((s) => s.label)), ["Inicio", "Pedidos", "Configuración"]);
+  assert.deepEqual(menuFor("atencion").flatMap((g) => g.secciones.map((s) => s.label)), ["Inicio", "Pedidos", "Catálogo", "Configuración"]);
 });
 
 test("initials: iniciales del avatar", () => {

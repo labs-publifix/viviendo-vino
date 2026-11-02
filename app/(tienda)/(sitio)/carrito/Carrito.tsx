@@ -14,12 +14,12 @@ import { cart, useCart, type CartKit } from "@/lib/cart/store";
 import type { BottleGroup } from "@/lib/catalog/types";
 import { kitSavingsCents } from "@/lib/money";
 import { Savings } from "@/app/_ui/Savings";
-import { KIT_SIZE, MAX_KITS } from "@/lib/kit/rules";
+import { KIT_SIZE, MAX_KITS, stockMessage } from "@/lib/kit/rules";
 import { useCartValidation } from "@/lib/cart/useCartValidation";
 import styles from "./carrito.module.css";
 
-// Carrito: los kits viven en el navegador; nombres, precios y totales los calcula el servidor con la base
-// (/api/carrito/validar) cada vez que el carrito cambia.
+// Carrito: los kits viven en el navegador; nombres, precios, totales y existencias los revisa el servidor con la
+// base (/api/carrito/validar) cada vez que el carrito cambia o se vuelve a abrir.
 
 type WineRef = { slug: string; name: string; group: BottleGroup; priceCents: number; compareAtCents: number | null };
 
@@ -73,7 +73,8 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
 
   const ready = validation.status === "done";
   const resultFor = (k: CartKit) => (ready ? validation.kits.find((r) => r.id === k.id) : undefined);
-  const allValid = ready && validation.kits.length === kits.length && validation.kits.every((r) => r.ok);
+  const sinExistencias = ready ? validation.stockIssues : [];
+  const allValid = ready && validation.kits.length === kits.length && validation.kits.every((r) => r.ok) && sinExistencias.length === 0;
   const bottles = kits.length * KIT_SIZE;
 
   function edit(id: string) {
@@ -87,6 +88,14 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
         <div className={styles.notice}>
           <Notice kind="ok" title="Kit agregado a tu carrito.">
             ¿Otro? Puedes <Link href="/arma-tu-kit">armar uno más</Link>; cada kit lleva su envío incluido.
+          </Notice>
+        </div>
+      )}
+
+      {sinExistencias.length > 0 && (
+        <div className={styles.notice}>
+          <Notice kind="aviso" title="Algunas botellas ya no alcanzan.">
+            {sinExistencias.map((i) => `${stockMessage(i.name, i.left)} Tienes ${i.requested} en tu carrito.`).join(" ")} Usa “Editar” en tus kits para cambiarlas por otras de su grupo.
           </Notice>
         </div>
       )}
@@ -150,13 +159,18 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
             </p>
           )}
           {validation.status === "error" && <Notice kind="error">{validation.error} Recarga la página para intentar de nuevo.</Notice>}
+          {allValid && (
+            <p className={styles.stockOk} role="status">
+              <Icon name="check" size={16} /> Existencias confirmadas
+            </p>
+          )}
           {allValid ? (
             <ButtonLink href="/checkout" size="lg" block>
               Continuar
             </ButtonLink>
           ) : (
             <Button size="lg" block disabled>
-              {ready || validation.status === "error" ? "Corrige tu carrito para continuar" : "Revisando precios…"}
+              {ready || validation.status === "error" ? "Corrige tu carrito para continuar" : "Revisando precios y existencias…"}
             </Button>
           )}
           <p className={styles.fine}>Pago de contado. Sin cargos de envío al final.</p>

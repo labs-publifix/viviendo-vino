@@ -1,12 +1,14 @@
 "use server";
 
-import { refresh } from "next/cache";
+import { refresh, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { audit } from "@/lib/admin/audit";
 import { siteOrigin } from "@/lib/admin/invite";
 import { enviarCorreosPedido, reenviarCorreoCliente } from "@/lib/admin/pedido-correos";
-import { crearPedido } from "@/lib/admin/pedidos";
+import { crearPedido, leerCambios } from "@/lib/admin/pedidos";
+import { avisarUmbrales } from "@/lib/inventario/avisos";
+import { leerFaltantes, textoFaltante } from "@/lib/inventario/rules";
 import { clientePrueba, kitsPrueba } from "@/lib/admin/pedidos-prueba";
 import { ACCIONES, accionesPara, destino, ESTADO_LABEL, PASO_CORREO, puedeReenviar, puedeVerPedido, validarAccion, validarNota, type AccionPedido, type EstadoPedido } from "@/lib/admin/pedidos-rules";
 import { CORREO_LABEL, type TipoCorreo } from "@/lib/email/tipos";
@@ -27,12 +29,16 @@ export async function crearPedidoPrueba(): Promise<PedidoState> {
   const user = await requireAdmin(["admin"]);
   if (process.env.VERCEL_ENV === "production") return { error: "Los pedidos de prueba solo existen en dev." };
   const kits = await kitsPrueba();
-  if (!kits) return { error: "No hay vinos disponibles para armar un kit." };
+  if (!kits) return { error: "No hay existencias suficientes para armar un kit de prueba." };
   const r = await crearPedido({ customer: clientePrueba(), kits, estado: "pagado", prueba: true, origen: "prueba", por: user });
-  if (!r.ok) return { error: r.error };
+  if (!r.ok) return { error: r.faltantes?.length ? `No alcanzan las existencias: ${r.faltantes.map(textoFaltante).join(" ")}` : r.error };
   await audit(user, "crear", "pedidos", r.id, null, { folio: r.folio, prueba: true });
+  updateTag("catalogo");
   const origen = await siteOrigin();
-  after(() => enviarCorreosPedido(r.id, "pagado", origen));
+  after(async () => {
+    await enviarCorreosPedido(r.id, "pagado", origen);
+    await avisarUmbrales(r.cambios, origen);
+  });
   redirect(`/admin/pedidos/${r.id}?aviso=creado`);
 }
 
@@ -62,21 +68,33 @@ export async function moverPedido(_prev: PedidoState, form: FormData): Promise<P
   if (nuevo === "cancelado") Object.assign(cambios, { cancelado_at: ahora, motivo_cancelacion: v.data.motivo });
 
   const db = supabaseAdmin();
-  // Solo si sigue en el estado que se leyó (nadie lo movió mientras tanto).
-  const { data: hecho, error } = await db.from("pedidos").update(cambios).eq("id", id).eq("estado", estado).select("id");
-  if (error) return { error: SAVE_ERROR };
-  if (!hecho?.length) return { error: "Alguien más acaba de cambiar este pedido. Recarga la página." };
-
   const detalle = nuevo === "enviado" ? `${v.data.paqueteria} · guía ${v.data.guia}` : nuevo === "cancelado" ? v.data.motivo : null;
-  await db.from("pedido_eventos").insert({ pedido_id: id, tipo: "estado", estado: nuevo, detalle, usuario_id: user.id, usuario_nombre: user.nombre });
-  if (nuevo === "pagado") await db.from("pagos").insert({ pedido_id: id, proveedor: "prueba", estado: "aprobado", monto_centavos: (await db.from("pedidos").select("total_centavos").eq("id", id).single()).data?.total_centavos ?? 0 });
+  const origen = await siteOrigin();
+  if (nuevo === "pagado") {
+    // Pago de prueba: la base descuenta las botellas y registra el pago en una sola operación.
+    const { data, error } = await db.rpc("confirmar_pago", { p_pedido: id, p_pago: { proveedor: "prueba", prueba: true }, p_evento: { usuario_id: user.id, usuario_nombre: user.nombre } });
+    if (error?.message === "sin_existencias") return { error: `No alcanzan las existencias: ${leerFaltantes(error.details).map(textoFaltante).join(" ")}` };
+    if (error?.message === "estado_invalido") return { error: "Alguien más acaba de cambiar este pedido. Recarga la página." };
+    if (error) return { error: SAVE_ERROR };
+    const vendidos = leerCambios(data);
+    after(() => avisarUmbrales(vendidos, origen));
+  } else {
+    // Solo si sigue en el estado que se leyó (nadie lo movió mientras tanto).
+    const { data: hecho, error } = await db.from("pedidos").update(cambios).eq("id", id).eq("estado", estado).select("id");
+    if (error) return { error: SAVE_ERROR };
+    if (!hecho?.length) return { error: "Alguien más acaba de cambiar este pedido. Recarga la página." };
+    await db.from("pedido_eventos").insert({ pedido_id: id, tipo: "estado", estado: nuevo, detalle, usuario_id: user.id, usuario_nombre: user.nombre });
+    // Cancelado antes de enviarse: si sus botellas ya se habían descontado, regresan al inventario.
+    if (nuevo === "cancelado") {
+      const { error: e2 } = await db.rpc("devolver_inventario", { p_pedido: id, p_usuario_id: user.id, p_usuario_nombre: user.nombre });
+      if (e2) console.error("admin/pedidos: no se devolvieron las botellas al inventario", e2.code);
+    }
+  }
+  if (nuevo === "pagado" || nuevo === "cancelado") updateTag("catalogo");
   await audit(user, "estado", "pedidos", id, { folio: p.folio, estado }, { folio: p.folio, estado: nuevo, ...(detalle ? { detalle } : {}) });
   // Correos: pagado (cliente y equipo), en camino y entregado (cliente). Salen después de responder.
   const correo = nuevo === "pagado" || nuevo === "enviado" || nuevo === "entregado" ? nuevo : null;
-  if (correo) {
-    const origen = await siteOrigin();
-    after(() => enviarCorreosPedido(id, correo, origen));
-  }
+  if (correo) after(() => enviarCorreosPedido(id, correo, origen));
   refresh();
   return { ok: true, message: `Listo: el pedido quedó “${ESTADO_LABEL[nuevo]}”.${correo ? " Le avisamos al cliente por correo." : ""}` };
 }

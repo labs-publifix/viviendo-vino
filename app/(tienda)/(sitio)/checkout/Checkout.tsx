@@ -1,26 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Button, ButtonLink } from "@/app/_ui/Button";
 import { Checkbox, SelectField, TextField } from "@/app/_ui/Field";
 import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
 import { Price } from "@/app/_ui/Price";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
-import { useCart } from "@/lib/cart/store";
+import { borrarApartado, guardarApartado, leerApartado } from "@/lib/cart/apartado";
+import { cart, useCart } from "@/lib/cart/store";
 import { useCartValidation } from "@/lib/cart/useCartValidation";
 import { MIN_AGE, todayInMexico } from "@/lib/checkout/age";
 import { MX_STATES, checkoutSchema, fieldErrors, type CheckoutField, type FieldErrors } from "@/lib/checkout/schema";
+import { APARTADO_MINUTOS, huellaCarrito, textoFaltante, type Faltante } from "@/lib/inventario/rules";
 import { KIT_SIZE } from "@/lib/kit/rules";
 import { useHydrated } from "@/lib/use-hydrated";
+import { Apartado, type ApartadoVista } from "./Apartado";
 import styles from "./checkout.module.css";
 
-// Checkout sin pago (fase actual): datos de contacto, envío y mayoría de edad. El servidor revisa todo
-// (/api/checkout/revisar) y el botón de pago queda desactivado hasta conectar Mercado Pago.
-// Los datos personales no se guardan en el navegador ni en el servidor.
+// Checkout en dos pasos. 1) Datos de contacto, envío y mayoría de edad. 2) "Continuar al pago": el servidor revisa
+// todo, aparta las botellas 30 minutos (/api/checkout/apartar) y aparece la cuenta regresiva junto al pago. Si el
+// tiempo se acaba, el carrito sigue guardado y un botón confirma existencias y vuelve a apartar (hasta 3 veces).
+// El pago con tarjeta (Mercado Pago, dentro del sitio) llega en su fase; en dev hay un pago de prueba.
+// Los datos personales no se guardan en el navegador: solo el id del apartado y su llave (lib/cart/apartado.ts).
 
-type Result = { kind: "ok" | "error"; text: string } | null;
+type Result = { kind: "ok" | "error"; text: string; faltantes?: Faltante[] } | null;
+type Paso = "datos" | "pago" | "listo";
+type Datos = ReturnType<typeof readForm>;
 
 const ORDER: CheckoutField[] = [
   "name", "email", "phone", "street", "neighborhood", "postalCode", "city", "state", "references", "receiver", "birthdate", "adult", "invoice", "promos", "terms",
@@ -48,24 +55,98 @@ function readForm(form: HTMLFormElement) {
   };
 }
 
-export function Checkout() {
+export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
   const hydrated = useHydrated();
   const { kits } = useCart();
   const validation = useCartValidation(kits, hydrated);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [result, setResult] = useState<Result>(null);
   const [checking, setChecking] = useState(false);
+  const [paso, setPaso] = useState<Paso>("datos");
+  const [apartado, setApartado] = useState<ApartadoVista | null>(null);
+  const [datos, setDatos] = useState<Datos | null>(null);
+  const [pagando, setPagando] = useState(false);
+  const [folio, setFolio] = useState<string | null>(null);
+  const [vencido, setVencido] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const huella = huellaCarrito(kits);
 
   const ready = validation.status === "done";
-  const cartOk = ready && validation.kits.length === kits.length && validation.kits.every((k) => k.ok);
+  const cartOk = ready && validation.kits.length === kits.length && validation.kits.every((k) => k.ok) && validation.stockIssues.length === 0;
+
+  const vista = (a: { expiraAt: string | null; renovaciones: number; maxRenovaciones: number; limite?: boolean }, serverNow: string): ApartadoVista => ({
+    expiraAt: a.expiraAt,
+    desfase: Date.parse(serverNow) - Date.now(),
+    renovaciones: a.renovaciones,
+    maxRenovaciones: a.maxRenovaciones,
+    limite: Boolean(a.limite),
+  });
+
+  // Al volver al checkout con el mismo carrito: si sus botellas siguen apartadas, se ve cuánto tiempo queda.
+  useEffect(() => {
+    if (!hydrated || kits.length === 0) return;
+    const guardado = leerApartado();
+    if (!guardado || guardado.huella !== huella) return;
+    let vivo = true;
+    fetch("/api/checkout/apartado", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: guardado.id, token: guardado.token }) })
+      .then((r) => r.json())
+      .then((x) => {
+        if (!vivo) return;
+        if (x?.ok && x.estado === "pendiente_pago" && x.expiraAt && Date.parse(x.expiraAt) > Date.parse(x.serverNow)) setApartado(vista(x, x.serverNow));
+        else if (!x?.ok || x.estado !== "pendiente_pago") borrarApartado();
+      })
+      .catch(() => {});
+    return () => {
+      vivo = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo al abrir el checkout con este carrito
+  }, [hydrated, huella]);
+
+  const onVencio = useCallback(() => setVencido(true), []);
 
   function focusFirst(errs: FieldErrors) {
     const first = ORDER.find((k) => errs[k]);
     if (first) formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
   }
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+  /** Revisa en el servidor y aparta (o conserva, o renueva) las botellas. */
+  async function apartar(data: Datos) {
+    setResult(null);
+    setChecking(true);
+    try {
+      const guardado = leerApartado();
+      const res = await fetch("/api/checkout/apartar", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ customer: data, kits: kits.map((k) => ({ id: k.id, items: k.items })), previo: guardado ? { id: guardado.id, token: guardado.token } : undefined }),
+      });
+      const body = await res.json().catch(() => null);
+      if (!res.ok || !body) throw new Error(body?.error ?? "No pudimos revisar tus datos. Intenta de nuevo.");
+      if (body.fieldErrors && Object.keys(body.fieldErrors).length > 0) {
+        setPaso("datos");
+        setErrors(body.fieldErrors);
+        focusFirst(body.fieldErrors);
+        return;
+      }
+      if (!body.ok) {
+        setResult({ kind: "error", text: body.cartError ?? body.error ?? "Tu carrito necesita un cambio antes de pagar.", faltantes: body.faltantes });
+        return;
+      }
+      const a = body.apartado;
+      guardarApartado({ id: a.id, token: a.token ?? guardado?.token ?? "", huella });
+      setApartado(vista(a, body.serverNow));
+      setVencido(false);
+      setDatos(data);
+      setPaso("pago");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      setResult({ kind: "error", text: err instanceof Error ? err.message : "No pudimos revisar tus datos. Intenta de nuevo." });
+    } finally {
+      setChecking(false);
+    }
+  }
+
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setResult(null);
     const data = readForm(e.currentTarget);
@@ -77,29 +158,30 @@ export function Checkout() {
       return;
     }
     setErrors({});
-    setChecking(true);
+    void apartar(data);
+  }
+
+  async function pagarPrueba() {
+    const guardado = leerApartado();
+    if (!guardado) return;
+    setPagando(true);
+    setResult(null);
     try {
-      const res = await fetch("/api/checkout/revisar", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ customer: data, kits: kits.map((k) => ({ id: k.id, items: k.items })) }),
-      });
+      const res = await fetch("/api/checkout/pagar-prueba", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: guardado.id, token: guardado.token }) });
       const body = await res.json().catch(() => null);
-      if (!res.ok || !body) throw new Error(body?.error ?? "No pudimos revisar tus datos. Intenta de nuevo.");
-      if (body.fieldErrors && Object.keys(body.fieldErrors).length > 0) {
-        setErrors(body.fieldErrors);
-        focusFirst(body.fieldErrors);
+      if (!body?.ok) {
+        setResult({ kind: "error", text: body?.error ?? "No pudimos confirmar tu pago. Intenta de nuevo.", faltantes: body?.faltantes });
         return;
       }
-      if (body.cartError) {
-        setResult({ kind: "error", text: body.cartError });
-        return;
-      }
-      setResult({ kind: "ok", text: "Tus datos están completos. Los pagos estarán disponibles pronto; no se hizo ningún cargo." });
-    } catch (err) {
-      setResult({ kind: "error", text: err instanceof Error ? err.message : "No pudimos revisar tus datos. Intenta de nuevo." });
+      borrarApartado();
+      cart.clear();
+      setFolio(body.folio);
+      setPaso("listo");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch {
+      setResult({ kind: "error", text: "No pudimos confirmar tu pago. Intenta de nuevo." });
     } finally {
-      setChecking(false);
+      setPagando(false);
     }
   }
 
@@ -112,6 +194,24 @@ export function Checkout() {
         <p className={styles.muted} role="status">
           Cargando tu pedido…
         </p>
+      </div>
+    );
+  }
+
+  if (paso === "listo" && folio) {
+    return (
+      <div className={styles.page}>
+        <Intro />
+        <div className={styles.listo} role="status">
+          <h2>¡Gracias! Tu pedido está confirmado.</h2>
+          <p>
+            Tu número de pedido es <span className={styles.folio}>{folio}</span>. Te mandamos la confirmación por correo y otro cuando tu caja salga.
+          </p>
+          {pagoPrueba && <Notice kind="info">Fue un pago de prueba: no se hizo ningún cargo.</Notice>}
+          <ButtonLink href="/vinos" size="lg">
+            Seguir viendo vinos
+          </ButtonLink>
+        </div>
       </div>
     );
   }
@@ -135,7 +235,51 @@ export function Checkout() {
     <div className={styles.page}>
       <Intro />
       <div className={styles.layout}>
-        <form ref={formRef} className={styles.form} noValidate onSubmit={onSubmit} aria-describedby="checkout-nota">
+        {paso === "pago" && datos && apartado && (
+          <div className={styles.paso}>
+            <Apartado apartado={apartado} renovando={checking} onRenovar={() => void apartar(datos)} onVencio={onVencio} />
+            {result && <Resultado result={result} />}
+            <section className={styles.datos} aria-labelledby="envio-titulo">
+              <div className={styles.datosHead}>
+                <h2 id="envio-titulo">Envío</h2>
+                <button type="button" className={styles.linkBtn} onClick={() => setPaso("datos")}>
+                  Cambiar datos
+                </button>
+              </div>
+              <p>
+                {datos.name} · {datos.phone}
+              </p>
+              <p>
+                {datos.street}, {datos.neighborhood}, CP {datos.postalCode}, {datos.city}, {datos.state}
+              </p>
+            </section>
+            <section className={styles.pago} aria-labelledby="pago-titulo">
+              <h2 id="pago-titulo">Pago</h2>
+              {pagoPrueba ? (
+                <>
+                  <p className={styles.muted}>Aquí irá el formulario de tarjeta de Mercado Pago. En dev puedes simular un pago aprobado: no se hace ningún cargo.</p>
+                  {(!vencido || apartado.limite) && (
+                    <Button type="button" size="lg" block loading={pagando} onClick={pagarPrueba}>
+                      Simular pago aprobado (prueba)
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Button size="lg" block disabled aria-describedby="pagos-pronto">
+                    Pago con tarjeta disponible pronto
+                  </Button>
+                  <p id="pagos-pronto" className={styles.payNote}>
+                    <Icon name="info" size={16} /> Muy pronto podrás pagar aquí con tarjeta de crédito o débito. Por ahora no se hace ningún cargo.
+                  </p>
+                </>
+              )}
+            </section>
+          </div>
+        )}
+
+        <form ref={formRef} className={styles.form} noValidate onSubmit={onSubmit} aria-describedby="checkout-nota" hidden={paso === "pago"}>
+          {apartado && !vencido && <Apartado apartado={apartado} compacto onVencio={onVencio} />}
           <p id="checkout-nota" className={styles.muted}>
             Todos los campos son obligatorios salvo los marcados como opcionales.
           </p>
@@ -250,15 +394,14 @@ export function Checkout() {
             <Checkbox name="promos" label="Quiero recibir correos con nuevas etiquetas y promociones." />
           </fieldset>
 
-          {result && (
-            <div aria-live="polite">
-              <Notice kind={result.kind}>{result.text}</Notice>
-            </div>
-          )}
+          {result && paso === "datos" && <Resultado result={result} />}
 
-          <Button type="submit" variant="secondary" size="lg" block loading={checking} disabled={!cartOk}>
-            Revisar mis datos
+          <Button type="submit" size="lg" block loading={checking} disabled={!cartOk}>
+            Continuar al pago
           </Button>
+          <p className={styles.payNote}>
+            <Icon name="clock" size={16} /> Al continuar te apartamos las botellas {APARTADO_MINUTOS} minutos mientras pagas.
+          </p>
         </form>
 
         <aside className={styles.summary} aria-labelledby="pedido-title">
@@ -267,7 +410,7 @@ export function Checkout() {
           </h2>
           {validation.status === "loading" || validation.status === "idle" ? (
             <p className={styles.muted} role="status">
-              Revisando precios…
+              Revisando precios y existencias…
             </p>
           ) : validation.status === "error" ? (
             <Notice kind="error">{validation.error} Recarga la página para intentar de nuevo.</Notice>
@@ -312,19 +455,35 @@ export function Checkout() {
             {ready ? <Price cents={validation.totalCents} size="lg" /> : <span className={styles.muted}>—</span>}
           </div>
 
-          <div className={styles.pay}>
-            <Button size="lg" block disabled aria-describedby="pagos-pronto">
-              Pagos disponibles pronto
-            </Button>
-            <p id="pagos-pronto" className={styles.payNote}>
-              <Icon name="info" size={16} /> Muy pronto podrás pagar aquí con Mercado Pago, de contado. Por ahora no se hace ningún cargo.
-            </p>
-          </div>
+          {ready && validation.stockIssues.length > 0 && (
+            <Notice kind="aviso">
+              Algunas botellas ya no alcanzan. <Link href="/carrito">Revísalo en el carrito</Link>.
+            </Notice>
+          )}
+          <p className={styles.payNote}>
+            <Icon name="info" size={16} /> Pago de contado con tarjeta de crédito o débito.
+          </p>
           <Link href="/carrito" className={styles.back}>
             Volver al carrito
           </Link>
         </aside>
       </div>
+    </div>
+  );
+}
+
+function Resultado({ result }: { result: NonNullable<Result> }) {
+  return (
+    <div aria-live="polite">
+      <Notice kind={result.kind}>
+        {result.text}
+        {result.faltantes && result.faltantes.length > 0 && (
+          <>
+            {" "}
+            {result.faltantes.map(textoFaltante).join(" ")} <Link href="/carrito">Corrígelo en el carrito</Link>.
+          </>
+        )}
+      </Notice>
     </div>
   );
 }

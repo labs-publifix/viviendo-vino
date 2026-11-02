@@ -58,13 +58,26 @@ export function kitMinimo(catalog: Pick<Catalog, "groups">): number | null {
   return precios.length ? Math.min(...precios) : null;
 }
 
+/**
+ * Botellas disponibles por vino, directo de la base (sin caché): existencias menos lo apartado en pagos en curso.
+ * null si la base aún no tiene el SQL del inventario (la tienda sigue con el disponible/agotado de siempre).
+ */
+export async function getDisponibles(db = client()): Promise<Map<string, number> | null> {
+  const { data, error } = await db.rpc("tienda_disponibles");
+  if (error || !Array.isArray(data)) {
+    if (error && error.code !== "PGRST202" && error.code !== "42883") console.error("catálogo: no se pudieron leer las existencias", error.code);
+    return null;
+  }
+  return new Map((data as { producto_id: string; disponibles: number }[]).map((r) => [r.producto_id, Number(r.disponibles)]));
+}
+
 export async function getCatalog(): Promise<Catalog> {
   "use cache";
   cacheLife("minutes");
   cacheTag("catalogo");
 
   const db = client();
-  const [productos, grupos, categorias, kits, items] = await Promise.all([
+  const [productos, grupos, categorias, kits, items, disponibles] = await Promise.all([
     db
       .from("productos")
       .select(PRODUCT_COLUMNS_CON_PRECIO_ANTES)
@@ -78,6 +91,7 @@ export async function getCatalog(): Promise<Catalog> {
       .order("orden")
       .then((r) => (r.error?.code === "42703" ? db.from("kits_prearmados").select("id, slug, nombre, descripcion, orden").order("orden") : r)),
     db.from("kits_prearmados_items").select("kit_id, producto_id, cantidad"),
+    getDisponibles(db),
   ]);
 
   const groupRows = must(grupos, "grupos");
@@ -104,7 +118,9 @@ export async function getCatalog(): Promise<Catalog> {
       award: (p.premio as string | null) ?? null,
       description: p.descripcion as string,
       imageUrl: (p.imagen_url as string | null) ?? null,
-      available: p.disponible as boolean,
+      // Con inventario: agotado cuando no quedan botellas para vender; sin él, el interruptor de siempre.
+      available: disponibles ? (disponibles.get(p.id as string) ?? 0) > 0 : (p.disponible as boolean),
+      stock: disponibles ? (disponibles.get(p.id as string) ?? 0) : null,
     }));
 
   const groups: GroupInfo[] = groupRows

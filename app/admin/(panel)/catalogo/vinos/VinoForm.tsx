@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/app/_ui/Button";
 import { Checkbox, TextField } from "@/app/_ui/Field";
 import { Icon } from "@/app/_ui/Icon";
@@ -49,7 +49,7 @@ const TIPO_LABEL: Record<string, string> = { blanco: "Blanco", rosado: "Rosado",
 const FOTO_W = 880;
 const FOTO_H = 1184;
 
-export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDatos; categorias: { slug: string; nombre: string }[]; grupos: Opcion[]; aliados: Opcion[] }) {
+export function VinoForm({ vino, categorias, grupos, aliados, inventario }: { vino: VinoDatos; categorias: { slug: string; nombre: string }[]; grupos: Opcion[]; aliados: Opcion[]; inventario?: ReactNode }) {
   const router = useRouter();
   const nuevo = !vino.id;
   const [v, setV] = useState({
@@ -163,6 +163,7 @@ export function VinoForm({ vino, categorias, grupos, aliados }: { vino: VinoDato
         </div>
 
         <aside className={styles.formSide}>
+          {inventario}
           <section className={styles.card}>
             <h3>Precio</h3>
             <TextField

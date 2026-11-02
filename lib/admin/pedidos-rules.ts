@@ -6,7 +6,7 @@ import { CORREO_LABEL, type TipoCorreo } from "../email/tipos.ts";
 import { precioACentavos } from "./catalogo-rules.ts";
 import type { Rol } from "./rules.ts";
 
-export const ESTADOS = ["pendiente_pago", "pagado", "preparando", "enviado", "entregado", "cancelado"] as const;
+export const ESTADOS = ["pendiente_pago", "pagado", "preparando", "enviado", "entregado", "cancelado", "vencido"] as const;
 export type EstadoPedido = (typeof ESTADOS)[number];
 
 export const ESTADO_LABEL: Record<EstadoPedido, string> = {
@@ -16,6 +16,8 @@ export const ESTADO_LABEL: Record<EstadoPedido, string> = {
   enviado: "En camino",
   entregado: "Entregado",
   cancelado: "Cancelado",
+  /** Un pago que nunca llegó: el apartado venció hace más de un día o el cliente cambió su carrito. */
+  vencido: "Venció sin pago",
 };
 /** Tono del punto de estado en tablas y etiquetas (los mismos de DataTable). */
 export const ESTADO_TONO: Record<EstadoPedido, "aviso" | "accent" | "ok" | "muted" | ""> = {
@@ -25,6 +27,7 @@ export const ESTADO_TONO: Record<EstadoPedido, "aviso" | "accent" | "ok" | "mute
   enviado: "accent",
   entregado: "ok",
   cancelado: "muted",
+  vencido: "muted",
 };
 
 /** Un pedido "cuenta" como venta desde que se pagó y mientras no se cancele. */

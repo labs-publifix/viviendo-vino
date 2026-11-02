@@ -73,12 +73,13 @@ async function mandar(p: { id: string; folio: string }, tipo: TipoCorreo, para: 
 
 /**
  * Manda los correos que tocan según el paso: pagado (cliente + equipo), enviado y entregado (cliente).
- * `origen` es el sitio del panel para el enlace del aviso al equipo (www o dev).
+ * `origen` es el sitio del panel para el enlace del aviso al equipo (www o dev). `cliente: false` no le escribe al
+ * cliente (pagos de prueba del checkout de dev hechos con un correo que no es del equipo).
  */
-export async function enviarCorreosPedido(id: string, paso: CorreoPedido, origen: string): Promise<void> {
+export async function enviarCorreosPedido(id: string, paso: CorreoPedido, origen: string, opciones: { cliente?: boolean } = {}): Promise<void> {
   const p = await leer(id);
   if (!p) return;
-  await mandar(p, TIPO[paso], "cliente", p.email, RENDER[paso](p));
+  if (opciones.cliente !== false) await mandar(p, TIPO[paso], "cliente", p.email, RENDER[paso](p));
   if (paso === "pagado") {
     const aviso = renderNuevoPedidoEquipo(p, `${origen}/admin/pedidos/${p.id}`);
     for (const to of await equipo(p.aliadoId)) await mandar(p, "pedido_equipo", "equipo", to, aviso);

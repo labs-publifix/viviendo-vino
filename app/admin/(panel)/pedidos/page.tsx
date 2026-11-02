@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { fechaCdmx } from "@/lib/admin/comunidad-format";
 import { getPedidos } from "@/lib/admin/pedidos";
 import { ESTADO_LABEL, ESTADO_TONO } from "@/lib/admin/pedidos-rules";
@@ -8,6 +9,7 @@ import { DataTable, type Column } from "../_ui/DataTable";
 import { PageHead } from "../_ui/PageHead";
 import styles from "../_ui/panel.module.css";
 import { PruebaButton } from "./PruebaButton";
+import s from "./pedidos.module.css";
 
 export const metadata: Metadata = { title: "Pedidos" };
 
@@ -19,7 +21,11 @@ const ETAPAS = ["preparar", "camino", "entregado", "cancelado", "pendiente"];
 export default async function Page({ searchParams }: PageProps<"/admin/pedidos">) {
   const user = await requireAdmin(["admin", "aliado", "atencion"]);
   const etapa = (await searchParams).etapa;
-  const pedidos = await getPedidos(user);
+  // Los pagos que nunca llegaron (apartado vencido) no ensucian la lista: se ven solo con ?etapa=vencido.
+  const todos = await getPedidos(user);
+  const verVencidos = etapa === "vencido";
+  const vencidos = todos.filter((p) => p.estado === "vencido").length;
+  const pedidos = todos.filter((p) => (p.estado === "vencido") === verVencidos);
   const cuenta = (etapa: string) => pedidos.filter((p) => ETAPA[p.estado] === etapa).length;
   const n = (v: number) => v.toLocaleString("es-MX");
   const variosAliados = user.rol !== "aliado" && new Set(pedidos.map((p) => p.aliadoId)).size > 1;
@@ -81,7 +87,7 @@ export default async function Page({ searchParams }: PageProps<"/admin/pedidos">
           key: "etapa",
           label: "Etapa del pedido",
           all: "Todos",
-          initial: typeof etapa === "string" && ETAPAS.includes(etapa) ? etapa : undefined,
+          initial: typeof etapa === "string" && ETAPAS.includes(etapa) && !verVencidos ? etapa : undefined,
           options: [
             { value: "preparar", label: "Por preparar" },
             { value: "camino", label: "En camino" },
@@ -97,6 +103,13 @@ export default async function Page({ searchParams }: PageProps<"/admin/pedidos">
             : "Todavía no hay pedidos. Llegan aquí en cuanto alguien pague en la tienda."
         }
       />
+      {user.rol !== "aliado" && (verVencidos || vencidos > 0) && (
+        <p className={s.vencidos}>
+          <Link href={verVencidos ? "/admin/pedidos" : "/admin/pedidos?etapa=vencido"}>
+            {verVencidos ? "Volver a los pedidos" : `Ver ${n(vencidos)} ${vencidos === 1 ? "pago que venció" : "pagos que vencieron"} sin completarse`}
+          </Link>
+        </p>
+      )}
     </>
   );
 }

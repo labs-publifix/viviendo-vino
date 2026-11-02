@@ -1,4 +1,4 @@
-/* Catálogo del panel: lista de vinos con interruptor, formulario de vino en dos columnas, kits y grupos. */
+/* Catálogo del panel: lista de vinos con existencias, formulario de vino en dos columnas, kits y grupos. */
 
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 .hint { margin: 0; max-width: 64ch; color: var(--muted); font-size: 14px; line-height: 1.5; }
@@ -24,7 +24,7 @@
 .row {
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) auto;
-  grid-template-areas: "thumb body price" "thumb switch edit";
+  grid-template-areas: "thumb body price" "thumb stock edit";
   gap: 4px 14px;
   align-items: center;
   padding: 12px 16px;
@@ -34,7 +34,7 @@
 .row:hover { background: rgb(10 2 6 / 0.02); }
 .row[aria-busy="true"] { opacity: 0.55; }
 @media (min-width: 900px) {
-  .row { grid-template-columns: 44px minmax(0, 1fr) 9rem 10rem 4.5rem; grid-template-areas: "thumb body price switch edit"; }
+  .row { grid-template-columns: 44px minmax(0, 1fr) 9rem 11rem 4.5rem; grid-template-areas: "thumb body price stock edit"; }
 }
 .rowMuted .name,
 .rowMuted .thumb { opacity: 0.55; }
@@ -55,16 +55,27 @@ a.name:hover { text-decoration: underline; text-underline-offset: 3px; }
 .edit { grid-area: edit; justify-self: end; display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; border: 0; border-radius: 10px; background: none; color: var(--fg); font: inherit; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; }
 .edit:hover { background: rgb(10 2 6 / 0.06); }
 
-/* Interruptor disponible / agotado */
-.switch { grid-area: switch; justify-self: start; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 10px 0 0; border: 0; background: none; color: var(--fg); font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; }
-@media (min-width: 900px) { .switch { justify-self: center; } }
-.switch:disabled { opacity: 0.5; cursor: default; }
-.track { position: relative; flex: none; width: 36px; height: 20px; border-radius: 999px; background: rgb(10 2 6 / 0.22); transition: background-color 150ms ease-out; }
-.thumbSwitch { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgb(10 2 6 / 0.25); transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1); }
-.switch[aria-checked="true"] .track { background: var(--ok); }
-.switch[aria-checked="true"] .thumbSwitch { transform: translateX(16px); }
-.switchLabel { min-width: 5.5rem; text-align: left; }
-@media (prefers-reduced-motion: reduce) { .track, .thumbSwitch { transition: none; } }
+/* Existencias: − número + (botones de 44 px), estado y apartadas */
+.stock { grid-area: stock; justify-self: start; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; }
+@media (min-width: 900px) { .row .stock { justify-self: center; align-items: center; } }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); }
+.stepper button { display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 999px; background: none; color: var(--fg); font: inherit; font-size: 20px; font-weight: 600; line-height: 1; cursor: pointer; transition: background-color 120ms ease-out; }
+.stepper button:hover:not(:disabled) { background: rgb(10 2 6 / 0.06); }
+.stepper button:active:not(:disabled) { background: rgb(10 2 6 / 0.12); }
+.stepper button:disabled { color: var(--muted); opacity: 0.45; cursor: default; }
+.stepper button:focus-visible { outline: var(--focus); outline-offset: 2px; }
+.stepper output { min-width: 2.75rem; font-size: 16px; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.stock[data-estado="pocas"] .stepper { border-color: var(--aviso); }
+.stock[data-estado="agotado"] .stepper { border-color: var(--error); }
+.stockValor { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stockValor span { color: var(--muted); font-size: 13px; font-weight: 400; }
+.stockNota { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center; min-height: 18px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+.stockBadge { padding: 1px 8px; border-radius: 999px; background: rgb(185 122 18 / 0.14); color: var(--fg); font-weight: 600; }
+.stock[data-estado="agotado"] .stockBadge { background: rgb(195 58 44 / 0.12); }
+.stockError { max-width: 16rem; margin: 2px 0 0; color: var(--error); font-size: 12px; line-height: 1.4; }
+.stockGrande .stepper button { width: 52px; height: 52px; font-size: 22px; }
+.stockGrande .stepper output { min-width: 4rem; font-size: 22px; }
+.stockGrande .stockNota { justify-content: flex-start; font-size: 13px; }
 
 .empty { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 48px 24px; border: 1px dashed var(--line); border-radius: var(--r-card); color: var(--muted); text-align: center; }
 .empty p { margin: 0; }
@@ -166,3 +177,19 @@ p.kitItems { display: block; color: var(--fg); }
 .margin[data-bajo] { border-color: var(--aviso); }
 .margin .marginWarn { display: block; color: var(--fg); font-size: 13px; line-height: 1.45; }
 .linkBtn { padding: 0; border: 0; background: none; color: var(--vv-vino); font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* Inventario en la ficha del vino */
+.fijar { display: flex; flex-direction: column; gap: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+.fijarTitulo { margin: 0 0 6px; font-size: 14px; font-weight: 700; }
+.movs { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.movs li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 10px; align-items: baseline; font-size: 14px; line-height: 1.4; }
+.movCambio { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+.movCambio[data-signo="menos"] { color: var(--muted); }
+.movTexto { min-width: 0; overflow-wrap: anywhere; }
+.movTexto a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.movTexto small { display: block; color: var(--muted); font-size: 12px; }
+.fichaGrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (min-width: 900px) { .fichaGrid { grid-template-columns: 220px minmax(0, 1fr); } }
+.fichaFoto { display: block; width: 100%; max-width: 220px; aspect-ratio: 880 / 1184; overflow: hidden; border-radius: var(--r-card); background: var(--bg); }
+.fichaFoto img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.fichaFoto > * { width: 100%; height: 100%; }

@@ -12,12 +12,13 @@
 /* Tarjetas de acción: número grande, qué es y a dónde lleva. */
 .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
 /* En el celular, si sobra una tarjeta, ocupa la fila completa. */
-@media (max-width: 899px) { .actions[data-n="5"] > :last-child { grid-column: 1 / -1; } }
-/* En escritorio, filas parejas: 4 → 4 columnas, 5 → 5, 6 → 3 × 2. */
+@media (max-width: 899px) { .actions[data-n="5"] > :last-child, .actions[data-n="7"] > :last-child { grid-column: 1 / -1; } }
+/* En escritorio, filas parejas: 4 → 4 columnas, 5 → 5, 6 → 3 × 2, 7 → 4 + 3 (la última ocupa dos). */
 @media (min-width: 900px) {
   .actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .actions[data-n="5"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .actions[data-n="6"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .actions[data-n="7"] > :last-child { grid-column: span 2; }
 }
 .action {
   display: flex;

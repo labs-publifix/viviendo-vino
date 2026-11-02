@@ -8,12 +8,16 @@ export const MAX_KITS = 10;
 
 export type KitItem = { slug: string; quantity: number };
 
-/** Lo mínimo que las reglas necesitan saber de un vino. */
-export type KitWine = { slug: string; name: string; group: string; priceCents: number; available: boolean };
+/**
+ * Lo mínimo que las reglas necesitan saber de un vino. `stock`: botellas que se pueden vender hoy (existencias
+ * menos apartados, con tope); null o ausente = sin límite conocido.
+ */
+export type KitWine = { slug: string; name: string; group: string; priceCents: number; available: boolean; stock?: number | null };
 
 export type AddCheck =
   | { ok: true }
-  | { ok: false; reason: "full" | "other-group" | "sold-out" | "unknown" };
+  | { ok: false; reason: "full" | "other-group" | "sold-out" | "unknown" }
+  | { ok: false; reason: "no-stock"; left: number };
 
 export function bottleCount(items: readonly KitItem[]): number {
   return items.reduce((sum, i) => sum + i.quantity, 0);
@@ -32,19 +36,31 @@ export function kitGroup(items: readonly KitItem[], wines: ReadonlyMap<string, K
   return null;
 }
 
-export function canAdd(items: readonly KitItem[], slug: string, wines: ReadonlyMap<string, KitWine>): AddCheck {
+/** Botellas de cada vino en una lista de kits (p. ej. los demás kits del carrito). */
+export function bottlesBySlug(kits: readonly (readonly KitItem[])[]): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const items of kits) for (const i of items) out.set(i.slug, (out.get(i.slug) ?? 0) + i.quantity);
+  return out;
+}
+
+/**
+ * ¿Cabe una botella más de este vino? `elsewhere`: las que ya ocupan los demás kits del carrito, para que entre
+ * todos los kits no se pidan más botellas de las que hay.
+ */
+export function canAdd(items: readonly KitItem[], slug: string, wines: ReadonlyMap<string, KitWine>, elsewhere?: ReadonlyMap<string, number>): AddCheck {
   const wine = wines.get(slug);
   if (!wine) return { ok: false, reason: "unknown" };
   if (!wine.available) return { ok: false, reason: "sold-out" };
   const group = kitGroup(items, wines);
   if (group && group !== wine.group) return { ok: false, reason: "other-group" };
   if (bottleCount(items) >= KIT_SIZE) return { ok: false, reason: "full" };
+  if (typeof wine.stock === "number" && quantityOf(items, slug) + (elsewhere?.get(slug) ?? 0) >= wine.stock) return { ok: false, reason: "no-stock", left: wine.stock };
   return { ok: true };
 }
 
 /** Agrega una botella si las reglas lo permiten; si no, devuelve el kit sin cambios. */
-export function addBottle(items: readonly KitItem[], slug: string, wines: ReadonlyMap<string, KitWine>): KitItem[] {
-  if (!canAdd(items, slug, wines).ok) return [...items];
+export function addBottle(items: readonly KitItem[], slug: string, wines: ReadonlyMap<string, KitWine>, elsewhere?: ReadonlyMap<string, number>): KitItem[] {
+  if (!canAdd(items, slug, wines, elsewhere).ok) return [...items];
   return quantityOf(items, slug) > 0
     ? items.map((i) => (i.slug === slug ? { ...i, quantity: i.quantity + 1 } : i))
     : [...items, { slug, quantity: 1 }];
@@ -108,6 +124,24 @@ export function validateKit(items: readonly KitItem[], wines: ReadonlyMap<string
   }
 
   return { ok: true, group: [...groups][0], lines, totalCents: lines.reduce((s, l) => s + l.subtotalCents, 0) };
+}
+
+export type StockIssue = { slug: string; name: string; requested: number; left: number };
+
+/** Vinos que el carrito pide en más botellas de las que hay (sumando todos sus kits). */
+export function stockIssues(kits: readonly (readonly KitItem[])[], wines: ReadonlyMap<string, KitWine>): StockIssue[] {
+  const out: StockIssue[] = [];
+  for (const [slug, requested] of bottlesBySlug(kits)) {
+    const w = wines.get(slug);
+    if (w && typeof w.stock === "number" && requested > w.stock) out.push({ slug, name: w.name, requested, left: w.stock });
+  }
+  return out;
+}
+
+/** "Solo quedan 2 botellas de X" / "X se agotó". */
+export function stockMessage(name: string, left: number): string {
+  if (left <= 0) return `${name} se agotó.`;
+  return `Solo ${left === 1 ? "queda 1 botella" : `quedan ${left} botellas`} de ${name}.`;
 }
 
 /** Combinaciones de caja completa para un grupo de solo caja (amarillo): 6 de cada uno y partes iguales. */
