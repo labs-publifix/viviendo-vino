@@ -32,6 +32,8 @@ export type GateDecision =
 export const STORE_HOME = "/inicio";
 export const LOGIN_PATH = "/acceso";
 export const LOGIN_API = "/api/acceso";
+/** Avisos de Mercado Pago: sin contraseña del preview y con la tienda cerrada; los protege su firma (x-signature). */
+export const MP_WEBHOOK = "/api/mercadopago/webhook";
 
 // Lo que la lista de espera necesita y debe funcionar siempre.
 const WAITLIST_EXACT = new Set([
@@ -76,6 +78,7 @@ export function decide({ pathname, host, env, hasPreviewAccess, hasAdminCookie =
 
   // dev.viviendovino.com nunca sirve el despliegue de producción.
   if (previewHost && env.vercelEnv === "production") return { action: "not-found" };
+  if (pathname === MP_WEBHOOK) return { action: "next" };
 
   if (env.preview || previewHost) {
     if (pathname === LOGIN_PATH || pathname === LOGIN_API) return { action: "next" };

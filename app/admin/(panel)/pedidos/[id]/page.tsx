@@ -215,7 +215,15 @@ export default async function Page({
           >
             <h2 id="siguiente">Siguiente paso</h2>
             {acciones.length ? (
-              <Acciones id={p.id} acciones={acciones} />
+              <Acciones
+                id={p.id}
+                acciones={acciones}
+                reembolso={
+                  p.pagos.some((x) => x.proveedor === "mercadopago" && x.estado === "aprobado") && !p.pagos.some((x) => x.estado === "reembolsado")
+                    ? formatMXNExacto(p.pagos.find((x) => x.proveedor === "mercadopago" && x.estado === "aprobado")!.monto)
+                    : null
+                }
+              />
             ) : (
               <p className={s.muted}>
                 {p.estado === "entregado"

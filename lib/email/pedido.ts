@@ -101,6 +101,27 @@ export function renderPedidoEntregado(p: PedidoCorreo) {
   return { subject, html, text };
 }
 
+/** Un pago que estaba en revisión no se aprobó: no se cobró nada y las botellas se liberaron. */
+export function renderPagoRechazado(p: PedidoCorreo) {
+  const subject = asunto(p, `No se pudo completar el pago de tu pedido ${p.folio}`);
+  const nombre = primerNombre(p.cliente);
+  const { html, text } = renderBrandEmail({
+    title: subject,
+    preheader: "Mercado Pago no aprobó el pago. No se hizo ningún cargo.",
+    eyebrow: "Pago no aprobado",
+    heading: nombre ? `${nombre}, tu pago no se aprobó` : "Tu pago no se aprobó",
+    paragraphs: [
+      "Mercado Pago revisó tu pago y no lo aprobó, así que no se hizo ningún cargo a tu tarjeta.",
+      "Tu carrito sigue guardado en el navegador donde compraste. Puedes intentar de nuevo con otra tarjeta; si las botellas siguen disponibles, te las apartamos otra vez.",
+      DUDAS,
+    ],
+    items: botellas(p),
+    cta: { label: "Volver a intentar", url: `${SITE_URL}/checkout` },
+    reason: RAZON_CLIENTE,
+  });
+  return { subject, html, text };
+}
+
 /** Aviso al equipo (admin, atención y la gente del aliado): hay un pedido pagado por preparar. */
 export function renderNuevoPedidoEquipo(p: PedidoCorreo, panelUrl: string) {
   const subject = asunto(p, `Nuevo pedido por preparar: ${p.folio}`);

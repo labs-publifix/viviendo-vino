@@ -101,3 +101,9 @@
 .codigoTexto { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
 .descuento { color: var(--ok); }
 .codigoError { margin: 0; color: var(--error); font-size: 13px; line-height: 1.45; }
+
+/* Pago con tarjeta (Mercado Pago) */
+.brick { display: flex; flex-direction: column; gap: var(--s-3); min-height: 120px; }
+.reto { display: flex; flex-direction: column; gap: var(--s-3); }
+.retoTexto { margin: 0; font-size: var(--t-small); line-height: 1.5; }
+.retoFrame { width: 100%; min-height: 560px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }

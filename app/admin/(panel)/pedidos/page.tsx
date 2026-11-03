@@ -77,8 +77,8 @@ export default async function Page({ searchParams }: PageProps<"/admin/pedidos">
           aliado: p.aliado,
           kits: p.kits,
           total: formatMXN((user.rol === "aliado" ? p.paraAliado : p.total) ?? 0),
-          estadoLabel: ESTADO_LABEL[p.estado],
-          tono: ESTADO_TONO[p.estado],
+          estadoLabel: p.pagoEnRevision ? "Pago en revisión" : ESTADO_LABEL[p.estado],
+          tono: p.pagoEnRevision ? "aviso" : ESTADO_TONO[p.estado],
           etapa: ETAPA[p.estado],
         }))}
         searchKeys={["folio", "cliente", "email", "ciudad"]}

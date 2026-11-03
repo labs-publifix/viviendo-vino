@@ -101,3 +101,12 @@ test("contraseña y destino seguro", () => {
   assert.equal(safeNext("https://evil.com"), "/");
   assert.equal(safeNext(null), "/");
 });
+
+test("webhook de Mercado Pago: pasa con la tienda cerrada y sin contraseña del preview (lo protege su firma)", () => {
+  const w = "/api/mercadopago/webhook";
+  assert.deepEqual(decide({ pathname: w, host: WWW, env: PROD_CLOSED, hasPreviewAccess: false }), { action: "next" });
+  assert.deepEqual(decide({ pathname: w, host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
+  // Nada más pasa por esa puerta: el resto de /api/mercadopago sigue cerrado.
+  assert.deepEqual(decide({ pathname: "/api/mercadopago/otra", host: WWW, env: PROD_CLOSED, hasPreviewAccess: false }), { action: "not-found" });
+  assert.deepEqual(decide({ pathname: "/api/checkout/pagar", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "login" });
+});

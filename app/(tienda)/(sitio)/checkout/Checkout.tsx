@@ -20,16 +20,19 @@ import { formatMXN } from "@/lib/money";
 import { useHydrated } from "@/lib/use-hydrated";
 import { Apartado, type ApartadoVista } from "./Apartado";
 import { CodigoDescuento, type CodigoAplicado } from "./CodigoDescuento";
+import { PagoTarjeta, Reto3DS, type DatosBrick } from "./PagoTarjeta";
 import styles from "./checkout.module.css";
 
 // Checkout en dos pasos. 1) Datos de contacto, envío y mayoría de edad. 2) "Continuar al pago": el servidor revisa
 // todo, aparta las botellas 30 minutos (/api/checkout/apartar) y aparece la cuenta regresiva junto al pago. Si el
 // tiempo se acaba, el carrito sigue guardado y un botón confirma existencias y vuelve a apartar (hasta 3 veces).
-// El pago con tarjeta (Mercado Pago, dentro del sitio) llega en su fase; en dev hay un pago de prueba.
+// El pago es con tarjeta, dentro del sitio (Card Payment Brick de Mercado Pago), con el reto 3-D Secure del banco si
+// lo pide y la pantalla de "pago en revisión". Sin credenciales de Mercado Pago, en dev queda el pago de prueba.
 // Los datos personales no se guardan en el navegador: solo el id del apartado y su llave (lib/cart/apartado.ts).
 
-type Result = { kind: "ok" | "error"; text: string; faltantes?: Faltante[] } | null;
-type Paso = "datos" | "pago" | "listo";
+type Result = { kind: "ok" | "error" | "info"; text: string; faltantes?: Faltante[] } | null;
+type Paso = "datos" | "pago" | "listo" | "revision";
+type RespuestaPago = { estado: "pagado"; folio: string } | { estado: "reto"; url: string } | { estado: "revision"; folio: string } | { estado: "rechazado" | "error"; mensaje: string };
 type Datos = ReturnType<typeof readForm>;
 
 const ORDER: CheckoutField[] = [
@@ -58,7 +61,7 @@ function readForm(form: HTMLFormElement) {
   };
 }
 
-export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
+export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpPublicKey: string | null }) {
   const hydrated = useHydrated();
   const { kits } = useCart();
   const validation = useCartValidation(kits, hydrated);
@@ -70,6 +73,12 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
   const [datos, setDatos] = useState<Datos | null>(null);
   const [pagando, setPagando] = useState(false);
   const [folio, setFolio] = useState<string | null>(null);
+  // Mercado Pago: total a pagar (del servidor), reto 3-D Secure en curso y cuántas veces se montó el formulario
+  // (cada intento rechazado lo vuelve a montar: el token de la tarjeta es de un solo uso).
+  const [totalPago, setTotalPago] = useState<number | null>(null);
+  const [reto, setReto] = useState<string | null>(null);
+  const [intento, setIntento] = useState(0);
+  const [fuePrueba, setFuePrueba] = useState(false);
   const [vencido, setVencido] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const huella = huellaCarrito(kits);
@@ -99,8 +108,11 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
       .then((r) => r.json())
       .then((x) => {
         if (!vivo) return;
-        if (x?.ok && x.estado === "pendiente_pago" && x.expiraAt && Date.parse(x.expiraAt) > Date.parse(x.serverNow)) setApartado(vista(x, x.serverNow));
-        else if (!x?.ok || x.estado !== "pendiente_pago") borrarApartado();
+        if (x?.ok && x.estado === "pendiente_pago" && x.expiraAt && Date.parse(x.expiraAt) > Date.parse(x.serverNow)) {
+          setApartado(vista(x, x.serverNow));
+          // Con Mercado Pago: un pago que quedó en revisión (o ya se aprobó) se ve como tal al volver.
+          if (mpPublicKey) void consultarPago(true);
+        } else if (!x?.ok || x.estado !== "pendiente_pago") borrarApartado();
       })
       .catch(() => {});
     return () => {
@@ -110,6 +122,71 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
   }, [hydrated, huella]);
 
   const onVencio = useCallback(() => setVencido(true), []);
+
+  function terminar(folioPedido: string, prueba: boolean) {
+    borrarApartado();
+    borrarCodigo();
+    cart.clear();
+    setFolio(folioPedido);
+    setFuePrueba(prueba);
+    setReto(null);
+    setPaso("listo");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /** Qué hacer con la respuesta de Mercado Pago (al pagar o al consultar). */
+  function aplicarPago(r: RespuestaPago | null, silencioso = false) {
+    if (!r) {
+      if (!silencioso) setResult({ kind: "error", text: "No pudimos confirmar tu pago. No se hizo ningún cargo; intenta de nuevo." });
+      return;
+    }
+    if (r.estado === "pagado") return terminar(r.folio, false);
+    if (r.estado === "reto") {
+      setReto(r.url);
+      return;
+    }
+    if (r.estado === "revision") {
+      setReto(null);
+      setFolio(r.folio);
+      setPaso("revision");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (silencioso) return;
+    setReto(null);
+    setResult({ kind: "error", text: r.mensaje });
+    setIntento((n) => n + 1);
+  }
+
+  async function pagarTarjeta(tarjeta: DatosBrick) {
+    const guardado = leerApartado();
+    if (!guardado) return;
+    setResult(null);
+    try {
+      const res = await fetch("/api/checkout/pagar", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: guardado.id, token: guardado.token, tarjeta }) });
+      aplicarPago(await res.json().catch(() => null));
+    } catch {
+      aplicarPago(null);
+    }
+  }
+
+  /** Consulta el pago (después del reto del banco). Reintenta unos segundos mientras el banco termina. */
+  async function consultarPago(silencioso = false) {
+    const guardado = leerApartado();
+    if (!guardado) return;
+    for (let i = 0; i < (silencioso ? 1 : 8); i++) {
+      const r: RespuestaPago | null = await fetch("/api/checkout/pago-estado", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: guardado.id, token: guardado.token }) })
+        .then((x) => x.json())
+        .catch(() => null);
+      if (r && r.estado !== "reto") {
+        if (silencioso && r.estado !== "pagado" && r.estado !== "revision") return;
+        return aplicarPago(r, silencioso);
+      }
+      if (silencioso) return;
+      await new Promise((ok) => setTimeout(ok, 3000));
+    }
+    if (!silencioso) setResult({ kind: "info", text: "Tu banco todavía está confirmando el pago. Espera un momento; si ya terminaste, vuelve a tocar “Ya terminé con mi banco”." });
+  }
 
   /** Pide al servidor la vista previa del código con este carrito. true si aplica. */
   async function probarCodigo(codigo: string): Promise<boolean> {
@@ -205,6 +282,7 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
       if (a.codigo) setAplicado((x) => ({ codigo: a.codigo, textoPublico: x?.textoPublico ?? "", descuento: a.descuento }));
       guardarApartado({ id: a.id, token: a.token ?? guardado?.token ?? "", huella });
       setApartado(vista(a, body.serverNow));
+      setTotalPago(a.total);
       setVencido(false);
       setDatos(data);
       setPaso("pago");
@@ -243,12 +321,7 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
         setResult({ kind: "error", text: body?.error ?? "No pudimos confirmar tu pago. Intenta de nuevo.", faltantes: body?.faltantes });
         return;
       }
-      borrarApartado();
-      borrarCodigo();
-      cart.clear();
-      setFolio(body.folio);
-      setPaso("listo");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      terminar(body.folio, true);
     } catch {
       setResult({ kind: "error", text: "No pudimos confirmar tu pago. Intenta de nuevo." });
     } finally {
@@ -278,8 +351,26 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
           <p>
             Tu número de pedido es <span className={styles.folio}>{folio}</span>. Te mandamos la confirmación por correo y otro cuando tu caja salga.
           </p>
-          {pagoPrueba && <Notice kind="info">Fue un pago de prueba: no se hizo ningún cargo.</Notice>}
+          {fuePrueba && <Notice kind="info">Fue un pago de prueba: no se hizo ningún cargo.</Notice>}
           <ButtonLink href="/vinos" size="lg">
+            Seguir viendo vinos
+          </ButtonLink>
+        </div>
+      </div>
+    );
+  }
+
+  if (paso === "revision" && folio) {
+    return (
+      <div className={styles.page}>
+        <Intro />
+        <div className={styles.listo} role="status">
+          <h2>Tu pago está en revisión.</h2>
+          <p>
+            Mercado Pago está revisando el pago de tu pedido <span className={styles.folio}>{folio}</span>. Suele tardar unos minutos y, a veces, hasta 48 horas.
+          </p>
+          <p>Tus botellas siguen apartadas. Te escribimos por correo en cuanto se confirme; no tienes que hacer nada más.</p>
+          <ButtonLink href="/vinos" variant="secondary">
             Seguir viendo vinos
           </ButtonLink>
         </div>
@@ -326,7 +417,21 @@ export function Checkout({ pagoPrueba }: { pagoPrueba: boolean }) {
             </section>
             <section className={styles.pago} aria-labelledby="pago-titulo">
               <h2 id="pago-titulo">Pago</h2>
-              {pagoPrueba ? (
+              {mpPublicKey ? (
+                reto ? (
+                  <Reto3DS url={reto} onTermino={() => void consultarPago()} />
+                ) : (
+                  (!vencido || apartado.limite) && (
+                    <PagoTarjeta
+                      key={intento}
+                      publicKey={mpPublicKey}
+                      montoCentavos={totalPago ?? validation.totalCents - (aplicado?.descuento ?? 0)}
+                      email={datos.email}
+                      onPagar={pagarTarjeta}
+                    />
+                  )
+                )
+              ) : pagoPrueba ? (
                 <>
                   <p className={styles.muted}>Aquí irá el formulario de tarjeta de Mercado Pago. En dev puedes simular un pago aprobado: no se hace ningún cargo.</p>
                   {(!vencido || apartado.limite) && (

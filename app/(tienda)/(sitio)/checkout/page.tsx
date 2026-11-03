@@ -11,5 +11,7 @@ export const metadata: Metadata = {
 export default function CheckoutPage() {
   if (!storeEnabled()) notFound();
   // Pago de prueba solo fuera de producción (dev y local), mientras se conecta Mercado Pago.
-  return <Checkout pagoPrueba={process.env.VERCEL_ENV !== "production"} />;
+  // Pago con tarjeta: la Public Key de Mercado Pago (pública por diseño). Sin ella, en dev queda el pago de prueba.
+  const mpPublicKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY || null;
+  return <Checkout pagoPrueba={!mpPublicKey && process.env.VERCEL_ENV !== "production"} mpPublicKey={mpPublicKey} />;
 }

@@ -19,7 +19,8 @@ const AYUDA: Partial<Record<AccionPedido, string>> = {
   marcar_pagado: "Solo para pedidos de prueba: simula el pago aprobado.",
 };
 
-export function Acciones({ id, acciones }: { id: string; acciones: AccionPedido[] }) {
+/** `reembolso`: lo que se devolverá a la tarjeta del cliente si se cancela (pagado con Mercado Pago). */
+export function Acciones({ id, acciones, reembolso = null }: { id: string; acciones: AccionPedido[]; reembolso?: string | null }) {
   const [state, action, pending] = useActionState<PedidoState, FormData>(moverPedido, {});
   const [abierta, setAbierta] = useState<AccionPedido | null>(null);
   const [paqueteria, setPaqueteria] = useState("");
@@ -61,7 +62,7 @@ export function Acciones({ id, acciones }: { id: string; acciones: AccionPedido[
           <form action={action} className={`${s.actionForm} ${s.cancelForm}`} noValidate>
             <input type="hidden" name="id" value={id} />
             <input type="hidden" name="accion" value="cancelar" />
-            <TextField label="¿Por qué se cancela?" name="motivo" value={motivo} onChange={(ev) => setMotivo(ev.target.value)} hint="Queda en el historial. Si ya se pagó, recuerda hacer la devolución." error={e.motivo} autoFocus />
+            <TextField label="¿Por qué se cancela?" name="motivo" value={motivo} onChange={(ev) => setMotivo(ev.target.value)} hint={reembolso ? `Queda en el historial. Al cancelar se devuelven ${reembolso} a la tarjeta del cliente en Mercado Pago.` : "Queda en el historial."} error={e.motivo} autoFocus />
             <div className={s.row}>
               <button type="submit" className={s.danger} disabled={pending}>
                 Sí, cancelar pedido

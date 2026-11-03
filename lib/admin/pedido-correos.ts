@@ -1,6 +1,6 @@
 import "server-only";
 import { Resend } from "resend";
-import { CONTACTO, renderNuevoPedidoEquipo, renderPedidoConfirmado, renderPedidoEntregado, renderPedidoEnviado, type PedidoCorreo } from "@/lib/email/pedido";
+import { CONTACTO, renderNuevoPedidoEquipo, renderPagoRechazado, renderPedidoConfirmado, renderPedidoEntregado, renderPedidoEnviado, type PedidoCorreo } from "@/lib/email/pedido";
 import { registrarCorreo, type TipoCorreo } from "@/lib/email/registro";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
@@ -8,7 +8,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 // Cada envío (o su falla) queda en correos_enviados; en el log del servidor nunca va el correo de nadie.
 // Si algo falla no deshace el cambio del pedido: se puede reenviar desde su historial.
 
-export type CorreoPedido = "pagado" | "enviado" | "entregado";
+export type CorreoPedido = "pagado" | "enviado" | "entregado" | "rechazado";
 
 async function leer(id: string): Promise<(PedidoCorreo & { aliadoId: string; email: string }) | null> {
   const db = supabaseAdmin();
@@ -48,8 +48,8 @@ async function equipo(aliadoId: string): Promise<string[]> {
   return [...new Set((data ?? []).filter((u) => u.rol === "admin" || u.rol === "atencion" || (u.rol === "aliado" && u.aliado_id === aliadoId)).map((u) => u.email as string))];
 }
 
-const RENDER = { pagado: renderPedidoConfirmado, enviado: renderPedidoEnviado, entregado: renderPedidoEntregado } as const;
-const TIPO: Record<CorreoPedido, TipoCorreo> = { pagado: "pedido_confirmado", enviado: "pedido_enviado", entregado: "pedido_entregado" };
+const RENDER = { pagado: renderPedidoConfirmado, enviado: renderPedidoEnviado, entregado: renderPedidoEntregado, rechazado: renderPagoRechazado } as const;
+const TIPO: Record<CorreoPedido, TipoCorreo> = { pagado: "pedido_confirmado", enviado: "pedido_enviado", entregado: "pedido_entregado", rechazado: "pedido_pago_rechazado" };
 
 type Correo = { subject: string; html: string; text: string };
 

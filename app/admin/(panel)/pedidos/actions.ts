@@ -7,6 +7,8 @@ import { audit } from "@/lib/admin/audit";
 import { siteOrigin } from "@/lib/admin/invite";
 import { enviarCorreosPedido, reenviarCorreoCliente } from "@/lib/admin/pedido-correos";
 import { crearPedido, leerCambios } from "@/lib/admin/pedidos";
+import { mpConfigurado } from "@/lib/mercadopago/client";
+import { ordenAprobada, reembolsarOrden } from "@/lib/mercadopago/cobro";
 import { avisarUmbrales } from "@/lib/inventario/avisos";
 import { leerFaltantes, textoFaltante } from "@/lib/inventario/rules";
 import { clientePrueba, kitsPrueba } from "@/lib/admin/pedidos-prueba";
@@ -79,6 +81,16 @@ export async function moverPedido(_prev: PedidoState, form: FormData): Promise<P
     const vendidos = leerCambios(data);
     after(() => avisarUmbrales(vendidos, origen));
   } else {
+    // Cancelar un pedido pagado con Mercado Pago: primero se devuelve el dinero; si Mercado Pago no lo acepta, el
+    // pedido no se cancela (así nunca queda cancelado con el cobro hecho).
+    if (nuevo === "cancelado") {
+      const orden = await ordenAprobada(id);
+      if (orden) {
+        if (!mpConfigurado() || !(await reembolsarOrden(id, orden.orderId, orden.monto, `Pedido cancelado: ${v.data.motivo}`))) {
+          return { error: "Mercado Pago no aceptó el reembolso, así que el pedido no se canceló. Intenta de nuevo en un momento o revisa el pago en Mercado Pago." };
+        }
+      }
+    }
     // Solo si sigue en el estado que se leyó (nadie lo movió mientras tanto).
     const { data: hecho, error } = await db.from("pedidos").update(cambios).eq("id", id).eq("estado", estado).select("id");
     if (error) return { error: SAVE_ERROR };

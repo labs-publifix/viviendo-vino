@@ -199,6 +199,8 @@ export type PedidoFila = {
   margen: number | null;
   /** Lo del aliado (precios acordados): admin y el aliado. */
   paraAliado: number | null;
+  /** Pago pendiente que Mercado Pago está revisando (o esperando el reto 3-D Secure del banco): no se prepara aún. */
+  pagoEnRevision: boolean;
 };
 
 export async function getPedidos(user: AdminUser): Promise<PedidoFila[]> {
@@ -206,7 +208,7 @@ export async function getPedidos(user: AdminUser): Promise<PedidoFila[]> {
   const db = supabaseAdmin();
   let q = db
     .from("pedidos")
-    .select("id, folio, created_at, estado, prueba, aliado_id, cliente_nombre, cliente_email, ciudad, estado_mx, kits, total_centavos, comision_centavos, aliado_centavos")
+    .select("id, folio, created_at, estado, prueba, aliado_id, cliente_nombre, cliente_email, ciudad, estado_mx, kits, total_centavos, comision_centavos, aliado_centavos, mp_estado")
     .order("created_at", { ascending: false })
     .limit(MAX_LISTA);
   if (user.rol === "aliado") q = q.eq("aliado_id", user.aliadoId!);
@@ -228,6 +230,7 @@ export async function getPedidos(user: AdminUser): Promise<PedidoFila[]> {
     total: veTotalCobrado(user.rol) ? p.total_centavos : null,
     margen: veMargen(user.rol) ? p.comision_centavos : null,
     paraAliado: veParteAliado(user.rol) ? p.aliado_centavos : null,
+    pagoEnRevision: p.estado === "pendiente_pago" && /^(processing|in_review|action_required)\//.test(String(p.mp_estado ?? "")),
   }));
 }
 

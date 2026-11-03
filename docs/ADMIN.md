@@ -88,6 +88,26 @@ producción (www) se hace después y solo con aprobación expresa.
 - **Dónde se ve:** resumen del checkout, correo "Recibimos tu pedido" ("ahorraste $X con CÓDIGO"), detalle del pedido
   (admin y atención), Finanzas (columna Descuento) y resultados por código (usos, descontado, ventas, margen neto).
 
+## Mercado Pago (decidido el 3 de noviembre de 2026)
+
+- **Cobro:** Card Payment Brick dentro del checkout + API de Orders (`POST /v1/orders`, modo automático). Solo tarjeta
+  de crédito o débito, **un solo pago** (sin meses), dinero al instante, `VIVIENDOVINO` en el estado de cuenta.
+  El monto sale del pedido en la base (con su descuento); el navegador solo manda el token de la tarjeta.
+- **Antes de cobrar** se aseguran las botellas 45 minutos (`asegurar_apartado`); si ya no alcanzan, no se cobra.
+- **3-D Secure** cuando el riesgo lo pide (`on_fraud_risk`): el reto del banco se muestra en un iframe dentro del
+  checkout; al terminar se consulta la orden.
+- **En revisión** (antifraude): las botellas siguen apartadas hasta 48 h; el cliente ve "Tu pago está en revisión" y el
+  admin "Pago en revisión". Si se aprueba, sale todo como siempre; si no, se liberan y se le avisa al cliente.
+- **Webhook** `/api/mercadopago/webhook` (evento "Order"): firma `x-signature` validada con `MP_WEBHOOK_SECRET`; la
+  orden se vuelve a consultar en la API (no se confía en el cuerpo). Idempotente. Pasa sin la contraseña del preview y
+  con la tienda cerrada (lib/gate.ts).
+- **Reembolso al cancelar** (solo admin, antes de enviar): primero se reembolsa completo en Mercado Pago; si no lo
+  acepta, el pedido no se cancela. Un pago que se aprueba cuando el pedido ya se canceló o venció se reembolsa solo.
+- **Comisión:** la API de Orders no devuelve la comisión de Mercado Pago; se sigue usando la estimada (3.49 % + $4 +
+  IVA, dinero al instante). Conciliar con los reportes de Mercado Pago.
+- **Variables (Vercel):** `NEXT_PUBLIC_MP_PUBLIC_KEY`, `MP_ACCESS_TOKEN`, `MP_WEBHOOK_SECRET`. Preview/Development: las
+  de prueba; Production: las de producción. Sin Public Key, dev usa el pago de prueba.
+
 ## Pedidos y Finanzas (27 de octubre de 2026)
 
 - **Estados:** Pago pendiente → Por preparar (pagado) → Preparando → En camino (con paquetería y guía) → Entregado.
@@ -227,9 +247,8 @@ función `admin_guardar_kit_items` (martes 27, `20261029000000_catalogo_admin.sq
   al cancelar, armador y carrito limitados a las existencias. 10 botellas por etiqueta de inicio: confirmar los
   números reales con el aliado antes del 19 de noviembre.
 - [x] Códigos de descuento (`20261106000000_descuentos.sql`): ver arriba.
-- [ ] Mercado Pago con Card Payment Brick (solo tarjeta): en el paso de pago del checkout, cobrar y llamar
-  `pagarApartado` (lib/inventario/apartado.ts) con proveedor "mercadopago" y la comisión real; quitar el pago de prueba
-  en producción (ya está bloqueado ahí).
+- [x] Mercado Pago (`20261107000000_mercadopago.sql`): ver arriba. Falta: pruebas con tarjetas de prueba en dev,
+  webhook configurado en el panel de Mercado Pago y, al final, credenciales de producción.
 - [ ] Limpieza de datos: borrar o anonimizar los pedidos "Venció sin pago" después de N días (tienen datos del cliente).
 - [ ] Facturación: confirmar si factura el aliado.
 - [ ] Finanzas: exportar a CSV para contabilidad.
