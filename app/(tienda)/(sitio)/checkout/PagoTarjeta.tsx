@@ -64,15 +64,19 @@ export function PagoTarjeta({
     // eslint-disable-next-line react-hooks/set-state-in-effect -- refleja que se vuelve a montar el formulario de Mercado Pago
     setEstado("cargando");
     setCausa(null);
+    // Diagnóstico: en qué paso va y el último error del formulario (aunque no sea crítico).
+    let fase = "sdk";
+    let ultimo = "";
     // Si en 25 s el formulario no está listo, se avisa en lugar de dejar "Cargando…" para siempre.
     const espera = setTimeout(() => {
       if (!vivo) return;
-      setCausa("tiempo_de_espera");
+      setCausa(`tiempo_de_espera · ${fase}${ultimo ? ` · ${ultimo}` : ""}`);
       setEstado("error");
     }, 25_000);
     cargarSdk()
       .then(async () => {
         if (!vivo) return;
+        fase = "creando";
         const MP = (window as MPWindow).MercadoPago!;
         const bricks = new MP(publicKey, { locale: "es-MX" }).bricks();
         const b = await bricks.create("cardPayment", id, {
@@ -88,6 +92,7 @@ export function PagoTarjeta({
             },
             onError: (e: { type?: string; cause?: string; message?: string } | undefined) => {
               console.error("mercadopago: error del formulario", e);
+              ultimo = `${e?.type ?? "?"}:${String(e?.cause ?? e?.message ?? "?").slice(0, 60)}`;
               // Los errores "critical" impiden mostrar o usar el formulario.
               if (vivo && e?.type === "critical") {
                 clearTimeout(espera);
@@ -99,13 +104,14 @@ export function PagoTarjeta({
               pagar.current({ ...formData, payment_type_id: additional?.paymentTypeId ?? formData.payment_type_id, installments: 1 }),
           },
         });
+        fase = "creado";
         if (!vivo) b.unmount();
         else brick.current = b;
       })
       .catch((e: unknown) => {
         if (!vivo) return;
         clearTimeout(espera);
-        setCausa(e instanceof Error && e.message === "sdk" ? "no_cargo_el_sdk" : "no_se_creo_el_formulario");
+        setCausa(e instanceof Error && e.message === "sdk" ? "no_cargo_el_sdk" : `no_se_creo_el_formulario · ${e instanceof Error ? e.message.slice(0, 80) : "?"}`);
         setEstado("error");
       });
     return () => {
