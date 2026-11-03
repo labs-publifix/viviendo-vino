@@ -79,6 +79,8 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
   const [reto, setReto] = useState<string | null>(null);
   const [intento, setIntento] = useState(0);
   const [fuePrueba, setFuePrueba] = useState(false);
+  const [rechazo, setRechazo] = useState<string | null>(null);
+  const [confirmando, setConfirmando] = useState(false);
   const [vencido, setVencido] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const huella = huellaCarrito(kits);
@@ -154,14 +156,17 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
     }
     if (silencioso) return;
     setReto(null);
-    setResult({ kind: "error", text: r.mensaje });
+    // El aviso va junto al formulario (que se vuelve a mostrar, vacío, para otro intento) y se lleva a la vista.
+    setRechazo(r.mensaje);
     setIntento((n) => n + 1);
+    requestAnimationFrame(() => document.getElementById("pago-titulo")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }
 
   async function pagarTarjeta(tarjeta: DatosBrick) {
     const guardado = leerApartado();
     if (!guardado) return;
     setResult(null);
+    setRechazo(null);
     try {
       const res = await fetch("/api/checkout/pagar", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: guardado.id, token: guardado.token, tarjeta }) });
       aplicarPago(await res.json().catch(() => null));
@@ -174,6 +179,15 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
   async function consultarPago(silencioso = false) {
     const guardado = leerApartado();
     if (!guardado) return;
+    if (!silencioso) setConfirmando(true);
+    try {
+      await consultarVarias(guardado, silencioso);
+    } finally {
+      setConfirmando(false);
+    }
+  }
+
+  async function consultarVarias(guardado: { id: string; token: string }, silencioso: boolean) {
     for (let i = 0; i < (silencioso ? 1 : 8); i++) {
       const r: RespuestaPago | null = await fetch("/api/checkout/pago-estado", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: guardado.id, token: guardado.token }) })
         .then((x) => x.json())
@@ -417,9 +431,21 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
             </section>
             <section className={styles.pago} aria-labelledby="pago-titulo">
               <h2 id="pago-titulo">Pago</h2>
+              {rechazo && (
+                <Notice kind="error" title="El pago no se completó. No se hizo ningún cargo.">
+                  {rechazo} Tus botellas siguen apartadas: vuelve a capturar la tarjeta abajo.
+                </Notice>
+              )}
               {mpPublicKey ? (
                 reto ? (
-                  <Reto3DS url={reto} onTermino={() => void consultarPago()} />
+                  <>
+                    {confirmando && (
+                      <p className={styles.muted} role="status">
+                        Confirmando tu pago con el banco…
+                      </p>
+                    )}
+                    <Reto3DS url={reto} onTermino={() => void consultarPago()} />
+                  </>
                 ) : (
                   (!vencido || apartado.limite) && (
                     <PagoTarjeta

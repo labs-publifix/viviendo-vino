@@ -43,7 +43,11 @@ async function evento(pedidoId: string, detalle: string) {
   await supabaseAdmin().from("pedido_eventos").insert({ pedido_id: pedidoId, tipo: "pago", detalle: detalle.slice(0, 300) });
 }
 
+/** Intento en curso: en revisión o esperando el reto del banco (no se cobra otra vez mientras tanto). */
 const enRevision = (mpEstado: string | null) => !!mpEstado && /^(processing|in_review|created|action_required)\//.test(mpEstado);
+/** Revisión antifraude (horas): si al final no se aprueba, el cliente ya no está en pantalla y se le escribe. */
+const enRevisionAntifraude = (mpEstado: string | null) => !!mpEstado && /^(processing|in_review|created)\//.test(mpEstado);
+const enReto = (mpEstado: string | null) => !!mpEstado && /^action_required\/pending_challenge/.test(mpEstado);
 
 /** Cobra un apartado con la tarjeta del Brick. */
 export async function cobrar(previo: Previo, tarjeta: DatosTarjeta): Promise<EstadoPago> {
@@ -181,8 +185,10 @@ export async function aplicarOrden(pedidoId: string, orden: OrdenMP, origen: "co
     return { estado: "revision", folio: p.folio };
   }
   if (r.tipo === "rechazado") {
-    // Un pago que estaba en revisión y no se aprobó: se liberan las botellas y se le avisa al cliente.
-    if (p.estado === "pendiente_pago" && origen !== "cobro" && enRevision(antes)) {
+    // Después del reto del banco el cliente sigue en el checkout: se le explica ahí y conserva su apartado.
+    if (enReto(antes)) return { estado: "rechazado", mensaje: textoRechazo(r.detalle === "failed" ? "cc_rejected_3ds_challenge" : r.detalle) };
+    // Un pago que estaba en revisión antifraude y no se aprobó: se liberan las botellas y se le avisa por correo.
+    if (p.estado === "pendiente_pago" && origen !== "cobro" && enRevisionAntifraude(antes)) {
       await db.from("pedidos").update({ reserva_expira_at: new Date().toISOString() }).eq("id", p.id).eq("estado", "pendiente_pago");
       revalidateTag("catalogo", "max");
       const sitio = await siteOrigin().catch(() => "");
