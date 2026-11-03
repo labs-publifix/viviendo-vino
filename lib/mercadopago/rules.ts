@@ -52,7 +52,7 @@ export const ESTADO_MX: Record<string, string> = {
 
 // ---------- Datos de la tarjeta (del Brick) ----------
 
-export type DatosTarjeta = { token: string; metodo: string; tipo: "credit_card" | "debit_card"; identificacion: { type: string; number: string } | null };
+export type DatosTarjeta = { token: string; metodo: string; tipo: "credit_card" | "debit_card" | "prepaid_card"; identificacion: { type: string; number: string } | null };
 
 /**
  * Lo que el navegador puede mandar del Brick: el token de la tarjeta (ya cifrada por MercadoPago.js), la marca y el
@@ -63,7 +63,7 @@ export function leerTarjeta(x: unknown): DatosTarjeta | null {
   const d = x as Record<string, unknown>;
   const token = typeof d.token === "string" && /^[A-Za-z0-9_-]{8,256}$/.test(d.token) ? d.token : null;
   const metodo = typeof d.payment_method_id === "string" && /^[a-z0-9_]{2,40}$/.test(d.payment_method_id) ? d.payment_method_id : null;
-  const tipo = d.payment_type_id === "credit_card" || d.payment_type_id === "debit_card" ? d.payment_type_id : null;
+  const tipo = d.payment_type_id === "credit_card" || d.payment_type_id === "debit_card" || d.payment_type_id === "prepaid_card" ? d.payment_type_id : null;
   if (!token || !metodo || !tipo) return null;
   if (d.installments !== undefined && Number(d.installments) !== 1) return null;
   const id = (d.payer as { identification?: { type?: unknown; number?: unknown } } | undefined)?.identification;

@@ -32,7 +32,8 @@ test("datos del Brick: token, marca, tipo y un solo pago", () => {
   const ok = leerTarjeta({ token: "abc123DEF456", payment_method_id: "master", payment_type_id: "credit_card", installments: 1, payer: { identification: { type: "RFC", number: "XAXX010101000" } } });
   assert.deepEqual(ok, { token: "abc123DEF456", metodo: "master", tipo: "credit_card", identificacion: { type: "RFC", number: "XAXX010101000" } });
   assert.equal(leerTarjeta({ token: "abc123DEF456", payment_method_id: "master", payment_type_id: "credit_card", installments: 3 }), null);
-  assert.equal(leerTarjeta({ token: "abc123DEF456", payment_method_id: "master", payment_type_id: "prepaid_card" }), null);
+  assert.equal(leerTarjeta({ token: "abc123DEF456", payment_method_id: "master", payment_type_id: "prepaid_card" })?.tipo, "prepaid_card");
+  assert.equal(leerTarjeta({ token: "abc123DEF456", payment_method_id: "master", payment_type_id: "account_money" }), null);
   assert.equal(leerTarjeta({ token: "x", payment_method_id: "master", payment_type_id: "debit_card" }), null);
   assert.equal(leerTarjeta(null), null);
 });
