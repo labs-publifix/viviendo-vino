@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Notice } from "@/app/_ui/Notice";
 import styles from "./checkout.module.css";
 
@@ -47,13 +47,16 @@ export function PagoTarjeta({
   /** Manda la tarjeta al servidor; resuelve cuando hay respuesta (sea cual sea). */
   onPagar: (datos: DatosBrick) => Promise<void>;
 }) {
-  const id = "pago-tarjeta-brick";
   const brick = useRef<Brick | null>(null);
   const pagar = useRef(onPagar);
   const [estado, setEstado] = useState<"cargando" | "listo" | "error">("cargando");
   // Motivo técnico del error del formulario (p. ej. "get_payment_methods_failed"), para poder diagnosticarlo.
   const [causa, setCausa] = useState<string | null>(null);
   const [vuelta, setVuelta] = useState(0);
+  // Contenedor con id único por formulario e intento: Next.js conserva copias ocultas de páginas ya visitadas y, con
+  // un id fijo, Mercado Pago se dibujaba en la copia oculta (el formulario "cargaba" pero nunca se veía).
+  const uid = useId().replace(/[^A-Za-z0-9]/g, "");
+  const id = `pago-tarjeta-${uid}-${vuelta}`;
 
   useEffect(() => {
     pagar.current = onPagar;
@@ -120,7 +123,7 @@ export function PagoTarjeta({
       brick.current?.unmount();
       brick.current = null;
     };
-  }, [publicKey, montoCentavos, email, vuelta]);
+  }, [publicKey, montoCentavos, email, id]);
 
   return (
     <div className={styles.brick}>
@@ -138,7 +141,7 @@ export function PagoTarjeta({
           {causa && <span className={styles.causa}>Código: {causa}</span>}
         </Notice>
       )}
-      <div id={id} key={vuelta} />
+      <div id={id} key={id} />
       <p className={styles.payNote}>Pago seguro con Mercado Pago. Tus datos de tarjeta no pasan por nuestro sitio. En tu estado de cuenta aparece como VIVIENDOVINO.</p>
     </div>
   );

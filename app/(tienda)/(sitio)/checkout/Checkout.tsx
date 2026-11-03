@@ -159,7 +159,10 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
     // El aviso va junto al formulario (que se vuelve a mostrar, vacío, para otro intento) y se lleva a la vista.
     setRechazo(r.mensaje);
     setIntento((n) => n + 1);
-    requestAnimationFrame(() => document.getElementById("pago-titulo")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    // La copia visible (Next.js puede conservar copias ocultas de la página con el mismo id).
+    requestAnimationFrame(() =>
+      [...document.querySelectorAll<HTMLElement>("#pago-titulo")].find((el) => el.offsetParent !== null)?.scrollIntoView({ behavior: "smooth", block: "start" }),
+    );
   }
 
   async function pagarTarjeta(tarjeta: DatosBrick) {
