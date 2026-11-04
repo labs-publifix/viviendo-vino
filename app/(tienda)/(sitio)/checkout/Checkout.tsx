@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Button, ButtonLink } from "@/app/_ui/Button";
-import { Checkbox, SelectField, TextField } from "@/app/_ui/Field";
+import { Checkbox, TextField } from "@/app/_ui/Field";
 import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
+import { Select } from "@/app/_ui/Select";
 import { Price } from "@/app/_ui/Price";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { borrarApartado, guardarApartado, leerApartado } from "@/lib/cart/apartado";
@@ -20,6 +21,7 @@ import { formatMXN } from "@/lib/money";
 import { useHydrated } from "@/lib/use-hydrated";
 import { Apartado, type ApartadoVista } from "./Apartado";
 import { CodigoDescuento, type CodigoAplicado } from "./CodigoDescuento";
+import { FechaNacimiento } from "./FechaNacimiento";
 import { PagoTarjeta, Reto3DS, type DatosBrick } from "./PagoTarjeta";
 import styles from "./checkout.module.css";
 
@@ -88,6 +90,13 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
   const [codigosActivos, setCodigosActivos] = useState(false);
   const [aplicado, setAplicado] = useState<CodigoAplicado | null>(null);
   const [codigoError, setCodigoError] = useState<string | null>(null);
+  const [estadoMx, setEstadoMx] = useState("");
+
+  // Al cambiar de paso (pago, confirmación, revisión) se sube al inicio, ya con la vista nueva pintada: así el mensaje
+  // de compra confirmada es lo primero que se ve y no se aterriza al pie de la página.
+  useEffect(() => {
+    if (paso !== "datos") window.scrollTo({ top: 0, behavior: "instant" });
+  }, [paso]);
 
   const ready = validation.status === "done";
   const cartOk = ready && validation.kits.length === kits.length && validation.kits.every((k) => k.ok) && validation.stockIssues.length === 0;
@@ -133,7 +142,6 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
     setFuePrueba(prueba);
     setReto(null);
     setPaso("listo");
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   /** Qué hacer con la respuesta de Mercado Pago (al pagar o al consultar). */
@@ -151,7 +159,6 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
       setReto(null);
       setFolio(r.folio);
       setPaso("revision");
-      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     if (silencioso) return;
@@ -261,7 +268,10 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
 
   function focusFirst(errs: FieldErrors) {
     const first = ORDER.find((k) => errs[k]);
-    if (first) formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+    if (!first) return;
+    // Los selectores del sitio guardan su valor en un input oculto: el foco va a su botón.
+    const form = formRef.current;
+    (form?.querySelector<HTMLElement>(`[data-campo="${first}"] [role="combobox"]`) ?? form?.querySelector<HTMLElement>(`[name="${first}"]`))?.focus();
   }
 
   /** Revisa en el servidor y aparta (o conserva, o renueva) las botellas. */
@@ -303,7 +313,6 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
       setVencido(false);
       setDatos(data);
       setPaso("pago");
-      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       setResult({ kind: "error", text: err instanceof Error ? err.message : "No pudimos revisar tus datos. Intenta de nuevo." });
     } finally {
@@ -362,11 +371,11 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
   if (paso === "listo" && folio) {
     return (
       <div className={styles.page}>
-        <Intro />
+        <Intro etiqueta="Pedido confirmado" titulo="¡Felicidades! Tu compra está confirmada." />
         <div className={styles.listo} role="status">
-          <h2>¡Gracias! Tu pedido está confirmado.</h2>
+          <h2>En unos minutos recibirás un correo con los detalles.</h2>
           <p>
-            Tu número de pedido es <span className={styles.folio}>{folio}</span>. Te mandamos la confirmación por correo y otro cuando tu caja salga.
+            Tu número de pedido es <span className={styles.folio}>{folio}</span>. Te avisaremos por correo otra vez cuando tu caja salga.
           </p>
           {fuePrueba && <Notice kind="info">Fue un pago de prueba: no se hizo ningún cargo.</Notice>}
           <ButtonLink href="/vinos" size="lg">
@@ -380,7 +389,7 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
   if (paso === "revision" && folio) {
     return (
       <div className={styles.page}>
-        <Intro />
+        <Intro etiqueta="Pago en revisión" titulo="Recibimos tu pedido." />
         <div className={styles.listo} role="status">
           <h2>Tu pago está en revisión.</h2>
           <p>
@@ -534,16 +543,20 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
               />
               <TextField name="city" label="Ciudad o municipio" autoComplete="address-level2" error={errors.city} onInput={clear("city")} />
             </div>
-            <SelectField name="state" label="Estado" autoComplete="address-level1" defaultValue="" error={errors.state} onChange={clear("state")}>
-              <option value="" disabled>
-                Elige tu estado
-              </option>
-              {MX_STATES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </SelectField>
+            <div data-campo="state">
+              <Select
+                name="state"
+                label="Estado"
+                placeholder="Elige tu estado"
+                value={estadoMx}
+                options={MX_STATES.map((s) => ({ value: s, label: s }))}
+                error={errors.state}
+                onChange={(v) => {
+                  setEstadoMx(v);
+                  clear("state")();
+                }}
+              />
+            </div>
             <TextField
               name="references"
               label="Referencias"
@@ -567,16 +580,7 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
             <legend>
               <NumberedLabel n={3}>Mayoría de edad</NumberedLabel>
             </legend>
-            <TextField
-              name="birthdate"
-              type="date"
-              label="Fecha de nacimiento"
-              autoComplete="bday"
-              max={todayInMexico()}
-              hint={`Solo vendemos a mayores de ${MIN_AGE} años.`}
-              error={errors.birthdate}
-              onInput={clear("birthdate")}
-            />
+            <FechaNacimiento name="birthdate" hoy={todayInMexico()} hint={`Solo vendemos a mayores de ${MIN_AGE} años.`} error={errors.birthdate} onChange={clear("birthdate")} />
             <Checkbox name="adult" label={`Confirmo que tengo ${MIN_AGE} años o más.`} error={errors.adult} onChange={clear("adult")} />
           </fieldset>
 
@@ -703,12 +707,12 @@ function Resultado({ result }: { result: NonNullable<Result> }) {
   );
 }
 
-function Intro() {
+function Intro({ etiqueta = "Checkout", titulo = "Ya casi." }: { etiqueta?: string; titulo?: string }) {
   return (
     <header className={styles.intro}>
-      <NumberedLabel>Checkout</NumberedLabel>
+      <NumberedLabel>{etiqueta}</NumberedLabel>
       <Heading level={1} size="section">
-        Ya casi.
+        {titulo}
       </Heading>
     </header>
   );

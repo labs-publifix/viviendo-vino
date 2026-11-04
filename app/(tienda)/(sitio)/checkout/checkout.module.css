@@ -108,3 +108,10 @@
 .retoTexto { margin: 0; font-size: var(--t-small); line-height: 1.5; }
 .retoFrame { width: 100%; min-height: 560px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
 .causa { display: block; margin-top: 4px; font-size: 12px; color: var(--muted); font-family: var(--font-mono, ui-monospace, monospace); }
+
+/* Fecha de nacimiento: día, mes y año con el selector del sitio. */
+.fecha { display: flex; flex-direction: column; gap: var(--s-2); min-width: 0; }
+.fechaLabel { font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+.fechaPartes { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.3fr) minmax(0, 1fr); gap: var(--s-2); }
+.fechaHint { margin: 0; padding-inline: 4px; color: var(--muted); font-size: var(--t-small); }
+.fechaError { margin: 0; padding-inline: 4px; color: var(--error); font-size: var(--t-small); }

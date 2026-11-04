@@ -1,4 +1,4 @@
-/* Selector del panel: mismo campo píldora que los inputs (Field) y un menú flotante con el estilo del sitio. */
+/* Selector del sitio (panel y checkout): mismo campo píldora que los inputs (Field) y un menú flotante con el estilo del sitio. */
 
 .field { display: flex; flex-direction: column; gap: var(--s-2); min-width: 0; }
 .label { font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
