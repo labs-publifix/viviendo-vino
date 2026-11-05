@@ -1,0 +1,114 @@
+/* Páginas legales: encabezado, índice del documento y texto largo cómodo de leer. Mismos tokens que el blog. */
+.page { max-width: var(--container); margin: 0 auto; padding: var(--s-7) var(--gutter) var(--s-9); }
+.head { display: flex; flex-direction: column; gap: var(--s-3); max-width: 48rem; padding-bottom: var(--s-6); }
+.updated { margin: 0; font-family: var(--font-label); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-5); align-items: start; }
+@media (min-width: 1024px) { .layout { grid-template-columns: 260px minmax(0, 44rem); gap: var(--s-8); } }
+
+/* Índice */
+.tocDesktop { display: none; }
+.tocLabel {
+  margin: 0 0 var(--s-3);
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vv-vino);
+}
+.tocList { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--line); }
+.tocList a {
+  display: grid;
+  grid-template-columns: 2.2em minmax(0, 1fr);
+  gap: var(--s-1);
+  margin-left: -1px;
+  padding: 7px 0 7px var(--s-4);
+  border-left: 2px solid transparent;
+  color: var(--muted);
+  font-size: var(--t-small);
+  line-height: 1.35;
+  text-decoration: none;
+  transition: color var(--vv-dur) var(--vv-ease), border-color var(--vv-dur) var(--vv-ease);
+}
+.tocList a:hover { color: var(--fg); }
+.tocList a[aria-current] { color: var(--fg); font-weight: 600; border-left-color: var(--vv-vino); }
+.tocList a:focus-visible { outline: var(--focus); outline-offset: 2px; }
+.tocNum { font-family: var(--font-label); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: var(--vv-vino); padding-top: 1px; }
+
+.tocMobile { border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+.tocMobile summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  min-height: 52px;
+  padding: 0 var(--s-4);
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vv-vino);
+  cursor: pointer;
+  list-style: none;
+}
+.tocMobile summary::-webkit-details-marker { display: none; }
+.tocMobile summary::after { content: "+"; font-family: var(--font-display); font-size: 22px; line-height: 1; }
+.tocMobile[open] summary::after { content: "−"; }
+.tocMobile summary:focus-visible { outline: var(--focus); outline-offset: 2px; }
+.tocCount { margin-left: auto; color: var(--muted); letter-spacing: 0.06em; text-transform: none; font-family: var(--font-display); font-size: 13px; }
+.tocMobile .tocList { max-height: 60vh; overflow-y: auto; padding: 0 var(--s-4) var(--s-3); border-left: 0; }
+.tocMobile .tocList a { min-height: 44px; align-items: center; padding: 6px 0; border-left: 0; }
+
+@media (min-width: 1024px) {
+  .tocDesktop { display: block; position: sticky; top: 120px; max-height: calc(100vh - 150px); overflow-y: auto; padding-right: var(--s-2); scrollbar-width: thin; }
+  .tocMobile { display: none; }
+}
+
+/* Texto del documento (Markdown → HTML) */
+.doc { min-width: 0; font-size: 17px; line-height: 1.7; }
+.doc :global(p) { margin: 0 0 var(--s-4); }
+.doc :global(h2) {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  margin: var(--s-7) 0 var(--s-4);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  scroll-margin-top: 110px;
+}
+.doc > :global(h2:first-of-type) { margin-top: var(--s-6); }
+.doc :global(h3) { display: flex; align-items: baseline; gap: var(--s-2); margin: var(--s-5) 0 var(--s-3); font-size: 19px; font-weight: 700; line-height: 1.3; scroll-margin-top: 110px; }
+.doc :global(.vv-legal-num) { flex: none; font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; color: var(--vv-vino); }
+.doc :global(h3 .vv-legal-num) { font-size: 12px; }
+.doc :global(a) { color: var(--vv-vino); font-weight: 600; text-decoration: underline; text-decoration-color: rgb(154 32 48 / 0.35); text-underline-offset: 3px; overflow-wrap: anywhere; }
+.doc :global(a:hover) { text-decoration-color: currentColor; }
+.doc :global(a:focus-visible) { outline: var(--focus); outline-offset: 2px; }
+.doc :global(strong) { font-weight: 700; }
+.doc :global(ul),
+.doc :global(ol) { margin: 0 0 var(--s-4); padding-left: 1.4em; }
+.doc :global(li) { margin: 0 0 var(--s-2); padding-left: 0.2em; }
+.doc :global(li p) { margin: 0; }
+.doc :global(ol > li::marker) { color: var(--vv-vino); font-weight: 700; font-variant-numeric: tabular-nums; }
+.doc :global(ul > li::marker) { color: var(--vv-vino); }
+/* Avisos (mayoría de edad): bloque destacado al inicio. */
+.doc :global(blockquote) { margin: 0 0 var(--s-5); padding: var(--s-4) var(--s-5); border-left: 3px solid var(--vv-vino); border-radius: 0 12px 12px 0; background: var(--surface); }
+.doc :global(blockquote p) { margin: 0; font-weight: 600; }
+/* Cierre del documento (consumo responsable). */
+.doc > :global(p:last-child:has(> em:only-child)) { margin-top: var(--s-7); padding-top: var(--s-4); border-top: 1px solid var(--line); color: var(--muted); font-size: var(--t-small); }
+
+.doc :global(.vv-table) { margin: 0 0 var(--s-5); overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+.doc :global(.vv-table:focus-visible) { outline: var(--focus); outline-offset: 2px; }
+.doc :global(table) { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 15px; line-height: 1.45; }
+.doc :global(th),
+.doc :global(td) { padding: var(--s-3) var(--s-4); text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.doc :global(th) { font-family: var(--font-label); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.doc :global(td:first-child) { font-weight: 700; }
+.doc :global(tr:last-child td) { border-bottom: 0; }
+
+@media (prefers-reduced-motion: reduce) { .tocList a { transition: none; } }
