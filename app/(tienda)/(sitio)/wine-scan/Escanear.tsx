@@ -29,20 +29,25 @@ export function BarraEscanear() {
   useEffect(() => {
     const hero = document.getElementById("ws-hero");
     const final = document.getElementById("ws-final");
-    if (!hero || !final || !("IntersectionObserver" in window)) return;
-    // Se ve entre el hero y el cierre: no tapa el botón del cierre ni el pie de página.
-    let heroVisto = true;
-    let cierreAbajo = true;
-    const io = new IntersectionObserver((entries) => {
-      for (const e of entries) {
-        if (e.target === hero) heroVisto = e.isIntersecting;
-        else cierreAbajo = !e.isIntersecting && e.boundingClientRect.top > 0;
-      }
-      setVisible(!heroVisto && cierreAbajo);
-    });
-    io.observe(hero);
-    io.observe(final);
-    return () => io.disconnect();
+    if (!hero || !final) return;
+    // Se ve entre el hero y el cierre: no tapa el botón del cierre ni el pie de página. Se mide al desplazarse (una vez
+    // por cuadro): un IntersectionObserver no avisa si un salto de scroll cruza el cierre de un lado al otro.
+    let cuadro = 0;
+    const medir = () => {
+      cuadro = 0;
+      setVisible(hero.getBoundingClientRect().bottom < 0 && final.getBoundingClientRect().top > window.innerHeight);
+    };
+    const pedir = () => {
+      if (!cuadro) cuadro = requestAnimationFrame(medir);
+    };
+    medir();
+    window.addEventListener("scroll", pedir, { passive: true });
+    window.addEventListener("resize", pedir);
+    return () => {
+      cancelAnimationFrame(cuadro);
+      window.removeEventListener("scroll", pedir);
+      window.removeEventListener("resize", pedir);
+    };
   }, []);
 
   return (
