@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { cacheLife } from "next/cache";
 import { CONTACTO } from "@/lib/contacto";
 import { SOCIAL } from "@/lib/social";
+import { Anio } from "./Anio";
 import { ButtonLink } from "./Button";
 import { ContactoDatos } from "./ContactoDatos";
 import { Icon } from "./Icon";
@@ -67,13 +67,6 @@ function Enlaces({ col }: { col: Columna }) {
       {col.nota && <p className={styles.nota}>{col.nota}</p>}
     </>
   );
-}
-
-/** Año para el aviso de derechos (se renueva cada día, sin volver a publicar). */
-async function Anio() {
-  "use cache";
-  cacheLife("days");
-  return <>{new Date().getFullYear()}</>;
 }
 
 export function Footer() {
