@@ -1,9 +1,83 @@
 import Link from "next/link";
-import { SocialLinks } from "./SocialLinks";
+import { cacheLife } from "next/cache";
+import { CONTACTO } from "@/lib/contacto";
+import { SOCIAL } from "@/lib/social";
+import { ButtonLink } from "./Button";
+import { ContactoDatos } from "./ContactoDatos";
+import { Icon } from "./Icon";
 import styles from "./Footer.module.css";
 
-// Pie (Manual · 10.11): enlaces, aviso +18 y consumo responsable. Sin muros: el aviso solo informa.
+// Pie (Manual · 10.11): marca, Descubrir, Información, Servicios y Contacto; franja con derechos, tarjetas aceptadas y
+// consumo responsable. Escritorio: rejilla de 12 columnas. Tableta: marca arriba y 2 × 2. Móvil: marca, contacto
+// (siempre visible) y las otras tres columnas como acordeones cerrados.
+
+type Columna = { id: string; titulo: string; enlaces: { href: string; texto: string }[]; nota?: string };
+
+const COLUMNAS: Columna[] = [
+  {
+    id: "descubrir",
+    titulo: "Descubrir",
+    enlaces: [
+      { href: "/wine-scan", texto: "Wine Scan" },
+      { href: "/quiz", texto: "Quiz IA" },
+      { href: "/blog", texto: "Blog" },
+      { href: "/nosotros", texto: "Nosotros" },
+    ],
+  },
+  {
+    id: "informacion",
+    titulo: "Información",
+    enlaces: [
+      { href: "/envios", texto: "Información de envíos" },
+      { href: "/preguntas-frecuentes", texto: "Preguntas frecuentes" },
+      { href: "/terminos", texto: "Términos y condiciones" },
+      { href: "/privacidad", texto: "Aviso de privacidad" },
+    ],
+  },
+  {
+    id: "servicios",
+    titulo: "Servicios",
+    enlaces: [
+      { href: "/servicios#marketing", texto: "Marketing para marcas de vino" },
+      { href: "/servicios#ia", texto: "Experiencias con IA" },
+    ],
+    nota: "En alianza con Continental Media",
+  },
+];
+
+const TARJETAS = [
+  { src: "/img/pagos/visa.png", alt: "Visa", w: 198, h: 64, alto: 20 },
+  { src: "/img/pagos/mastercard.png", alt: "Mastercard", w: 82, h: 64, alto: 26 },
+  { src: "/img/pagos/amex.png", alt: "American Express", w: 64, h: 64, alto: 26 },
+];
+
+const instagram = SOCIAL.find((s) => s.id === "instagram")!;
+const otrasRedes = SOCIAL.filter((s) => s.id !== "instagram");
+
+function Enlaces({ col }: { col: Columna }) {
+  return (
+    <>
+      <ul className={styles.links}>
+        {col.enlaces.map((e) => (
+          <li key={e.href}>
+            <Link href={e.href}>{e.texto}</Link>
+          </li>
+        ))}
+      </ul>
+      {col.nota && <p className={styles.nota}>{col.nota}</p>}
+    </>
+  );
+}
+
+/** Año para el aviso de derechos (se renueva cada día, sin volver a publicar). */
+async function Anio() {
+  "use cache";
+  cacheLife("days");
+  return <>{new Date().getFullYear()}</>;
+}
+
 export function Footer() {
+  const legal = [CONTACTO.razonSocial, CONTACTO.rfc && `RFC ${CONTACTO.rfc}`].filter(Boolean).join(" · ");
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
@@ -11,32 +85,75 @@ export function Footer() {
           {/* eslint-disable-next-line @next/next/no-img-element -- SVG maestro del logotipo */}
           <img src="/brand/logo-color.svg" alt="Viviendo Vino" width={786} height={250} />
           <p>Kits de 6 botellas de vino italiano. Envío incluido.</p>
-          <SocialLinks />
+          <a href={instagram.href} target="_blank" rel="noopener noreferrer" className={styles.instagram}>
+            <Icon name="instagram" size={22} />
+            {instagram.handle}
+            <span className="vv-sr-only"> en Instagram (se abre en otra pestaña)</span>
+          </a>
+          <ul className={styles.redes} aria-label="Otras redes de Viviendo Vino">
+            {otrasRedes.map((s) => (
+              <li key={s.id}>
+                <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`${s.name} (se abre en otra pestaña)`}>
+                  <Icon name={s.id} size={20} />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className={styles.cols}>
-          <nav aria-label="Información">
-            <ul className={styles.links}>
-              <li><Link href="/envios">Envíos</Link></li>
-              <li><Link href="/preguntas-frecuentes">Preguntas frecuentes</Link></li>
-              <li><Link href="/terminos">Términos y condiciones</Link></li>
-              <li><Link href="/privacidad">Aviso de privacidad</Link></li>
-            </ul>
+
+        {/* Escritorio y tableta: columnas abiertas. */}
+        {COLUMNAS.map((col) => (
+          <nav key={col.id} className={`${styles.col} ${styles.abierta}`} aria-labelledby={`pie-${col.id}`}>
+            <h2 id={`pie-${col.id}`} className={styles.colTitle}>
+              {col.titulo}
+            </h2>
+            <Enlaces col={col} />
           </nav>
-          <nav aria-label="Descubrir">
-            <p className={styles.colTitle}>Descubrir</p>
-            <ul className={styles.links}>
-              <li><Link href="/wine-scan">Wine Scan</Link></li>
-              <li><Link href="/quiz">Quiz IA</Link></li>
-              <li><Link href="/blog">Blog</Link></li>
-              <li><Link href="/nosotros">Nosotros</Link></li>
-            </ul>
-          </nav>
+        ))}
+
+        <section className={styles.contacto} aria-labelledby="pie-contacto">
+          <h2 id="pie-contacto" className={styles.colTitle}>
+            Contacto
+          </h2>
+          <ContactoDatos />
+          <ButtonLink href="/contacto" variant="secondary" className={styles.escribenos}>
+            <Icon name="mail" size={18} /> Escríbenos
+          </ButtonLink>
+        </section>
+
+        {/* Móvil: las mismas columnas como acordeones cerrados (details/summary, operables con teclado). */}
+        <div className={styles.acordeones}>
+          {COLUMNAS.map((col) => (
+            <details key={col.id} className={styles.acordeon}>
+              <summary>
+                <h2 className={styles.colTitle}>{col.titulo}</h2>
+                <Icon name="chevron" size={18} />
+              </summary>
+              <nav aria-label={col.titulo}>
+                <Enlaces col={col} />
+              </nav>
+            </details>
+          ))}
         </div>
       </div>
-      <div className={styles.legal}>
-        <p className={styles.age}>Venta solo a mayores de 18 años</p>
-        {/* Leyenda pendiente de validación legal (PENDIENTES.md). */}
-        <p>Evita el exceso. © 2026 Viviendo Vino · Tienda en línea.</p>
+
+      <div className={styles.franja}>
+        <p className={styles.derechos}>
+          © <Anio /> Viviendo Vino. Todos los derechos reservados.
+          {legal && <span className={styles.razon}>{legal}</span>}
+        </p>
+        <div className={styles.tarjetas}>
+          <p>Aquí tus tarjetas son bienvenidas</p>
+          <ul aria-label="Tarjetas aceptadas">
+            {TARJETAS.map((t) => (
+              <li key={t.alt}>
+                {/* eslint-disable-next-line @next/next/no-img-element -- PNG pequeño a 2x, sin optimizador */}
+                <img src={t.src} alt={t.alt} width={t.w} height={t.h} style={{ height: t.alto, width: "auto" }} loading="lazy" />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className={styles.moderacion}>Disfruta con moderación. Este contenido es solo para mayores de edad.</p>
       </div>
     </footer>
   );

@@ -49,6 +49,27 @@ export function TextField({ label, hint, error, optional, id: given, ...rest }: 
   );
 }
 
+export function TextArea({ label, hint, error, optional, id: given, ...rest }: FieldBase & ComponentProps<"textarea">) {
+  const auto = useId();
+  const id = given ?? auto;
+  return (
+    <div className={styles.field}>
+      <label className={styles.label} htmlFor={id}>
+        {label}
+        {optional && <span className={styles.optional}> (opcional)</span>}
+      </label>
+      <textarea
+        id={id}
+        className={`${styles.input} ${styles.textarea}`}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy(id, hint, error)}
+        {...rest}
+      />
+      <Describe id={id} hint={hint} error={error} />
+    </div>
+  );
+}
+
 export function SelectField({
   label,
   hint,

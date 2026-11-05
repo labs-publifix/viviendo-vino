@@ -148,3 +148,10 @@ for (const w of [432, 576, 688]) {
   await base.clone().webp({ quality: 80 }).toFile(join(out("wine-scan"), `hero-${w}.webp`));
 }
 console.log("hero de Wine Scan → public/img/wine-scan/hero-{432,576,688}.{avif,webp}");
+
+// Logos de tarjetas del pie: sin el margen vacío de los originales, a 64 px de alto (2x de lo que se muestra).
+for (const [file, name] of [["VISA-Logo.png", "visa"], ["Mastercard-logo.png", "mastercard"], ["American-Express-Logo.png", "amex"]]) {
+  const trimmed = await sharp(join(root, "fotos-vinos", file)).trim({ threshold: 10 }).toBuffer();
+  await sharp(trimmed).resize({ height: 64 }).png({ compressionLevel: 9, palette: true }).toFile(join(out("pagos"), `${name}.png`));
+}
+console.log("tarjetas → public/img/pagos/{visa,mastercard,amex}.png");

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { AyudaPedido } from "@/app/_ui/AyudaPedido";
 import { Button, ButtonLink } from "@/app/_ui/Button";
 import { Checkbox, TextField } from "@/app/_ui/Field";
 import { Icon } from "@/app/_ui/Icon";
@@ -682,6 +683,7 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
           <p className={styles.payNote}>
             <Icon name="info" size={16} /> Pago de contado con tarjeta de crédito o débito.
           </p>
+          <AyudaPedido />
           <Link href="/carrito" className={styles.back}>
             Volver al carrito
           </Link>

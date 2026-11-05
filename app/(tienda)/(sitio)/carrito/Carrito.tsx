@@ -1,5 +1,6 @@
 "use client";
 
+import { AyudaPedido } from "@/app/_ui/AyudaPedido";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useHydrated } from "@/lib/use-hydrated";
@@ -177,6 +178,7 @@ export function Carrito({ wines, presets }: { wines: WineRef[]; presets: { slug:
           <ButtonLink href="/arma-tu-kit" variant="secondary" block>
             Armar otro kit
           </ButtonLink>
+          <AyudaPedido />
         </aside>
       </div>
     </div>

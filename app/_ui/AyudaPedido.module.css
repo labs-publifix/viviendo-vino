@@ -1,0 +1,4 @@
+.ayuda { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.ayuda a { display: inline-block; padding: 4px 0; color: var(--fg); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.ayuda a:hover { color: var(--vv-vino); }
+.ayuda a:focus-visible { outline: var(--focus); outline-offset: 2px; }

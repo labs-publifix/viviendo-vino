@@ -27,6 +27,8 @@
 .input:focus-visible { outline: var(--focus); outline-offset: 2px; }
 .input:disabled { opacity: 0.5; cursor: not-allowed; }
 .input[aria-invalid="true"] { border-color: var(--error); }
+/* Mensajes largos: caja redondeada (no píldora), crece hacia abajo. */
+.textarea { min-height: 160px; padding: 14px 20px; border-radius: 20px; resize: vertical; line-height: 1.5; }
 
 .selectWrap { position: relative; }
 .selectWrap::after {

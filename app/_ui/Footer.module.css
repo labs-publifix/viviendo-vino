@@ -1,19 +1,36 @@
+/* Pie de 4 columnas sobre hueso, filete superior sutil. Títulos de columna en mono vino (contraste AA sobre hueso). */
 .footer { border-top: 1px solid var(--line); margin-top: var(--s-9); }
+
 .inner {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s-6);
   max-width: var(--container);
   margin: 0 auto;
   padding: var(--s-7) var(--gutter) var(--s-6);
 }
-.brand { display: flex; flex-direction: column; gap: var(--s-3); max-width: 22rem; }
+
+/* Marca */
+.brand { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-3); min-width: 0; }
 .brand img { width: 140px; height: auto; }
-.brand p { margin: 0; color: var(--muted); font-size: var(--t-small); }
-.cols { display: flex; flex-wrap: wrap; gap: var(--s-6) var(--s-8); }
-/* La columna de información no lleva título: se alinea con los enlaces de Descubrir. */
-.cols > nav:first-child { padding-top: calc(var(--t-label) * 1.5 + var(--s-2)); }
+.brand p { margin: 0; max-width: 22rem; color: var(--muted); font-size: 15px; }
+.instagram {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  color: var(--fg);
+  font-weight: 600;
+  text-decoration: none;
+}
+.instagram svg { color: var(--vv-vino); }
+.instagram:hover { color: var(--vv-vino); text-decoration: underline; text-underline-offset: 3px; }
+.redes { display: flex; gap: var(--s-1); margin: calc(-1 * var(--s-2)) 0 0 -10px; padding: 0; list-style: none; }
+.redes a { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: var(--muted); }
+.redes a:hover { color: var(--vv-vino); }
+
+/* Columnas */
+.col { min-width: 0; }
 .colTitle {
   margin: 0 0 var(--s-2);
   font-family: var(--font-label);
@@ -23,27 +40,77 @@
   text-transform: uppercase;
   color: var(--vv-vino);
 }
-.links { display: grid; gap: var(--s-1); margin: 0; padding: 0; list-style: none; }
-.links a { display: inline-block; padding: 10px 0; color: var(--fg); text-decoration: none; font-size: var(--t-small); }
-.links a:hover { color: var(--vv-vino); text-decoration: underline; }
-.legal {
+.links { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--fg); font-size: 15px; text-decoration: none; }
+.links a:hover { color: var(--vv-vino); text-decoration: underline; text-underline-offset: 3px; }
+.nota { margin: var(--s-2) 0 0; color: var(--muted); font-size: 13px; }
+
+.contacto { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.contacto .colTitle { margin-bottom: var(--s-4); }
+.escribenos { margin-top: var(--s-5); }
+
+.instagram:focus-visible,
+.redes a:focus-visible,
+.links a:focus-visible,
+.acordeon summary:focus-visible { outline: var(--focus); outline-offset: 2px; }
+
+/* Móvil (<768): marca, contacto y acordeones; las columnas abiertas se ocultan. */
+.abierta { display: none; }
+.acordeones { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.acordeon { border-bottom: 1px solid var(--line); }
+.acordeon summary {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  gap: var(--s-2) var(--s-5);
+  min-height: 52px;
+  cursor: pointer;
+  list-style: none;
+}
+.acordeon summary::-webkit-details-marker { display: none; }
+.acordeon summary .colTitle { margin: 0; }
+.acordeon summary svg { color: var(--vv-vino); transition: transform 180ms var(--vv-ease); }
+.acordeon[open] summary svg { transform: rotate(180deg); }
+.acordeon nav { padding-bottom: var(--s-3); }
+
+/* Tableta (768–1023): marca a todo el ancho y 2 × 2 con las cuatro columnas. */
+@media (min-width: 768px) {
+  .inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-6) var(--s-7); }
+  .brand { grid-column: 1 / -1; }
+  .abierta { display: block; }
+  .acordeones { display: none; }
+}
+
+/* Escritorio (≥1024): 12 columnas: marca 3, Descubrir 2, Información 2, Servicios 2, Contacto 3. */
+@media (min-width: 1024px) {
+  .inner { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-6) var(--s-5); }
+  .brand { grid-column: span 3; }
+  .abierta { grid-column: span 2; }
+  .contacto { grid-column: span 3; }
+}
+
+/* Franja inferior */
+.franja {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
   max-width: var(--container);
   margin: 0 auto;
-  padding: var(--s-4) var(--gutter) var(--s-8);
+  padding: var(--s-5) var(--gutter) var(--s-8);
   border-top: 1px solid var(--line);
-  font-size: 13px;
   color: var(--muted);
+  font-size: 13px;
 }
-.legal p { margin: 0; }
-.age {
-  font-family: var(--font-label);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--fg);
+.franja p { margin: 0; }
+.derechos { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3); }
+.razon { color: var(--muted); }
+.tarjetas { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-4); }
+.tarjetas ul { display: flex; align-items: center; gap: var(--s-4); margin: 0; padding: 0; list-style: none; }
+.tarjetas li { display: flex; align-items: center; }
+/* Gris cálido uniforme sobre hueso: sin color, con un toque sepia para no verse frío. Sin cambio al pasar el puntero. */
+.tarjetas img { display: block; filter: grayscale(1) sepia(0.25) contrast(1.05); opacity: 0.62; }
+.moderacion { font-size: 13px; }
+@media (min-width: 1024px) {
+  .franja { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--s-3) var(--s-6); }
+  .moderacion { grid-column: 1 / -1; }
 }
+@media (prefers-reduced-motion: reduce) { .acordeon summary svg { transition: none; } }

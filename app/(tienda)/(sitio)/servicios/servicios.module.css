@@ -1,0 +1,22 @@
+/* /servicios: dos tarjetas ligeras, sin imágenes. Las anclas dejan aire bajo el encabezado fijo. */
+.page { max-width: var(--container); margin: 0 auto; padding: var(--s-7) var(--gutter) var(--s-9); }
+.head { display: flex; flex-direction: column; gap: var(--s-3); max-width: 48rem; padding-bottom: var(--s-7); }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+@media (min-width: 768px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-5); } }
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-6) var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  scroll-margin-top: 120px;
+}
+.card > p:last-of-type { margin-bottom: var(--s-3); }
+.card p { margin: 0; color: var(--muted); font-size: var(--t-body-lg); line-height: 1.5; }
+.card a:not([class]) { color: var(--vv-vino); font-weight: 600; }
+.card > a:last-child { margin-top: auto; }
+.title { margin: 0; font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+.card .nota { font-size: var(--t-small); }

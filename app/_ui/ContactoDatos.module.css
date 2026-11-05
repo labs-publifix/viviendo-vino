@@ -1,0 +1,46 @@
+/* Datos de contacto: icono en vino, etiqueta mono y dato. Mismos tokens que el pie. */
+.list { display: flex; flex-direction: column; gap: var(--s-4); margin: 0; font-style: normal; }
+.item { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: var(--s-3); align-items: start; }
+.item > svg { margin-top: 2px; color: var(--vv-vino); }
+.body { display: flex; flex-direction: column; gap: 2px; min-width: 0; font-size: 15px; line-height: 1.45; }
+.label {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.number { font-size: 17px; font-weight: 700; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
+.link {
+  display: inline-block;
+  padding: 6px 0;
+  margin: -6px 0;
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: rgb(10 2 6 / 0.3);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.link:hover { color: var(--vv-vino); text-decoration-color: currentColor; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-2); }
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--vv-radius-pill);
+  background: var(--surface);
+  color: var(--fg);
+  font-size: var(--t-small);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 150ms ease-out;
+}
+.action svg { color: var(--vv-vino); }
+.action:hover { border-color: var(--vv-vino); }
+.link:focus-visible,
+.action:focus-visible { outline: var(--focus); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .action { transition: none; } }
