@@ -268,15 +268,15 @@ export default function WineScanPage() {
         <div className={styles.heroMedia}>
           <picture>
             <source media={SIN_FOTO} srcSet={VACIO} />
-            <source type="image/avif" srcSet="/img/wine-scan/hero-432.avif 432w, /img/wine-scan/hero-576.avif 576w" sizes="(min-width: 1280px) 520px, 40vw" />
+            <source type="image/avif" srcSet="/img/wine-scan/hero-432.avif 432w, /img/wine-scan/hero-576.avif 576w, /img/wine-scan/hero-720.avif 720w" sizes="(min-width: 1280px) 520px, 40vw" />
             <img
-              src="/img/wine-scan/hero-576.webp"
-              srcSet="/img/wine-scan/hero-432.webp 432w, /img/wine-scan/hero-576.webp 576w"
+              src="/img/wine-scan/hero-720.webp"
+              srcSet="/img/wine-scan/hero-432.webp 432w, /img/wine-scan/hero-576.webp 576w, /img/wine-scan/hero-720.webp 720w"
               sizes="(min-width: 1280px) 520px, 40vw"
-              width={576}
-              height={720}
+              width={720}
+              height={900}
               fetchPriority="high"
-              alt="Grupo de amigos en una mesa con vino y tabla de quesos mirando una etiqueta en un celular"
+              alt="Ilustración de un grupo de amigos en una mesa con vino y tabla de quesos mirando una etiqueta en un celular"
               className={styles.heroImg}
             />
           </picture>
