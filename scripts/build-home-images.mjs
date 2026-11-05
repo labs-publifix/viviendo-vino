@@ -137,3 +137,13 @@ await sharp(join(root, "fotos-vinos/rafa-nosotros.png"))
   .png()
   .toFile(join(out(""), "rafa-avatar.png"));
 console.log("avatar PNG → public/img/rafa-avatar.png");
+
+// Hero de Wine Scan (solo escritorio): la foto original es 16:9 (1280 × 720); el recorte 4:5 (576 × 720) empieza en
+// x = 410 para que entren la mujer con el teléfono, el hombre con la botella y nadie quede con el rostro cortado.
+const WINE_SCAN = join(root, "fotos-vinos/hero-wine-scan-section.png");
+for (const w of [432, 576]) {
+  const base = sharp(WINE_SCAN).extract({ left: 410, top: 0, width: 576, height: 720 }).resize(w, Math.round((w * 5) / 4));
+  await base.clone().avif({ quality: 55 }).toFile(join(out("wine-scan"), `hero-${w}.avif`));
+  await base.clone().webp({ quality: 80 }).toFile(join(out("wine-scan"), `hero-${w}.webp`));
+}
+console.log("hero de Wine Scan → public/img/wine-scan/hero-{432,576}.{avif,webp}");

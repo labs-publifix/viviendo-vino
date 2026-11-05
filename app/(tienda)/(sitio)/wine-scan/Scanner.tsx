@@ -144,7 +144,8 @@ export function Scanner() {
   );
 
   return (
-    <div className={styles.scanner}>
+    // data-fase: la página oculta la landing y la barra fija mientras hay lectura o resultado (solo presentación).
+    <div className={styles.scanner} data-fase={phase.name}>
       <input
         ref={inputRef}
         type="file"
@@ -186,7 +187,7 @@ export function Scanner() {
 
       {phase.name === "idle" && (
         <div className={styles.start}>
-          <button type="button" className={styles.scanButton} onClick={openCamera}>
+          <button type="button" className={styles.scanButton} onClick={openCamera} data-accion="escanear">
             <span className={styles.scanIcon} aria-hidden="true">
               <Icon name="camera" size={32} />
             </span>

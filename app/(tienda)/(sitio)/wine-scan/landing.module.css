@@ -1,0 +1,287 @@
+/* Wine Scan como landing. Mismos tokens, contenedor y ritmo que la portada (descubre.module.css).
+   Vista móvil = puntero táctil y hasta 1024 px (la misma regla de siempre): escáner primero, sin QR ni foto.
+   Vista de escritorio con foto = desde 1024 px con puntero fino, o desde 1025 px con cualquiera. */
+
+.page { overflow-x: clip; }
+
+/* ---------- 1. Hero ---------- */
+/* Móvil: idéntico al de antes (columna de 720 px, mismo aire). */
+.hero { max-width: 720px; margin: 0 auto; padding: var(--s-7) var(--gutter) 0; }
+.heroCopy { display: flex; flex-direction: column; gap: var(--s-6); min-width: 0; }
+.intro { display: flex; flex-direction: column; gap: var(--s-3); }
+.lede { margin: 0; max-width: 40rem; font-size: var(--t-body-lg); color: var(--muted); }
+.heroMedia { display: none; }
+
+/* Qué vista se ve: táctil y angosto → escáner; lo demás → QR. Sin JavaScript, sin parpadeo. */
+.mobile { display: none; }
+.desktop { display: flex; flex-direction: column; gap: var(--s-4); }
+@media (pointer: coarse) and (max-width: 1024px) {
+  .mobile { display: block; }
+  .desktop { display: none; }
+}
+
+.qrCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: center;
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+@media (min-width: 640px) { .qrCard { grid-template-columns: 168px minmax(0, 1fr); } }
+.qrCode { width: 168px; height: 168px; padding: var(--s-3); border-radius: 12px; background: #fff; }
+.qrCode svg { display: block; width: 100%; height: 100%; }
+.qrText { display: flex; flex-direction: column; gap: var(--s-2); }
+.qrText p { margin: 0; color: var(--muted); }
+.qrTitle { margin: 0; font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+
+/* Gratis · Sin registro · La foto no se guarda */
+.micro { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); margin: 0; padding: 0; list-style: none; font-size: var(--t-small); color: var(--muted); }
+.micro li { display: inline-flex; align-items: center; gap: var(--s-2); }
+.micro li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--vv-vino); }
+
+@media (min-width: 1024px) and (pointer: fine), (min-width: 1025px) {
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--s-8);
+    align-items: center;
+    max-width: var(--container);
+    padding: var(--s-6) var(--gutter) var(--s-4);
+  }
+  .heroMedia { position: relative; display: block; }
+  /* Foto 4:5; su alto se ajusta para que el hero quepa completo en 1440 × 900 sin desplazarse. */
+  .heroImg {
+    display: block;
+    width: auto;
+    height: clamp(440px, calc(100svh - 230px), 660px);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 60% 50%;
+    border-radius: 28px;
+    box-shadow: var(--shadow-float);
+  }
+  /* Chip sobre la mesa (abajo a la izquierda), lejos de los rostros. */
+  .floatChip {
+    position: absolute;
+    left: calc(-1 * var(--s-6));
+    bottom: var(--s-7);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    margin: 0;
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--vv-radius-pill);
+    background: var(--surface);
+    box-shadow: var(--shadow-float);
+    font-family: var(--font-label);
+    font-size: var(--t-label);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .floatChip span { width: 8px; height: 8px; border-radius: 50%; background: var(--vv-vino); }
+}
+
+/* ---------- Landing (debajo del hero) ---------- */
+/* Mientras hay una lectura o un resultado en pantalla, la guía es lo único que se ve. */
+.page:has([data-fase]:not([data-fase="idle"])) .landing { display: none; }
+
+.section { max-width: var(--container); margin: 0 auto; padding: var(--s-9) var(--gutter) 0; }
+.head { display: flex; flex-direction: column; gap: var(--s-3); max-width: 44rem; margin-bottom: var(--s-6); }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  min-width: 0;
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.card p { margin: 0; color: var(--muted); }
+.card > svg,
+.cardTop svg { color: var(--vv-vino); }
+.cardTop { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--s-2); }
+.cardTitle { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; }
+.card > svg { margin-bottom: var(--s-2); }
+.num { font-family: var(--font-label); font-size: var(--t-label); font-weight: 500; letter-spacing: 0.1em; color: var(--vv-vino); }
+
+/* 2. Cómo funciona: lista vertical en móvil, tres en fila en escritorio */
+.pasos { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4); margin: 0; padding: 0; list-style: none; }
+@media (min-width: 768px) { .pasos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* 3. Qué recibes */
+.recibes { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-7); align-items: start; }
+.phoneCol { display: flex; justify-content: center; }
+.recibesCol { display: flex; flex-direction: column; gap: var(--s-6); min-width: 0; }
+@media (min-width: 960px) {
+  .recibes { grid-template-columns: 360px minmax(0, 1fr); gap: var(--s-8); }
+  .phoneCol { position: sticky; top: 120px; }
+}
+
+.phoneWrap { display: flex; flex-direction: column; align-items: center; gap: var(--s-3); margin: 0; }
+.mockTag {
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.phone {
+  width: min(100%, 320px);
+  padding: 10px;
+  border-radius: 44px;
+  background: var(--vv-negro);
+  box-shadow: var(--shadow-float);
+}
+.screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: 44px var(--s-4) var(--s-5);
+  border-radius: 34px;
+  background: var(--vv-hueso);
+  color: var(--fg);
+}
+.screen p { margin: 0; }
+.notch { position: absolute; top: 12px; left: 50%; width: 84px; height: 22px; border-radius: 12px; background: var(--vv-negro); transform: translateX(-50%); }
+.mWhat { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: var(--s-3); align-items: start; }
+.mWhat > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.mBottle { display: block; width: 64px; height: auto; aspect-ratio: 880 / 1184; object-fit: contain; border-radius: 8px; background: var(--surface); }
+.mLabel { font-family: var(--font-label); font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--vv-vino); }
+.mName { font-size: 26px; font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; }
+.mMeta { font-size: 12px; color: var(--muted); }
+.mChips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 0; padding: 0; list-style: none; }
+.mChips li { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border: 1px solid var(--line); border-radius: var(--vv-radius-pill); font-size: 11px; }
+.mOk::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+.mBlock { display: flex; flex-direction: column; gap: var(--s-2); padding-top: var(--s-3); border-top: 1px solid var(--line); }
+.mScale { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px var(--s-2); font-size: 12px; }
+.mScale > span:first-child { font-family: var(--font-label); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+.mScale > span:nth-child(2) { font-weight: 600; }
+.mTrack { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; }
+.mTrack span { height: 5px; border-radius: 3px; background: rgb(10 2 6 / 0.1); }
+.mTrack .mOn { background: var(--vv-ciruela); }
+.mTemp { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.mTemp span { font-family: var(--font-label); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; color: var(--vv-vino); }
+
+.bloques { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.bloques li { display: flex; flex-direction: column; gap: var(--s-2); padding: var(--s-5) 0; border-bottom: 1px solid var(--line); }
+.bloques p:last-child { margin: 0; font-size: var(--t-body-lg); line-height: 1.45; }
+@media (min-width: 640px) {
+  .bloques { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s-6); }
+}
+
+.extras { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+@media (min-width: 640px) { .extras { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.extra { display: flex; flex-direction: column; gap: var(--s-3); padding: var(--s-5); border-radius: var(--r-card); background: rgb(10 2 6 / 0.04); }
+.extra p { margin: 0; }
+.extraTitle { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.25; }
+
+.rec { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: var(--s-4); align-items: start; padding: var(--s-4); border: 1.5px solid var(--vv-vino); border-radius: 14px; background: var(--surface); }
+.rec:not(:has(.recImg)) { grid-template-columns: minmax(0, 1fr); }
+.recImg { width: 64px; height: auto; aspect-ratio: 880 / 1184; object-fit: contain; }
+.recBody { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-2); min-width: 0; }
+.recBody p { margin: 0; }
+.recLabel { font-family: var(--font-label); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--vv-vino); }
+.recName { margin: 0; font-size: 18px; font-weight: 800; line-height: 1.2; }
+.recPrice { display: flex; align-items: baseline; gap: var(--s-2); }
+.recPrice > span:last-child { font-size: var(--t-small); color: var(--muted); }
+
+.fine { margin: 0; font-size: var(--t-small); color: var(--muted); }
+
+/* 4. Cuándo usarlo: 2 columnas en móvil, 4 en escritorio */
+.grid4 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); margin: 0; padding: 0; list-style: none; }
+@media (max-width: 399px) { .grid4 { grid-template-columns: minmax(0, 1fr); } }
+@media (min-width: 960px) { .grid4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4); } }
+
+/* 5 y 6. Banda de tips y confianza */
+.band { margin-top: var(--s-9); background: var(--surface); border-block: 1px solid var(--line); }
+.bandInner { display: flex; flex-direction: column; gap: var(--s-5); max-width: var(--container); margin: 0 auto; padding: var(--s-7) var(--gutter); }
+.bandInner + .bandInner { padding-top: 0; }
+.tips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-4); margin: 0; padding: 0; list-style: none; }
+@media (min-width: 960px) { .tips { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.tips li { display: flex; align-items: center; gap: var(--s-3); font-weight: 600; line-height: 1.3; }
+.tipIcon { display: grid; flex: none; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%; color: var(--vv-vino); background: var(--vv-hueso); }
+.trust { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); margin: 0; padding: var(--s-5) 0 0; border-top: 1px solid var(--line); list-style: none; }
+@media (min-width: 640px) { .trust { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 960px) { .trust { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.trust li { display: flex; align-items: flex-start; gap: var(--s-2); font-size: var(--t-small); color: var(--muted); }
+.trust svg { flex: none; margin-top: 1px; color: var(--vv-vino); }
+
+/* 7. Preguntas: details/summary nativos (teclado sin JavaScript) */
+.faqLayout { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-2); }
+@media (min-width: 960px) { .faqLayout { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s-8); } }
+.faq { border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); min-height: 56px; padding: var(--s-3) 0; cursor: pointer; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; flex: none; font-size: 24px; font-weight: 400; color: var(--vv-vino); }
+.faq details[open] summary::after { content: "−"; }
+.faq summary:focus-visible { outline: var(--focus); outline-offset: 2px; }
+.faq h3 { margin: 0; font-size: var(--t-body-lg); font-weight: 700; line-height: 1.35; }
+.faq details p { margin: 0; padding: 0 0 var(--s-4); color: var(--muted); }
+
+/* 8. Cierre */
+.final { padding-bottom: var(--s-9); }
+.finalBox { display: flex; flex-direction: column; align-items: center; gap: var(--s-5); max-width: 44rem; margin: 0 auto; text-align: center; }
+.finalBox .qrCard { text-align: left; }
+.finalBox .mobile { width: 100%; }
+
+/* Botón de escaneo (cierre y barra fija), mismo rojo vino que el del hero */
+.ctaScan {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  width: 100%;
+  min-height: 56px;
+  padding: 0 var(--s-5);
+  border: 0;
+  border-radius: var(--vv-radius-pill);
+  background: var(--vv-vino);
+  color: var(--vv-hueso);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ctaScan:active { transform: scale(0.98); }
+.ctaScan:focus-visible { outline: var(--focus); outline-offset: 3px; }
+
+.sticky {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 30;
+  padding: var(--s-3) var(--gutter) calc(var(--s-3) + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 70%, rgb(243 236 228 / 0));
+  transform: translateY(110%);
+  visibility: hidden;
+  transition: transform var(--vv-dur) var(--vv-ease), visibility 0s linear var(--vv-dur);
+}
+.sticky[data-visible] { transform: none; visibility: visible; transition: transform var(--vv-dur) var(--vv-ease), visibility 0s; }
+.page:has([data-fase]:not([data-fase="idle"])) .sticky { display: none; }
+
+/* Entrada sutil de las secciones al aparecer (solo donde el navegador lo soporta y sin "reducir movimiento"). */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .section,
+    .bandInner {
+      animation: entra linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+    @keyframes entra { from { opacity: 0; transform: translateY(16px); } }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sticky,
+  .sticky[data-visible] { transition: none; }
+}
