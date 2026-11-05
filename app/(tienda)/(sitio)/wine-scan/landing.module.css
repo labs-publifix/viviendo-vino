@@ -199,7 +199,9 @@
 
 /* 4. Cuándo usarlo: 2 columnas en móvil, 4 en escritorio */
 .grid4 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); margin: 0; padding: 0; list-style: none; }
-@media (max-width: 399px) { .grid4 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 359px) { .grid4 { grid-template-columns: minmax(0, 1fr); } }
+.grid4 .card { padding: var(--s-4); }
+@media (min-width: 640px) { .grid4 .card { padding: var(--s-5); } }
 @media (min-width: 960px) { .grid4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4); } }
 
 /* 5 y 6. Banda de tips y confianza */
