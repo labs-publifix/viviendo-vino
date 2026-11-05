@@ -11,7 +11,7 @@
   text-transform: uppercase;
   color: var(--muted);
 }
-.phoneRow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-2); }
 .number { font-size: 17px; font-weight: 700; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
 .link {
   display: inline-block;
@@ -28,9 +28,9 @@
 .action {
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
+  gap: 6px;
+  min-height: 34px;
   padding: 0 14px;
-  margin: -6px 0;
   border: 1px solid var(--line);
   border-radius: var(--vv-radius-pill);
   background: var(--surface);
@@ -41,7 +41,8 @@
   position: relative;
   transition: border-color 150ms ease-out;
 }
-.action::after { content: ""; position: absolute; inset: -6px 0; }
+.action::after { content: ""; position: absolute; inset: -5px 0; } /* área táctil de 44 px */
+.action svg { flex: none; color: var(--vv-vino); }
 .action:hover { border-color: var(--vv-vino); color: var(--vv-vino); }
 .link:focus-visible,
 .action:focus-visible { outline: var(--focus); outline-offset: 2px; }

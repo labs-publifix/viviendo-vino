@@ -55,5 +55,5 @@ test("constantes de contacto: teléfono, correo y domicilio oficiales", () => {
   assert.equal(CONTACTO.correo.href, "mailto:hola@viviendovino.com");
   assert.ok(CONTACTO.domicilio.texto.includes("Boca del Río, Ver."));
   assert.ok(CONTACTO.domicilio.mapa.startsWith("https://www.google.com/maps/search/?api=1&query=Bv.%20Adolfo"));
-  assert.equal("whatsapp" in CONTACTO, false);
+  assert.ok(CONTACTO.whatsapp.href.startsWith("https://wa.me/522291325000?text=Hola%2C%20vengo"));
 });
