@@ -42,7 +42,7 @@ export function renderContactoConfirmacion(d: ContactoDatos) {
     heading: `Gracias, ${d.nombre.split(" ")[0]}.`,
     paragraphs: [
       "Recibimos tu mensaje. Te respondemos en nuestro horario de atención: lunes a viernes, de 9:00 a 18:00 (hora CDMX).",
-      `Si necesitas algo antes, también estamos en WhatsApp al ${CONTACTO.whatsapp.texto}.`,
+      `Si necesitas algo antes, llámanos al ${CONTACTO.telefono.texto}.`,
     ],
     cta: { label: "Volver a Viviendo Vino", url: SITE_URL },
     reason: "Recibes este correo porque nos escribiste desde el formulario de contacto de viviendovino.com.",

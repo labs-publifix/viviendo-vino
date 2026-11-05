@@ -14,7 +14,7 @@ import styles from "./contacto.module.css";
 // el resultado en la misma página (con el foco en el aviso). Campo oculto "sitio" y hora de inicio para frenar bots.
 
 const ORDEN: ContactoCampo[] = ["nombre", "correo", "telefono", "motivo", "mensaje", "privacidad"];
-const NO_SE_ENVIO = `No pudimos enviar tu mensaje. Escríbenos por WhatsApp al ${CONTACTO.whatsapp.texto} o al correo ${CONTACTO.correo.texto}.`;
+const NO_SE_ENVIO = `No pudimos enviar tu mensaje. Llámanos al ${CONTACTO.telefono.texto} o escríbenos a ${CONTACTO.correo.texto}.`;
 
 type Estado = { tipo: "ok" } | { tipo: "error"; texto: string } | null;
 

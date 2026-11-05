@@ -517,7 +517,7 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
             <TextField
               name="phone"
               type="tel"
-              label="Teléfono con WhatsApp"
+              label="Teléfono"
               autoComplete="tel-national"
               inputMode="numeric"
               hint="10 dígitos. Lo usamos para coordinar la entrega."

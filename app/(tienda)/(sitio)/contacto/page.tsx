@@ -14,7 +14,7 @@ import styles from "./contacto.module.css";
 
 export const metadata: Metadata = {
   title: "Contacto · Viviendo Vino",
-  description: "Escríbenos sobre tu pedido, nuestros servicios para marcas de vino o lo que necesites. También por teléfono y WhatsApp.",
+  description: "Escríbenos sobre tu pedido, tus etiquetas, nuestros servicios para el mundo del vino o lo que necesites. También por teléfono.",
   alternates: { canonical: `${SITE_URL}/contacto` },
 };
 

@@ -1,5 +1,6 @@
 import "server-only";
 import { formatMXN } from "@/lib/money";
+import { CONTACTO as CONTACTO_SITIO } from "@/lib/contacto";
 import { SITE_URL } from "@/lib/site";
 import { renderBrandEmail } from "./brand-layout";
 
@@ -7,7 +8,7 @@ import { renderBrandEmail } from "./brand-layout";
 // servicio, sin enlace de baja). Al equipo: aviso de pedido por preparar, sin datos de contacto del cliente ni montos.
 // Los pedidos de prueba llevan "[Prueba]" en el asunto.
 
-export const CONTACTO = "hola@viviendovino.com";
+export const CONTACTO = CONTACTO_SITIO.correo.texto;
 
 export type PedidoCorreo = {
   id: string;

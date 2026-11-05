@@ -7,9 +7,10 @@ import { ContactoDatos } from "./ContactoDatos";
 import { Icon } from "./Icon";
 import styles from "./Footer.module.css";
 
-// Pie (Manual · 10.11): marca, Descubrir, Información, Servicios y Contacto; franja con derechos, tarjetas aceptadas y
-// consumo responsable. Escritorio: rejilla de 12 columnas. Tableta: marca arriba y 2 × 2. Móvil: marca, contacto
-// (siempre visible) y las otras tres columnas como acordeones cerrados.
+// Pie (Manual · 10.11). Arriba, cuatro columnas iguales: marca, Descubrir, Información y Servicios. Debajo, la franja
+// de Contacto con sus cuatro datos alineados a esas mismas columnas. Al final: derechos, tarjetas aceptadas y consumo
+// responsable. Tableta: marca arriba, tres columnas y contacto en 2 × 2. Móvil: marca, contacto (siempre visible) y
+// las tres columnas de enlaces como acordeones cerrados.
 
 type Columna = { id: string; titulo: string; enlaces: { href: string; texto: string }[]; nota?: string };
 
@@ -38,8 +39,10 @@ const COLUMNAS: Columna[] = [
     id: "servicios",
     titulo: "Servicios",
     enlaces: [
-      { href: "/servicios#marketing", texto: "Marketing para marcas de vino" },
+      { href: "/servicios#marketing", texto: "Marketing para negocios de vino" },
       { href: "/servicios#ia", texto: "Experiencias con IA" },
+      { href: "/servicios#consultoria", texto: "Consultoría para centros de consumo" },
+      { href: "/servicios#regalos", texto: "Regalos corporativos" },
     ],
     nota: "En alianza con Continental Media",
   },
@@ -105,13 +108,16 @@ export function Footer() {
         ))}
 
         <section className={styles.contacto} aria-labelledby="pie-contacto">
-          <h2 id="pie-contacto" className={styles.colTitle}>
-            Contacto
-          </h2>
-          <ContactoDatos />
-          <ButtonLink href="/contacto" variant="secondary" className={styles.escribenos}>
-            <Icon name="mail" size={18} /> Escríbenos
-          </ButtonLink>
+          <div className={styles.contactoHead}>
+            <h2 id="pie-contacto" className={styles.colTitle}>
+              Contacto
+            </h2>
+            <ButtonLink href="/contacto" variant="secondary" className={styles.escribenos}>
+              <Icon name="mail" size={18} />
+              <span>Escríbenos</span>
+            </ButtonLink>
+          </div>
+          <ContactoDatos variante="franja" />
         </section>
 
         {/* Móvil: las mismas columnas como acordeones cerrados (details/summary, operables con teclado). */}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { InfoPage, Pendiente, Section } from "../_info/InfoPage";
+import { CONTACTO } from "@/lib/contacto";
 
 export const metadata: Metadata = {
   title: "Aviso de privacidad · Viviendo Vino",
@@ -20,7 +21,7 @@ export default function Privacidad() {
       <Section n={1} title="Responsable">
         <p>
           <Pendiente>razón social, domicilio y datos del responsable</Pendiente>. Contacto para privacidad:{" "}
-          <a href="mailto:hola@viviendovino.com">hola@viviendovino.com</a>.
+          <a href={CONTACTO.correo.href}>{CONTACTO.correo.texto}</a>.
         </p>
       </Section>
       <Section n={2} title="Datos que pedimos">
@@ -55,7 +56,7 @@ export default function Privacidad() {
       <Section n={5} title="Tus derechos">
         <p>
           Puedes pedir acceso, rectificación, cancelación u oposición (derechos ARCO), o retirar tu consentimiento,
-          escribiendo a <a href="mailto:hola@viviendovino.com">hola@viviendovino.com</a>.{" "}
+          escribiendo a <a href={CONTACTO.correo.href}>{CONTACTO.correo.texto}</a>.{" "}
           <Pendiente>requisitos de la solicitud y plazo de respuesta</Pendiente>.
         </p>
       </Section>

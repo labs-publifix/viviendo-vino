@@ -10,12 +10,12 @@ import { isRateLimited } from "@/lib/rate-limit";
 
 const ok = () => Response.json({ ok: true });
 const fail = (status: number, error: string, fieldErrors?: object) => Response.json({ ok: false, error, fieldErrors }, { status });
-const NO_SE_ENVIO = `No pudimos enviar tu mensaje. Escríbenos por WhatsApp al ${CONTACTO.whatsapp.texto} o al correo ${CONTACTO.correo.texto}.`;
+const NO_SE_ENVIO = `No pudimos enviar tu mensaje. Llámanos al ${CONTACTO.telefono.texto} o escríbenos a ${CONTACTO.correo.texto}.`;
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (isRateLimited(`contacto:${ip}`, Date.now(), LIMITE_IP)) {
-    return fail(429, `Recibimos varios mensajes desde tu conexión. Espera un rato o escríbenos por WhatsApp al ${CONTACTO.whatsapp.texto}.`);
+    return fail(429, `Recibimos varios mensajes desde tu conexión. Espera un rato o llámanos al ${CONTACTO.telefono.texto}.`);
   }
 
   let body: Record<string, unknown>;

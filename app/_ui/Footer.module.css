@@ -45,9 +45,12 @@
 .links a:hover { color: var(--vv-vino); text-decoration: underline; text-underline-offset: 3px; }
 .nota { margin: var(--s-2) 0 0; color: var(--muted); font-size: 13px; }
 
-.contacto { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
-.contacto .colTitle { margin-bottom: var(--s-4); }
-.escribenos { margin-top: var(--s-5); }
+/* Contacto: franja a todo el ancho, con filete arriba; título y "Escríbenos" en la misma línea. */
+.contacto { display: flex; flex-direction: column; gap: var(--s-5); min-width: 0; padding-top: var(--s-6); border-top: 1px solid var(--line); }
+.contactoHead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-3); }
+.contactoHead .colTitle { margin: 0; }
+/* El sobre se ve más alto que el texto: se baja 1 px para centrarlo a ojo con las minúsculas. */
+.escribenos svg { position: relative; top: 1px; }
 
 .instagram:focus-visible,
 .redes a:focus-visible,
@@ -72,20 +75,19 @@
 .acordeon[open] summary svg { transform: rotate(180deg); }
 .acordeon nav { padding-bottom: var(--s-3); }
 
-/* Tableta (768–1023): marca a todo el ancho y 2 × 2 con las cuatro columnas. */
+/* Tableta (768–1023): marca a todo el ancho; Descubrir, Información y Servicios en tres columnas; contacto abajo. */
 @media (min-width: 768px) {
-  .inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-6) var(--s-7); }
+  .inner { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-6) var(--s-5); }
   .brand { grid-column: 1 / -1; }
   .abierta { display: block; }
   .acordeones { display: none; }
+  .contacto { grid-column: 1 / -1; }
 }
 
-/* Escritorio (≥1024): 12 columnas: marca 3, Descubrir 2, Información 2, Servicios 2, Contacto 3. */
+/* Escritorio (≥1024): cuatro columnas iguales (marca y tres de enlaces); la franja de contacto usa las mismas cuatro. */
 @media (min-width: 1024px) {
-  .inner { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-6) var(--s-5); }
-  .brand { grid-column: span 3; }
-  .abierta { grid-column: span 2; }
-  .contacto { grid-column: span 3; }
+  .inner { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-7) var(--s-5); }
+  .brand { grid-column: auto; }
 }
 
 /* Franja inferior */

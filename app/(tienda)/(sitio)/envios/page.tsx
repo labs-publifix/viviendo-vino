@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { InfoPage, Pendiente, Section } from "../_info/InfoPage";
+import { CONTACTO } from "@/lib/contacto";
 
 export const metadata: Metadata = {
   title: "Envíos · Viviendo Vino",
@@ -44,7 +45,7 @@ export default function Envios() {
       </Section>
       <Section n={6} title="Si algo llega mal">
         <p>
-          Escríbenos a <a href="mailto:hola@viviendovino.com">hola@viviendovino.com</a> con tu número de pedido y una foto
+          Escríbenos a <a href={CONTACTO.correo.href}>{CONTACTO.correo.texto}</a> con tu número de pedido y una foto
           de la caja y las botellas. <Pendiente>plazo para reportar y cómo se repone o reembolsa</Pendiente>.
         </p>
         <p>

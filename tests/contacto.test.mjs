@@ -33,6 +33,8 @@ test("teléfono opcional, solo números y signos", () => {
 test("?motivo= preselecciona solo motivos válidos", () => {
   assert.equal(motivoDeUrl("marketing"), "marketing");
   assert.equal(motivoDeUrl("ia"), "ia");
+  assert.equal(motivoDeUrl("etiquetas"), "etiquetas");
+  assert.equal(motivoDeUrl("regalos"), "regalos");
   assert.equal(motivoDeUrl(["pedido", "otro"]), "pedido");
   assert.equal(motivoDeUrl("<script>"), "");
   assert.equal(motivoDeUrl(undefined), "");
@@ -46,9 +48,12 @@ test("anti-spam: campo oculto lleno o envío demasiado rápido", () => {
   assert.equal(esBot("", undefined, ahora), true);
 });
 
-test("constantes de contacto: un solo número, enlaces bien armados", () => {
-  assert.equal(CONTACTO.telefono.texto, "229 278 1916");
-  assert.equal(CONTACTO.telefono.href, "tel:+522292781916");
-  assert.ok(CONTACTO.whatsapp.href.startsWith("https://wa.me/522292781916?text=Hola%2C%20vengo"));
+test("constantes de contacto: teléfono, correo y domicilio oficiales", () => {
+  assert.equal(CONTACTO.telefono.texto, "229 132 5000");
+  assert.equal(CONTACTO.telefono.href, "tel:+522291325000");
+  assert.equal(CONTACTO.correo.texto, "hola@viviendovino.com");
+  assert.equal(CONTACTO.correo.href, "mailto:hola@viviendovino.com");
+  assert.ok(CONTACTO.domicilio.texto.includes("Boca del Río, Ver."));
   assert.ok(CONTACTO.domicilio.mapa.startsWith("https://www.google.com/maps/search/?api=1&query=Bv.%20Adolfo"));
+  assert.equal("whatsapp" in CONTACTO, false);
 });

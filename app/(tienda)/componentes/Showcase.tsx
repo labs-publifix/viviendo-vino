@@ -147,7 +147,7 @@ export function Showcase() {
           <div className={styles.formGrid}>
             <TextField label="Nombre completo" autoComplete="name" placeholder="Como aparece en tu identificación" />
             <TextField label="Correo" type="email" inputMode="email" defaultValue="ana@gmail" error="Revisa tu correo: falta el dominio, por ejemplo nombre@gmail.com." />
-            <TextField label="Teléfono con WhatsApp" type="tel" inputMode="numeric" hint="10 dígitos, sin lada internacional." />
+            <TextField label="Teléfono" type="tel" inputMode="numeric" hint="10 dígitos, sin lada internacional." />
             <TextField label="Código postal" inputMode="numeric" disabled placeholder="Disponible en el checkout" />
             <SelectField label="Estado" defaultValue="">
               <option value="" disabled>

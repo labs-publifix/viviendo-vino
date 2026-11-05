@@ -2,23 +2,20 @@ import { CONTACTO } from "@/lib/contacto";
 import { Icon } from "./Icon";
 import styles from "./ContactoDatos.module.css";
 
-// Datos de contacto (pie y /contacto), leídos de lib/contacto.ts. Teléfono y WhatsApp van en una sola línea con sus
-// dos acciones; el domicilio abre Google Maps en otra pestaña.
-export function ContactoDatos() {
-  const { telefono, whatsapp, correo, domicilio, horario } = CONTACTO;
+// Datos de contacto (pie y /contacto), leídos de lib/contacto.ts: teléfono (con "Llamar"), correo, domicilio (abre
+// Google Maps en otra pestaña) y horario. "franja": los cuatro en fila (pie); "lista": uno debajo de otro (/contacto).
+export function ContactoDatos({ variante = "lista" }: { variante?: "lista" | "franja" }) {
+  const { telefono, correo, domicilio, horario } = CONTACTO;
   return (
-    <address className={styles.list}>
+    <address className={`${styles.list} ${variante === "franja" ? styles.franja : ""}`}>
       <div className={styles.item}>
         <Icon name="phone" size={20} />
         <div className={styles.body}>
-          <span className={styles.label}>Teléfono y WhatsApp</span>
-          <span className={styles.number}>{telefono.texto}</span>
-          <span className={styles.actions}>
+          <span className={styles.label}>Teléfono</span>
+          <span className={styles.phoneRow}>
+            <span className={styles.number}>{telefono.texto}</span>
             <a href={telefono.href} className={styles.action} aria-label={`Llamar al ${telefono.texto}`}>
-              <Icon name="phone" size={16} /> Llamar
-            </a>
-            <a href={whatsapp.href} className={styles.action} target="_blank" rel="noopener noreferrer" aria-label={`WhatsApp al ${whatsapp.texto} (se abre en otra pestaña)`}>
-              <Icon name="whatsapp" size={16} /> WhatsApp
+              Llamar
             </a>
           </span>
         </div>

@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { InfoPage, Pendiente } from "../_info/InfoPage";
 import styles from "../_info/info.module.css";
+import { CONTACTO } from "@/lib/contacto";
 
 export const metadata: Metadata = {
   title: "Preguntas frecuentes · Viviendo Vino",
@@ -73,11 +74,11 @@ const GROUPS: { title: string; items: { q: string; a: ReactNode }[] }[] = [
         q: "¿Cómo los contacto?",
         a: (
           <p>
-            Por correo a <a href="mailto:hola@viviendovino.com">hola@viviendovino.com</a> o por Instagram en{" "}
+            Por correo a <a href={CONTACTO.correo.href}>{CONTACTO.correo.texto}</a> o por Instagram en{" "}
             <a href="https://www.instagram.com/viviendovino/" rel="noopener noreferrer" target="_blank">
               @viviendovino
             </a>
-            . WhatsApp: <Pendiente>número</Pendiente>.
+            . Por teléfono al <a href={CONTACTO.telefono.href}>{CONTACTO.telefono.texto}</a>, {CONTACTO.horario.charAt(0).toLowerCase() + CONTACTO.horario.slice(1)}.
           </p>
         ),
       },

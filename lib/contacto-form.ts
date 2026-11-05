@@ -6,8 +6,11 @@ import { EMAIL_ERROR } from "./messages.ts";
 
 export const MOTIVOS = [
   { id: "pedido", texto: "Mi pedido o una compra" },
-  { id: "marketing", texto: "Servicios de marketing para marcas de vino" },
-  { id: "ia", texto: "Experiencias con IA para marcas y restaurantes" },
+  { id: "etiquetas", texto: "Me interesa vender mis etiquetas en su tienda" },
+  { id: "marketing", texto: "Marketing para negocios de vino" },
+  { id: "ia", texto: "Experiencias con IA" },
+  { id: "consultoria", texto: "Consultoría para centros de consumo" },
+  { id: "regalos", texto: "Regalos corporativos" },
   { id: "otro", texto: "Otro" },
 ] as const;
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { InfoPage, Pendiente, Section } from "../_info/InfoPage";
+import { CONTACTO } from "@/lib/contacto";
 
 export const metadata: Metadata = {
   title: "Términos y condiciones · Viviendo Vino",
@@ -60,7 +61,7 @@ export default function Terminos() {
       <Section n={10} title="Cambios y contacto">
         <p>
           Podemos actualizar estos términos; la fecha de arriba indica la versión vigente. Dudas:{" "}
-          <a href="mailto:hola@viviendovino.com">hola@viviendovino.com</a>. <Pendiente>legislación aplicable y tribunales</Pendiente>.
+          <a href={CONTACTO.correo.href}>{CONTACTO.correo.texto}</a>. <Pendiente>legislación aplicable y tribunales</Pendiente>.
         </p>
       </Section>
     </InfoPage>
