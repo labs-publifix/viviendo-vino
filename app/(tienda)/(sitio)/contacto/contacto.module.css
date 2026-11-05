@@ -15,3 +15,4 @@
 
 .aside { display: flex; flex-direction: column; gap: var(--s-4); padding: var(--s-5); border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
 .asideTitle { margin: 0; font-size: var(--t-subtitle); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+.form a { color: var(--vv-vino); font-weight: 600; text-underline-offset: 3px; }
