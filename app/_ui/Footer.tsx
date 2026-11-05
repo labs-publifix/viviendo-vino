@@ -114,7 +114,7 @@ export function Footer() {
             </h2>
             <ButtonLink href="/contacto" variant="secondary" className={styles.escribenos}>
               <Icon name="mail" size={18} />
-              <span>Escríbenos</span>
+              Escríbenos
             </ButtonLink>
           </div>
           <ContactoDatos variante="franja" />
