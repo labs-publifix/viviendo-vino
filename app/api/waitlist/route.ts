@@ -1,11 +1,12 @@
 import { after } from "next/server";
 import { Resend } from "resend";
-import { renderConfirmationEmail } from "@/lib/email/confirmation";
+import { GUIA_REGALO_PATH, renderConfirmationEmail } from "@/lib/email/confirmation";
 import { notifyRecipients, renderSignupNotification } from "@/lib/email/signup-notification";
 import { isRateLimited } from "@/lib/rate-limit";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { unsubscribeToken } from "@/lib/tokens";
 import { EMAIL_ERROR } from "@/lib/messages";
+import { launch, signupClose, signupOpen } from "@/lib/launch";
 import { signupSchema } from "@/lib/waitlist-schema";
 import { normalizeWineTypes, type WineType } from "@/lib/wine-types";
 
@@ -16,6 +17,10 @@ const ok = () => Response.json({ ok: true });
 const fail = (status: number, error: string) => Response.json({ ok: false, error }, { status });
 
 export async function POST(request: Request) {
+  // La lista cierra antes de la apertura (lib/launch.ts): después ya no se guarda nada, aunque la página siga abierta.
+  if (!signupOpen()) {
+    return fail(410, `La lista de espera cerró el ${signupClose.day} a las ${signupClose.time}. Abrimos el ${launch.day} a las ${launch.time}.`);
+  }
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (isRateLimited(ip)) return fail(429, "Demasiados intentos. Espera unos minutos y vuelve a probar.");
 
@@ -88,7 +93,7 @@ async function sendConfirmation(id: string, email: string, wineTypes: WineType[]
     if (!apiKey || !from) throw new Error("Faltan RESEND_API_KEY o EMAIL_FROM");
 
     const unsubscribeUrl = `${origin}/api/waitlist/unsubscribe?token=${encodeURIComponent(unsubscribeToken(id))}`;
-    const { subject, html, text } = renderConfirmationEmail({ wineTypes, unsubscribeUrl });
+    const { subject, html, text } = renderConfirmationEmail({ wineTypes, unsubscribeUrl, guideUrl: `${origin}${GUIA_REGALO_PATH}` });
     const { error } = await new Resend(apiKey).emails.send({
       from,
       to: email,

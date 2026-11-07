@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { GIFT_END_MS, LAUNCH_AT_MS, giftEnd, launch, phaseAt, type Phase } from "@/lib/launch";
+import { LAUNCH_AT_MS, SIGNUP_CLOSE_MS, launch, signupClose } from "@/lib/launch";
 import styles from "./waitlist.module.css";
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -11,52 +10,32 @@ function parts(ms: number) {
   return { d: pad(Math.floor(mins / 1440)), h: pad(Math.floor((mins % 1440) / 60)), m: pad(mins % 60) };
 }
 
-const COPY: Record<Phase, { lede: string; when: string; label: string }> = {
-  before: {
-    lede: `Abrimos el ${launch.day} a las ${launch.time}.`,
-    when: `${launch.day} · ${launch.time}, hora centro de México`,
-    label: "Cuenta regresiva para la apertura",
-  },
-  gift: {
-    lede: "Ya abrimos.",
-    when: `Tu regalo sorpresa sigue disponible hasta el ${giftEnd.day}, ${giftEnd.time} (hora centro de México).`,
-    label: "Tiempo restante para el regalo sorpresa",
-  },
-  after: {
-    lede: "La tienda ya está abierta.",
-    when: "La ventana del regalo sorpresa cerró.",
-    label: "La ventana del regalo sorpresa cerró",
-  },
-};
-
+// Mientras la lista está abierta, la cuenta va al cierre del registro (lunes 16, 11:59 pm); después, a la apertura.
 // En servidor se pinta un estado neutro ("--"); la cuenta se calcula al montar en el cliente.
-export function Countdown() {
-  const [now, setNow] = useState<number | null>(null);
-
-  useEffect(() => {
-    const tick = () => setNow(Date.now());
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const phase: Phase = now === null ? "before" : phaseAt(now);
-  const copy = COPY[phase];
-  const target = phase === "before" ? LAUNCH_AT_MS : GIFT_END_MS;
+export function Countdown({ now, abierta }: { now: number | null; abierta: boolean }) {
+  const target = abierta ? SIGNUP_CLOSE_MS : LAUNCH_AT_MS;
   const t = now === null ? { d: "--", h: "--", m: "--" } : parts(target - now);
+  const etiqueta = abierta ? "La lista cierra en" : "Abrimos en";
 
   return (
-    <>
-      <p className={styles.lede}>
-        Tienda en línea de kits de 6 botellas de vino, armados por ti. <span>{copy.lede}</span>
-      </p>
-
-      <div className={styles.count} role="timer" aria-label={copy.label} aria-live="off">
+    <div className={styles.countWrap}>
+      <p className={styles.countLabel}>{etiqueta}</p>
+      <div className={styles.count} role="timer" aria-label={abierta ? "Cuenta regresiva para el cierre de la lista" : "Cuenta regresiva para la apertura"} aria-live="off">
         <div className={styles.unit}><div className={styles.num}>{t.d}</div><div className={styles.lab}>Días</div></div>
         <div className={styles.unit}><div className={styles.num}>{t.h}</div><div className={styles.lab}>Horas</div></div>
         <div className={styles.unit}><div className={styles.num}>{t.m}</div><div className={styles.lab}>Minutos</div></div>
       </div>
-      <p className={styles.when}>{copy.when}</p>
-    </>
+      <p className={styles.when}>
+        {abierta ? (
+          <>
+            Registro hasta el {signupClose.day}, {signupClose.time}. <strong>Abrimos el {launch.day} a las {launch.time}</strong> (hora centro de México).
+          </>
+        ) : (
+          <>
+            {launch.day.charAt(0).toUpperCase() + launch.day.slice(1)} · {launch.time}, hora centro de México.
+          </>
+        )}
+      </p>
+    </div>
   );
 }

@@ -1,13 +1,71 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { giftEnd, launch } from "@/lib/launch";
+import { giftEnd, launch, signupClose } from "@/lib/launch";
 import { EMAIL_ERROR } from "@/lib/messages";
 import { WINE_TYPES, WINE_TYPE_LABELS, wineTypesNote, type WineType } from "@/lib/wine-types";
 import styles from "./waitlist.module.css";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const GENERIC_ERROR = "No pudimos registrarte. Revisa tu conexión e intenta de nuevo.";
+
+/** Mensaje y enlace para invitar a alguien. Cada canal lleva su ?src= para saber de dónde llegó cada registro. */
+const INVITACION = `Me apunté a la lista de Viviendo Vino: abren su tienda en línea de kits de vino el ${launch.day}. Si te apuntas antes del ${signupClose.day} recibes un regalo sorpresa con tu primer kit.`;
+const enlace = (src: string) => `${window.location.origin}/?src=${src}`;
+
+function Compartir() {
+  const [aviso, setAviso] = useState("");
+
+  async function compartir() {
+    const url = enlace("amigo-compartir");
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Viviendo Vino", text: INVITACION, url });
+        return;
+      }
+      await navigator.clipboard.writeText(`${INVITACION} ${url}`);
+      setAviso("Enlace copiado. Pégalo donde quieras.");
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
+      setAviso("No se pudo compartir desde este navegador.");
+    }
+  }
+
+  async function copiar() {
+    try {
+      await navigator.clipboard.writeText(enlace("amigo-enlace"));
+      setAviso("Enlace copiado. Pégalo donde quieras.");
+    } catch {
+      setAviso("No se pudo copiar el enlace.");
+    }
+  }
+
+  return (
+    <div className={styles.share}>
+      <p className={styles.shareTitle}>Invita a alguien</p>
+      <p>Si se apunta antes del {signupClose.day}, también recibe su regalo sorpresa.</p>
+      <div className={styles.shareActions}>
+        <a
+          className={styles.shareBtn}
+          href={`https://wa.me/?text=${encodeURIComponent(`${INVITACION} ${typeof window === "undefined" ? "" : enlace("amigo-whatsapp")}`)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          WhatsApp<span className="vv-sr-only"> (se abre en otra pestaña)</span>
+        </a>
+        <button type="button" className={styles.shareBtn} onClick={compartir}>
+          Compartir
+        </button>
+        <button type="button" className={styles.shareBtn} onClick={copiar}>
+          Copiar enlace
+        </button>
+      </div>
+      <p className={styles.shareNote} role="status">
+        {aviso}
+      </p>
+    </div>
+  );
+}
 
 export function SignupForm() {
   const [selected, setSelected] = useState<WineType[]>([]);
@@ -83,7 +141,9 @@ export function SignupForm() {
           Tu regalo sorpresa va en tu primer kit si compras entre el {launch.day} y el {giftEnd.day}. Compra con este
           mismo correo.
         </p>
+        <p className={styles.picked}>Revisa tu correo: ahí te espera tu Guía de maridaje en PDF.</p>
         {note && <p className={styles.picked}>{note}</p>}
+        <Compartir />
         <button className={styles.link} type="button" onClick={reset}>
           Registrar otro correo
         </button>

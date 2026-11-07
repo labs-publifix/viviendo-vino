@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import styles from "@/app/_waitlist/waitlist.module.css";
+import styles from "./baja.module.css";
 import { Unsubscribe } from "./Unsubscribe";
 
 export const metadata: Metadata = {

@@ -35,6 +35,9 @@ export const LOGIN_API = "/api/acceso";
 /** Avisos de Mercado Pago: sin contraseña del preview y con la tienda cerrada; los protege su firma (x-signature). */
 export const MP_WEBHOOK = "/api/mercadopago/webhook";
 
+/** Guía de maridaje que se regala en el correo de confirmación de la lista. */
+export const GUIA_REGALO = "/guias/guia-de-maridaje.pdf";
+
 // Lo que la lista de espera necesita y debe funcionar siempre.
 const WAITLIST_EXACT = new Set([
   "/",
@@ -44,8 +47,9 @@ const WAITLIST_EXACT = new Set([
   "/sitemap.xml",
   "/opengraph-image.png",
   "/twitter-image.png",
+  GUIA_REGALO,
 ]);
-const WAITLIST_PREFIXES = ["/api/waitlist", "/api/cron/email-sequence", "/_next/", "/brand/", "/email/"];
+const WAITLIST_PREFIXES = ["/api/waitlist", "/api/cron/email-sequence", "/_next/", "/brand/", "/email/", "/img/lista/"];
 
 // Favicons, webclips y manifest del kit de marca, en la raíz pública.
 const BRAND_KIT_FILE =
@@ -53,7 +57,7 @@ const BRAND_KIT_FILE =
 
 // Lo que se sirve sin contraseña en el preview: lo que necesita la pantalla de acceso y el logo de los
 // correos (/email/), que los clientes de correo descargan sin la cookie del preview.
-const LOGIN_PREFIXES = ["/_next/", "/brand/", "/email/", "/robots.txt"];
+const LOGIN_PREFIXES = ["/_next/", "/brand/", "/email/", "/robots.txt", GUIA_REGALO];
 
 export function isWaitlistPath(pathname: string): boolean {
   return (

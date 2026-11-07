@@ -20,6 +20,7 @@ const WAITLIST_ROUTES = [
   "/robots.txt", "/sitemap.xml", "/brand/logo-color.svg", "/email/logo-viviendo-vino.png",
   "/favicon.ico", "/favicon.svg", "/favicon-32x32.png", "/apple-touch-icon.png", "/safari-pinned-tab.svg",
   "/site.webmanifest", "/browserconfig.xml", "/android-chrome-512x512.png", "/maskable-icon-192x192.png", "/mstile-150x150.png",
+  "/img/lista/hero.webp", "/guias/guia-de-maridaje.pdf",
 ];
 
 test("producción cerrada: ninguna ruta de la tienda pasa", () => {
@@ -109,4 +110,12 @@ test("webhook de Mercado Pago: pasa con la tienda cerrada y sin contraseña del 
   // Nada más pasa por esa puerta: el resto de /api/mercadopago sigue cerrado.
   assert.deepEqual(decide({ pathname: "/api/mercadopago/otra", host: WWW, env: PROD_CLOSED, hasPreviewAccess: false }), { action: "not-found" });
   assert.deepEqual(decide({ pathname: "/api/checkout/pagar", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "login" });
+});
+
+test("lista de espera: solo la guía regalada y las imágenes de la landing; lo demás de la tienda sigue oculto", () => {
+  for (const pathname of ["/guias/temperatura-de-servicio.pdf", "/img/vinos/soave-doc-2024.webp", "/img/kits/burbujas.webp", "/lista"]) {
+    assert.deepEqual(decide({ pathname, host: WWW, env: PROD_CLOSED, hasPreviewAccess: false }), { action: "not-found" }, pathname);
+  }
+  // El correo de confirmación enlaza la guía: se abre sin la contraseña del preview.
+  assert.deepEqual(decide({ pathname: "/guias/guia-de-maridaje.pdf", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
 });

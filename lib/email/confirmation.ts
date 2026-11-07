@@ -13,7 +13,10 @@ export function wineTypesSentence(types: readonly WineType[]): string | null {
   return note ? `${note} Lo tendremos presente para el primer kit.` : null;
 }
 
-export function renderConfirmationEmail(input: { wineTypes: readonly WineType[]; unsubscribeUrl: string }) {
+/** Guía que se regala al registrarse (está en public/guias y el gate la deja pasar con la tienda cerrada). */
+export const GUIA_REGALO_PATH = "/guias/guia-de-maridaje.pdf";
+
+export function renderConfirmationEmail(input: { wineTypes: readonly WineType[]; unsubscribeUrl: string; guideUrl?: string }) {
   const sentence = wineTypesSentence(input.wineTypes);
   const { html, text } = renderBrandEmail({
     title: CONFIRMATION_SUBJECT,
@@ -29,10 +32,12 @@ export function renderConfirmationEmail(input: { wineTypes: readonly WineType[];
     paragraphs: [
       "Viviendo Vino es una tienda en línea: armas tu kit en viviendovino.com y te lo enviamos a tu domicilio.",
       "Compra tu primer kit de 6 botellas en las primeras 48 horas y te enviamos un regalo sorpresa con tu pedido. Para que lo reconozcamos, compra con este mismo correo.",
+      "Y para que empieces desde hoy, te regalamos nuestra Guía de maridaje en PDF: cómo combinar vino y comida sin reglas rígidas.",
       "Mientras tanto, ve pensando tu primer kit: son 6 botellas y tú las armas.",
       ...(sentence ? [sentence] : []),
     ],
-    cta: { label: "Ver la cuenta regresiva", url: SITE_URL },
+    cta: { label: "Descargar la Guía de maridaje", url: input.guideUrl ?? `${SITE_URL}${GUIA_REGALO_PATH}` },
+    secondary: { label: "Ver la cuenta regresiva", url: SITE_URL },
     unsubscribeUrl: input.unsubscribeUrl,
   });
   return { subject: CONFIRMATION_SUBJECT, html, text };

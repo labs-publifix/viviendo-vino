@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import styles from "@/app/_waitlist/waitlist.module.css";
+import styles from "./baja.module.css";
 
 export function Unsubscribe() {
   const params = useSearchParams();
