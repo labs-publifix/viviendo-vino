@@ -43,7 +43,7 @@ export const SEQUENCE: SequenceStep[] = [
       paragraphs: [
         "En una semana abrimos viviendovino.com, nuestra tienda en línea.",
         "Así se arma tu kit: eliges 6 botellas del catálogo, las juntas en tu kit y te lo enviamos a tu domicilio. El envío ya va incluido en el precio.",
-        "Si compras en las primeras 48 horas con este mismo correo, tu kit llega con un regalo sorpresa.",
+        "Si compras en las primeras 48 horas con este mismo correo, tu kit llega con un descorchador Viviendo Vino de regalo.",
       ],
       cta: { label: "Ver la cuenta regresiva", url: SITE_URL },
     },
@@ -55,19 +55,19 @@ export const SEQUENCE: SequenceStep[] = [
     audience: "all",
     subject: `Mañana abrimos a las ${launch.time}`,
     content: {
-      preheader: `Mañana a las ${launch.time} abre la tienda en línea. Tu regalo sorpresa cierra el ${giftEnd.day}.`,
+      preheader: `Mañana a las ${launch.time} abre la tienda en línea. Tu descorchador de regalo aplica hasta el ${giftEnd.day}.`,
       eyebrow: "Mañana abrimos",
       heading: "Tres pasos y listo.",
       highlight: {
         label: "Abre la tienda en línea",
         value: `Mañana, ${launch.time}`,
         sub: "Hora centro de México",
-        note: `El regalo sorpresa cierra el ${giftEnd.day}, ${giftEnd.time}`,
+        note: `El descorchador de regalo aplica hasta el ${giftEnd.day}, ${giftEnd.time}`,
       },
       paragraphs: [
         "1. Ya te apuntaste con este correo.",
         "2. Compra tu kit en viviendovino.com en las primeras 48 horas después de la apertura, con este mismo correo.",
-        "3. Recibe tu regalo sorpresa con tu pedido.",
+        "3. Recibe tu descorchador Viviendo Vino con tu pedido.",
         `La ventana del regalo va ${giftWindow}. El pago es con Mercado Pago, de contado.`,
       ],
       cta: { label: "Ver la cuenta regresiva", url: SITE_URL },
@@ -78,19 +78,19 @@ export const SEQUENCE: SequenceStep[] = [
     name: "Ya abrimos",
     sendAtMs: LAUNCH_AT_MS, // jue 19 nov, 9:00 am
     audience: "all",
-    subject: "Ya abrimos. Tu regalo sorpresa te espera",
+    subject: "Ya abrimos. Tu descorchador te espera",
     content: {
-      preheader: `La tienda en línea ya está abierta. Tienes 48 horas para tu regalo sorpresa.`,
+      preheader: `La tienda en línea ya está abierta. Tienes 48 horas para llevarte tu descorchador de regalo.`,
       eyebrow: "Ya abrimos",
       heading: "Arma tu kit.",
       highlight: {
-        label: "Tu regalo sorpresa",
+        label: "Tu descorchador de regalo",
         value: "48 horas",
         sub: `Hasta el ${giftEnd.day}, ${giftEnd.time} · hora centro de México`,
       },
       paragraphs: [
         "La tienda en línea de Viviendo Vino ya está abierta. Elige tus 6 botellas en viviendovino.com: el envío va incluido.",
-        "Compra en las próximas 48 horas con este mismo correo y te enviamos un regalo sorpresa con tu pedido.",
+        "Compra en las próximas 48 horas con este mismo correo y te enviamos un descorchador Viviendo Vino de regalo con tu pedido.",
       ],
       cta: { label: "Ir a la tienda", url: SITE_URL },
     },
@@ -100,9 +100,9 @@ export const SEQUENCE: SequenceStep[] = [
     name: "Quedan 24 horas",
     sendAtMs: LAUNCH_AT_MS + 24 * HOUR, // vie 20 nov, 9:00 am
     audience: "not_purchased",
-    subject: "Te quedan 24 horas para tu regalo sorpresa",
+    subject: "Te quedan 24 horas para tu descorchador de regalo",
     content: {
-      preheader: `Tu regalo sorpresa sigue disponible hasta mañana a las ${giftEnd.time}.`,
+      preheader: `Tu descorchador de regalo sigue disponible hasta mañana a las ${giftEnd.time}.`,
       eyebrow: "Quedan 24 horas",
       heading: "Tu regalo sigue en pie.",
       highlight: {
@@ -111,7 +111,7 @@ export const SEQUENCE: SequenceStep[] = [
         sub: `${capitalize(giftEnd.day)} · hora centro de México`,
       },
       paragraphs: [
-        "Arma tu kit de 6 botellas en la tienda en línea y compra con este mismo correo para recibir tu regalo sorpresa.",
+        "Arma tu kit de 6 botellas en la tienda en línea y compra con este mismo correo para recibir tu descorchador Viviendo Vino.",
       ],
       cta: { label: "Ir a la tienda", url: SITE_URL },
     },
@@ -123,11 +123,11 @@ export const SEQUENCE: SequenceStep[] = [
     audience: "not_purchased",
     subject: `El regalo cierra mañana a las ${giftEnd.time}`,
     content: {
-      preheader: `Último aviso: tu regalo sorpresa cierra mañana a las ${giftEnd.time}.`,
+      preheader: `Último aviso: tu descorchador de regalo cierra mañana a las ${giftEnd.time}.`,
       eyebrow: "Último aviso",
       heading: "Cierra mañana.",
       paragraphs: [
-        `Tu regalo sorpresa cierra mañana, ${giftEnd.day}, a las ${giftEnd.time}. Compra con este mismo correo.`,
+        `Tu descorchador de regalo cierra mañana, ${giftEnd.day}, a las ${giftEnd.time}. Compra con este mismo correo.`,
       ],
       cta: { label: "Ir a la tienda", url: SITE_URL },
     },

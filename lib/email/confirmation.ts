@@ -20,18 +20,18 @@ export function renderConfirmationEmail(input: { wineTypes: readonly WineType[];
   const sentence = wineTypesSentence(input.wineTypes);
   const { html, text } = renderBrandEmail({
     title: CONFIRMATION_SUBJECT,
-    preheader: `Abrimos la tienda en línea el ${launch.shortDay}. Compra en las primeras 48 horas y recibe un regalo sorpresa.`,
+    preheader: `Abrimos la tienda en línea el ${launch.shortDay}. Compra en las primeras 48 horas y llévate un descorchador Viviendo Vino de regalo.`,
     eyebrow: "Ya estás en la lista",
     heading: "Ya estás dentro.",
     highlight: {
       label: "Abre la tienda en línea",
       value: capitalize(launch.day),
       sub: `${launch.time} · hora centro de México`,
-      note: `Regalo sorpresa para compras hasta el ${giftEnd.day}, ${giftEnd.time}`,
+      note: `Descorchador de regalo para compras hasta el ${giftEnd.day}, ${giftEnd.time}`,
     },
     paragraphs: [
       "Viviendo Vino es una tienda en línea: armas tu kit en viviendovino.com y te lo enviamos a tu domicilio.",
-      "Compra tu primer kit de 6 botellas en las primeras 48 horas y te enviamos un regalo sorpresa con tu pedido. Para que lo reconozcamos, compra con este mismo correo.",
+      "Compra tu primer kit de 6 botellas en las primeras 48 horas y te enviamos un descorchador Viviendo Vino de regalo con tu pedido. Para que lo reconozcamos, compra con este mismo correo.",
       "Y para que empieces desde hoy, te regalamos nuestra Guía de maridaje en PDF: cómo combinar vino y comida sin reglas rígidas.",
       "Mientras tanto, ve pensando tu primer kit: son 6 botellas y tú las armas.",
       ...(sentence ? [sentence] : []),
