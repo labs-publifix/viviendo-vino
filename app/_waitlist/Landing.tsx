@@ -28,7 +28,7 @@ export function Landing({ simular = null }: { simular?: Simulacion }) {
           <Registro simular={simular} />
           <div className={styles.heroMedia}>
             {/* eslint-disable-next-line @next/next/no-img-element -- ilustración ya optimizada */}
-            <img src="/img/lista/hero.webp" alt="Ilustración de un hombre en una terraza probando una copa de vino blanco" width={720} height={960} fetchPriority="high" />
+            <img src="/img/lista/descorchador.webp" alt="Descorchador negro con el logotipo de Viviendo Vino, sobre una mesa junto a una copa de vino tinto" width={900} height={900} fetchPriority="high" />
           </div>
         </div>
 

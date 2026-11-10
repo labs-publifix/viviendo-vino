@@ -20,7 +20,7 @@ const WAITLIST_ROUTES = [
   "/robots.txt", "/sitemap.xml", "/brand/logo-color.svg", "/email/logo-viviendo-vino.png",
   "/favicon.ico", "/favicon.svg", "/favicon-32x32.png", "/apple-touch-icon.png", "/safari-pinned-tab.svg",
   "/site.webmanifest", "/browserconfig.xml", "/android-chrome-512x512.png", "/maskable-icon-192x192.png", "/mstile-150x150.png",
-  "/img/lista/hero.webp", "/guias/guia-de-maridaje.pdf",
+  "/img/lista/descorchador.webp", "/guias/guia-de-maridaje.pdf",
 ];
 
 test("producción cerrada: ninguna ruta de la tienda pasa", () => {

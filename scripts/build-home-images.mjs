@@ -158,5 +158,5 @@ console.log("tarjetas → public/img/pagos/{visa,mastercard,amex}.png");
 
 // Landing de la lista de espera (producción con la tienda cerrada): sus imágenes viven en public/img/lista/, la única
 // carpeta de imágenes que el gate deja pasar antes de la apertura.
-await sharp(join(root, "fotos-vinos/hero-rafa-movil.jpg")).resize(720, 960).webp({ quality: 80 }).toFile(join(out("lista"), "hero.webp"));
-console.log("lista de espera → public/img/lista/hero.webp");
+await sharp(join(root, "fotos-vinos/descorchador-viviendo-vino.jpg")).resize(900, 900).webp({ quality: 82 }).toFile(join(out("lista"), "descorchador.webp"));
+console.log("lista de espera → public/img/lista/descorchador.webp");
