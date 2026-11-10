@@ -7,9 +7,8 @@ import { storeEnabled } from "@/lib/catalog/enabled";
 import { SITE_URL } from "@/lib/site";
 import styles from "./servicios.module.css";
 
-// /servicios (versión inicial): cuatro bloques con ancla (#marketing, #ia, #consultoria y #regalos) que llevan al formulario de contacto con el
-// motivo ya elegido. TODO(siguiente fase): una página por servicio con entregables, casos y cómo trabajamos; aquí no
-// van precios, clientes ni cifras.
+// /servicios: cuatro bloques con ancla (#marketing, #ia, #consultoria y #regalos); cada uno lleva a su página interna
+// (/servicios/<slug>), donde están el detalle, WhatsApp y el formulario.
 
 export const metadata: Metadata = {
   title: "Servicios · Viviendo Vino",
@@ -35,9 +34,15 @@ export default function Servicios() {
             Marketing integral para marcas del mundo del vino
           </h2>
           <p>Estrategia, contenido, redes sociales y campañas para marcas del mundo del vino.</p>
-          <p className={styles.nota}>En alianza con Continental Media.</p>
-          <ButtonLink href="/contacto?motivo=marketing" variant="secondary">
-            Cuéntanos tu proyecto
+          <p className={styles.nota}>
+            En alianza con{" "}
+            <a href="https://continentalmedia.com.mx" target="_blank" rel="noopener noreferrer">
+              Continental Media<span className="vv-sr-only"> (se abre en otra pestaña)</span>
+            </a>
+            .
+          </p>
+          <ButtonLink href="/servicios/marketing-para-negocios-de-vino" variant="secondary">
+            Conoce el servicio
           </ButtonLink>
         </section>
 
@@ -50,8 +55,8 @@ export default function Servicios() {
             Experiencias interactivas con inteligencia artificial para marcas y restaurantes. Mira cómo funcionan en{" "}
             <Link href="/wine-scan">Wine Scan</Link> y en el <Link href="/quiz">Quiz</Link> de Viviendo Vino.
           </p>
-          <ButtonLink href="/contacto?motivo=ia" variant="secondary">
-            Cuéntanos tu proyecto
+          <ButtonLink href="/servicios/experiencias-con-ia" variant="secondary">
+            Conoce el servicio
           </ButtonLink>
         </section>
 
@@ -61,8 +66,8 @@ export default function Servicios() {
           <h2 id="servicio-consultoria" className={styles.title}>
             Consultoría para centros de consumo
           </h2>
-          <ButtonLink href="/contacto?motivo=consultoria" variant="secondary">
-            Cuéntanos tu proyecto
+          <ButtonLink href="/servicios/consultoria-para-centros-de-consumo" variant="secondary">
+            Conoce el servicio
           </ButtonLink>
         </section>
 
@@ -71,8 +76,8 @@ export default function Servicios() {
           <h2 id="servicio-regalos" className={styles.title}>
             Regalos corporativos
           </h2>
-          <ButtonLink href="/contacto?motivo=regalos" variant="secondary">
-            Cuéntanos tu proyecto
+          <ButtonLink href="/servicios/regalos-corporativos" variant="secondary">
+            Conoce el servicio
           </ButtonLink>
         </section>
       </div>

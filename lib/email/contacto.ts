@@ -12,6 +12,7 @@ export function renderContactoEquipo(d: ContactoDatos) {
   const subject = `[Contacto web] ${motivo} — ${d.nombre}`.slice(0, 200);
   const filas: [string, string][] = [
     ["Nombre", d.nombre],
+    ...(d.empresa ? ([["Empresa", d.empresa]] as [string, string][]) : []),
     ["Correo", d.correo],
     ["Teléfono", d.telefono || "—"],
     ["Motivo", motivo],

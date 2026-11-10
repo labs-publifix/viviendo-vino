@@ -39,6 +39,12 @@ export const contactoSchema = z.object({
     .transform((s) => sinControl(s).replace(/\s+/g, " ").trim())
     .pipe(z.string().min(2, { error: "Escribe tu nombre." }).max(120, { error: "El nombre es demasiado largo." })),
   // Igual que el correo de la lista de espera (minúsculas, sin espacios).
+  /** Solo en las páginas de servicios (opcional). */
+  empresa: z
+    .string()
+    .transform((s) => sinControl(s).replace(/\s+/g, " ").trim())
+    .pipe(z.string().max(120, { error: "El nombre de la empresa es demasiado largo." }))
+    .default(""),
   correo: z
     .string()
     .transform((s) => s.trim().toLowerCase())

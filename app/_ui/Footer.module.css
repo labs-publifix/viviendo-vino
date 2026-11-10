@@ -44,6 +44,9 @@
 .links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--fg); font-size: 15px; text-decoration: none; }
 .links a:hover { color: var(--vv-vino); text-decoration: underline; text-underline-offset: 3px; }
 .nota { margin: var(--s-2) 0 0; color: var(--muted); font-size: 13px; }
+.nota a { color: var(--fg); text-decoration: underline; text-decoration-color: rgb(10 2 6 / 0.3); text-underline-offset: 3px; }
+.nota a:hover { color: var(--vv-vino); }
+.nota a:focus-visible { outline: var(--focus); outline-offset: 2px; }
 
 /* Contacto: franja a todo el ancho, con filete arriba; título y "Escríbenos" en la misma línea. */
 .contacto { display: flex; flex-direction: column; gap: var(--s-5); min-width: 0; padding-top: var(--s-6); border-top: 1px solid var(--line); }

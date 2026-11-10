@@ -39,10 +39,10 @@ const COLUMNAS: Columna[] = [
     id: "servicios",
     titulo: "Servicios",
     enlaces: [
-      { href: "/servicios#marketing", texto: "Marketing para negocios de vino" },
-      { href: "/servicios#ia", texto: "Experiencias con IA" },
-      { href: "/servicios#consultoria", texto: "Consultoría para centros de consumo" },
-      { href: "/servicios#regalos", texto: "Regalos corporativos" },
+      { href: "/servicios/marketing-para-negocios-de-vino", texto: "Marketing para negocios de vino" },
+      { href: "/servicios/experiencias-con-ia", texto: "Experiencias con IA" },
+      { href: "/servicios/consultoria-para-centros-de-consumo", texto: "Consultoría para centros de consumo" },
+      { href: "/servicios/regalos-corporativos", texto: "Regalos corporativos" },
     ],
     nota: "En alianza con Continental Media",
   },
@@ -67,7 +67,14 @@ function Enlaces({ col }: { col: Columna }) {
           </li>
         ))}
       </ul>
-      {col.nota && <p className={styles.nota}>{col.nota}</p>}
+      {col.nota && (
+        <p className={styles.nota}>
+          En alianza con{" "}
+          <a href="https://continentalmedia.com.mx" target="_blank" rel="noopener noreferrer">
+            Continental Media<span className="vv-sr-only"> (se abre en otra pestaña)</span>
+          </a>
+        </p>
+      )}
     </>
   );
 }

@@ -51,6 +51,9 @@
 .onDark .fact dd { color: rgb(243 236 228 / 0.7); }
 .note { margin: 0; font-size: var(--t-small); color: var(--muted); }
 .onDark .note { color: rgb(243 236 228 / 0.6); }
+.note a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.note a:hover { color: var(--vv-orquidea); }
+.note a:focus-visible { outline: 2px solid var(--vv-hueso); outline-offset: 2px; }
 @media (min-width: 640px) { .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 /* 3 y 4. Columnas cortas con número (mismo trazo que "Cómo funciona" de la portada). */

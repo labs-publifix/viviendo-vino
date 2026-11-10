@@ -72,7 +72,21 @@ export default function Nosotros() {
                 </div>
               ))}
             </dl>
-            <p className={styles.note}>{RAFA_NOTE}</p>
+            <p className={styles.note}>
+              {/* "Continental Media" siempre enlaza a su sitio (en otra pestaña). */}
+              {RAFA_NOTE.split("Continental Media").map((parte, i) =>
+                i === 0 ? (
+                  parte
+                ) : (
+                  <span key={i}>
+                    <a href="https://continentalmedia.com.mx" target="_blank" rel="noopener noreferrer">
+                      Continental Media<span className="vv-sr-only"> (se abre en otra pestaña)</span>
+                    </a>
+                    {parte}
+                  </span>
+                ),
+              )}
+            </p>
           </div>
         </div>
       </DarkBlock>
