@@ -9,8 +9,9 @@ import styles from "./landing.module.css";
 
 const instagram = SOCIAL.find((s) => s.id === "instagram")!;
 
-// Bloque principal del hero: título, cuenta regresiva y formulario. Hasta el lunes 16 a las 11:59 pm la lista
-// acepta registros; después el formulario se cierra solo y la cuenta va a la apertura (el servidor también rechaza).
+// Bloque principal del hero: título, formulario y cuenta regresiva. El correo va arriba para que en el celular se vea
+// en la primera pantalla. Hasta el lunes 16 a las 11:59 pm la lista acepta registros; después el formulario se cierra
+// solo y la cuenta va a la apertura (el servidor también rechaza).
 export function Registro({ simular = null }: { simular?: Simulacion }) {
   const now = useAhora(simular);
   const fase = now === null ? "registro" : phaseAt(now);
@@ -19,30 +20,31 @@ export function Registro({ simular = null }: { simular?: Simulacion }) {
   return (
     <div className={styles.registro} id="registro">
       <p className={styles.eyebrow}>Tienda en línea · Abre el {launch.day}</p>
-      <h1 className={styles.title}>{abierta ? "Apúntate y recibe un regalo sorpresa con tu primer kit." : "La lista de espera cerró. Nos vemos el jueves."}</h1>
+      <h1 className={styles.title}>{abierta ? "Déjanos tu correo y llévate un descorchador Viviendo Vino." : "La lista de espera cerró. Nos vemos el jueves."}</h1>
       <p className={styles.lede}>
-        Kits de 6 botellas de vino italiano que tú armas, con envío incluido. Y además: Wine Scan, Quiz IA y guías para disfrutar
-        mejor cada copa.
+        {abierta
+          ? "Va de regalo con tu primer kit de 6 botellas de vino italiano. Solo para la lista de espera."
+          : "Kits de 6 botellas de vino italiano que tú armas, con envío incluido."}
       </p>
-      <Countdown now={now} abierta={abierta} />
       {abierta ? (
         <>
           <SignupForm />
-          <p className={styles.bonus}>
-            <span aria-hidden="true">✦</span> Al registrarte te enviamos de regalo nuestra <strong>Guía de maridaje</strong> en PDF.
-          </p>
+          <Countdown now={now} abierta />
         </>
       ) : (
-        <div className={styles.cerrada} role="status">
-          <p>
-            La lista cerró el {signupClose.day} a las {signupClose.time}. Si te registraste, compra con el mismo correo entre el {launch.day} y las 48
-            horas siguientes para recibir tu regalo sorpresa.
-          </p>
-          <a href={instagram.href} target="_blank" rel="noopener noreferrer" className={styles.cerradaLink}>
-            Síguenos en Instagram {instagram.handle}
-            <span className="vv-sr-only"> (se abre en otra pestaña)</span>
-          </a>
-        </div>
+        <>
+          <Countdown now={now} abierta={false} />
+          <div className={styles.cerrada} role="status">
+            <p>
+              La lista cerró el {signupClose.day} a las {signupClose.time}. Si te registraste, compra con el mismo correo entre el {launch.day} y las 48
+              horas siguientes para recibir tu descorchador.
+            </p>
+            <a href={instagram.href} target="_blank" rel="noopener noreferrer" className={styles.cerradaLink}>
+              Síguenos en Instagram {instagram.handle}
+              <span className="vv-sr-only"> (se abre en otra pestaña)</span>
+            </a>
+          </div>
+        </>
       )}
     </div>
   );

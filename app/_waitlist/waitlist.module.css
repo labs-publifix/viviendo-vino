@@ -2,7 +2,7 @@
    landing.module.css. El vino solo aparece en: chips activos, botón y etiquetas. */
 
 /* Cuenta regresiva */
-.countWrap { margin-top: 32px; }
+.countWrap { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); width: 100%; }
 .countLabel { margin: 0 0 14px; font-family: var(--font-label); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .count { display: flex; }
 .unit { min-width: 0; padding: 0 clamp(18px, 4.5vw, 36px); border-left: 1px solid var(--line); }
@@ -27,37 +27,7 @@
 .when strong { color: var(--fg); font-weight: 600; }
 
 /* Formulario */
-.form { width: 100%; margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
-.fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
-.legend { padding: 0; margin-bottom: 14px; font-size: 15px; font-weight: 500; }
-.legend span { color: var(--muted); font-weight: 400; }
-
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font: inherit;
-  font-size: 14px;
-  color: var(--fg);
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: var(--vv-radius-pill);
-  padding: 9px 16px;
-  cursor: pointer;
-  transition: border-color var(--vv-dur), background-color var(--vv-dur), color var(--vv-dur);
-}
-.chip:hover { border-color: var(--accent); }
-.dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--muted);
-  transition: background-color var(--vv-dur);
-}
-.chip[aria-pressed="true"] { background: var(--btn-bg); border-color: var(--btn-bg); color: var(--btn-fg); }
-.chip[aria-pressed="true"] .dot { background: var(--btn-fg); }
-
+.form { width: 100%; margin-top: 20px; display: flex; flex-direction: column; gap: 20px; }
 .row { display: flex; gap: 8px; width: 100%; }
 .row > * { min-width: 0; }
 .input {
