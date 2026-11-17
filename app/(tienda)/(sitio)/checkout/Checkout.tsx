@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { AvisoSimplificado, CASILLA_PROMOS } from "@/app/_ui/AvisoSimplificado";
 import { AyudaPedido } from "@/app/_ui/AyudaPedido";
 import { Button, ButtonLink } from "@/app/_ui/Button";
 import { Checkbox, TextField } from "@/app/_ui/Field";
@@ -10,11 +11,15 @@ import { Notice } from "@/app/_ui/Notice";
 import { Select } from "@/app/_ui/Select";
 import { Price } from "@/app/_ui/Price";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
+import { evento, pesos } from "@/lib/analytics";
 import { borrarApartado, guardarApartado, leerApartado } from "@/lib/cart/apartado";
 import { borrarCodigo, guardarCodigo, leerCodigo } from "@/lib/cart/codigo";
 import { cart, useCart } from "@/lib/cart/store";
 import { useCartValidation } from "@/lib/cart/useCartValidation";
 import { MIN_AGE, todayInMexico } from "@/lib/checkout/age";
+import { CONTACTO } from "@/lib/contacto";
+
+const CONTACTO_CORREO = CONTACTO.correo.texto;
 import { MX_STATES, checkoutSchema, fieldErrors, type CheckoutField, type FieldErrors } from "@/lib/checkout/schema";
 import { APARTADO_MINUTOS, huellaCarrito, textoFaltante, type Faltante } from "@/lib/inventario/rules";
 import { KIT_SIZE } from "@/lib/kit/rules";
@@ -57,7 +62,8 @@ function readForm(form: HTMLFormElement) {
     references: str("references"),
     receiver: str("receiver"),
     birthdate: str("birthdate"),
-    adult: f.get("adult") === "on",
+    // Una sola casilla obligatoria confirma la edad y acepta términos y aviso (texto de los legales del 5 nov 2026).
+    adult: f.get("terms") === "on",
     invoice: f.get("invoice") === "on",
     promos: f.get("promos") === "on",
     terms: f.get("terms") === "on",
@@ -135,7 +141,16 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
 
   const onVencio = useCallback(() => setVencido(true), []);
 
+  // GA4: inicio del checkout (una vez por visita, con el carrito ya cargado).
+  const midioCheckout = useRef(false);
+  useEffect(() => {
+    if (!hydrated || kits.length === 0 || midioCheckout.current) return;
+    midioCheckout.current = true;
+    evento("begin_checkout", { currency: "MXN", items: kits.flatMap((k) => k.items.map((i) => ({ item_id: i.slug, quantity: i.quantity }))) });
+  }, [hydrated, kits]);
+
   function terminar(folioPedido: string, prueba: boolean) {
+    if (!prueba) evento("purchase", { transaction_id: folioPedido, currency: "MXN", ...(totalPago !== null ? { value: pesos(totalPago) } : {}), kits: kits.length });
     borrarApartado();
     borrarCodigo();
     cart.clear();
@@ -268,8 +283,9 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
   }, [hydrated, huella]);
 
   function focusFirst(errs: FieldErrors) {
-    const first = ORDER.find((k) => errs[k]);
-    if (!first) return;
+    const found = ORDER.find((k) => errs[k]);
+    if (!found) return;
+    const first = found === "adult" ? "terms" : found;
     // Los selectores del sitio guardan su valor en un input oculto: el foco va a su botón.
     const form = formRef.current;
     (form?.querySelector<HTMLElement>(`[data-campo="${first}"] [role="combobox"]`) ?? form?.querySelector<HTMLElement>(`[name="${first}"]`))?.focus();
@@ -582,26 +598,33 @@ export function Checkout({ pagoPrueba, mpPublicKey }: { pagoPrueba: boolean; mpP
               <NumberedLabel n={3}>Mayoría de edad</NumberedLabel>
             </legend>
             <FechaNacimiento name="birthdate" hoy={todayInMexico()} hint={`Solo vendemos a mayores de ${MIN_AGE} años.`} error={errors.birthdate} onChange={clear("birthdate")} />
-            <Checkbox name="adult" label={`Confirmo que tengo ${MIN_AGE} años o más.`} error={errors.adult} onChange={clear("adult")} />
           </fieldset>
 
           <fieldset className={styles.section}>
             <legend>
               <NumberedLabel n={4}>Últimos detalles</NumberedLabel>
             </legend>
-            <Checkbox name="invoice" label="Necesito factura." hint="Te pediremos tus datos fiscales por correo después de la compra." />
+            <Checkbox
+              name="invoice"
+              label="Requiero factura."
+              hint={`Después de comprar, envía a ${CONTACTO_CORREO} tu número de pedido y tu Constancia de Situación Fiscal.`}
+            />
             <Checkbox
               name="terms"
               label={
                 <>
-                  Acepto los <Link href="/terminos">términos y condiciones</Link> y el{" "}
-                  <Link href="/privacidad">aviso de privacidad</Link>.
+                  Confirmo que soy mayor de 18 años y acepto los <Link href="/terminos">Términos y Condiciones</Link> y el{" "}
+                  <Link href="/privacidad">Aviso de Privacidad</Link>.
                 </>
               }
-              error={errors.terms}
-              onChange={clear("terms")}
+              error={errors.terms ?? errors.adult}
+              onChange={() => {
+                clear("terms")();
+                clear("adult")();
+              }}
             />
-            <Checkbox name="promos" label="Quiero recibir correos con nuevas etiquetas y promociones." />
+            <Checkbox name="promos" label={CASILLA_PROMOS} />
+            <AvisoSimplificado className={styles.avisoDatos} />
           </fieldset>
 
           {result && paso === "datos" && <Resultado result={result} />}

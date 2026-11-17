@@ -8,6 +8,7 @@ import { Notice } from "@/app/_ui/Notice";
 import { CONTACTO } from "@/lib/contacto";
 import { MENSAJE_MAX, contactoSchema, erroresContacto, type ContactoCampo, type ContactoErrores, type MotivoId } from "@/lib/contacto-form";
 import styles from "./servicio.module.css";
+import { evento } from "@/lib/analytics";
 
 // Formulario de contacto de cada servicio: nombre, empresa, correo, teléfono y mensaje. Usa el mismo envío que
 // /contacto (/api/contacto, con Resend y la plantilla de marca) y manda como motivo el servicio de la página.
@@ -65,6 +66,7 @@ export function ServicioForm({ motivo, servicio }: { motivo: Exclude<MotivoId, "
       if (body?.ok) {
         formRef.current?.reset();
         inicio.current = Date.now();
+        evento("generate_lead", { tipo: "contacto", motivo });
         setEstado({ tipo: "ok" });
         return;
       }

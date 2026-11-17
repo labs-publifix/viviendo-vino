@@ -25,7 +25,12 @@ export type PedidoCorreo = {
   guia: string;
   /** Texto de entrega del aliado ("Sale en 2 días hábiles desde Córdoba"), si lo tiene. */
   plazo: string;
+  /** Lleva el descorchador de regalo de la lista de espera (lib/lista/regalo-rules.ts). */
+  descorchador?: boolean;
 };
+
+const DESCORCHADOR_CLIENTE = "Y como te apuntaste en la lista de espera, tu descorchador Viviendo Vino de regalo va en esta caja.";
+const DESCORCHADOR_EQUIPO = "Este pedido lleva descorchador Viviendo Vino de regalo (lista de espera): inclúyelo en la caja.";
 
 const asunto = (p: PedidoCorreo, texto: string) => `${p.prueba ? "[Prueba] " : ""}${texto}`;
 const primerNombre = (nombre: string) => nombre.replace(/\(prueba\)/i, "").trim().split(/\s+/)[0] || "";
@@ -52,6 +57,7 @@ export function renderPedidoConfirmado(p: PedidoCorreo) {
     },
     paragraphs: [
       "Tu pago quedó confirmado y ya estamos preparando tu caja.",
+      ...(p.descorchador ? [DESCORCHADOR_CLIENTE] : []),
       `La enviamos a ${p.envio.recibe ? `${p.envio.recibe}, ` : ""}${p.envio.calle}, ${p.envio.colonia}, CP ${p.envio.codigoPostal}, ${p.envio.ciudad}, ${p.envio.estado}.`,
       ...(p.plazo ? [p.plazo.endsWith(".") ? p.plazo : `${p.plazo}.`] : []),
       "Cuando salga te mandamos otro correo con la paquetería y el número de guía para rastrearla.",
@@ -125,7 +131,7 @@ export function renderPagoRechazado(p: PedidoCorreo) {
 
 /** Aviso al equipo (admin, atención y la gente del aliado): hay un pedido pagado por preparar. */
 export function renderNuevoPedidoEquipo(p: PedidoCorreo, panelUrl: string) {
-  const subject = asunto(p, `Nuevo pedido por preparar: ${p.folio}`);
+  const subject = asunto(p, `Nuevo pedido por preparar: ${p.folio}${p.descorchador ? " · lleva descorchador" : ""}`);
   const { html, text } = renderBrandEmail({
     title: subject,
     preheader: `${resumenKits(p)} para ${p.envio.ciudad}, ${p.envio.estado}.`,
@@ -133,7 +139,10 @@ export function renderNuevoPedidoEquipo(p: PedidoCorreo, panelUrl: string) {
     heading: "Nuevo pedido por preparar",
     // Sin montos: lo recibe también la gente del aliado, que no ve el precio público.
     highlight: { label: "Pedido", value: p.folio, sub: resumenKits(p), note: `Destino: ${p.envio.ciudad}, ${p.envio.estado}` },
-    paragraphs: ["Ya está pagado. Ábrelo en el panel para ver la dirección completa y marcarlo como “Preparando” cuando empiecen a armar la caja."],
+    paragraphs: [
+      ...(p.descorchador ? [DESCORCHADOR_EQUIPO] : []),
+      "Ya está pagado. Ábrelo en el panel para ver la dirección completa y marcarlo como “Preparando” cuando empiecen a armar la caja.",
+    ],
     items: botellas(p),
     cta: { label: "Ver el pedido en el panel", url: panelUrl },
     reason: "Recibes este aviso porque tienes acceso al panel de administración de viviendovino.com.",

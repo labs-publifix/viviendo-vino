@@ -2,6 +2,7 @@ import "server-only";
 import { Resend } from "resend";
 import { CONTACTO, renderNuevoPedidoEquipo, renderPagoRechazado, renderPedidoConfirmado, renderPedidoEntregado, renderPedidoEnviado, type PedidoCorreo } from "@/lib/email/pedido";
 import { registrarCorreo, type TipoCorreo } from "@/lib/email/registro";
+import { registrarCompraLista } from "@/lib/lista/regalo";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 // Envía los correos de un pedido. Se llama con after(): el panel responde de inmediato y el correo sale después.
@@ -10,11 +11,11 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export type CorreoPedido = "pagado" | "enviado" | "entregado" | "rechazado";
 
-async function leer(id: string): Promise<(PedidoCorreo & { aliadoId: string; email: string }) | null> {
+async function leer(id: string): Promise<(PedidoCorreo & { aliadoId: string; email: string; pagadoAt: string | null }) | null> {
   const db = supabaseAdmin();
   const { data: p } = await db
     .from("pedidos")
-    .select("id, folio, prueba, aliado_id, cliente_nombre, cliente_email, total_centavos, descuento_centavos, codigo, calle, colonia, codigo_postal, ciudad, estado_mx, recibe, paqueteria, guia")
+    .select("id, folio, prueba, aliado_id, cliente_nombre, cliente_email, total_centavos, descuento_centavos, codigo, calle, colonia, codigo_postal, ciudad, estado_mx, recibe, paqueteria, guia, pagado_at")
     .eq("id", id)
     .maybeSingle();
   if (!p) return null;
@@ -39,6 +40,7 @@ async function leer(id: string): Promise<(PedidoCorreo & { aliadoId: string; ema
     paqueteria: p.paqueteria ?? "",
     guia: p.guia ?? "",
     plazo: (plazoR.data?.plazo_entrega_texto as string | null) ?? "",
+    pagadoAt: (p.pagado_at as string | null) ?? null,
   };
 }
 
@@ -81,6 +83,8 @@ async function mandar(p: { id: string; folio: string }, tipo: TipoCorreo, para: 
 export async function enviarCorreosPedido(id: string, paso: CorreoPedido, origen: string, opciones: { cliente?: boolean } = {}): Promise<void> {
   const p = await leer(id);
   if (!p) return;
+  // Al pagarse: marca la compra en la lista de espera y revisa si lleva el descorchador de regalo.
+  if (paso === "pagado") p.descorchador = await registrarCompraLista({ email: p.email, pagadoAt: p.pagadoAt, prueba: p.prueba });
   if (opciones.cliente !== false) await mandar(p, TIPO[paso], "cliente", p.email, RENDER[paso](p));
   if (paso === "pagado") {
     const aviso = renderNuevoPedidoEquipo(p, `${origen}/admin/pedidos/${p.id}`);
@@ -92,5 +96,6 @@ export async function enviarCorreosPedido(id: string, paso: CorreoPedido, origen
 export async function reenviarCorreoCliente(id: string, paso: CorreoPedido, usuarioId: string): Promise<boolean> {
   const p = await leer(id);
   if (!p) return false;
+  if (paso === "pagado") p.descorchador = await registrarCompraLista({ email: p.email, pagadoAt: p.pagadoAt, prueba: p.prueba });
   return mandar(p, TIPO[paso], "cliente", p.email, RENDER[paso](p), { reenvio: true, usuarioId });
 }

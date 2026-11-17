@@ -7,6 +7,7 @@ import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
 import { compressPhoto } from "@/lib/wine-scan/image";
 import type { ScanResponse } from "@/lib/wine-scan/types";
+import { evento } from "@/lib/analytics";
 import { ScanResult } from "./ScanResult";
 import styles from "./wineScan.module.css";
 
@@ -83,6 +84,7 @@ export function Scanner() {
         return setPhase({ name: "retry", kind: accion, message: mensaje_usuario ?? "No se alcanza a leer bien la etiqueta. ¿Puedes tomar otra foto?" });
       }
       setPhase({ name: "result", data, preview });
+      evento("wine_scan", { modo: typeof body === "string" ? "texto" : "foto", parecido: Boolean(data.recomendacion) });
     } catch (err) {
       const aborted = err instanceof DOMException && err.name === "AbortError";
       setPhase({ name: "error", message: aborted ? "La lectura tardó demasiado. Intenta de nuevo con otra foto." : NETWORK_ERROR });

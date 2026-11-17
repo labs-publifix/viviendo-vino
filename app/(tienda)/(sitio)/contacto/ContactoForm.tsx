@@ -9,6 +9,7 @@ import { Select } from "@/app/_ui/Select";
 import { CONTACTO } from "@/lib/contacto";
 import { MENSAJE_MAX, MOTIVOS, contactoSchema, erroresContacto, type ContactoCampo, type ContactoErrores, type MotivoId } from "@/lib/contacto-form";
 import styles from "./contacto.module.css";
+import { evento } from "@/lib/analytics";
 
 // Formulario de contacto: valida en el navegador con el mismo esquema que el servidor, envía a /api/contacto y muestra
 // el resultado en la misma página (con el foco en el aviso). Campo oculto "sitio" y hora de inicio para frenar bots.
@@ -77,6 +78,7 @@ export function ContactoForm({ motivoInicial }: { motivoInicial: MotivoId | "" }
         setMotivo("");
         setLargo(0);
         inicio.current = Date.now();
+        evento("generate_lead", { tipo: "contacto", motivo: datos.motivo });
         setEstado({ tipo: "ok" });
         return;
       }

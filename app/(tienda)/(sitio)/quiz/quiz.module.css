@@ -226,3 +226,7 @@ aside.reto p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   .option, .segments li, .chevron { transition: none; }
 }
+
+/* Aviso de privacidad simplificado junto a las casillas. */
+.avisoDatos { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.avisoDatos a { color: var(--fg); font-weight: 600; text-underline-offset: 3px; }

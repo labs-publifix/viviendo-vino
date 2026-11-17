@@ -9,6 +9,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import { nombreGrupo } from "./catalogo";
 import { comisionMPEstimada, esVenta, puedeVerPedido, repartoBroker, resumenFinanzas, veCorreoCliente, veMargen, veParteAliado, veTotalCobrado, type EstadoPedido } from "./pedidos-rules";
 import type { AdminUser } from "./session";
+import { pedidosConDescorchador } from "@/lib/lista/regalo";
 
 // Pedidos y Finanzas. Crear un pedido: el servidor vuelve a validar al cliente y cada kit y toma precios,
 // nombres y comisión de la base en ese momento (sin caché); lo que mande el navegador solo aporta slugs y
@@ -201,6 +202,8 @@ export type PedidoFila = {
   paraAliado: number | null;
   /** Pago pendiente que Mercado Pago está revisando (o esperando el reto 3-D Secure del banco): no se prepara aún. */
   pagoEnRevision: boolean;
+  /** Lleva el descorchador de regalo de la lista de espera (lib/lista/regalo-rules.ts). */
+  descorchador: boolean;
 };
 
 export async function getPedidos(user: AdminUser): Promise<PedidoFila[]> {
@@ -208,14 +211,16 @@ export async function getPedidos(user: AdminUser): Promise<PedidoFila[]> {
   const db = supabaseAdmin();
   let q = db
     .from("pedidos")
-    .select("id, folio, created_at, estado, prueba, aliado_id, cliente_nombre, cliente_email, ciudad, estado_mx, kits, total_centavos, comision_centavos, aliado_centavos, mp_estado")
+    .select("id, folio, created_at, estado, prueba, aliado_id, cliente_nombre, cliente_email, ciudad, estado_mx, kits, total_centavos, comision_centavos, aliado_centavos, mp_estado, pagado_at")
     .order("created_at", { ascending: false })
     .limit(MAX_LISTA);
   if (user.rol === "aliado") q = q.eq("aliado_id", user.aliadoId!);
   const [rows, aliados] = await Promise.all([q, db.from("aliados").select("id, nombre")]);
   const nombres = new Map(check(aliados, "los aliados").map((a) => [a.id as string, a.nombre as string]));
   const correo = veCorreoCliente(user.rol);
-  return check(rows, "los pedidos").map((p) => ({
+  const lista = check(rows, "los pedidos");
+  const conRegalo = await pedidosConDescorchador(lista.map((p) => ({ id: p.id, email: p.cliente_email, pagadoAt: p.pagado_at }))).catch(() => new Set<string>());
+  return lista.map((p) => ({
     id: p.id,
     folio: p.folio,
     creado: p.created_at,
@@ -231,6 +236,7 @@ export async function getPedidos(user: AdminUser): Promise<PedidoFila[]> {
     margen: veMargen(user.rol) ? p.comision_centavos : null,
     paraAliado: veParteAliado(user.rol) ? p.aliado_centavos : null,
     pagoEnRevision: p.estado === "pendiente_pago" && /^(processing|in_review|action_required)\//.test(String(p.mp_estado ?? "")),
+    descorchador: conRegalo.has(p.id),
   }));
 }
 
@@ -286,6 +292,7 @@ export async function getPedido(user: AdminUser, id: string) {
       paqueteria: (p.paqueteria as string | null) ?? "",
       guia: (p.guia as string | null) ?? "",
     },
+    descorchador: (await pedidosConDescorchador([{ id: p.id as string, email: p.cliente_email as string, pagadoAt: (p.pagado_at as string | null) ?? null }]).catch(() => new Set<string>())).has(p.id as string),
     fechas: { pagado: p.pagado_at as string | null, enviado: p.enviado_at as string | null, entregado: p.entregado_at as string | null, cancelado: p.cancelado_at as string | null },
     motivoCancelacion: (p.motivo_cancelacion as string | null) ?? "",
     kits: kits.map((k) => ({

@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { evento } from "@/lib/analytics";
 import { MAX_KITS, type KitItem } from "@/lib/kit/rules";
 
 // Carrito y kit en curso, guardados en el navegador (localStorage). Si el navegador no deja guardar
@@ -125,6 +126,7 @@ export const cart = {
     if (!exists && s.kits.length >= MAX_KITS) return { ok: false, reason: "max-kits" };
     const kits = exists ? s.kits.map((k) => (k.id === editing ? kit : k)) : [...s.kits, kit];
     save({ kits, draft: { items: [] } });
+    if (!exists) evento("add_to_cart", { currency: "MXN", items: items.map((i) => ({ item_id: i.slug, quantity: i.quantity })), kit: preset ?? "armado" });
     return { ok: true };
   },
   /** Agrega un kit directo al carrito (kit prearmado) sin tocar el kit que se esté armando. */
@@ -132,6 +134,7 @@ export const cart = {
     const s = getSnapshot();
     if (s.kits.length >= MAX_KITS) return { ok: false, reason: "max-kits" };
     save({ ...s, kits: [...s.kits, { id: newId(), items, ...(preset ? { preset } : {}) }] });
+    evento("add_to_cart", { currency: "MXN", items: items.map((i) => ({ item_id: i.slug, quantity: i.quantity })), kit: preset ?? "armado" });
     return { ok: true };
   },
   removeKit(id: string) {

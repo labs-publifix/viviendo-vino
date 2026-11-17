@@ -1,7 +1,7 @@
 ---
 titulo: "Aviso de Privacidad Integral"
 etiqueta: "Legal"
-actualizado: "5 de noviembre de 2026"
+actualizado: "17 de noviembre de 2026"
 seo: "Aviso de privacidad · Viviendo Vino"
 descripcion: "Cómo tratamos tus datos personales en viviendovino.com, con quién los compartimos y cómo ejercer tus derechos ARCO."
 ---
@@ -81,6 +81,7 @@ Para operar el Sitio utilizamos proveedores que tratan datos por cuenta nuestra,
 | Supabase      | Base de datos de pedidos y registros del Sitio                                                                             |
 | Resend        | Envío de correos electrónicos (confirmaciones, guías, resultados del quiz y, con tu consentimiento, correos promocionales) |
 | Anthropic     | Procesamiento con inteligencia artificial de las respuestas del quiz para generar recomendaciones                          |
+| Google (Google Analytics) | Medición agregada del uso del Sitio (páginas visitadas, tipo de dispositivo, canal de llegada y pasos de la compra) |
 
 Algunos de estos proveedores pueden almacenar o procesar información en servidores ubicados fuera de México, con medidas de seguridad y obligaciones de confidencialidad equivalentes a las que establece la Ley.
 
@@ -104,7 +105,11 @@ Además de darte de baja de nuestros correos promocionales, puedes pedir que te 
 
 ## 8. Cookies y tecnologías similares
 
-El Sitio utiliza cookies y almacenamiento local estrictamente necesarios para su funcionamiento, como recordar tu confirmación de mayoría de edad, conservar tu carrito y mantener la seguridad de la sesión. Puedes eliminarlas o bloquearlas desde la configuración de tu navegador, aunque algunas funciones del Sitio podrían dejar de operar. Si en el futuro incorporamos herramientas de medición o publicidad, actualizaremos este aviso y, cuando corresponda, te pediremos tu autorización.
+El Sitio utiliza cookies y almacenamiento local estrictamente necesarios para su funcionamiento, como recordar tu confirmación de mayoría de edad, conservar tu carrito y mantener la seguridad de la sesión. Puedes eliminarlas o bloquearlas desde la configuración de tu navegador, aunque algunas funciones del Sitio podrían dejar de operar.
+
+Además, usamos Google Analytics, un servicio de medición de Google, para entender de forma agregada cómo se usa el Sitio: qué páginas se visitan, desde qué tipo de dispositivo y por qué canal llegan las visitas, y qué pasos de la compra se completan. Para ello, Google Analytics coloca cookies en tu navegador y registra datos técnicos como un identificador aleatorio del navegador, las páginas vistas, el tipo de dispositivo y una ubicación aproximada a nivel de ciudad. No le enviamos tu nombre, correo, teléfono ni domicilio, y no usamos esta información para publicidad personalizada. Puedes bloquear o eliminar estas cookies desde la configuración de tu navegador o con el [complemento de inhabilitación de Google Analytics](https://tools.google.com/dlpage/gaoptout); el Sitio seguirá funcionando.
+
+Si en el futuro incorporamos herramientas de publicidad, actualizaremos este aviso y, cuando corresponda, te pediremos tu autorización.
 
 ## 9. Menores de edad
 

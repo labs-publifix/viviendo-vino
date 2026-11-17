@@ -56,6 +56,7 @@ export default async function Page({
           <h1 className={s.title}>
             Pedido {p.folio}
             {p.prueba && <span className={s.tag}>Prueba</span>}
+            {p.descorchador && <span className={`${s.tag} ${s.regalo}`}>Lleva descorchador</span>}
           </h1>
           <p className={s.sub}>
             {fechaCdmx(p.creado)}

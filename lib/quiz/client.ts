@@ -1,3 +1,4 @@
+import { evento } from "@/lib/analytics";
 // Utilidades del Quiz IA en el navegador: id anónimo, perfil guardado (para repetir en 2 preguntas) y eventos
 // del embudo. Si el navegador no deja guardar (modo privado, almacenamiento bloqueado), todo sigue funcionando.
 
@@ -79,6 +80,7 @@ export type QuizEvent =
 
 /** Evento del embudo. sendBeacon sobrevive a la navegación (por ejemplo, al ir al armador). */
 export function track(tipo: QuizEvent, extra: { quiz_id?: string; pregunta?: number; origen?: string } = {}) {
+  evento(`quiz_${tipo}`, { ...(extra.pregunta !== undefined ? { pregunta: extra.pregunta } : {}), ...(extra.origen ? { origen: extra.origen } : {}) });
   try {
     const body = JSON.stringify({ tipo, session_id: sessionId(), ...extra });
     if (navigator.sendBeacon?.("/api/quiz/event", new Blob([body], { type: "text/plain" }))) return;

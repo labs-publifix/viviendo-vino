@@ -7,6 +7,7 @@ import { Checkbox, TextField } from "@/app/_ui/Field";
 import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
 import styles from "./article.module.css";
+import { evento } from "@/lib/analytics";
 
 // Descarga de una guía: botón que abre una ventana con correo y aceptación. El servidor (/api/guias)
 // valida, guarda la solicitud y envía el PDF por correo. "Novedades" es opcional y aparte del aviso.
@@ -60,6 +61,7 @@ export function GuideDownload({ slug, guide, label, tone = "light" }: { slug: st
       const json = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
       if (!res.ok || !json?.ok) throw new Error(json?.error ?? "No pudimos enviarte la guía. Intenta de nuevo en un momento.");
       setSentTo(email);
+      evento("generate_lead", { tipo: "guia", slug });
       setStatus("done");
     } catch (err) {
       setStatus("idle");

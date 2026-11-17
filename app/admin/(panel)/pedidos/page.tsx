@@ -68,7 +68,7 @@ export default async function Page({ searchParams }: PageProps<"/admin/pedidos">
         columns={columns}
         rows={pedidos.map((p) => ({
           id: p.id,
-          folio: p.prueba ? `${p.folio} · prueba` : p.folio,
+          folio: `${p.folio}${p.prueba ? " · prueba" : ""}${p.descorchador ? " · descorchador" : ""}`,
           folioHref: `/admin/pedidos/${p.id}`,
           fecha: fechaCdmx(p.creado),
           cliente: p.cliente,

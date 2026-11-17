@@ -8,6 +8,7 @@ import { Icon } from "@/app/_ui/Icon";
 import { Notice } from "@/app/_ui/Notice";
 import { track } from "@/lib/quiz/client";
 import styles from "./quiz.module.css";
+import { AvisoSimplificado, CASILLA_PROMOS } from "@/app/_ui/AvisoSimplificado";
 
 // "Guarda tu perfil": el correo se pide solo aquí, después del resultado, y es opcional. El servidor
 // (/api/quiz/save-profile) valida, guarda y envía el resumen con la guía en PDF del perfil.
@@ -94,7 +95,8 @@ export function SaveProfile({ quizId, regalo }: { quizId: string; regalo: boolea
             }
             error={errors.consent}
           />
-          <Checkbox name="marketing" label="Quiero recibir novedades de Viviendo Vino (opcional)." />
+          <Checkbox name="marketing" label={CASILLA_PROMOS} />
+          <AvisoSimplificado className={styles.avisoDatos} />
           {/* Campo trampa para bots: invisible para personas. */}
           <div className={styles.trap} aria-hidden="true">
             <label>

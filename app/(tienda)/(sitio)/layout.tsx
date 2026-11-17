@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { AgeGate, AGE_GATE_SCRIPT } from "@/app/_ui/AgeGate";
+import { Analytics } from "@/app/_ui/Analytics";
 import { AnnouncementBar } from "@/app/_ui/AnnouncementBar";
 import { CodigoCampana } from "@/app/_ui/CodigoCampana";
 import { Footer } from "@/app/_ui/Footer";
@@ -26,6 +27,7 @@ export default function SitioLayout({ children }: { children: ReactNode }) {
       <Header />
       <main id="contenido">{children}</main>
       <Footer />
+      <Analytics />
     </>
   );
 }
