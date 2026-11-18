@@ -57,7 +57,8 @@ export function CodigoForm({ codigo, kits, siteUrl }: { codigo: CodigoDatosForm;
   const nuevo = !codigo.id;
   const set = (k: keyof CodigoDatosForm) => (ev: { target: { value: string } }) => setV((o) => ({ ...o, [k]: ev.target.value }));
   const num = valorNumerico(v.tipo, v.valor, v.tope);
-  const enlace = `${siteUrl}/?codigo=${encodeURIComponent(normalizarCodigo(v.codigo) || "CODIGO")}`;
+  // Página de promoción: aplica el código y tiene su propia imagen para compartir (/promo/<CÓDIGO>).
+  const enlace = `${siteUrl}/promo/${encodeURIComponent(normalizarCodigo(v.codigo) || "CODIGO")}`;
 
   const copiar = async () => {
     try {

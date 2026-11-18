@@ -68,7 +68,9 @@ export async function fotoOg(archivo: string): Promise<string | null> {
 type Comun = { etiqueta: string; titulo: string; texto?: string };
 export type PlantillaOg =
   | (Comun & { variante: "foto"; foto: string | null; ancho?: number })
-  | (Comun & { variante: "letras"; tono: keyof typeof FONDOS; lista?: string[] });
+  | (Comun & { variante: "letras"; tono: keyof typeof FONDOS; lista?: string[] })
+  /** Código de descuento: la cifra en grande ("10 %"), el texto público y el código en una etiqueta. */
+  | (Comun & { variante: "promo"; cifra: string; codigo: string; foto: string | null });
 
 const tamTitulo = (t: string) => (t.length > 40 ? 50 : t.length > 26 ? 60 : 72);
 
@@ -91,6 +93,37 @@ export async function imagenOg(p: PlantillaOg): Promise<ImageResponse> {
           {p.foto ? (
             // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text -- Satori: imagen dentro del PNG
             <img src={p.foto} width={anchoFoto} height={630} style={{ width: anchoFoto, height: 630, objectFit: "cover" }} />
+          ) : null}
+        </div>
+      ),
+      { ...OG_SIZE, fonts },
+    );
+  }
+
+  if (p.variante === "promo") {
+    const largo = p.texto && p.texto.length > 70;
+    return new ImageResponse(
+      (
+        <div style={{ width: "100%", height: "100%", display: "flex", background: COLOR.crema, fontFamily: "Inter" }}>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "56px 60px", color: COLOR.tinta }}>
+            {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text -- Satori: imagen dentro del PNG */}
+            <img src={logoColor} height={58} style={{ height: 58, width: 182 }} />
+            <div style={{ display: "flex", flexDirection: "column", marginTop: "auto", marginBottom: "auto", padding: "16px 0" }}>
+              <span style={{ fontSize: 21, fontWeight: 800, letterSpacing: 3, textTransform: "uppercase", color: COLOR.vino }}>{p.etiqueta}</span>
+              <span style={{ marginTop: 6, fontSize: 132, fontWeight: 900, lineHeight: 1, letterSpacing: -6, color: COLOR.vino }}>{p.cifra}</span>
+              <span style={{ marginTop: 2, fontSize: 40, fontWeight: 900, lineHeight: 1.08, letterSpacing: -1.5 }}>{p.titulo}</span>
+              {p.texto ? <span style={{ marginTop: 14, fontSize: largo ? 22 : 25, fontWeight: 500, lineHeight: 1.3, color: COLOR.gris }}>{p.texto}</span> : null}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ fontSize: 18, fontWeight: 500, color: COLOR.gris }}>Código</span>
+                <span style={{ fontSize: 28, fontWeight: 800, letterSpacing: 4, color: COLOR.vino, border: `3px dashed ${COLOR.vino}`, borderRadius: 14, padding: "6px 18px" }}>{p.codigo}</span>
+              </div>
+            </div>
+          </div>
+          {p.foto ? (
+            // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text -- Satori: imagen dentro del PNG
+            <img src={p.foto} width={430} height={630} style={{ width: 430, height: 630, objectFit: "cover" }} />
           ) : null}
         </div>
       ),

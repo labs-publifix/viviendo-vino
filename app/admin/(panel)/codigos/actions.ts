@@ -1,6 +1,6 @@
 "use server";
 
-import { refresh } from "next/cache";
+import { refresh, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { audit } from "@/lib/admin/audit";
 import { requireAdmin } from "@/lib/admin/session";
@@ -44,6 +44,7 @@ export async function guardarCodigo(_prev: CodigoState, form: FormData): Promise
       return { error: SAVE_ERROR };
     }
     await audit(user, "editar", "codigos_descuento", id, antes, { ...antes, ...fila });
+    updateTag("codigos"); // la página /promo/<código> muestra el texto y la vigencia
     refresh();
     return { ok: true, message: "Cambios guardados." };
   }
@@ -59,6 +60,7 @@ export async function guardarCodigo(_prev: CodigoState, form: FormData): Promise
     return { error: SAVE_ERROR };
   }
   await audit(user, "crear", "codigos_descuento", data.id, null, fila);
+  updateTag("codigos");
   redirect(`/admin/codigos/${data.id}?aviso=creado`);
 }
 
@@ -72,6 +74,7 @@ export async function cambiarActivoCodigo(id: string, activo: boolean): Promise<
   const { error } = await db.from("codigos_descuento").update({ activo, updated_at: new Date().toISOString() }).eq("id", id);
   if (error) return { error: SAVE_ERROR };
   await audit(user, activo ? "reactivar" : "pausar", "codigos_descuento", id, { codigo: c.codigo, activo: c.activo }, { codigo: c.codigo, activo });
+  updateTag("codigos");
   refresh();
   return { ok: true, message: activo ? `${c.codigo} está activo otra vez.` : `${c.codigo} quedó en pausa: ya no se puede usar.` };
 }
