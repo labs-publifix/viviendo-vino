@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<title>Manual del aliado · Viviendo Vino</title>
+<style>
+  /* Tokens de marca (app/globals.css). */
+  :root {
+    --negro: #0a0206; --hueso: #f3ece4; --vino: #9a2030; --carmin: #cf2c4b; --ciruela: #641f53; --orquidea: #d2a5c8;
+    --gris: #5c5454; --linea: #e3d9ce; --papel: #fbf8f4;
+  }
+  @font-face { font-family: Inter; font-weight: 400; src: url(../../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); }
+  @font-face { font-family: Inter; font-weight: 500; src: url(../../node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); }
+  @font-face { font-family: Inter; font-weight: 700; src: url(../../node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2); }
+  @font-face { font-family: Inter; font-weight: 800; src: url(../../node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2); }
+  @font-face { font-family: Inter; font-weight: 900; src: url(../../node_modules/@fontsource/inter/files/inter-latin-900-normal.woff2); }
+  @font-face { font-family: Mono; font-weight: 500; src: url(../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2); }
+
+  @page { size: Letter; margin: 0; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font-family: Inter, sans-serif; font-size: 10.5pt; line-height: 1.5; color: var(--negro); background: #fff; }
+
+  .page { width: 8.5in; min-height: 11in; padding: 0.7in 0.75in 0.8in; position: relative; page-break-after: always; break-after: page; }
+  .page:last-child { page-break-after: auto; break-after: auto; }
+  .pie { position: absolute; left: 0.75in; right: 0.75in; bottom: 0.4in; display: flex; justify-content: space-between;
+    font-family: Mono; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris); border-top: 1px solid var(--linea); padding-top: 8px; }
+
+  /* Portada */
+  .portada { background:
+      radial-gradient(ellipse 70% 55% at 100% 0%, rgb(154 32 48 / 0.55), rgb(154 32 48 / 0.12) 55%, transparent 75%),
+      radial-gradient(ellipse 55% 45% at 0% 100%, rgb(100 31 83 / 0.45), transparent 70%), var(--negro);
+    color: var(--hueso); display: flex; flex-direction: column; padding: 0.9in 0.85in; }
+  .portada .logo { width: 2.2in; }
+  .portada .centro { margin-top: auto; margin-bottom: auto; }
+  .eti { font-family: Mono; font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--vino); margin: 0 0 10px; }
+  .portada .eti { color: var(--orquidea); }
+  .portada h1 { font-size: 46pt; font-weight: 900; line-height: 0.98; letter-spacing: -0.03em; margin: 0; }
+  .portada h1 em { font-style: normal; color: var(--carmin); }
+  .portada .bajada { font-size: 14pt; color: rgb(243 236 228 / 0.82); max-width: 5.2in; margin: 22px 0 0; }
+  .portada .meta { font-family: Mono; font-size: 8pt; letter-spacing: 0.1em; text-transform: uppercase; color: rgb(243 236 228 / 0.65); display: flex; gap: 28px; }
+
+  h2 { font-size: 22pt; font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; margin: 0 0 6px; }
+  h2 .num { color: var(--vino); }
+  h3 { font-size: 12pt; font-weight: 800; margin: 20px 0 6px; }
+  .lede { font-size: 12pt; color: var(--gris); margin: 0 0 18px; max-width: 6in; }
+  p { margin: 0 0 8px; }
+  strong { font-weight: 700; }
+  a { color: var(--vino); text-decoration: none; font-weight: 600; }
+  ul, ol { margin: 0 0 10px; padding-left: 18px; }
+  li { margin: 0 0 4px; }
+  li::marker { color: var(--vino); font-weight: 700; }
+  code, .ruta { font-family: Mono; font-size: 8.8pt; background: var(--hueso); border-radius: 5px; padding: 1px 6px; color: var(--negro); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card { border: 1px solid var(--linea); border-radius: 14px; padding: 14px 16px; background: var(--papel); }
+  .card h3 { margin-top: 0; }
+  .card.si { border-top: 4px solid #2f7a4f; }
+  .card.no { border-top: 4px solid var(--vino); }
+  .nota { border-left: 4px solid var(--vino); background: var(--hueso); border-radius: 0 12px 12px 0; padding: 12px 16px; margin: 14px 0; }
+  .nota.ciruela { border-left-color: var(--ciruela); }
+  .nota p:last-child { margin: 0; }
+
+  .pasos { list-style: none; padding: 0; counter-reset: paso; }
+  .pasos li { counter-increment: paso; position: relative; padding: 0 0 12px 44px; margin: 0; }
+  .pasos li::before { content: counter(paso, decimal-leading-zero); position: absolute; left: 0; top: -1px; font-family: Mono; font-size: 9pt;
+    color: #fff; background: var(--vino); border-radius: 999px; width: 30px; height: 22px; display: grid; place-items: center; }
+
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 9.8pt; }
+  th { text-align: left; font-family: Mono; font-weight: 500; font-size: 7.8pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris);
+    border-bottom: 2px solid var(--negro); padding: 6px 8px; }
+  td { border-bottom: 1px solid var(--linea); padding: 6px 8px; vertical-align: top; }
+  .chip { display: inline-block; font-size: 8.6pt; font-weight: 700; border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+  .c-gris { background: #ece6df; color: var(--gris); }
+  .c-ambar { background: #f6e3d2; color: #8a4b17; }
+  .c-vino { background: #f4d9de; color: var(--vino); }
+  .c-ok { background: #dcefe3; color: #24603d; }
+
+  .flujo { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 6px 0 16px; }
+  .flujo .flecha { color: var(--vino); font-weight: 900; }
+  .flujo .accion { font-family: Mono; font-size: 7.6pt; color: var(--gris); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .check { list-style: none; padding: 0; }
+  .check li { padding-left: 26px; position: relative; }
+  .check li::before { content: ""; position: absolute; left: 0; top: 3px; width: 13px; height: 13px; border: 2px solid var(--vino); border-radius: 4px; }
+
+  .contacto { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
+  .contacto .card { text-align: left; }
+  .contacto .dato { font-size: 13pt; font-weight: 800; margin: 2px 0 0; }
+  .indice { list-style: none; padding: 0; margin: 10px 0 0; columns: 2; column-gap: 28px; }
+  .indice li { break-inside: avoid; border-bottom: 1px solid var(--linea); padding: 5px 0; font-weight: 600; }
+  .indice span { font-family: Mono; color: var(--vino); margin-right: 10px; }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<section class="page portada">
+  <img class="logo" src="../../public/brand/logo-fondo-oscuro.svg" alt="Viviendo Vino">
+  <div class="centro">
+    <p class="eti">Manual del aliado</p>
+    <h1>Tu panel en<br><em>Viviendo Vino.</em></h1>
+    <p class="bajada">Cómo entrar, preparar y enviar los pedidos, llevar tu inventario y consultar tus ventas. Todo en un solo lugar: <strong>www.viviendovino.com/admin</strong></p>
+  </div>
+  <div class="meta"><span>Versión 1.0</span><span>Noviembre 2026</span><span>Uso interno</span></div>
+</section>
+
+<!-- 1. BIENVENIDA -->
+<section class="page">
+  <p class="eti">01 · Bienvenida</p>
+  <h2>Qué puedes hacer en el panel.</h2>
+  <p class="lede">Viviendo Vino vende tus vinos en kits de 6 botellas con el envío incluido. Tú preparas y envías cada pedido; nosotros atendemos al cliente, cobramos y te transferimos lo tuyo.</p>
+
+  <div class="grid2">
+    <div class="card si">
+      <h3>Sí puedes</h3>
+      <ul>
+        <li>Ver <strong>tus pedidos</strong> con nombre, teléfono y dirección de entrega.</li>
+        <li>Moverlos: <strong>preparar, enviar</strong> (con paquetería y guía) y <strong>entregar</strong>.</li>
+        <li>Dejar <strong>notas</strong> en el historial de cada pedido.</li>
+        <li>Llevar el <strong>inventario</strong> de tus vinos.</li>
+        <li>Consultar <strong>tus ventas, lo que te toca, las transferencias y tu saldo</strong>.</li>
+        <li>Cambiar tu nombre, tu contraseña y activar el código en dos pasos.</li>
+      </ul>
+    </div>
+    <div class="card no">
+      <h3>Lo hace Viviendo Vino</h3>
+      <ul>
+        <li>Cambiar precios, textos, fotos, grupos o kits.</li>
+        <li>Cancelar un pedido o devolver dinero.</li>
+        <li>Atender al cliente (correo, WhatsApp, aclaraciones).</li>
+        <li>Invitar a más personas de tu equipo al panel.</li>
+        <li>Ver los datos de otro aliado.</li>
+      </ul>
+      <p style="color:var(--gris);font-size:9.5pt;margin-top:8px">Si necesitas alguno de estos cambios, escríbenos (contacto al final).</p>
+    </div>
+  </div>
+
+  <h3>Lo que verás en el menú</h3>
+  <table>
+    <thead><tr><th style="width:26%">Sección</th><th>Para qué sirve</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Inicio</strong></td><td>Resumen del día: pedidos por preparar, pedidos atrasados, vinos agotados o con pocas botellas y tus ventas.</td></tr>
+      <tr><td><strong>Pedidos</strong></td><td>La lista de tus pedidos y el detalle de cada uno. Aquí trabajas a diario.</td></tr>
+      <tr><td><strong>Catálogo · Tus vinos</strong></td><td>Cuántas botellas tienes de cada vino. Aquí actualizas el inventario.</td></tr>
+      <tr><td><strong>Finanzas</strong></td><td>Tus ventas, lo que te corresponde, las transferencias recibidas y tu saldo (solo lectura).</td></tr>
+      <tr><td><strong>Configuración · Mi cuenta</strong></td><td>Tu nombre, contraseña, código en dos pasos y sesiones abiertas.</td></tr>
+    </tbody>
+  </table>
+
+  <ol class="indice">
+    <li><span>02</span>Primer acceso</li>
+    <li><span>03</span>Cómo llega y avanza un pedido</li>
+    <li><span>04</span>Preparar y enviar paso a paso</li>
+    <li><span>05</span>Inventario</li>
+    <li><span>06</span>Finanzas</li>
+    <li><span>07</span>Ayuda y contacto</li>
+  </ol>
+  <div class="pie"><span>Viviendo Vino · Manual del aliado</span><span>2</span></div>
+</section>
+
+<!-- 2. PRIMER ACCESO -->
+<section class="page">
+  <p class="eti">02 · Primer acceso</p>
+  <h2>Entra por primera vez.</h2>
+  <p class="lede">Recibirás un correo de Viviendo Vino con un enlace para crear tu contraseña.</p>
+
+  <ol class="pasos">
+    <li><strong>Abre el correo de invitación</strong> y da clic en el enlace. <br><span style="color:var(--gris)">El enlace <strong>vence en 1 hora</strong> y sirve <strong>una sola vez</strong>. Si venció, en la pantalla de entrada da <strong>"Es mi primera vez"</strong> y te llega uno nuevo.</span></li>
+    <li><strong>Crea tu contraseña</strong> de al menos <strong>10 caracteres</strong>. Que sea solo tuya: no la compartas ni la uses en otros sitios.</li>
+    <li><strong>Entra al panel</strong> en <span class="ruta">www.viviendovino.com/admin</span> con tu correo y tu contraseña. Guarda la dirección en tus favoritos.</li>
+    <li><strong>Activa el código en dos pasos</strong> (muy recomendado): <span class="ruta">Configuración → Mi cuenta</span>. Escanea el código QR con una app de autenticación (Google Authenticator, Microsoft Authenticator o similar). Desde entonces, al entrar te pediremos el código de 6 dígitos de la app.</li>
+  </ol>
+
+  <div class="nota">
+    <p><strong>Cada persona, su propia cuenta.</strong> Si alguien más de tu equipo va a preparar pedidos, pídenos que lo invitemos con su correo. Así el historial muestra quién hizo cada cambio y nadie comparte contraseñas.</p>
+  </div>
+
+  <h3>Si no puedes entrar</h3>
+  <ul>
+    <li><strong>Olvidaste la contraseña:</strong> en la pantalla de entrada da <strong>"Olvidé mi contraseña"</strong> y sigue el correo.</li>
+    <li><strong>Vas a cambiar de celular:</strong> antes, desactiva el código en <span class="ruta">Configuración → Mi cuenta</span> y vuelve a activarlo en el nuevo.</li>
+    <li><strong>Perdiste el celular con la app del código:</strong> escríbenos y lo resolvemos contigo.</li>
+    <li><strong>No te llega el correo:</strong> revisa la carpeta de spam o promociones y avísanos.</li>
+  </ul>
+
+  <h3>Lista para tu primer día</h3>
+  <ul class="check">
+    <li>Creé mi contraseña y entré al panel.</li>
+    <li>Activé el código en dos pasos.</li>
+    <li>Revisé en <strong>Tus vinos</strong> que las existencias coincidan con mi almacén.</li>
+    <li>Guardé <span class="ruta">www.viviendovino.com/admin</span> en favoritos y tengo a la mano el contacto de Viviendo Vino.</li>
+  </ul>
+  <div class="pie"><span>Viviendo Vino · Manual del aliado</span><span>3</span></div>
+</section>
+
+<!-- 3. CICLO DEL PEDIDO -->
+<section class="page">
+  <p class="eti">03 · Pedidos</p>
+  <h2>Cómo llega y avanza un pedido.</h2>
+  <p class="lede">Cuando un cliente paga, te llega un correo <strong>"Nuevo pedido por preparar"</strong> y el pedido aparece en el panel. Tú lo avanzas con un botón en cada paso.</p>
+
+  <div class="flujo">
+    <span class="chip c-ambar">Por preparar</span><span class="flecha">→</span>
+    <span class="accion">Empezar a preparar</span><span class="flecha">→</span>
+    <span class="chip c-ambar">Preparando</span><span class="flecha">→</span>
+    <span class="accion">Marcar como enviado</span><span class="flecha">→</span>
+    <span class="chip c-vino">En camino</span><span class="flecha">→</span>
+    <span class="accion">Marcar como entregado</span><span class="flecha">→</span>
+    <span class="chip c-ok">Entregado</span>
+  </div>
+
+  <table>
+    <thead><tr><th style="width:22%">Estado</th><th>Qué significa</th><th style="width:30%">Qué haces tú</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip c-gris">Pago pendiente</span></td><td>El cliente está pagando. Las botellas quedan apartadas unos minutos.</td><td>Nada. No prepares nada todavía.</td></tr>
+      <tr><td><span class="chip c-ambar">Por preparar</span></td><td>Pago confirmado por Mercado Pago. Ya es una venta.</td><td>Da <strong>"Empezar a preparar"</strong>.</td></tr>
+      <tr><td><span class="chip c-ambar">Preparando</span></td><td>Estás armando la caja.</td><td>Al entregarla a la paquetería, da <strong>"Marcar como enviado"</strong> con la paquetería y el número de guía.</td></tr>
+      <tr><td><span class="chip c-vino">En camino</span></td><td>El cliente recibe un correo con la paquetería y su guía.</td><td>Cuando la paquetería confirme la entrega, da <strong>"Marcar como entregado"</strong>.</td></tr>
+      <tr><td><span class="chip c-ok">Entregado</span></td><td>El cliente recibe un correo de entrega. Cuenta para tu saldo.</td><td>Nada más.</td></tr>
+      <tr><td><span class="chip c-gris">Cancelado</span></td><td>Lo canceló Viviendo Vino (antes de enviarse).</td><td>No lo envíes. Sus botellas regresan solas a tu inventario.</td></tr>
+      <tr><td><span class="chip c-gris">Venció sin pago</span></td><td>El pago nunca llegó.</td><td>Nada: no es una venta.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="nota">
+    <p><strong>Tiempos.</strong> Prometemos al cliente <strong>preparar en 1 a 2 días hábiles</strong> y entregar en <strong>hasta 7 días hábiles</strong> desde la compra. El panel marca como <strong>atrasados</strong> los pedidos que pasan el plazo de preparación acordado contigo.</p>
+  </div>
+  <div class="nota ciruela">
+    <p><strong>Etiqueta "Lleva descorchador".</strong> Algunos pedidos de la apertura llevan de regalo un descorchador Viviendo Vino. Lo verás como etiqueta en el pedido y en el correo de aviso. Inclúyelo en la caja.</p>
+  </div>
+  <div class="pie"><span>Viviendo Vino · Manual del aliado</span><span>4</span></div>
+</section>
+
+<!-- 4. PREPARAR Y ENVIAR -->
+<section class="page">
+  <p class="eti">04 · Paso a paso</p>
+  <h2>Preparar y enviar un pedido.</h2>
+  <p class="lede">En <span class="ruta">Pedidos</span>, abre el pedido por su folio (por ejemplo <strong>VV-1004</strong>).</p>
+
+  <ol class="pasos">
+    <li><strong>Revisa el detalle.</strong> Cada kit lleva <strong>6 botellas</strong>; el pedido muestra qué vinos y cuántos de cada uno. Un pedido puede traer más de un kit.</li>
+    <li><strong>Da "Empezar a preparar".</strong> Así Viviendo Vino sabe que ya está en tus manos.</li>
+    <li><strong>Arma la caja</strong> en el empaque para 6 botellas. Si el pedido dice <strong>"Lleva descorchador"</strong>, inclúyelo.</li>
+    <li><strong>Genera la guía</strong> con la paquetería (por ejemplo, Tres Guerras) usando el <strong>nombre, teléfono y dirección</strong> del pedido, con sus referencias.</li>
+    <li><strong>Da "Marcar como enviado"</strong> y captura la <strong>paquetería</strong> y el <strong>número de guía</strong> exactamente como aparece. El cliente lo recibe por correo para rastrearlo.</li>
+    <li><strong>Al confirmarse la entrega</strong>, da <strong>"Marcar como entregado"</strong>.</li>
+  </ol>
+
+  <h3>Antes de cerrar cada caja</h3>
+  <ul class="check">
+    <li>Las botellas coinciden con el pedido: vino, añada y cantidad.</li>
+    <li>Cápsulas, sellos y etiquetas intactos; ninguna botella golpeada.</li>
+    <li>Empaque firme para 6 botellas, sin movimiento dentro de la caja.</li>
+    <li>El descorchador va en la caja, si el pedido lo indica.</li>
+    <li>La guía lleva el nombre, teléfono y dirección completos del pedido.</li>
+  </ul>
+
+  <h3>Situaciones especiales</h3>
+  <table>
+    <tbody>
+      <tr><td style="width:36%"><strong>Te falta una botella</strong></td><td>No cambies el vino por otro. Escríbenos antes de enviar: nosotros hablamos con el cliente.</td></tr>
+      <tr><td><strong>La dirección parece incompleta</strong></td><td>Déjalo en una <strong>nota</strong> del pedido y avísanos; contactamos al cliente.</td></tr>
+      <tr><td><strong>Entrega solo a mayores de edad</strong></td><td>Es vino: la paquetería puede pedir identificación y no entregar si quien recibe no es mayor de 18 años.</td></tr>
+      <tr><td><strong>El cliente reporta daños</strong></td><td>El cliente nos escribe a nosotros (tiene 48 horas). Nosotros coordinamos contigo la reposición o la devolución.</td></tr>
+      <tr><td><strong>Te escribe un cliente directo</strong></td><td>Canalízalo con Viviendo Vino: somos su único punto de contacto.</td></tr>
+    </tbody>
+  </table>
+  <div class="pie"><span>Viviendo Vino · Manual del aliado</span><span>5</span></div>
+</section>
+
+<!-- 5. INVENTARIO -->
+<section class="page">
+  <p class="eti">05 · Inventario</p>
+  <h2>Tus vinos y sus existencias.</h2>
+  <p class="lede">En <span class="ruta">Catálogo → Tus vinos</span> ves cuántas botellas hay de cada vino. <strong>Cuando un vino llega a 0, en la tienda aparece agotado</strong> y nadie lo puede agregar a su kit.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Botones − y +</h3>
+      <p>Quitan o suman <strong>una botella</strong> por clic. Varios clics seguidos cuentan como un solo movimiento en el historial.</p>
+      <p style="color:var(--gris)">Úsalos para ajustes pequeños: una botella rota, una que regresó.</p>
+    </div>
+    <div class="card">
+      <h3>Fijar</h3>
+      <p>Escribes el <strong>número exacto</strong> que tienes en tu almacén (conteo físico).</p>
+      <p style="color:var(--gris)">Úsalo cuando hagas inventario o si vendes los mismos vinos por otros canales.</p>
+    </div>
+  </div>
+
+  <h3>Lo que hace el sistema solo</h3>
+  <ul>
+    <li><strong>Al pagarse un pedido</strong>, sus botellas se descuentan solas del inventario. No las restes a mano.</li>
+    <li><strong>Mientras un cliente paga</strong>, sus botellas quedan apartadas unos minutos; si no paga, regresan solas.</li>
+    <li><strong>Si Viviendo Vino cancela</strong> un pedido, sus botellas regresan al inventario.</li>
+    <li><strong>Te avisamos por correo</strong> cuando un vino baja a <strong>3 botellas o menos</strong> y cuando llega a <strong>0</strong>.</li>
+    <li>Cada cambio queda en el <strong>historial</strong>, con quién lo hizo y cuándo.</li>
+  </ul>
+
+  <div class="nota">
+    <p><strong>La regla de oro:</strong> si vendes estos vinos también por otros canales, <strong>actualiza el inventario el mismo día</strong>. Así nunca vendemos una botella que ya no tienes.</p>
+  </div>
+
+  <p style="color:var(--gris)">Tú solo cambias existencias. Precios, textos y fotos de los vinos los cambia Viviendo Vino.</p>
+  <div class="pie"><span>Viviendo Vino · Manual del aliado</span><span>6</span></div>
+</section>
+
+<!-- 6. FINANZAS -->
+<section class="page">
+  <p class="eti">06 · Finanzas</p>
+  <h2>Tus ventas y tu saldo.</h2>
+  <p class="lede">En <span class="ruta">Finanzas</span> consultas lo tuyo. Es solo de lectura.</p>
+
+  <table>
+    <thead><tr><th style="width:30%">Concepto</th><th>Cómo se calcula</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Lo que te toca</strong></td><td>El <strong>precio acordado por botella</strong> × las botellas vendidas. Lo recibes <strong>íntegro</strong>: la comisión de Mercado Pago y los descuentos de campañas salen del margen de Viviendo Vino, no de lo tuyo.</td></tr>
+      <tr><td><strong>Transferencias</strong></td><td>Los pagos que Viviendo Vino te ha hecho, con su fecha y monto.</td></tr>
+      <tr><td><strong>Saldo</strong></td><td>Lo tuyo de los pedidos <strong>entregados</strong>, menos lo ya transferido. Los pedidos pagados que aún no se entregan aparecen aparte, como "En camino".</td></tr>
+    </tbody>
+  </table>
+
+  <div class="nota ciruela">
+    <p><strong>Por eso importa marcar "Entregado" a tiempo:</strong> un pedido entra a tu saldo cuando está entregado.</p>
+  </div>
+
+  <h3>Lo que no verás</h3>
+  <p>El precio al público, el margen de Viviendo Vino y el correo del cliente. Son datos que maneja Viviendo Vino.</p>
+
+  <h3>Dudas sobre pagos o facturación</h3>
+  <p>Escríbenos con el folio del pedido o el periodo y lo revisamos juntos.</p>
+  <div class="pie"><span>Viviendo Vino · Manual del aliado</span><span>7</span></div>
+</section>
+
+<!-- 7. AYUDA -->
+<section class="page">
+  <p class="eti">07 · Ayuda</p>
+  <h2>Estamos para ayudarte.</h2>
+  <p class="lede">Para cualquier duda del panel, de un pedido o de un cliente, escríbenos. Ten a la mano el <strong>folio del pedido</strong> (VV-…).</p>
+
+  <div class="contacto">
+    <div class="card"><p class="eti">Correo</p><p class="dato">hola@viviendovino.com</p></div>
+    <div class="card"><p class="eti">Teléfono y WhatsApp</p><p class="dato">229 132 5000</p></div>
+    <div class="card"><p class="eti">Horario</p><p class="dato" style="font-size:11pt">Lunes a viernes<br>9:00 a 18:00 (CDMX)</p></div>
+  </div>
+
+  <h3>Resumen en una hoja</h3>
+  <table>
+    <tbody>
+      <tr><td style="width:34%"><strong>Entrar</strong></td><td><span class="ruta">www.viviendovino.com/admin</span> · correo + contraseña (+ código de tu app)</td></tr>
+      <tr><td><strong>Llega un pedido</strong></td><td>Correo "Nuevo pedido por preparar" → <strong>Empezar a preparar</strong></td></tr>
+      <tr><td><strong>Sale a ruta</strong></td><td><strong>Marcar como enviado</strong> con paquetería y número de guía</td></tr>
+      <tr><td><strong>Llegó</strong></td><td><strong>Marcar como entregado</strong> (cuenta para tu saldo)</td></tr>
+      <tr><td><strong>Cambió tu almacén</strong></td><td><span class="ruta">Catálogo → Tus vinos</span>: − / + o <strong>Fijar</strong></td></tr>
+      <tr><td><strong>Algo raro</strong></td><td>Nota en el pedido y avísanos. Nunca cambies un vino por otro sin hablarlo.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="nota">
+    <p><strong>Seguridad.</strong> Viviendo Vino nunca te pedirá tu contraseña ni tu código por teléfono, correo o WhatsApp. Si alguien te los pide, no los compartas y avísanos.</p>
+  </div>
+
+  <p style="margin-top:22px;color:var(--gris);font-size:9pt">El abuso en el consumo de este producto es nocivo para la salud. Venta exclusiva a mayores de 18 años.</p>
+  <div class="pie"><span>Viviendo Vino · Manual del aliado</span><span>8</span></div>
+</section>
+
+</body>
+</html>
