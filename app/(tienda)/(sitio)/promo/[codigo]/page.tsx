@@ -5,7 +5,7 @@ import { ButtonLink } from "@/app/_ui/Button";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { codigosActivos, promoPorCodigo } from "@/lib/promo";
-import type { Promo } from "@/lib/promo-rules";
+import { normalizarCodigoPromo, type Promo } from "@/lib/promo-rules";
 import { seo } from "@/lib/seo";
 import { AplicarCodigo } from "./AplicarCodigo";
 import styles from "./promo.module.css";
@@ -26,6 +26,13 @@ async function cargar(params: Promise<{ codigo: string }>) {
   return storeEnabled() ? promoPorCodigo(codigo) : null;
 }
 
+/** Ruta de esta misma página (aunque el código no sirva): WhatsApp y Facebook usan og:url como dirección oficial y,
+ *  si apuntara a "/", mostrarían la tarjeta de la portada en lugar de la de la promoción. */
+async function rutaPromo(params: Promise<{ codigo: string }>) {
+  const { codigo } = await params;
+  return `/promo/${normalizarCodigoPromo(codigo) ?? "codigo"}`;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ codigo: string }> }): Promise<Metadata> {
   const p = await cargar(params);
   const usable = p && (p.estado === "vigente" || p.estado === "programado");
@@ -36,7 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<{ codigo: s
         ruta: `/promo/${p.codigo}`,
         tituloSocial: `${p.titular} · Código ${p.codigo}`,
       })
-    : seo({ titulo: "Arma tu kit de 6 botellas · Viviendo Vino", descripcion: "Elige 6 botellas de vino italiano y arma tu kit. El envío va incluido en el precio.", ruta: "/" });
+    : seo({ titulo: "Arma tu kit de 6 botellas · Viviendo Vino", descripcion: "Elige 6 botellas de vino italiano y arma tu kit. El envío va incluido en el precio.", ruta: await rutaPromo(params) });
   return { ...base, robots: { index: false, follow: true } };
 }
 
