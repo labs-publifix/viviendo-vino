@@ -14,6 +14,9 @@ import { getCatalog, getWine } from "@/lib/catalog/repo";
 import { CATEGORY_LABELS, GROUP_LABELS, TYPE_LABELS } from "@/lib/catalog/types";
 import { KIT_IMAGES } from "@/lib/catalog/media";
 import { formatMXN } from "@/lib/money";
+import { recortar, seo, urlAbsoluta } from "@/lib/seo";
+import { JsonLd } from "@/app/_ui/JsonLd";
+import { ENVIO_INCLUIDO, grafo, ID_NEGOCIO, migas, POLITICA_DEVOLUCION } from "@/lib/jsonld";
 import { SITE_URL } from "@/lib/site";
 import styles from "./ficha.module.css";
 
@@ -38,11 +41,13 @@ async function load(params: Promise<{ slug: string }>) {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { wine } = await load(params);
-  return {
-    title: `${wine.name} · Viviendo Vino`,
-    description: `${wine.description} ${formatMXN(wine.priceCents)} por botella, en kits de 6 con envío incluido.`,
-    alternates: { canonical: `/vinos/${wine.slug}` },
-  };
+  return seo({
+    titulo: `${wine.name} · Viviendo Vino`,
+    descripcion: `${recortar(wine.description, 100)} ${formatMXN(wine.priceCents)} por botella, en kits de 6 con envío incluido.`,
+    ruta: `/vinos/${wine.slug}`,
+    // Para compartir, sin precio: las redes guardan la tarjeta por semanas.
+    descripcionSocial: recortar(`${wine.description} En kits de 6 botellas con envío incluido a todo México.`, 200),
+  });
 }
 
 // Dentro de <Suspense>: al renovarse la marquesina o el catálogo la página se regenera sin conocer el slug,
@@ -72,31 +77,44 @@ async function FichaVino({ params }: { params: Promise<{ slug: string }> }) {
     { label: "Botella", value: `${wine.volumeMl} ml` },
   ].filter((f): f is { label: string; value: string } => Boolean(f.value));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: wine.name,
-    description: wine.description,
-    category: CATEGORY_LABELS[wine.category],
-    brand: { "@type": "Brand", name: wine.producer },
-    ...(wine.imageUrl ? { image: `${SITE_URL}${wine.imageUrl}` } : {}),
-    offers: {
-      "@type": "Offer",
-      url: `${SITE_URL}/vinos/${wine.slug}`,
-      price: (wine.priceCents / 100).toFixed(2),
-      priceCurrency: "MXN",
-      availability: wine.available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      itemCondition: "https://schema.org/NewCondition",
+  const url = `${SITE_URL}/vinos/${wine.slug}`;
+  const jsonLd = grafo(
+    {
+      "@type": "Product",
+      "@id": `${url}#producto`,
+      name: wine.name,
+      description: wine.description,
+      sku: wine.slug,
+      url,
+      category: CATEGORY_LABELS[wine.category],
+      brand: { "@type": "Brand", name: wine.producer },
+      ...(wine.imageUrl ? { image: urlAbsoluta(wine.imageUrl) } : {}),
+      ...(wine.award ? { award: wine.award } : {}),
+      additionalProperty: facts.map((f) => ({ "@type": "PropertyValue", name: f.label, value: f.value })),
+      offers: {
+        "@type": "Offer",
+        url,
+        price: (wine.priceCents / 100).toFixed(2),
+        priceCurrency: "MXN",
+        availability: wine.available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        itemCondition: "https://schema.org/NewCondition",
+        // Se vende en kits de 6 botellas del mismo grupo (el precio es por botella, igual que en la ficha).
+        eligibleQuantity: { "@type": "QuantitativeValue", minValue: 1, unitText: "botella" },
+        seller: { "@id": ID_NEGOCIO },
+        shippingDetails: ENVIO_INCLUIDO,
+        hasMerchantReturnPolicy: POLITICA_DEVOLUCION,
+      },
     },
-  };
+    migas([
+      ["Inicio", "/"],
+      ["Vinos", "/vinos"],
+      [wine.name, `/vinos/${wine.slug}`],
+    ]),
+  );
 
   return (
     <div className={styles.page}>
-      <script
-        type="application/ld+json"
-        // JSON generado aquí desde la base; "<" se escapa para que ningún texto cierre la etiqueta.
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
-      />
+      <JsonLd data={jsonLd} />
 
       <nav aria-label="Ruta" className={styles.crumbs}>
         <ol>

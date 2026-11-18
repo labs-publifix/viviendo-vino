@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { seo } from "@/lib/seo";
+import { JsonLd } from "@/app/_ui/JsonLd";
+import { grafo, negocio, sitioWeb } from "@/lib/jsonld";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import marca from "@/data/catalogo-marca.json";
@@ -17,10 +20,12 @@ import { Descubre } from "./Descubre";
 import styles from "./inicio.module.css";
 
 // Portada de la tienda. Con STORE_OPEN=true, proxy.ts la muestra en "/".
-export const metadata: Metadata = {
-  title: "Viviendo Vino · Arma tu kit de 6 botellas de vino italiano",
-  description: "Elige 6 botellas de vino italiano y arma tu kit. El envío va incluido en el precio.",
-};
+export const metadata: Metadata = seo({
+  titulo: "Vino italiano en línea: arma tu kit de 6 · Viviendo Vino",
+  descripcion: "Arma tu kit de 6 botellas de vino italiano: blancos, rosado, tintos y espumosos. El envío a todo México va incluido en el precio.",
+  ruta: "/",
+  tituloSocial: "Viviendo Vino · Arma tu kit de 6 botellas de vino italiano",
+});
 
 const STEPS = [
   {
@@ -44,6 +49,7 @@ export default async function TiendaInicio() {
 
   return (
     <>
+      <JsonLd data={grafo(negocio(), sitioWeb())} />
       <DarkBlock aria-labelledby="hero-title" image={{ src: "/img/hero-rafa.webp", width: 1086, height: 1448, clean: true }}>
         <div className={styles.hero}>
           <NumberedLabel tone="dark">Vinos exclusivos de Viviendo Vino</NumberedLabel>

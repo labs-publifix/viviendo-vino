@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { seo } from "@/lib/seo";
+import { JsonLd } from "@/app/_ui/JsonLd";
+import { grafo, ID_NEGOCIO, migas } from "@/lib/jsonld";
+import { SITE_URL } from "@/lib/site";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/app/_ui/ArticleCard";
 import { ButtonLink } from "@/app/_ui/Button";
@@ -9,10 +13,11 @@ import { storeEnabled } from "@/lib/catalog/enabled";
 import { BlogGrid } from "./BlogGrid";
 import styles from "./blog.module.css";
 
-export const metadata: Metadata = {
-  title: "Blog y guías · Viviendo Vino",
-  description: "Artículos y guías de maridaje escritos por Rafa Aguirre, en palabras sencillas. Las guías también las puedes descargar en PDF.",
-};
+export const metadata: Metadata = seo({
+  titulo: "Blog y guías de vino · Viviendo Vino",
+  descripcion: "Artículos y guías de maridaje escritos por Rafa Aguirre, en palabras sencillas. Las guías también las puedes descargar en PDF.",
+  ruta: "/blog",
+});
 
 export default async function Blog() {
   if (!storeEnabled()) notFound();
@@ -22,6 +27,7 @@ export default async function Blog() {
 
   return (
     <>
+      <JsonLd data={grafo({ "@type": "Blog", name: "Blog y guías de Viviendo Vino", url: `${SITE_URL}/blog`, inLanguage: "es-MX", publisher: { "@id": ID_NEGOCIO } }, migas([["Inicio", "/"], ["Blog", "/blog"]]))} />
       <header className={`${styles.section} ${styles.intro}`}>
         <NumberedLabel>Blog y guías</NumberedLabel>
         <Heading level={1} size="section">

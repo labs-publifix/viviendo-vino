@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ButtonLink } from "@/app/_ui/Button";
 import { Icon } from "@/app/_ui/Icon";
+import { JsonLd } from "@/app/_ui/JsonLd";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { CONTACTO } from "@/lib/contacto";
+import { grafo, ID_NEGOCIO, migas } from "@/lib/jsonld";
 import { SITE_URL } from "@/lib/site";
 import { SERVICIOS, rutaServicio, servicioPorSlug, type Seccion, type Servicio } from "@/lib/servicios/contenido";
 import { enLinea } from "@/lib/servicios/render";
@@ -190,6 +192,23 @@ function SeccionView({ sec, i }: { sec: Seccion; i: number }) {
 function ServicioPage({ s }: { s: Servicio }) {
   return (
     <article className={styles.page}>
+      <JsonLd
+        data={grafo(
+          {
+            "@type": "Service",
+            name: s.nombre,
+            description: s.seo.descripcion,
+            url: `${SITE_URL}${rutaServicio(s.slug)}`,
+            provider: { "@id": ID_NEGOCIO },
+            areaServed: { "@type": "Country", name: "México" },
+          },
+          migas([
+            ["Inicio", "/"],
+            ["Servicios", "/servicios"],
+            [s.nombre, rutaServicio(s.slug)],
+          ]),
+        )}
+      />
       <Hero s={s} />
       {s.secciones.map((sec, i) => (
         <SeccionView key={i} sec={sec} i={i} />

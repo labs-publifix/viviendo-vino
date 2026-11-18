@@ -12,7 +12,7 @@ export default function robots(): MetadataRoute.Robots {
     };
   }
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/carrito", "/checkout", "/baja", "/correos"] },
+    rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/carrito", "/checkout", "/baja", "/correos", "/admin", "/acceso", "/lista", "/componentes"] },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

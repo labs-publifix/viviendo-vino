@@ -17,13 +17,19 @@ const mono = JetBrains_Mono({
 });
 
 const IS_PREVIEW = process.env.NEXT_PUBLIC_PREVIEW === "true";
-const title = "Viviendo Vino · Lista de espera";
-const description = `Tienda en línea de kits de 6 botellas de vino, armados por ti. Abrimos el ${launch.day}. Apúntate y llévate un descorchador Viviendo Vino con tu primer kit.`;
+// Con la tienda abierta, los valores por defecto son los de la tienda (cada página pública define los suyos con
+// lib/seo.ts). Con la tienda cerrada, los de la lista de espera.
+const STORE_OPEN = process.env.STORE_OPEN === "true";
+const title = STORE_OPEN ? "Viviendo Vino · Vino italiano en kits de 6 botellas" : "Viviendo Vino · Lista de espera";
+const description = STORE_OPEN
+  ? "Arma tu kit de 6 botellas de vino italiano. El envío a todo México va incluido en el precio."
+  : `Tienda en línea de kits de 6 botellas de vino, armados por ti. Abrimos el ${launch.day}. Apúntate y llévate un descorchador Viviendo Vino con tu primer kit.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title,
   description,
+  applicationName: "Viviendo Vino",
   openGraph: {
     title,
     description,

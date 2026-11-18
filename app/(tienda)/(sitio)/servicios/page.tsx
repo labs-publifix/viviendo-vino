@@ -1,25 +1,39 @@
 import type { Metadata } from "next";
+import { seo } from "@/lib/seo";
+import { JsonLd } from "@/app/_ui/JsonLd";
+import { grafo, migas } from "@/lib/jsonld";
+import { SITE_URL } from "@/lib/site";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonLink } from "@/app/_ui/Button";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { storeEnabled } from "@/lib/catalog/enabled";
-import { SITE_URL } from "@/lib/site";
+import { SERVICIOS, rutaServicio } from "@/lib/servicios/contenido";
 import styles from "./servicios.module.css";
 
 // /servicios: cuatro bloques con ancla (#marketing, #ia, #consultoria y #regalos); cada uno lleva a su página interna
 // (/servicios/<slug>), donde están el detalle, WhatsApp y el formulario.
 
-export const metadata: Metadata = {
-  title: "Servicios · Viviendo Vino",
-  description: "Marketing, experiencias con inteligencia artificial, consultoría para centros de consumo y regalos corporativos para el mundo del vino.",
-  alternates: { canonical: `${SITE_URL}/servicios` },
-};
+export const metadata: Metadata = seo({
+  titulo: "Servicios para negocios de vino · Viviendo Vino",
+  descripcion: "Marketing, experiencias con inteligencia artificial, consultoría para centros de consumo y regalos corporativos para el mundo del vino.",
+  ruta: "/servicios",
+});
 
 export default function Servicios() {
   if (!storeEnabled()) notFound();
   return (
     <div className={styles.page}>
+      <JsonLd
+        data={grafo(
+          {
+            "@type": "ItemList",
+            name: "Servicios de Viviendo Vino",
+            itemListElement: SERVICIOS.map((s, i) => ({ "@type": "ListItem", position: i + 1, url: `${SITE_URL}${rutaServicio(s.slug)}`, name: s.nombre })),
+          },
+          migas([["Inicio", "/"], ["Servicios", "/servicios"]]),
+        )}
+      />
       <header className={styles.head}>
         <NumberedLabel>Servicios</NumberedLabel>
         <Heading level={1} size="section">

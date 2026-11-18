@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
+import { seo } from "@/lib/seo";
+import { JsonLd } from "@/app/_ui/JsonLd";
+import { grafo, migas, preguntasFrecuentes } from "@/lib/jsonld";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { CONTACTO } from "@/lib/contacto";
-import { SITE_URL } from "@/lib/site";
 import { InfoPage } from "../_info/InfoPage";
 import styles from "../_info/info.module.css";
 
 // Preguntas frecuentes autorizadas (documento del 5 de noviembre de 2026). Mismo diseño de siempre: grupos con
 // preguntas plegables (details/summary). El texto es el del documento; solo se agregan enlaces.
 
-export const metadata: Metadata = {
-  title: "Preguntas frecuentes · Viviendo Vino",
-  description: "Kits de 6 botellas, precios con envío incluido, pagos con Mercado Pago, facturas, tiempos de entrega, cancelaciones, devoluciones y privacidad.",
-  alternates: { canonical: `${SITE_URL}/preguntas-frecuentes` },
-};
+export const metadata: Metadata = seo({
+  titulo: "Preguntas frecuentes · Viviendo Vino",
+  descripcion: "Kits de 6 botellas, precios con envío incluido, pagos con Mercado Pago, facturas, tiempos de entrega, cancelaciones, devoluciones y privacidad.",
+  ruta: "/preguntas-frecuentes",
+});
 
 const Correo = () => <a href={CONTACTO.correo.href}>{CONTACTO.correo.texto}</a>;
 
@@ -187,6 +189,7 @@ export default function PreguntasFrecuentes() {
   if (!storeEnabled()) notFound();
   return (
     <InfoPage label="Ayuda" title="Preguntas frecuentes." updated="5 de noviembre de 2026" draft={false}>
+      <JsonLd data={grafo(preguntasFrecuentes(GROUPS.flatMap((g) => g.items)), migas([["Inicio", "/"], ["Preguntas frecuentes", "/preguntas-frecuentes"]]))} />
       {GROUPS.map((g) => (
         <section key={g.title}>
           <h2 className={styles.faqGroup}>{g.title}</h2>

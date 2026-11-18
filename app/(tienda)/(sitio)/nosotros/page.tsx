@@ -1,4 +1,9 @@
 import type { Metadata } from "next";
+import { seo } from "@/lib/seo";
+import { JsonLd } from "@/app/_ui/JsonLd";
+import { AUTHOR } from "@/lib/blog/meta";
+import { grafo, ID_NEGOCIO, migas } from "@/lib/jsonld";
+import { SITE_URL } from "@/lib/site";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonLink } from "@/app/_ui/Button";
@@ -13,10 +18,11 @@ import styles from "./nosotros.module.css";
 
 // Página de Rafa Aguirre, fundador. Los textos de Rafa viven en lib/about.ts (finales desde el 26 oct 2026).
 
-export const metadata: Metadata = {
-  title: "Nosotros · Viviendo Vino",
-  description: "Viviendo Vino es una forma directa de comprar buen vino. Conoce a Rafa Aguirre, quien elige cada vino.",
-};
+export const metadata: Metadata = seo({
+  titulo: "Nosotros: quién elige cada vino · Viviendo Vino",
+  descripcion: "Viviendo Vino es una forma directa de comprar buen vino. Conoce a Rafa Aguirre, quien elige cada vino.",
+  ruta: "/nosotros",
+});
 
 const PASOS = ["Armas tu kit de 6 botellas.", "Pagas en línea.", "Lo recibes en tu casa, con envío incluido."];
 const INSTAGRAM = SOCIAL.find((s) => s.id === "instagram")!;
@@ -26,6 +32,24 @@ export default function Nosotros() {
 
   return (
     <>
+      <JsonLd
+        data={grafo(
+          {
+            "@type": "AboutPage",
+            url: `${SITE_URL}/nosotros`,
+            name: "Nosotros",
+            about: { "@id": ID_NEGOCIO },
+            mainEntity: {
+              "@type": "Person",
+              name: AUTHOR.name,
+              jobTitle: AUTHOR.role,
+              image: `${SITE_URL}/img/og/nosotros.jpg`,
+              worksFor: { "@id": ID_NEGOCIO, "@type": "OnlineStore", name: "Viviendo Vino", url: `${SITE_URL}/` },
+            },
+          },
+          migas([["Inicio", "/"], ["Nosotros", "/nosotros"]]),
+        )}
+      />
       {/* 1. Portada */}
       <section className={`${styles.section} ${styles.hero} ${styles.beforeDark}`} aria-labelledby="nosotros-title">
         <div className={styles.copy}>

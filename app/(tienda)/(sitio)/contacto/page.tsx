@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
+import { seo } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ContactoDatos } from "@/app/_ui/ContactoDatos";
 import { Heading, NumberedLabel } from "@/app/_ui/Typography";
 import { storeEnabled } from "@/lib/catalog/enabled";
 import { motivoDeUrl } from "@/lib/contacto-form";
-import { SITE_URL } from "@/lib/site";
 import { ContactoForm } from "./ContactoForm";
 import styles from "./contacto.module.css";
 
 // /contacto: formulario (Resend, sin guardar mensajes) y, al lado, los datos de contacto de lib/contacto.ts.
 // ?motivo=pedido|marketing|ia|otro preselecciona el motivo.
 
-export const metadata: Metadata = {
-  title: "Contacto · Viviendo Vino",
-  description: "Escríbenos sobre tu pedido, tus etiquetas, nuestros servicios para el mundo del vino o lo que necesites. También por teléfono.",
-  alternates: { canonical: `${SITE_URL}/contacto` },
-};
+export const metadata: Metadata = seo({
+  titulo: "Contacto · Viviendo Vino",
+  descripcion: "Escríbenos sobre tu pedido, tus etiquetas, nuestros servicios para el mundo del vino o lo que necesites. También por teléfono.",
+  ruta: "/contacto",
+});
 
 async function FormConMotivo({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const sp = await searchParams;

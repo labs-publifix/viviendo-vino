@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { seo } from "@/lib/seo";
+import { JsonLd } from "@/app/_ui/JsonLd";
+import { aplicacion, grafo, migas, preguntasFrecuentes } from "@/lib/jsonld";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -20,12 +23,12 @@ import styles from "./landing.module.css";
 // escritorio, el QR para abrirlo en el celular y la foto. La decisión de qué vista se ve es de CSS (puntero táctil y
 // ancho), sin parpadeo al cargar. Debajo: cómo funciona, qué recibes (con un ejemplo real), usos, tips y preguntas.
 
-export const metadata: Metadata = {
-  title: "Wine Scan: fotografía la etiqueta y conoce tu vino | Viviendo Vino",
-  description:
+export const metadata: Metadata = seo({
+  titulo: "Wine Scan: fotografía la etiqueta de tu vino · Viviendo Vino",
+  descripcion:
     "Toma una foto de la etiqueta de cualquier vino y recibe gratis, sin registro, una guía: qué es, cómo se siente, cómo servirlo y con qué combina.",
-  alternates: { canonical: `${SITE_URL}/wine-scan` },
-};
+  ruta: "/wine-scan",
+});
 
 const HOST = /^[a-z0-9.-]+(:\d{2,5})?$/i;
 // GIF transparente de 1 px: en la vista móvil la foto del hero no se descarga.
@@ -238,6 +241,13 @@ export default function WineScanPage() {
   if (!storeEnabled()) notFound();
   return (
     <div className={styles.page}>
+      <JsonLd
+        data={grafo(
+          aplicacion({ nombre: "Wine Scan", ruta: "/wine-scan", descripcion: "Toma una foto de la etiqueta de cualquier vino y recibe gratis, sin registro, una guía: qué es, cómo se siente, cómo servirlo y con qué combina." }),
+          preguntasFrecuentes(PREGUNTAS),
+          migas([["Inicio", "/"], ["Wine Scan", "/wine-scan"]]),
+        )}
+      />
       {/* 1. Hero */}
       <div className={styles.hero}>
         <div className={styles.heroCopy}>
