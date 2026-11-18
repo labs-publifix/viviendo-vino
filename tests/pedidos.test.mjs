@@ -81,6 +81,7 @@ test("validaciones: guía al enviar, motivo al cancelar, nota y transferencia", 
   assert.equal(validarAccion("enviar", { paqueteria: "Correos", guia: "1234567890" }).ok, false);
   const ok = validarAccion("enviar", { paqueteria: "DHL", guia: " 12-ab-34 " });
   assert.deepEqual(ok, { ok: true, data: { paqueteria: "DHL", guia: "12-AB-34" } });
+  assert.equal(validarAccion("enviar", { paqueteria: "Tres Guerras", guia: "1234567890" }).ok, true);
   assert.equal(validarAccion("cancelar", { motivo: "no" }).ok, false);
   assert.equal(validarAccion("cancelar", { motivo: "El cliente lo pidió" }).ok, true);
   assert.equal(validarAccion("preparar", {}).ok, true);

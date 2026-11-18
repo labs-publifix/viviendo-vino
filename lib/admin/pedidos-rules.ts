@@ -175,7 +175,8 @@ export function resumenFinanzas(ventas: VentaFin[], transferencias: Transferenci
 
 export type Resultado<T> = { ok: true; data: T } | { ok: false; errors: Record<string, string> };
 
-export const PAQUETERIAS = ["Estafeta", "DHL", "FedEx", "Paquetexpress", "99 Minutos", "Otra"] as const;
+// Tres Guerras primero: es la paquetería del aliado (Información de envíos).
+export const PAQUETERIAS = ["Tres Guerras", "Estafeta", "DHL", "FedEx", "Paquetexpress", "99 Minutos", "Otra"] as const;
 
 /** Datos que pide cada acción: la guía al enviar y el motivo al cancelar. */
 export function validarAccion(accion: AccionPedido, datos: { paqueteria?: string; guia?: string; motivo?: string }): Resultado<{ paqueteria?: string; guia?: string; motivo?: string }> {
