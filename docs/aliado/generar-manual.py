@@ -12,24 +12,50 @@ AQUI = Path(__file__).parent
 MARCAS = json.loads((AQUI / "capturas" / "marcas.json").read_text())
 
 
+# Recortes (en píxeles de la captura original) para quitar el menú lateral y dejar más grande lo importante.
+RECORTES = {
+    "acceso": (400, 120, 480, 560),
+    "inicio": (284, 24, 976, 600),
+    "pedidos": (284, 24, 976, 590),
+    "pedido-por-preparar": (284, 30, 976, 810),
+    "pedido-preparando": (284, 30, 976, 560),
+    "pedido-en-camino": (284, 30, 976, 750),
+    "vinos": (276, 24, 1004, 680),
+    "finanzas": (284, 24, 976, 760),
+}
+
+
 def captura(nombre, pie, ancho="100%"):
-    """Imagen con sus números encima (posiciones en % de la imagen)."""
+    """Captura recortada con contornos finos y números al lado de cada elemento (no encima)."""
     d = MARCAS[nombre]
+    W, H = d["ancho"], d["alto"]
+    cx, cy, cw, ch = RECORTES.get(nombre, (0, 0, W, H))
     capas = []
     for m in d["marcas"]:
+        # De % de la captura completa a % del recorte, con 4 px de aire alrededor del elemento.
+        x = (m["x"] / 100 * W - cx - 4) / cw * 100
+        y = (m["y"] / 100 * H - cy - 4) / ch * 100
+        w = (m["w"] / 100 * W + 8) / cw * 100
+        h = (m["h"] / 100 * H + 8) / ch * 100
+        lado = "der" if x < 5 else "izq"
         capas.append(
-            f'<span class="caja" style="left:{m["x"]}%;top:{m["y"]}%;width:{m["w"]}%;height:{m["h"]}%"></span>'
-            f'<span class="num" style="left:{m["x"]}%;top:{m["y"] + m["h"] / 2}%">{m["n"]}</span>'
+            f'<span class="caja" style="left:{x:.2f}%;top:{y:.2f}%;width:{w:.2f}%;height:{h:.2f}%"></span>'
+            f'<span class="num {lado}" style="left:{(x + w if lado == "der" else x):.2f}%;top:{y + h / 2:.2f}%">{m["n"]}</span>'
         )
+    img = f'<img src="capturas/{nombre}.png" alt="" style="width:{W / cw * 100:.3f}%;left:{-cx / cw * 100:.3f}%;top:{-cy / ch * 100:.3f}%">'
     return (
-        f'<figure class="shot" style="width:{ancho}"><div class="marco"><img src="capturas/{nombre}.png" alt="">'
+        f'<figure class="shot" style="width:{ancho}"><div class="marco" style="aspect-ratio:{cw}/{ch}">{img}'
         + "".join(capas)
         + f"</div><figcaption>{pie}</figcaption></figure>"
     )
 
 
-def leyenda(items):
-    return '<ol class="leyenda">' + "".join(f'<li><span class="n">{i + 1}</span><div>{t}</div></li>' for i, t in enumerate(items)) + "</ol>"
+def leyenda(items, columnas=2):
+    filas = []
+    for i, t in enumerate(items):
+        titulo, _, texto = t.partition(":</strong>")
+        filas.append(f'<li><span class="n">{i + 1}</span><div>{titulo}:</strong>{texto}</div></li>' if texto else f'<li><span class="n">{i + 1}</span><div>{t}</div></li>')
+    return f'<ol class="leyenda c{columnas}">' + "".join(filas) + "</ol>"
 
 
 PAGINAS = []
@@ -81,14 +107,21 @@ pagina(
 <p class="eti">01 · Entrar al panel</p>
 <h2>Entra con tu correo y tu contraseña.</h2>
 <p class="lede">La dirección es <span class="ruta">www.viviendovino.com/admin</span>. Guárdala en favoritos.</p>
-{captura("acceso", "Pantalla de entrada al panel.")}
+<div class="lado acceso">{captura("acceso", "Pantalla de entrada al panel.")}<div>
 {leyenda([
     "<strong>Correo:</strong> el mismo en el que recibiste la invitación.",
     "<strong>Contraseña:</strong> la que creaste (mínimo 10 caracteres).",
-    "<strong>Entrar.</strong> Si activaste el código en dos pasos, después te pide los 6 dígitos de tu app.",
+    "<strong>Entrar:</strong> listo, ya estás en el panel.",
     "<strong>Es mi primera vez:</strong> si el enlace de la invitación ya venció (dura 1 hora), aquí pides uno nuevo para crear tu contraseña.",
     "<strong>Olvidé mi contraseña:</strong> te llega un correo para crear una nueva.",
-])}
+], columnas=1)}
+</div></div>
+<h3>La primera vez</h3>
+<ol class="pasos">
+  <li><strong>Abre el correo de invitación</strong> de Viviendo Vino y da clic en el enlace. Vence en 1 hora y sirve una sola vez.</li>
+  <li><strong>Crea tu contraseña</strong> de al menos 10 caracteres. Que sea solo tuya.</li>
+  <li><strong>Entra</strong> en <span class="ruta">www.viviendovino.com/admin</span> con tu correo y tu contraseña.</li>
+</ol>
 """,
     "Entrar",
 )
@@ -96,22 +129,26 @@ pagina(
 pagina(
     f"""
 <p class="eti">01 · Entrar al panel</p>
-<h2>Protege tu cuenta (recomendado).</h2>
-<p class="lede">En <span class="ruta">Configuración → Mi cuenta</span> puedes cambiar tu nombre y tu contraseña, y activar el <strong>código en dos pasos</strong>.</p>
-{captura("cuenta", "Configuración → Mi cuenta, sección del código en dos pasos.")}
+<h2>Tu cuenta: nombre y contraseña.</h2>
+<p class="lede">En <span class="ruta">Configuración → Mi cuenta</span> puedes corregir tu nombre o cambiar tu contraseña cuando quieras.</p>
+<div class="lado cuenta">{captura("cuenta", "Configuración → Mi cuenta.")}<div>
 {leyenda([
-    "<strong>Código en dos pasos:</strong> además de tu contraseña, al entrar te pedimos un código de 6 dígitos de una app en tu celular.",
-    "<strong>Activar:</strong> escanea el código QR con Google Authenticator, Microsoft Authenticator o similar, y escribe el código que te muestre.",
-])}
+    "<strong>Nombre:</strong> así apareces en el historial de cada pedido.",
+    "<strong>Guardar nombre:</strong> guarda el cambio.",
+    "<strong>Contraseña actual:</strong> la que usas hoy.",
+    "<strong>Contraseña nueva:</strong> mínimo 10 caracteres; escríbela dos veces.",
+    "<strong>Cambiar contraseña:</strong> se cierran tus sesiones en otros dispositivos.",
+], columnas=1)}
+</div></div>
 <div class="nota"><p><strong>Cada persona, su propia cuenta.</strong> No compartas tu contraseña. Si alguien más va a preparar pedidos, pídenos que lo invitemos con su correo.</p></div>
-<div class="nota ciruela"><p><strong>¿Vas a cambiar de celular?</strong> Antes, desactiva el código en Mi cuenta y vuelve a activarlo en el nuevo. Si lo perdiste, escríbenos.</p></div>
 <h3>Tu primer día</h3>
-<ul class="check">
+<ul class="check cols">
   <li>Creé mi contraseña y entré al panel.</li>
-  <li>Activé el código en dos pasos.</li>
   <li>Revisé en <strong>Catálogo</strong> que las existencias coincidan con mi almacén.</li>
   <li>Guardé <span class="ruta">www.viviendovino.com/admin</span> en favoritos.</li>
+  <li>Tengo a la mano el contacto de Viviendo Vino (página 12).</li>
 </ul>
+<p class="opcional"><strong>Opcional:</strong> en esta misma pantalla existe un "código en dos pasos" para más seguridad. No es necesario; si algún día lo quieres activar, pídenos ayuda.</p>
 """,
     "Mi cuenta",
 )
@@ -186,7 +223,7 @@ pagina(
 <p class="eti">05 · Paso 1</p>
 <h2>Preparar el pedido.</h2>
 <p class="lede">Abre el pedido desde la lista. Todo lo que necesitas para armar la caja está en esta pantalla.</p>
-{captura("pedido-por-preparar", "Detalle de un pedido por preparar (2 kits).")}
+{captura("pedido-por-preparar", "Detalle de un pedido por preparar (2 kits).", ancho="86%")}
 {leyenda([
     "<strong>Qué lleva:</strong> cada kit son <strong>6 botellas</strong>; aquí ves qué vinos y cuántos de cada uno.",
     "<strong>Para ti:</strong> lo que te toca de este pedido, a tus precios acordados.",
@@ -338,7 +375,7 @@ pagina(
 </div>
 <h3>Resumen en una hoja</h3>
 <table><tbody>
-  <tr><td style="width:32%"><strong>Entrar</strong></td><td><span class="ruta">www.viviendovino.com/admin</span> · correo, contraseña y código de tu app</td></tr>
+  <tr><td style="width:32%"><strong>Entrar</strong></td><td><span class="ruta">www.viviendovino.com/admin</span> · tu correo y tu contraseña</td></tr>
   <tr><td><strong>Llega un pedido</strong></td><td>Correo "Nuevo pedido por preparar" → abre el pedido → <strong>Empezar a preparar</strong></td></tr>
   <tr><td><strong>Sale a ruta</strong></td><td>Paquetería + número de guía → <strong>Marcar como enviado</strong></td></tr>
   <tr><td><strong>Llegó</strong></td><td><strong>Marcar como entregado</strong> (entra a tu saldo)</td></tr>

@@ -1,113 +1,119 @@
 <!doctype html>
 <html lang="es-MX"><head><meta charset="utf-8"><title>Manual del aliado · Viviendo Vino</title>
-<style>
-  /* Tokens de marca (app/globals.css). */
-  :root {
-    --negro: #0a0206; --hueso: #f3ece4; --vino: #9a2030; --carmin: #cf2c4b; --ciruela: #641f53; --orquidea: #d2a5c8;
-    --gris: #5c5454; --linea: #e3d9ce; --papel: #fbf8f4;
-  }
-  @font-face { font-family: Inter; font-weight: 400; src: url(../../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); }
-  @font-face { font-family: Inter; font-weight: 500; src: url(../../node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); }
-  @font-face { font-family: Inter; font-weight: 700; src: url(../../node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2); }
-  @font-face { font-family: Inter; font-weight: 800; src: url(../../node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2); }
-  @font-face { font-family: Inter; font-weight: 900; src: url(../../node_modules/@fontsource/inter/files/inter-latin-900-normal.woff2); }
-  @font-face { font-family: Mono; font-weight: 500; src: url(../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2); }
+<style>/* Manual del aliado · tokens de marca (app/globals.css) */
+:root {
+  --negro: #0a0206; --hueso: #f3ece4; --vino: #9a2030; --carmin: #cf2c4b; --ciruela: #641f53; --orquidea: #d2a5c8;
+  --gris: #5c5454; --gris-claro: #8a8080; --linea: #e8dfd5; --papel: #fbf8f4;
+}
+@font-face { font-family: Inter; font-weight: 400; src: url(../../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); }
+@font-face { font-family: Inter; font-weight: 500; src: url(../../node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); }
+@font-face { font-family: Inter; font-weight: 700; src: url(../../node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2); }
+@font-face { font-family: Inter; font-weight: 800; src: url(../../node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2); }
+@font-face { font-family: Inter; font-weight: 900; src: url(../../node_modules/@fontsource/inter/files/inter-latin-900-normal.woff2); }
+@font-face { font-family: Mono; font-weight: 500; src: url(../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2); }
 
-  @page { size: Letter; margin: 0; }
-  * { box-sizing: border-box; }
-  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  body { margin: 0; font-family: Inter, sans-serif; font-size: 10.5pt; line-height: 1.5; color: var(--negro); background: #fff; }
+@page { size: Letter; margin: 0; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font-family: Inter, sans-serif; font-size: 10pt; line-height: 1.5; color: var(--negro); background: #fff; }
 
-  .page { width: 8.5in; min-height: 11in; padding: 0.7in 0.75in 0.8in; position: relative; page-break-after: always; break-after: page; }
-  .page:last-child { page-break-after: auto; break-after: auto; }
-  .pie { position: absolute; left: 0.75in; right: 0.75in; bottom: 0.4in; display: flex; justify-content: space-between;
-    font-family: Mono; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris); border-top: 1px solid var(--linea); padding-top: 8px; }
+.page { width: 8.5in; height: 11in; padding: 0.62in 0.72in 0.8in; position: relative; overflow: hidden; page-break-after: always; break-after: page; }
+.page:last-child { page-break-after: auto; break-after: auto; }
+.page::before { content: ""; position: absolute; left: 0.72in; top: 0.38in; width: 28px; height: 3px; border-radius: 3px; background: var(--vino); }
+.pie { position: absolute; left: 0.72in; right: 0.72in; bottom: 0.4in; display: flex; justify-content: space-between;
+  font-family: Mono; font-size: 7pt; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gris-claro); border-top: 1px solid var(--linea); padding-top: 8px; }
 
-  /* Portada */
-  .portada { background:
-      radial-gradient(ellipse 70% 55% at 100% 0%, rgb(154 32 48 / 0.55), rgb(154 32 48 / 0.12) 55%, transparent 75%),
-      radial-gradient(ellipse 55% 45% at 0% 100%, rgb(100 31 83 / 0.45), transparent 70%), var(--negro);
-    color: var(--hueso); display: flex; flex-direction: column; padding: 0.9in 0.85in; }
-  .portada .logo { width: 2.2in; }
-  .portada .centro { margin-top: auto; margin-bottom: auto; }
-  .eti { font-family: Mono; font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--vino); margin: 0 0 10px; }
-  .portada .eti { color: var(--orquidea); }
-  .portada h1 { font-size: 46pt; font-weight: 900; line-height: 0.98; letter-spacing: -0.03em; margin: 0; }
-  .portada h1 em { font-style: normal; color: var(--carmin); }
-  .portada .bajada { font-size: 14pt; color: rgb(243 236 228 / 0.82); max-width: 5.2in; margin: 22px 0 0; }
-  .portada .meta { font-family: Mono; font-size: 8pt; letter-spacing: 0.1em; text-transform: uppercase; color: rgb(243 236 228 / 0.65); display: flex; gap: 28px; }
+/* Portada */
+.portada { background:
+    radial-gradient(ellipse 70% 55% at 100% 0%, rgb(154 32 48 / 0.55), rgb(154 32 48 / 0.12) 55%, transparent 75%),
+    radial-gradient(ellipse 55% 45% at 0% 100%, rgb(100 31 83 / 0.45), transparent 70%), var(--negro);
+  color: var(--hueso); display: flex; flex-direction: column; padding: 0.9in 0.85in; }
+.portada::before { display: none; }
+.portada .logo { width: 2.1in; }
+.portada .centro { margin-top: auto; margin-bottom: auto; }
+.portada h1 { font-size: 46pt; font-weight: 900; line-height: 0.98; letter-spacing: -0.03em; margin: 0; }
+.portada h1 em { font-style: normal; color: var(--carmin); }
+.portada .bajada { font-size: 13.5pt; color: rgb(243 236 228 / 0.82); max-width: 5.2in; margin: 22px 0 0; }
+.portada .meta { font-family: Mono; font-size: 7.5pt; letter-spacing: 0.1em; text-transform: uppercase; color: rgb(243 236 228 / 0.6); display: flex; gap: 28px; }
+.portada .eti { color: var(--orquidea); }
 
-  h2 { font-size: 22pt; font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; margin: 0 0 6px; }
-  h2 .num { color: var(--vino); }
-  h3 { font-size: 12pt; font-weight: 800; margin: 20px 0 6px; }
-  .lede { font-size: 12pt; color: var(--gris); margin: 0 0 18px; max-width: 6in; }
-  p { margin: 0 0 8px; }
-  strong { font-weight: 700; }
-  a { color: var(--vino); text-decoration: none; font-weight: 600; }
-  ul, ol { margin: 0 0 10px; padding-left: 18px; }
-  li { margin: 0 0 4px; }
-  li::marker { color: var(--vino); font-weight: 700; }
-  code, .ruta { font-family: Mono; font-size: 8.8pt; background: var(--hueso); border-radius: 5px; padding: 1px 6px; color: var(--negro); }
+/* Tipografía */
+.eti { font-family: Mono; font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--vino); margin: 0 0 8px; }
+h2 { font-size: 21pt; font-weight: 900; letter-spacing: -0.02em; line-height: 1.08; margin: 0 0 6px; }
+h3 { font-size: 11pt; font-weight: 800; margin: 16px 0 6px; }
+.lede { font-size: 11pt; color: var(--gris); margin: 0 0 14px; max-width: 6.4in; }
+p { margin: 0 0 8px; }
+strong { font-weight: 700; }
+ul, ol { margin: 0 0 10px; padding-left: 18px; }
+li { margin: 0 0 4px; }
+li::marker { color: var(--vino); font-weight: 700; }
+.ruta { font-family: Mono; font-size: 8.4pt; background: var(--hueso); border-radius: 5px; padding: 1px 6px; color: var(--negro); white-space: nowrap; }
 
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .card { border: 1px solid var(--linea); border-radius: 14px; padding: 14px 16px; background: var(--papel); }
-  .card h3 { margin-top: 0; }
-  .card.si { border-top: 4px solid #2f7a4f; }
-  .card.no { border-top: 4px solid var(--vino); }
-  .nota { border-left: 4px solid var(--vino); background: var(--hueso); border-radius: 0 12px 12px 0; padding: 12px 16px; margin: 14px 0; }
-  .nota.ciruela { border-left-color: var(--ciruela); }
-  .nota p:last-child { margin: 0; }
+/* Capturas: marco limpio, contorno fino y número al lado del elemento. */
+.shot { margin: 4px auto 12px; }
+.marco { position: relative; overflow: hidden; border-radius: 10px; border: 1px solid var(--linea);
+  box-shadow: 0 1px 2px rgb(10 2 6 / 0.04), 0 8px 24px rgb(10 2 6 / 0.07); background: var(--hueso); }
+.marco img { position: absolute; display: block; max-width: none; }
+.caja { position: absolute; border: 1.25px solid rgb(207 44 75 / 0.85); border-radius: 6px; background: rgb(207 44 75 / 0.04); }
+.num { position: absolute; width: 16px; height: 16px; border-radius: 999px; background: var(--vino); color: #fff;
+  font-family: Inter; font-weight: 700; font-size: 7.5pt; line-height: 16px; text-align: center; box-shadow: 0 0 0 1.5px #fff; }
+.num.izq { transform: translate(calc(-100% - 5px), -50%); }
+.num.der { transform: translate(5px, -50%); }
+figcaption { font-family: Mono; font-size: 6.8pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-claro); margin-top: 7px; }
 
-  .pasos { list-style: none; padding: 0; counter-reset: paso; }
-  .pasos li { counter-increment: paso; position: relative; padding: 0 0 12px 44px; margin: 0; }
-  .pasos li::before { content: counter(paso, decimal-leading-zero); position: absolute; left: 0; top: -1px; font-family: Mono; font-size: 9pt;
-    color: #fff; background: var(--vino); border-radius: 999px; width: 30px; height: 22px; display: grid; place-items: center; }
+/* Leyenda de números */
+.leyenda { list-style: none; padding: 0; margin: 2px 0 10px; display: grid; gap: 0 22px; }
+.leyenda.c2 { grid-template-columns: 1fr 1fr; }
+.leyenda.c1 { grid-template-columns: 1fr; }
+.leyenda li { display: flex; gap: 10px; align-items: baseline; margin: 0; padding: 6px 0; border-bottom: 1px solid var(--linea); font-size: 9.4pt; line-height: 1.42; color: var(--gris); }
+.leyenda li strong { color: var(--negro); }
+.leyenda .n { flex: none; width: 16px; height: 16px; border-radius: 999px; background: var(--vino); color: #fff; font-weight: 700; font-size: 7.5pt; line-height: 16px; text-align: center; transform: translateY(-1px); }
 
-  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 9.8pt; }
-  th { text-align: left; font-family: Mono; font-weight: 500; font-size: 7.8pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris);
-    border-bottom: 2px solid var(--negro); padding: 6px 8px; }
-  td { border-bottom: 1px solid var(--linea); padding: 6px 8px; vertical-align: top; }
-  .chip { display: inline-block; font-size: 8.6pt; font-weight: 700; border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
-  .c-gris { background: #ece6df; color: var(--gris); }
-  .c-ambar { background: #f6e3d2; color: #8a4b17; }
-  .c-vino { background: #f4d9de; color: var(--vino); }
-  .c-ok { background: #dcefe3; color: #24603d; }
+/* Bloques */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.card { border: 1px solid var(--linea); border-radius: 12px; padding: 14px 16px; background: var(--papel); }
+.card h3 { margin-top: 0; }
+.card.si { border-top: 3px solid #2f7a4f; }
+.card.no { border-top: 3px solid var(--vino); }
+.nota { border-left: 3px solid var(--vino); background: var(--papel); border-radius: 0 10px 10px 0; padding: 10px 14px; margin: 12px 0; font-size: 9.6pt; }
+.nota.ciruela { border-left-color: var(--ciruela); }
+.nota p:last-child { margin: 0; }
+.opcional { font-size: 8.8pt; color: var(--gris-claro); border-top: 1px dashed var(--linea); padding-top: 10px; margin-top: 14px; }
+.lado { display: grid; grid-template-columns: 2.6in 1fr; gap: 26px; align-items: start; margin-top: 6px; }
+.lado.acceso { grid-template-columns: 3.1in 1fr; }
+.lado.cuenta { grid-template-columns: 3.7in 1fr; }
 
-  .flujo { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 6px 0 16px; }
-  .flujo .flecha { color: var(--vino); font-weight: 900; }
-  .flujo .accion { font-family: Mono; font-size: 7.6pt; color: var(--gris); text-transform: uppercase; letter-spacing: 0.06em; }
+.pasos { list-style: none; padding: 0; counter-reset: paso; }
+.pasos li { counter-increment: paso; position: relative; padding: 0 0 8px 34px; margin: 0; }
+.pasos li::before { content: counter(paso); position: absolute; left: 0; top: 0; font-family: Mono; font-size: 8pt;
+  color: var(--vino); border: 1.25px solid var(--vino); border-radius: 999px; width: 20px; height: 20px; display: grid; place-items: center; }
 
-  .check { list-style: none; padding: 0; }
-  .check li { padding-left: 26px; position: relative; }
-  .check li::before { content: ""; position: absolute; left: 0; top: 3px; width: 13px; height: 13px; border: 2px solid var(--vino); border-radius: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 6px 0 12px; font-size: 9pt; }
+th { text-align: left; font-family: Mono; font-weight: 500; font-size: 7pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-claro);
+  border-bottom: 1.5px solid var(--negro); padding: 6px 8px; }
+td { border-bottom: 1px solid var(--linea); padding: 5px 8px; vertical-align: top; }
+.chip { display: inline-block; font-size: 8pt; font-weight: 700; border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+.c-gris { background: #ece6df; color: var(--gris); }
+.c-ambar { background: #f6e3d2; color: #8a4b17; }
+.c-vino { background: #f4d9de; color: var(--vino); }
+.c-ok { background: #dcefe3; color: #24603d; }
 
-  .contacto { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
-  .contacto .card { text-align: left; }
-  .contacto .dato { font-size: 13pt; font-weight: 800; margin: 2px 0 0; }
-  .indice { list-style: none; padding: 0; margin: 10px 0 0; columns: 2; column-gap: 28px; }
-  .indice li { break-inside: avoid; border-bottom: 1px solid var(--linea); padding: 5px 0; font-weight: 600; }
-  .indice span { font-family: Mono; color: var(--vino); margin-right: 10px; }
+.camino { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: center; gap: 6px; margin: 8px 0 18px; }
+.camino .et { background: var(--papel); border: 1px solid var(--linea); border-radius: 12px; padding: 10px 6px; text-align: center; }
+.camino .et p { margin: 6px 0 0; font-size: 8pt; color: var(--gris); line-height: 1.3; }
+.camino .bt { font-family: Mono; font-size: 6.8pt; color: var(--vino); text-transform: uppercase; letter-spacing: 0.04em; text-align: center; line-height: 1.35; max-width: 0.9in; }
 
-  /* V2: capturas anotadas */
-  .page { padding: 0.6in 0.7in 0.75in; }
-  .shot { margin: 6px 0 10px; }
-  .marco { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--linea); box-shadow: 0 6px 18px rgb(10 2 6 / 0.08); }
-  .marco img { display: block; width: 100%; }
-  .caja { position: absolute; border: 2px solid var(--carmin); border-radius: 8px; box-shadow: 0 0 0 3px rgb(207 44 75 / 0.18); }
-  .num { position: absolute; transform: translate(-115%, -50%); width: 24px; height: 24px; border-radius: 999px; background: var(--vino); color: #fff;
-    font-family: Mono; font-size: 10pt; display: grid; place-items: center; box-shadow: 0 0 0 2px #fff, 0 2px 6px rgb(10 2 6 / 0.25); }
-  figcaption { font-family: Mono; font-size: 7.5pt; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gris); margin-top: 6px; }
-  .leyenda { list-style: none; padding: 0; margin: 4px 0 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; }
-  .leyenda li { display: flex; gap: 10px; align-items: flex-start; margin: 0; font-size: 9.8pt; line-height: 1.4; }
-  .leyenda .n { flex: none; width: 22px; height: 22px; border-radius: 999px; background: var(--vino); color: #fff; font-family: Mono; font-size: 9pt; display: grid; place-items: center; margin-top: 1px; }
-  .camino { display: grid; grid-template-columns: repeat(7, auto); align-items: center; gap: 6px; margin: 6px 0 16px; }
-  .camino .et { background: var(--papel); border: 1px solid var(--linea); border-radius: 12px; padding: 10px; text-align: center; }
-  .camino .et p { margin: 6px 0 0; font-size: 8.4pt; color: var(--gris); line-height: 1.3; }
-  .camino .bt { font-family: Mono; font-size: 7.4pt; color: var(--vino); text-transform: uppercase; letter-spacing: 0.04em; text-align: center; line-height: 1.3; }
-  .lado { display: grid; grid-template-columns: 2.6in 1fr; gap: 26px; align-items: start; margin-top: 10px; }
-  .check.cols { columns: 2; column-gap: 24px; }
-  .check.cols li { break-inside: avoid; }
-  .card h3 { margin-top: 0; }
+.check { list-style: none; padding: 0; }
+.check li { padding-left: 24px; position: relative; }
+.check li::before { content: ""; position: absolute; left: 0; top: 3px; width: 12px; height: 12px; border: 1.5px solid var(--vino); border-radius: 3px; }
+.check.cols { columns: 2; column-gap: 24px; }
+.check.cols li { break-inside: avoid; }
+
+.contacto { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+.contacto .dato { font-size: 12.5pt; font-weight: 800; margin: 2px 0 0; }
+.indice { list-style: none; padding: 0; margin: 8px 0 0; columns: 2; column-gap: 28px; }
+.indice li { break-inside: avoid; border-bottom: 1px solid var(--linea); padding: 6px 0; font-weight: 600; }
+.indice span { font-family: Mono; color: var(--vino); margin-right: 10px; font-weight: 500; }
 </style></head><body>
 
 <section class="page portada">
@@ -151,35 +157,43 @@
 <p class="eti">01 · Entrar al panel</p>
 <h2>Entra con tu correo y tu contraseña.</h2>
 <p class="lede">La dirección es <span class="ruta">www.viviendovino.com/admin</span>. Guárdala en favoritos.</p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/acceso.png" alt=""><span class="caja" style="left:36.17%;top:46.16%;width:27.66%;height:6.25%"></span><span class="num" style="left:36.17%;top:49.285%">1</span><span class="caja" style="left:36.17%;top:57.66%;width:27.66%;height:6.25%"></span><span class="num" style="left:36.17%;top:60.785%">2</span><span class="caja" style="left:36.17%;top:65.91%;width:27.66%;height:6.5%"></span><span class="num" style="left:36.17%;top:69.16%">3</span><span class="caja" style="left:54.51%;top:74.41%;width:9.32%;height:2.63%"></span><span class="num" style="left:54.51%;top:75.725%">4</span><span class="caja" style="left:36.17%;top:74.41%;width:11.17%;height:2.63%"></span><span class="num" style="left:36.17%;top:75.725%">5</span></div><figcaption>Pantalla de entrada al panel.</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>Correo:</strong> el mismo en el que recibiste la invitación.</div></li><li><span class="n">2</span><div><strong>Contraseña:</strong> la que creaste (mínimo 10 caracteres).</div></li><li><span class="n">3</span><div><strong>Entrar.</strong> Si activaste el código en dos pasos, después te pide los 6 dígitos de tu app.</div></li><li><span class="n">4</span><div><strong>Es mi primera vez:</strong> si el enlace de la invitación ya venció (dura 1 hora), aquí pides uno nuevo para crear tu contraseña.</div></li><li><span class="n">5</span><div><strong>Olvidé mi contraseña:</strong> te llega un correo para crear una nueva.</div></li></ol>
+<div class="lado acceso"><figure class="shot" style="width:100%"><div class="marco" style="aspect-ratio:480/560"><img src="capturas/acceso.png" alt="" style="width:266.667%;left:-83.333%;top:-21.429%"><span class="caja" style="left:12.29%;top:43.80%;width:75.43%;height:10.36%"></span><span class="num izq" style="left:12.29%;top:48.98%">1</span><span class="caja" style="left:12.29%;top:60.23%;width:75.43%;height:10.36%"></span><span class="num izq" style="left:12.29%;top:65.41%">2</span><span class="caja" style="left:12.29%;top:72.01%;width:75.43%;height:10.71%"></span><span class="num izq" style="left:12.29%;top:77.37%">3</span><span class="caja" style="left:61.19%;top:84.16%;width:26.52%;height:5.19%"></span><span class="num izq" style="left:61.19%;top:86.75%">4</span><span class="caja" style="left:12.29%;top:84.16%;width:31.45%;height:5.19%"></span><span class="num izq" style="left:12.29%;top:86.75%">5</span></div><figcaption>Pantalla de entrada al panel.</figcaption></figure><div>
+<ol class="leyenda c1"><li><span class="n">1</span><div><strong>Correo:</strong> el mismo en el que recibiste la invitación.</div></li><li><span class="n">2</span><div><strong>Contraseña:</strong> la que creaste (mínimo 10 caracteres).</div></li><li><span class="n">3</span><div><strong>Entrar:</strong> listo, ya estás en el panel.</div></li><li><span class="n">4</span><div><strong>Es mi primera vez:</strong> si el enlace de la invitación ya venció (dura 1 hora), aquí pides uno nuevo para crear tu contraseña.</div></li><li><span class="n">5</span><div><strong>Olvidé mi contraseña:</strong> te llega un correo para crear una nueva.</div></li></ol>
+</div></div>
+<h3>La primera vez</h3>
+<ol class="pasos">
+  <li><strong>Abre el correo de invitación</strong> de Viviendo Vino y da clic en el enlace. Vence en 1 hora y sirve una sola vez.</li>
+  <li><strong>Crea tu contraseña</strong> de al menos 10 caracteres. Que sea solo tuya.</li>
+  <li><strong>Entra</strong> en <span class="ruta">www.viviendovino.com/admin</span> con tu correo y tu contraseña.</li>
+</ol>
 <div class="pie"><span>Viviendo Vino · Manual del aliado · Entrar</span><span>3</span></div></section><section class="page">
 <p class="eti">01 · Entrar al panel</p>
-<h2>Protege tu cuenta (recomendado).</h2>
-<p class="lede">En <span class="ruta">Configuración → Mi cuenta</span> puedes cambiar tu nombre y tu contraseña, y activar el <strong>código en dos pasos</strong>.</p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/cuenta.png" alt=""><span class="caja" style="left:7.52%;top:18.18%;width:51.75%;height:10.04%"></span><span class="num" style="left:7.52%;top:23.2%">1</span><span class="caja" style="left:7.52%;top:56.41%;width:24.53%;height:20%"></span><span class="num" style="left:7.52%;top:66.41%">2</span></div><figcaption>Configuración → Mi cuenta, sección del código en dos pasos.</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>Código en dos pasos:</strong> además de tu contraseña, al entrar te pedimos un código de 6 dígitos de una app en tu celular.</div></li><li><span class="n">2</span><div><strong>Activar:</strong> escanea el código QR con Google Authenticator, Microsoft Authenticator o similar, y escribe el código que te muestre.</div></li></ol>
+<h2>Tu cuenta: nombre y contraseña.</h2>
+<p class="lede">En <span class="ruta">Configuración → Mi cuenta</span> puedes corregir tu nombre o cambiar tu contraseña cuando quieras.</p>
+<div class="lado cuenta"><figure class="shot" style="width:100%"><div class="marco" style="aspect-ratio:860/729.1875"><img src="capturas/cuenta.png" alt="" style="width:100.000%;left:0.000%;top:0.000%"><span class="caja" style="left:4.53%;top:13.73%;width:90.93%;height:7.96%"></span><span class="num der" style="left:95.47%;top:17.71%">1</span><span class="caja" style="left:4.53%;top:36.35%;width:20.01%;height:7.13%"></span><span class="num der" style="left:24.55%;top:39.91%">2</span><span class="caja" style="left:4.53%;top:63.66%;width:90.93%;height:7.96%"></span><span class="num der" style="left:95.47%;top:67.64%">3</span><span class="caja" style="left:4.53%;top:76.27%;width:45.00%;height:7.96%"></span><span class="num der" style="left:49.54%;top:80.25%">4</span><span class="caja" style="left:4.53%;top:89.30%;width:23.31%;height:7.13%"></span><span class="num der" style="left:27.85%;top:92.86%">5</span></div><figcaption>Configuración → Mi cuenta.</figcaption></figure><div>
+<ol class="leyenda c1"><li><span class="n">1</span><div><strong>Nombre:</strong> así apareces en el historial de cada pedido.</div></li><li><span class="n">2</span><div><strong>Guardar nombre:</strong> guarda el cambio.</div></li><li><span class="n">3</span><div><strong>Contraseña actual:</strong> la que usas hoy.</div></li><li><span class="n">4</span><div><strong>Contraseña nueva:</strong> mínimo 10 caracteres; escríbela dos veces.</div></li><li><span class="n">5</span><div><strong>Cambiar contraseña:</strong> se cierran tus sesiones en otros dispositivos.</div></li></ol>
+</div></div>
 <div class="nota"><p><strong>Cada persona, su propia cuenta.</strong> No compartas tu contraseña. Si alguien más va a preparar pedidos, pídenos que lo invitemos con su correo.</p></div>
-<div class="nota ciruela"><p><strong>¿Vas a cambiar de celular?</strong> Antes, desactiva el código en Mi cuenta y vuelve a activarlo en el nuevo. Si lo perdiste, escríbenos.</p></div>
 <h3>Tu primer día</h3>
-<ul class="check">
+<ul class="check cols">
   <li>Creé mi contraseña y entré al panel.</li>
-  <li>Activé el código en dos pasos.</li>
   <li>Revisé en <strong>Catálogo</strong> que las existencias coincidan con mi almacén.</li>
   <li>Guardé <span class="ruta">www.viviendovino.com/admin</span> en favoritos.</li>
+  <li>Tengo a la mano el contacto de Viviendo Vino (página 12).</li>
 </ul>
+<p class="opcional"><strong>Opcional:</strong> en esta misma pantalla existe un "código en dos pasos" para más seguridad. No es necesario; si algún día lo quieres activar, pídenos ayuda.</p>
 <div class="pie"><span>Viviendo Vino · Manual del aliado · Mi cuenta</span><span>4</span></div></section><section class="page">
 <p class="eti">02 · Inicio</p>
 <h2>Lo que necesita tu atención hoy.</h2>
 <p class="lede">Es lo primero que ves al entrar. Revísalo cada mañana.</p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/inicio.png" alt=""><span class="caja" style="left:25.08%;top:28.04%;width:20.99%;height:2.63%"></span><span class="num" style="left:25.08%;top:29.355%">1</span><span class="caja" style="left:49.5%;top:28.04%;width:20.99%;height:2.63%"></span><span class="num" style="left:49.5%;top:29.355%">2</span><span class="caja" style="left:73.93%;top:28.04%;width:20.99%;height:2.63%"></span><span class="num" style="left:73.93%;top:29.355%">3</span><span class="caja" style="left:49.5%;top:43.29%;width:20.99%;height:2.63%"></span><span class="num" style="left:49.5%;top:44.605%">4</span><span class="caja" style="left:73.93%;top:43.29%;width:20.99%;height:2.63%"></span><span class="num" style="left:73.93%;top:44.605%">5</span><span class="caja" style="left:23.75%;top:54.31%;width:7.19%;height:3.19%"></span><span class="num" style="left:23.75%;top:55.905%">6</span></div><figcaption>Inicio del panel.</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>Por preparar:</strong> pedidos pagados que aún no salen. Tu lista de trabajo del día.</div></li><li><span class="n">2</span><div><strong>Atrasados:</strong> pedidos que ya pasaron el plazo de preparación. Debe estar en 0.</div></li><li><span class="n">3</span><div><strong>En camino:</strong> enviados que aún no marcas como entregados.</div></li><li><span class="n">4</span><div><strong>Vinos agotados:</strong> vinos en 0 botellas; en la tienda nadie los puede comprar.</div></li><li><span class="n">5</span><div><strong>Pocas existencias:</strong> vinos con 3 botellas o menos.</div></li><li><span class="n">6</span><div><strong>Tus ventas:</strong> lo vendido hoy, en 7 días y en el mes, y lo que tienes por recibir.</div></li></ol>
+<figure class="shot" style="width:100%"><div class="marco" style="aspect-ratio:976/600"><img src="capturas/inicio.png" alt="" style="width:131.148%;left:-29.098%;top:-4.000%"><span class="caja" style="left:3.38%;top:32.71%;width:28.35%;height:4.83%"></span><span class="num der" style="left:31.73%;top:35.13%">1</span><span class="caja" style="left:35.41%;top:32.71%;width:28.35%;height:4.83%"></span><span class="num izq" style="left:35.41%;top:35.13%">2</span><span class="caja" style="left:67.45%;top:32.71%;width:28.35%;height:4.83%"></span><span class="num izq" style="left:67.45%;top:35.13%">3</span><span class="caja" style="left:35.41%;top:53.05%;width:28.35%;height:4.83%"></span><span class="num izq" style="left:35.41%;top:55.47%">4</span><span class="caja" style="left:67.45%;top:53.05%;width:28.35%;height:4.83%"></span><span class="num izq" style="left:67.45%;top:55.47%">5</span><span class="caja" style="left:1.64%;top:67.75%;width:10.25%;height:5.58%"></span><span class="num der" style="left:11.89%;top:70.54%">6</span></div><figcaption>Inicio del panel.</figcaption></figure>
+<ol class="leyenda c2"><li><span class="n">1</span><div><strong>Por preparar:</strong> pedidos pagados que aún no salen. Tu lista de trabajo del día.</div></li><li><span class="n">2</span><div><strong>Atrasados:</strong> pedidos que ya pasaron el plazo de preparación. Debe estar en 0.</div></li><li><span class="n">3</span><div><strong>En camino:</strong> enviados que aún no marcas como entregados.</div></li><li><span class="n">4</span><div><strong>Vinos agotados:</strong> vinos en 0 botellas; en la tienda nadie los puede comprar.</div></li><li><span class="n">5</span><div><strong>Pocas existencias:</strong> vinos con 3 botellas o menos.</div></li><li><span class="n">6</span><div><strong>Tus ventas:</strong> lo vendido hoy, en 7 días y en el mes, y lo que tienes por recibir.</div></li></ol>
 <div class="pie"><span>Viviendo Vino · Manual del aliado · Inicio</span><span>5</span></div></section><section class="page">
 <p class="eti">03 · Pedidos</p>
 <h2>Tus pedidos, en una lista.</h2>
 <p class="lede">Cuando un cliente paga, te llega un correo <strong>"Nuevo pedido por preparar"</strong> y el pedido aparece aquí.</p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/pedidos.png" alt=""><span class="caja" style="left:26.95%;top:29.71%;width:23.75%;height:5.25%"></span><span class="num" style="left:26.95%;top:32.335%">1</span><span class="caja" style="left:60.02%;top:29.84%;width:10.08%;height:5%"></span><span class="num" style="left:60.02%;top:32.34%">2</span><span class="caja" style="left:25.08%;top:48.02%;width:4.66%;height:2.13%"></span><span class="num" style="left:25.08%;top:49.085%">3</span><span class="caja" style="left:85.68%;top:46.34%;width:10.49%;height:5.72%"></span><span class="num" style="left:85.68%;top:49.2%">4</span></div><figcaption>Pedidos: la lista completa.</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>Buscar:</strong> por número de pedido (folio), nombre del cliente o ciudad.</div></li><li><span class="n">2</span><div><strong>Filtros:</strong> ve solo los que están por preparar, en camino, entregados o cancelados.</div></li><li><span class="n">3</span><div><strong>Folio:</strong> da clic para abrir el pedido (por ejemplo, VV-1008).</div></li><li><span class="n">4</span><div><strong>Estado:</strong> en qué paso va cada pedido. La columna <strong>Para ti</strong> es lo que te toca de ese pedido.</div></li></ol>
+<figure class="shot" style="width:100%"><div class="marco" style="aspect-ratio:976/590"><img src="capturas/pedidos.png" alt="" style="width:131.148%;left:-29.098%;top:-4.068%"><span class="caja" style="left:5.84%;top:35.54%;width:31.97%;height:8.48%"></span><span class="num izq" style="left:5.84%;top:39.78%">1</span><span class="caja" style="left:49.21%;top:35.71%;width:14.04%;height:8.13%"></span><span class="num izq" style="left:49.21%;top:39.77%">2</span><span class="caja" style="left:3.38%;top:60.37%;width:6.93%;height:4.24%"></span><span class="num der" style="left:10.31%;top:62.49%">3</span><span class="caja" style="left:82.86%;top:58.09%;width:14.58%;height:9.12%"></span><span class="num izq" style="left:82.86%;top:62.65%">4</span></div><figcaption>Pedidos: la lista completa.</figcaption></figure>
+<ol class="leyenda c2"><li><span class="n">1</span><div><strong>Buscar:</strong> por número de pedido (folio), nombre del cliente o ciudad.</div></li><li><span class="n">2</span><div><strong>Filtros:</strong> ve solo los que están por preparar, en camino, entregados o cancelados.</div></li><li><span class="n">3</span><div><strong>Folio:</strong> da clic para abrir el pedido (por ejemplo, VV-1008).</div></li><li><span class="n">4</span><div><strong>Estado:</strong> en qué paso va cada pedido. La columna <strong>Para ti</strong> es lo que te toca de ese pedido.</div></li></ol>
 <div class="pie"><span>Viviendo Vino · Manual del aliado · Pedidos</span><span>6</span></div></section><section class="page">
 <p class="eti">04 · El camino de un pedido</p>
 <h2>Tres botones, en orden.</h2>
@@ -210,15 +224,15 @@
 <p class="eti">05 · Paso 1</p>
 <h2>Preparar el pedido.</h2>
 <p class="lede">Abre el pedido desde la lista. Todo lo que necesitas para armar la caja está en esta pantalla.</p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/pedido-por-preparar.png" alt=""><span class="caja" style="left:25.39%;top:23.35%;width:40.56%;height:2.63%"></span><span class="num" style="left:25.39%;top:24.665000000000003%">1</span><span class="caja" style="left:25.39%;top:61.6%;width:16.59%;height:3%"></span><span class="num" style="left:25.39%;top:63.1%">2</span><span class="caja" style="left:70.49%;top:27.7%;width:24.12%;height:5.5%"></span><span class="num" style="left:70.49%;top:30.45%">3</span><span class="caja" style="left:70.49%;top:44.3%;width:24.12%;height:2.6%"></span><span class="num" style="left:70.49%;top:45.599999999999994%">4</span><span class="caja" style="left:70.49%;top:71.9%;width:24.12%;height:2.6%"></span><span class="num" style="left:70.49%;top:73.2%">5</span><span class="caja" style="left:25.39%;top:100.51%;width:25.57%;height:2.25%"></span><span class="num" style="left:25.39%;top:101.635%">6</span></div><figcaption>Detalle de un pedido por preparar (2 kits).</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>Qué lleva:</strong> cada kit son <strong>6 botellas</strong>; aquí ves qué vinos y cuántos de cada uno.</div></li><li><span class="n">2</span><div><strong>Para ti:</strong> lo que te toca de este pedido, a tus precios acordados.</div></li><li><span class="n">3</span><div><strong>Empezar a preparar:</strong> dale clic al empezar a armar la caja; así sabemos que ya está en tus manos.</div></li><li><span class="n">4</span><div><strong>Envío:</strong> nombre, dirección y referencias para la guía de la paquetería.</div></li><li><span class="n">5</span><div><strong>Cliente:</strong> nombre y teléfono para la paquetería.</div></li><li><span class="n">6</span><div><strong>Agregar una nota:</strong> deja aquí cualquier detalle (por ejemplo, dirección incompleta) y avísanos.</div></li></ol>
+<figure class="shot" style="width:86%"><div class="marco" style="aspect-ratio:976/810"><img src="capturas/pedido-por-preparar.png" alt="" style="width:131.148%;left:-29.098%;top:-3.704%"><span class="caja" style="left:3.79%;top:18.87%;width:54.01%;height:3.58%"></span><span class="num der" style="left:57.80%;top:20.66%">1</span><span class="caja" style="left:3.79%;top:56.65%;width:22.58%;height:3.95%"></span><span class="num der" style="left:26.37%;top:58.62%">2</span><span class="caja" style="left:62.94%;top:23.16%;width:32.45%;height:6.42%"></span><span class="num izq" style="left:62.94%;top:26.37%">3</span><span class="caja" style="left:62.94%;top:39.56%;width:32.45%;height:3.55%"></span><span class="num izq" style="left:62.94%;top:41.34%">4</span><span class="caja" style="left:62.94%;top:66.81%;width:32.45%;height:3.55%"></span><span class="num izq" style="left:62.94%;top:68.59%">5</span><span class="caja" style="left:3.79%;top:95.07%;width:34.35%;height:3.21%"></span><span class="num der" style="left:38.14%;top:96.67%">6</span></div><figcaption>Detalle de un pedido por preparar (2 kits).</figcaption></figure>
+<ol class="leyenda c2"><li><span class="n">1</span><div><strong>Qué lleva:</strong> cada kit son <strong>6 botellas</strong>; aquí ves qué vinos y cuántos de cada uno.</div></li><li><span class="n">2</span><div><strong>Para ti:</strong> lo que te toca de este pedido, a tus precios acordados.</div></li><li><span class="n">3</span><div><strong>Empezar a preparar:</strong> dale clic al empezar a armar la caja; así sabemos que ya está en tus manos.</div></li><li><span class="n">4</span><div><strong>Envío:</strong> nombre, dirección y referencias para la guía de la paquetería.</div></li><li><span class="n">5</span><div><strong>Cliente:</strong> nombre y teléfono para la paquetería.</div></li><li><span class="n">6</span><div><strong>Agregar una nota:</strong> deja aquí cualquier detalle (por ejemplo, dirección incompleta) y avísanos.</div></li></ol>
 <div class="nota ciruela"><p><strong>"Lleva descorchador":</strong> algunos pedidos de la apertura muestran esta etiqueta. Incluye el descorchador Viviendo Vino en la caja.</p></div>
 <div class="pie"><span>Viviendo Vino · Manual del aliado · Preparar</span><span>8</span></div></section><section class="page">
 <p class="eti">06 · Paso 2</p>
 <h2>Enviar: captura la paquetería y la guía.</h2>
 <p class="lede">Cuando entregues la caja a la paquetería, registra el envío. El cliente recibe un correo con su número de guía para rastrearlo.</p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/pedido-preparando.png" alt=""><span class="caja" style="left:70.49%;top:27.7%;width:24.12%;height:2.25%"></span><span class="num" style="left:70.49%;top:28.825%">1</span><span class="caja" style="left:70.49%;top:38.45%;width:24.12%;height:2.25%"></span><span class="num" style="left:70.49%;top:39.575%">2</span><span class="caja" style="left:70.49%;top:49.45%;width:24.12%;height:5.5%"></span><span class="num" style="left:70.49%;top:52.2%">3</span></div><figcaption>Pedido en preparación, con la paquetería y la guía capturadas.</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>Paquetería:</strong> elige la que usaste (por ejemplo, Tres Guerras).</div></li><li><span class="n">2</span><div><strong>Número de guía:</strong> escríbelo exactamente como viene en el comprobante.</div></li><li><span class="n">3</span><div><strong>Marcar como enviado:</strong> el pedido pasa a "En camino" y el cliente recibe su guía por correo.</div></li></ol>
+<figure class="shot" style="width:100%"><div class="marco" style="aspect-ratio:976/560"><img src="capturas/pedido-preparando.png" alt="" style="width:131.148%;left:-29.098%;top:-5.357%"><span class="caja" style="left:62.94%;top:33.50%;width:32.45%;height:4.64%"></span><span class="num izq" style="left:62.94%;top:35.82%">1</span><span class="caja" style="left:62.94%;top:48.86%;width:32.45%;height:4.64%"></span><span class="num izq" style="left:62.94%;top:51.18%">2</span><span class="caja" style="left:62.94%;top:64.56%;width:32.45%;height:9.29%"></span><span class="num izq" style="left:62.94%;top:69.21%">3</span></div><figcaption>Pedido en preparación, con la paquetería y la guía capturadas.</figcaption></figure>
+<ol class="leyenda c2"><li><span class="n">1</span><div><strong>Paquetería:</strong> elige la que usaste (por ejemplo, Tres Guerras).</div></li><li><span class="n">2</span><div><strong>Número de guía:</strong> escríbelo exactamente como viene en el comprobante.</div></li><li><span class="n">3</span><div><strong>Marcar como enviado:</strong> el pedido pasa a "En camino" y el cliente recibe su guía por correo.</div></li></ol>
 <h3>Antes de cerrar la caja</h3>
 <ul class="check cols">
   <li>Vinos, añadas y cantidades iguales al pedido.</li>
@@ -232,8 +246,8 @@
 <p class="eti">07 · Paso 3</p>
 <h2>Entregado: cierra el pedido.</h2>
 <p class="lede">Cuando la paquetería confirme la entrega, márcalo. Desde ese momento el pedido cuenta para tu saldo.</p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/pedido-en-camino.png" alt=""><span class="caja" style="left:70.49%;top:27.7%;width:24.12%;height:5.5%"></span><span class="num" style="left:70.49%;top:30.45%">1</span><span class="caja" style="left:27.11%;top:92.64%;width:38.85%;height:2.63%"></span><span class="num" style="left:27.11%;top:93.955%">2</span></div><figcaption>Pedido en camino.</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>Marcar como entregado:</strong> el cliente recibe un correo de entrega y el pedido entra a tu saldo.</div></li><li><span class="n">2</span><div><strong>Historial:</strong> queda registrada la paquetería y la guía, quién hizo cada paso y cuándo.</div></li></ol>
+<figure class="shot" style="width:100%"><div class="marco" style="aspect-ratio:976/750"><img src="capturas/pedido-en-camino.png" alt="" style="width:131.148%;left:-29.098%;top:-4.000%"><span class="caja" style="left:62.94%;top:25.01%;width:32.45%;height:6.93%"></span><span class="num izq" style="left:62.94%;top:28.48%">1</span><span class="caja" style="left:6.05%;top:94.27%;width:51.77%;height:3.86%"></span><span class="num izq" style="left:6.05%;top:96.21%">2</span></div><figcaption>Pedido en camino.</figcaption></figure>
+<ol class="leyenda c2"><li><span class="n">1</span><div><strong>Marcar como entregado:</strong> el cliente recibe un correo de entrega y el pedido entra a tu saldo.</div></li><li><span class="n">2</span><div><strong>Historial:</strong> queda registrada la paquetería y la guía, quién hizo cada paso y cuándo.</div></li></ol>
 <h3>Situaciones especiales</h3>
 <table><tbody>
   <tr><td style="width:34%"><strong>Te falta una botella</strong></td><td>No la cambies por otro vino. Escríbenos antes de enviar.</td></tr>
@@ -246,7 +260,7 @@
 <p class="eti">08 · Desde el celular</p>
 <h2>El panel también funciona en el celular.</h2>
 <div class="lado">
-  <figure class="shot" style="width:2.6in"><div class="marco"><img src="capturas/celular-pedido.png" alt=""></div><figcaption>El mismo pedido, en un iPhone.</figcaption></figure>
+  <figure class="shot" style="width:2.6in"><div class="marco" style="aspect-ratio:390/664"><img src="capturas/celular-pedido.png" alt="" style="width:100.000%;left:0.000%;top:0.000%"></div><figcaption>El mismo pedido, en un iPhone.</figcaption></figure>
   <div>
     <p class="lede" style="margin-top:0">Útil en el almacén: abre el pedido, arma la caja y marca cada paso sin ir a la computadora.</p>
     <ul>
@@ -262,14 +276,14 @@
 <p class="eti">09 · Inventario</p>
 <h2>Tus vinos y sus existencias.</h2>
 <p class="lede">En <span class="ruta">Catálogo</span> ves cuántas botellas tienes de cada vino. <strong>Cuando un vino llega a 0, la tienda lo muestra agotado.</strong></p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/vinos.png" alt=""><span class="caja" style="left:26.95%;top:19.81%;width:22.19%;height:5.25%"></span><span class="num" style="left:26.95%;top:22.435%">1</span><span class="caja" style="left:44.65%;top:26.94%;width:13.28%;height:5%"></span><span class="num" style="left:44.65%;top:29.44%">2</span><span class="caja" style="left:76.88%;top:42.94%;width:8.91%;height:5.25%"></span><span class="num" style="left:76.88%;top:45.565%">3</span><span class="caja" style="left:79.31%;top:81.06%;width:4.03%;height:2.35%"></span><span class="num" style="left:79.31%;top:82.235%">4</span><span class="caja" style="left:91.55%;top:44.06%;width:3.38%;height:5.5%"></span><span class="num" style="left:91.55%;top:46.81%">5</span></div><figcaption>Catálogo: tus vinos.</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>Buscar:</strong> por nombre del vino o del productor.</div></li><li><span class="n">2</span><div><strong>Filtros:</strong> ve rápido cuáles tienen pocas botellas o están agotados.</div></li><li><span class="n">3</span><div><strong>− y +:</strong> quitan o suman una botella por clic y se guardan solos. Úsalos para ajustes pequeños.</div></li><li><span class="n">4</span><div><strong>Pocas / Agotado:</strong> aviso cuando un vino tiene 3 o menos, o 0.</div></li><li><span class="n">5</span><div><strong>Ver:</strong> abre la ficha del vino para fijar el número exacto y ver sus movimientos (página 10).</div></li></ol>
+<figure class="shot" style="width:100%"><div class="marco" style="aspect-ratio:1004/680"><img src="capturas/vinos.png" alt="" style="width:127.490%;left:-27.490%;top:-3.529%"><span class="caja" style="left:6.47%;top:19.19%;width:29.09%;height:7.36%"></span><span class="num izq" style="left:6.47%;top:22.87%">1</span><span class="caja" style="left:29.04%;top:27.57%;width:17.73%;height:7.05%"></span><span class="num izq" style="left:29.04%;top:31.09%">2</span><span class="caja" style="left:70.13%;top:46.40%;width:12.16%;height:7.36%"></span><span class="num izq" style="left:70.13%;top:50.08%">3</span><span class="caja" style="left:73.22%;top:91.26%;width:5.93%;height:3.94%"></span><span class="num izq" style="left:73.22%;top:93.23%">4</span><span class="caja" style="left:88.83%;top:47.72%;width:5.11%;height:7.65%"></span><span class="num izq" style="left:88.83%;top:51.55%">5</span></div><figcaption>Catálogo: tus vinos.</figcaption></figure>
+<ol class="leyenda c2"><li><span class="n">1</span><div><strong>Buscar:</strong> por nombre del vino o del productor.</div></li><li><span class="n">2</span><div><strong>Filtros:</strong> ve rápido cuáles tienen pocas botellas o están agotados.</div></li><li><span class="n">3</span><div><strong>− y +:</strong> quitan o suman una botella por clic y se guardan solos. Úsalos para ajustes pequeños.</div></li><li><span class="n">4</span><div><strong>Pocas / Agotado:</strong> aviso cuando un vino tiene 3 o menos, o 0.</div></li><li><span class="n">5</span><div><strong>Ver:</strong> abre la ficha del vino para fijar el número exacto y ver sus movimientos (página 10).</div></li></ol>
 <div class="pie"><span>Viviendo Vino · Manual del aliado · Inventario</span><span>12</span></div></section><section class="page">
 <p class="eti">10 · Inventario</p>
 <h2>¿Contaste el almacén? Fija el número exacto.</h2>
 <p class="lede">En la ficha de cada vino (botón <strong>Ver</strong>) puedes escribir cuántas botellas tienes de verdad.</p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/vino-ficha.png" alt=""><span class="caja" style="left:29.79%;top:12.44%;width:17.38%;height:9.88%"></span><span class="num" style="left:29.79%;top:17.38%">1</span><span class="caja" style="left:29.79%;top:37.69%;width:63.48%;height:3.84%"></span><span class="num" style="left:29.79%;top:39.61%">2</span><span class="caja" style="left:29.79%;top:87.65%;width:63.48%;height:3.84%"></span><span class="num" style="left:29.79%;top:89.57000000000001%">3</span></div><figcaption>Ficha del vino: inventario.</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>− y +:</strong> igual que en la lista.</div></li><li><span class="n">2</span><div><strong>Fijar existencias:</strong> escribe las botellas que contaste, elige el motivo (conteo físico, merma…) y da <strong>Fijar existencias</strong>.</div></li><li><span class="n">3</span><div><strong>Movimientos recientes:</strong> cada cambio, quién lo hizo y cuántas quedaron.</div></li></ol>
+<figure class="shot" style="width:100%"><div class="marco" style="aspect-ratio:1024/646.5"><img src="capturas/vino-ficha.png" alt="" style="width:100.000%;left:0.000%;top:0.000%"><span class="caja" style="left:29.40%;top:9.90%;width:18.16%;height:9.59%"></span><span class="num izq" style="left:29.40%;top:14.70%">1</span><span class="caja" style="left:29.40%;top:31.24%;width:64.26%;height:4.49%"></span><span class="num izq" style="left:29.40%;top:33.48%">2</span><span class="caja" style="left:29.40%;top:73.47%;width:64.26%;height:4.49%"></span><span class="num izq" style="left:29.40%;top:75.72%">3</span></div><figcaption>Ficha del vino: inventario.</figcaption></figure>
+<ol class="leyenda c2"><li><span class="n">1</span><div><strong>− y +:</strong> igual que en la lista.</div></li><li><span class="n">2</span><div><strong>Fijar existencias:</strong> escribe las botellas que contaste, elige el motivo (conteo físico, merma…) y da <strong>Fijar existencias</strong>.</div></li><li><span class="n">3</span><div><strong>Movimientos recientes:</strong> cada cambio, quién lo hizo y cuántas quedaron.</div></li></ol>
 <h3>Lo que el sistema hace solo</h3>
 <ul>
   <li><strong>Al pagarse un pedido</strong>, descuenta sus botellas. No las restes a mano.</li>
@@ -282,8 +296,8 @@
 <p class="eti">11 · Finanzas</p>
 <h2>Tus ventas y tu saldo.</h2>
 <p class="lede">Solo de consulta. Todo está calculado con <strong>tus precios acordados</strong>.</p>
-<figure class="shot" style="width:100%"><div class="marco"><img src="capturas/finanzas.png" alt=""><span class="caja" style="left:25.08%;top:25.41%;width:15.59%;height:2.11%"></span><span class="num" style="left:25.08%;top:26.465%">1</span><span class="caja" style="left:43.24%;top:25.41%;width:15.51%;height:2.11%"></span><span class="num" style="left:43.24%;top:26.465%">2</span><span class="caja" style="left:61.33%;top:25.41%;width:15.51%;height:2.11%"></span><span class="num" style="left:61.33%;top:26.465%">3</span><span class="caja" style="left:79.41%;top:25.41%;width:15.51%;height:4.22%"></span><span class="num" style="left:79.41%;top:27.52%">4</span><span class="caja" style="left:25.39%;top:40.26%;width:15.36%;height:2.6%"></span><span class="num" style="left:25.39%;top:41.559999999999995%">5</span><span class="caja" style="left:25.39%;top:62.12%;width:11.27%;height:2.6%"></span><span class="num" style="left:25.39%;top:63.419999999999995%">6</span></div><figcaption>Finanzas.</figcaption></figure>
-<ol class="leyenda"><li><span class="n">1</span><div><strong>Tus ventas:</strong> lo que te toca de todos tus pedidos pagados.</div></li><li><span class="n">2</span><div><strong>Entregado:</strong> lo de pedidos ya entregados, es decir, lo que ya se te debe.</div></li><li><span class="n">3</span><div><strong>Transferido:</strong> lo que Viviendo Vino ya te pagó.</div></li><li><span class="n">4</span><div><strong>Por recibir:</strong> entregado menos transferido. Lo que va en camino se suma al entregarse.</div></li><li><span class="n">5</span><div><strong>Transferencias recibidas:</strong> cada pago, con fecha y referencia.</div></li><li><span class="n">6</span><div><strong>Ventas por pedido:</strong> el detalle por folio, con su estado.</div></li></ol>
+<figure class="shot" style="width:100%"><div class="marco" style="aspect-ratio:976/760"><img src="capturas/finanzas.png" alt="" style="width:131.148%;left:-29.098%;top:-3.158%"><span class="caja" style="left:3.38%;top:23.07%;width:21.27%;height:3.28%"></span><span class="num der" style="left:24.65%;top:24.71%">1</span><span class="caja" style="left:27.20%;top:23.07%;width:21.16%;height:3.28%"></span><span class="num izq" style="left:27.20%;top:24.71%">2</span><span class="caja" style="left:50.92%;top:23.07%;width:21.16%;height:3.28%"></span><span class="num izq" style="left:50.92%;top:24.71%">3</span><span class="caja" style="left:74.64%;top:23.07%;width:21.16%;height:5.49%"></span><span class="num izq" style="left:74.64%;top:25.81%">4</span><span class="caja" style="left:3.79%;top:38.70%;width:20.96%;height:3.79%"></span><span class="num der" style="left:24.75%;top:40.59%">5</span><span class="caja" style="left:3.79%;top:61.71%;width:15.60%;height:3.79%"></span><span class="num der" style="left:19.39%;top:63.60%">6</span></div><figcaption>Finanzas.</figcaption></figure>
+<ol class="leyenda c2"><li><span class="n">1</span><div><strong>Tus ventas:</strong> lo que te toca de todos tus pedidos pagados.</div></li><li><span class="n">2</span><div><strong>Entregado:</strong> lo de pedidos ya entregados, es decir, lo que ya se te debe.</div></li><li><span class="n">3</span><div><strong>Transferido:</strong> lo que Viviendo Vino ya te pagó.</div></li><li><span class="n">4</span><div><strong>Por recibir:</strong> entregado menos transferido. Lo que va en camino se suma al entregarse.</div></li><li><span class="n">5</span><div><strong>Transferencias recibidas:</strong> cada pago, con fecha y referencia.</div></li><li><span class="n">6</span><div><strong>Ventas por pedido:</strong> el detalle por folio, con su estado.</div></li></ol>
 <div class="nota ciruela"><p>Recibes tu precio acordado <strong>íntegro</strong>: la comisión de Mercado Pago y los descuentos de campañas salen del margen de Viviendo Vino.</p></div>
 <div class="pie"><span>Viviendo Vino · Manual del aliado · Finanzas</span><span>14</span></div></section><section class="page">
 <p class="eti">12 · Ayuda</p>
@@ -296,7 +310,7 @@
 </div>
 <h3>Resumen en una hoja</h3>
 <table><tbody>
-  <tr><td style="width:32%"><strong>Entrar</strong></td><td><span class="ruta">www.viviendovino.com/admin</span> · correo, contraseña y código de tu app</td></tr>
+  <tr><td style="width:32%"><strong>Entrar</strong></td><td><span class="ruta">www.viviendovino.com/admin</span> · tu correo y tu contraseña</td></tr>
   <tr><td><strong>Llega un pedido</strong></td><td>Correo "Nuevo pedido por preparar" → abre el pedido → <strong>Empezar a preparar</strong></td></tr>
   <tr><td><strong>Sale a ruta</strong></td><td>Paquetería + número de guía → <strong>Marcar como enviado</strong></td></tr>
   <tr><td><strong>Llegó</strong></td><td><strong>Marcar como entregado</strong> (entra a tu saldo)</td></tr>
