@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  // CSS incrustado en el <head> en lugar de <link>: PageSpeed marcaba ~590 ms de CSS que bloquea el primer pintado
+  // en móvil. Costo: el CSS ya no se guarda aparte en caché entre páginas. Si no mejora la medición, quitar.
+  experimental: { inlineCss: true },
   // El blog lee content/blog/*.md y las imágenes para compartir usan Inter y el avatar: se incluyen en el
   // despliegue para cuando una página se regenera en el servidor (las que muestran el catálogo).
   outputFileTracingIncludes: {
