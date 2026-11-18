@@ -124,7 +124,7 @@ export function Footer() {
               Escríbenos
             </ButtonLink>
           </div>
-          <ContactoDatos variante="franja" />
+          <ContactoDatos variante="franja" llamar={false} />
         </section>
 
         {/* Móvil: las mismas columnas como acordeones cerrados (details/summary, operables con teclado). */}
