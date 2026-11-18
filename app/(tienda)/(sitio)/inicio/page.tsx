@@ -50,7 +50,18 @@ export default async function TiendaInicio() {
   return (
     <>
       <JsonLd data={grafo(negocio(), sitioWeb())} />
-      <DarkBlock aria-labelledby="hero-title" image={{ src: "/img/hero-rafa.webp", width: 1086, height: 1448, clean: true }}>
+      <DarkBlock aria-labelledby="hero-title" image={{
+          src: "/img/hero/hero-rafa-720.webp",
+          width: 1086,
+          height: 1448,
+          clean: true,
+          srcSet: {
+            avif: "/img/hero/hero-rafa-480.avif 480w, /img/hero/hero-rafa-720.avif 720w, /img/hero/hero-rafa-1086.avif 1086w",
+            webp: "/img/hero/hero-rafa-480.webp 480w, /img/hero/hero-rafa-720.webp 720w, /img/hero/hero-rafa-1086.webp 1086w",
+          },
+          // Celular y tableta: a todo el ancho. Escritorio: el 42 % derecho del bloque.
+          sizes: "(max-width: 1023px) 100vw, 42vw",
+        }}>
         <div className={styles.hero}>
           <NumberedLabel tone="dark">Vinos exclusivos de Viviendo Vino</NumberedLabel>
           <h1 id="hero-title" className={styles.heroTitle}>

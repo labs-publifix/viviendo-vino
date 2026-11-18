@@ -54,6 +54,7 @@
 /* La ilustración se ve a toda opacidad, sin velos ni difuminados, con un corte recto contra el bloque
    oscuro. El bloque del texto conserva la atmósfera del manual (§6): resplandor vino arriba a la
    derecha de su propio espacio y eco ciruela abajo a la izquierda. */
+.picture { display: contents; }
 .clean { --panel: 42%; background: var(--vv-negro); }
 .clean .photo {
   left: auto;

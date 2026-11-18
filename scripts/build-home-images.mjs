@@ -116,7 +116,13 @@ for (const [code, files] of Object.entries(GROUPS)) await groupImage(code, files
 
 // Hero ilustrado: versión limpia en vertical (3:4), sin degradado. Se usa en todos los tamaños.
 await sharp(join(root, "fotos-vinos/hero-rafa-movil.jpg")).resize(1086, 1448).webp({ quality: 82 }).toFile(join(out(""), "hero-rafa.webp"));
-console.log("hero ilustrado → public/img/hero-rafa.webp");
+// Versiones por ancho para srcset (es la imagen más pesada de la portada y su LCP): cada pantalla baja la suya.
+for (const w of [480, 720, 1086]) {
+  const base = sharp(join(root, "fotos-vinos/hero-rafa-movil.jpg")).resize(w, Math.round((w * 1448) / 1086));
+  await base.clone().avif({ quality: 55 }).toFile(join(out("hero"), `hero-rafa-${w}.avif`));
+  await base.clone().webp({ quality: 80 }).toFile(join(out("hero"), `hero-rafa-${w}.webp`));
+}
+console.log("hero ilustrado → public/img/hero-rafa.webp y public/img/hero/hero-rafa-{480,720,1086}.{avif,webp}");
 
 // Foto de Rafa (Nosotros): cuadrada; cada lugar la encuadra con object-fit.
 // Foto final de Nosotros (25 oct 2026), vertical 768×1024. El avatar del blog sigue saliendo de rafa-nosotros.png.
