@@ -119,3 +119,9 @@ test("lista de espera: solo la guía regalada y las imágenes de la landing; lo 
   // El correo de confirmación enlaza la guía: se abre sin la contraseña del preview.
   assert.deepEqual(decide({ pathname: "/guias/guia-de-maridaje.pdf", host: DEV, env: PREVIEW, hasPreviewAccess: false }), { action: "next" });
 });
+
+test("el archivo de verificación de Google se sirve aunque la tienda esté cerrada", () => {
+  assert.equal(isWaitlistPath("/googledcccd2c664a9ab65.html"), true);
+  assert.equal(isWaitlistPath("/google-otra-cosa.html"), false);
+  assert.equal(isWaitlistPath("/googledcccd2c664a9ab65.html/x"), false);
+});

@@ -59,9 +59,16 @@ const BRAND_KIT_FILE =
 // correos (/email/), que los clientes de correo descargan sin la cookie del preview.
 const LOGIN_PREFIXES = ["/_next/", "/brand/", "/email/", "/robots.txt", GUIA_REGALO];
 
+// Archivo de verificación de Google Search Console (public/google<código>.html): siempre visible, para no perder
+// la verificación de la propiedad aunque la tienda se cierre.
+const GOOGLE_VERIFICATION_FILE = /^\/google[0-9a-f]{16}\.html$/;
+
 export function isWaitlistPath(pathname: string): boolean {
   return (
-    WAITLIST_EXACT.has(pathname) || BRAND_KIT_FILE.test(pathname) || WAITLIST_PREFIXES.some((p) => pathname.startsWith(p))
+    WAITLIST_EXACT.has(pathname) ||
+    BRAND_KIT_FILE.test(pathname) ||
+    GOOGLE_VERIFICATION_FILE.test(pathname) ||
+    WAITLIST_PREFIXES.some((p) => pathname.startsWith(p))
   );
 }
 
