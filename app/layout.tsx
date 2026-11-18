@@ -20,6 +20,10 @@ const IS_PREVIEW = process.env.NEXT_PUBLIC_PREVIEW === "true";
 // Con la tienda abierta, los valores por defecto son los de la tienda (cada página pública define los suyos con
 // lib/seo.ts). Con la tienda cerrada, los de la lista de espera.
 const STORE_OPEN = process.env.STORE_OPEN === "true";
+// Verificación de Google Search Console (propiedad de prefijo de URL, método "etiqueta HTML"): solo el valor de
+// content="…" que da Google, capturado en Vercel. Es público (va en el HTML); se valida para no inyectar nada más.
+const GOOGLE_VERIFICATION = (process.env.GOOGLE_SITE_VERIFICATION ?? "").trim();
+const VERIFICATION = /^[A-Za-z0-9_-]{20,100}$/.test(GOOGLE_VERIFICATION) ? { google: GOOGLE_VERIFICATION } : undefined;
 const title = STORE_OPEN ? "Viviendo Vino · Vino italiano en kits de 6 botellas" : "Viviendo Vino · Lista de espera";
 const description = STORE_OPEN
   ? "Arma tu kit de 6 botellas de vino italiano. El envío a todo México va incluido en el precio."
@@ -52,6 +56,7 @@ export const metadata: Metadata = {
     other: [{ rel: "mask-icon", url: "/safari-pinned-tab.svg", color: "#9A2031" }],
   },
   manifest: "/site.webmanifest",
+  ...(VERIFICATION && !IS_PREVIEW ? { verification: VERIFICATION } : {}),
   appleWebApp: { title: "Viviendo Vino" },
   other: { "msapplication-TileColor": "#9A2031", "msapplication-config": "/browserconfig.xml" },
   // El preview privado nunca se indexa (además de X-Robots-Tag y robots.txt).
